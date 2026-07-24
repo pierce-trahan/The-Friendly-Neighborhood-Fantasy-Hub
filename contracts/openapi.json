@@ -202,7 +202,8 @@
             "enum": [
               "match_existing",
               "create_new",
-              "ignore"
+              "ignore",
+              "clear"
             ],
             "title": "Decision",
             "type": "string"

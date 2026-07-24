@@ -440,7 +440,10 @@ def decide_import_row(
             "Start a new preview to make different mapping decisions.",
             409,
         )
-    if row.normalized_candidate_json is None and request.decision != "ignore":
+    if (
+        row.normalized_candidate_json is None
+        and request.decision not in {"ignore", "clear"}
+    ):
         raise _hub_error(
             "IMPORT.PLAYER.INVALID_ROW_CANNOT_MATCH",
             "That invalid row cannot create or match a player.",

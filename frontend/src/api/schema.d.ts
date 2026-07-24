@@ -312,7 +312,7 @@ export interface components {
              * Decision
              * @enum {string}
              */
-            decision: "match_existing" | "create_new" | "ignore";
+            decision: "match_existing" | "create_new" | "ignore" | "clear";
             /** Note */
             note?: string | null;
             /** Player Id */

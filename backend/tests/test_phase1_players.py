@@ -155,6 +155,20 @@ def test_invalid_row_can_be_ignored_before_atomic_commit(
         assert ignored.json()["invalid_count"] == 0
         assert ignored.json()["ignored_count"] == 1
 
+        restored = client.put(
+            f"/api/v1/player-imports/{preview.json()['id']}/rows/{invalid_row['id']}/decision",
+            json={"decision": "clear"},
+        )
+        assert restored.status_code == 200
+        assert restored.json()["invalid_count"] == 1
+        assert restored.json()["ignored_count"] == 0
+
+        ignored = client.put(
+            f"/api/v1/player-imports/{preview.json()['id']}/rows/{invalid_row['id']}/decision",
+            json={"decision": "ignore"},
+        )
+        assert ignored.status_code == 200
+
         committed = client.post(
             f"/api/v1/player-imports/{preview.json()['id']}/commit"
         )
