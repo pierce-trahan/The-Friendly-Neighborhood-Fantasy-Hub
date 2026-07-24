@@ -52,7 +52,38 @@ See [PROJECT_ROADMAP.md](PROJECT_ROADMAP.md) for the complete product roadmap an
 
 ## Project Status
 
-This repository begins with product direction and scope. Implementation will proceed module by module, with each module specified, built, tested against acceptance criteria, and audited before the next begins.
+Phase 0 implementation is underway. The repository now contains a
+production-shaped local launch proof with configuration persistence, a
+sanitized offline Entropy profile, and a small React status screen.
+
+## Local Setup
+
+Requirements:
+
+- Python 3.12 or newer
+- Node.js 22 or newer
+
+From PowerShell in the repository:
+
+```powershell
+.\scripts\bootstrap.ps1
+.\scripts\run.ps1
+```
+
+After setup, `Launch Friendly Hub.cmd` provides the same local launch path by
+double-click. The launcher starts the private local service and opens
+`http://127.0.0.1:8765` in the normal browser.
+
+Development and verification commands:
+
+```powershell
+.\scripts\dev.ps1
+.\scripts\verify.ps1
+```
+
+Production data is stored outside the repository under
+`%LOCALAPPDATA%\FriendlyNeighborhoodFantasyHub\`. Automated tests use temporary
+directories and never touch that production location.
 
 ## Accepted Technical Direction
 

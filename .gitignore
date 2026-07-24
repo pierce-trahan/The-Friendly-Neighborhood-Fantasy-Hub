@@ -12,9 +12,13 @@ ENV/
 # Packaging
 build/
 dist/
+node_modules/
 *.egg-info/
 .eggs/
 pip-wheel-metadata/
+*.tsbuildinfo
+frontend/vite.config.js
+frontend/vite.config.d.ts
 
 # Test, coverage, and type-checking caches
 .pytest_cache/
@@ -64,4 +68,3 @@ service-account*.json
 .DS_Store
 Thumbs.db
 Desktop.ini
-
