@@ -77,6 +77,7 @@ Initial categories:
 - `DRAFT`
 - `BACKUP`
 - `EXPORT`
+- `SECURITY`
 - `INTERNAL`
 
 Examples:
@@ -97,6 +98,7 @@ Specific codes are preferred over parsing message text.
 | Status | Use |
 |---:|---|
 | 400 | Malformed or logically impossible request |
+| 403 | A local write request is missing the Hub's trust guard |
 | 404 | Requested local record does not exist |
 | 409 | Version conflict or operation conflicts with current state |
 | 422 | Field or domain validation failed |

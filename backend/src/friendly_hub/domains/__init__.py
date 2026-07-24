@@ -1,0 +1,1 @@
+"""Fantasy Hub domain modules."""

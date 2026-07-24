@@ -116,4 +116,4 @@ Electron would provide a traditional desktop window and a single TypeScript-orie
 4. [x] Define SQLite ownership, migration, backup, and recovery conventions.
 5. [x] Define logging and user-facing error conventions.
 6. [x] Create a small sanitized offline test dataset.
-7. [ ] Build a minimal launch/configuration persistence proof before analytical features.
+7. [x] Build a minimal launch/configuration persistence proof before analytical features.
