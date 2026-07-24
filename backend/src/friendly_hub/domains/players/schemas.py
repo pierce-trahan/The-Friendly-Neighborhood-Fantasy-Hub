@@ -67,7 +67,7 @@ class CsvPreviewRequest(BaseModel):
 
 
 class MappingDecisionRequest(BaseModel):
-    decision: Literal["match_existing", "create_new", "ignore"]
+    decision: Literal["match_existing", "create_new", "ignore", "clear"]
     player_id: str | None = None
     note: str | None = Field(default=None, max_length=300)
 

@@ -3,7 +3,7 @@ from __future__ import annotations
 import json
 from uuid import uuid4
 
-from sqlalchemy import func, or_, select
+from sqlalchemy import delete, func, or_, select
 from sqlalchemy.orm import Session
 
 from friendly_hub.core.time import utc_now_text
@@ -404,6 +404,28 @@ def save_decision(
             PlayerMappingDecisionRow.import_row_id == row.id
         )
     )
+    if decision == "clear":
+        if existing is not None:
+            session.execute(
+                delete(PlayerMappingDecisionRow).where(
+                    PlayerMappingDecisionRow.id == existing.id
+                )
+            )
+        row.resolved_player_id = None
+        candidate_ids = json.loads(row.candidate_player_ids_json)
+        if row.normalized_candidate_json is None:
+            row.outcome = "invalid"
+            row.reason_code = "IMPORT.PLAYER.ROW_INVALID"
+            row.explanation = "This source row is invalid and needs review."
+        else:
+            row.outcome = "ambiguous"
+            row.reason_code = "IMPORT.PLAYER.CONFIRM_NAME_MATCH"
+            row.explanation = (
+                "The suggested identity is unconfirmed and still needs review."
+                if candidate_ids
+                else "This row still needs a create-new or ignore decision."
+            )
+        return
     if existing is None:
         existing = PlayerMappingDecisionRow(
             id=str(uuid4()),
