@@ -21,6 +21,11 @@ def runtime_settings(tmp_path: Path) -> RuntimeSettings:
         / "fixtures"
         / "league_profiles"
         / "entropy-2026.sanitized.json",
+        player_fixture_path=project_root
+        / "tests"
+        / "fixtures"
+        / "players"
+        / "phase-1-players.sanitized.json",
     )
 
 

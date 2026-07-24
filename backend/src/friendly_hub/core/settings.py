@@ -13,6 +13,7 @@ class RuntimeSettings:
     log_dir: Path
     frontend_dist: Path
     sample_fixture_path: Path
+    player_fixture_path: Path
 
     @classmethod
     def from_environment(cls) -> RuntimeSettings:
@@ -35,6 +36,16 @@ class RuntimeSettings:
             / "league_profiles"
             / "entropy-2026.sanitized.json"
         )
+        player_fixture_override = os.environ.get("FRIENDLY_HUB_PLAYER_FIXTURE")
+        player_fixture_path = (
+            Path(player_fixture_override).expanduser().resolve()
+            if player_fixture_override
+            else project_root
+            / "tests"
+            / "fixtures"
+            / "players"
+            / "phase-1-players.sanitized.json"
+        )
 
         return cls(
             project_root=project_root,
@@ -43,6 +54,7 @@ class RuntimeSettings:
             log_dir=data_dir / "logs",
             frontend_dist=project_root / "frontend" / "dist",
             sample_fixture_path=sample_fixture_path,
+            player_fixture_path=player_fixture_path,
         )
 
     def ensure_directories(self) -> None:

@@ -52,9 +52,14 @@ See [PROJECT_ROADMAP.md](PROJECT_ROADMAP.md) for the complete product roadmap an
 
 ## Project Status
 
-Phase 0 implementation is underway. The repository now contains a
-production-shaped local launch proof with configuration persistence, a
-sanitized offline Entropy profile, and a small React status screen.
+Phase 0 is complete: the repository contains a production-shaped local launch
+proof with configuration persistence, a sanitized offline Entropy profile, and
+a React status screen.
+
+Phase 1 is now building the canonical player universe and import-review
+workflow. See the
+[player universe specification](docs/specs/phase-1-player-universe.md) for the
+identity, matching, CSV, privacy, and reconciliation rules.
 
 ## Local Setup
 

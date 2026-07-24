@@ -8,6 +8,14 @@ from sqlalchemy import engine_from_config, pool
 from friendly_hub.db.base import Base
 from friendly_hub.domains.configuration.models import AppConfigurationRow  # noqa: F401
 from friendly_hub.domains.leagues.models import LeagueProfileRow  # noqa: F401
+from friendly_hub.domains.players.models import (  # noqa: F401
+    PlayerExternalIdRow,
+    PlayerImportRow,
+    PlayerImportSessionRow,
+    PlayerMappingDecisionRow,
+    PlayerRelevanceRow,
+    PlayerRow,
+)
 
 config = context.config
 

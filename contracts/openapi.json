@@ -61,6 +61,28 @@
         "title": "BackupConfiguration",
         "type": "object"
       },
+      "CsvPreviewRequest": {
+        "properties": {
+          "csv_text": {
+            "maxLength": 5000000,
+            "minLength": 1,
+            "title": "Csv Text",
+            "type": "string"
+          },
+          "filename": {
+            "default": "players.csv",
+            "maxLength": 200,
+            "minLength": 1,
+            "title": "Filename",
+            "type": "string"
+          }
+        },
+        "required": [
+          "csv_text"
+        ],
+        "title": "CsvPreviewRequest",
+        "type": "object"
+      },
       "DisplayConfiguration": {
         "additionalProperties": false,
         "properties": {
@@ -172,6 +194,703 @@
           "imported_at"
         ],
         "title": "LeagueProfileSummary",
+        "type": "object"
+      },
+      "MappingDecisionRequest": {
+        "properties": {
+          "decision": {
+            "enum": [
+              "match_existing",
+              "create_new",
+              "ignore"
+            ],
+            "title": "Decision",
+            "type": "string"
+          },
+          "note": {
+            "anyOf": [
+              {
+                "maxLength": 300,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Note"
+          },
+          "player_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Player Id"
+          }
+        },
+        "required": [
+          "decision"
+        ],
+        "title": "MappingDecisionRequest",
+        "type": "object"
+      },
+      "PlayerCandidate": {
+        "properties": {
+          "display_name": {
+            "maxLength": 200,
+            "minLength": 1,
+            "title": "Display Name",
+            "type": "string"
+          },
+          "external_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "External Id"
+          },
+          "fantasy_positions": {
+            "items": {
+              "enum": [
+                "QB",
+                "RB",
+                "WR",
+                "TE",
+                "K",
+                "DEF",
+                "UNKNOWN"
+              ],
+              "type": "string"
+            },
+            "minItems": 1,
+            "title": "Fantasy Positions",
+            "type": "array"
+          },
+          "first_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "First Name"
+          },
+          "include": {
+            "default": true,
+            "title": "Include",
+            "type": "boolean"
+          },
+          "is_rookie": {
+            "default": false,
+            "title": "Is Rookie",
+            "type": "boolean"
+          },
+          "last_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Last Name"
+          },
+          "primary_position": {
+            "enum": [
+              "QB",
+              "RB",
+              "WR",
+              "TE",
+              "K",
+              "DEF",
+              "UNKNOWN"
+            ],
+            "title": "Primary Position",
+            "type": "string"
+          },
+          "provider": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Provider"
+          },
+          "rookie_class": {
+            "anyOf": [
+              {
+                "maximum": 2200.0,
+                "minimum": 1900.0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Rookie Class"
+          },
+          "search_name": {
+            "title": "Search Name",
+            "type": "string"
+          },
+          "status": {
+            "enum": [
+              "active",
+              "inactive",
+              "injured",
+              "reserve",
+              "unknown"
+            ],
+            "title": "Status",
+            "type": "string"
+          },
+          "suffix": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Suffix"
+          },
+          "team": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Team"
+          }
+        },
+        "required": [
+          "display_name",
+          "search_name",
+          "primary_position",
+          "fantasy_positions",
+          "status"
+        ],
+        "title": "PlayerCandidate",
+        "type": "object"
+      },
+      "PlayerImportCommitResponse": {
+        "properties": {
+          "created_players": {
+            "title": "Created Players",
+            "type": "integer"
+          },
+          "ignored_rows": {
+            "title": "Ignored Rows",
+            "type": "integer"
+          },
+          "session": {
+            "$ref": "#/components/schemas/PlayerImportSessionRead"
+          },
+          "updated_players": {
+            "title": "Updated Players",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "session",
+          "created_players",
+          "updated_players",
+          "ignored_rows"
+        ],
+        "title": "PlayerImportCommitResponse",
+        "type": "object"
+      },
+      "PlayerImportRowRead": {
+        "properties": {
+          "candidate": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/PlayerCandidate"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "candidate_players": {
+            "items": {
+              "$ref": "#/components/schemas/PlayerRead"
+            },
+            "title": "Candidate Players",
+            "type": "array"
+          },
+          "explanation": {
+            "title": "Explanation",
+            "type": "string"
+          },
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "outcome": {
+            "enum": [
+              "new",
+              "matched",
+              "changed",
+              "ambiguous",
+              "invalid",
+              "ignored"
+            ],
+            "title": "Outcome",
+            "type": "string"
+          },
+          "proposed_player_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Proposed Player Id"
+          },
+          "reason_code": {
+            "title": "Reason Code",
+            "type": "string"
+          },
+          "resolved_player_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Resolved Player Id"
+          },
+          "row_number": {
+            "title": "Row Number",
+            "type": "integer"
+          },
+          "source_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Source Name"
+          }
+        },
+        "required": [
+          "id",
+          "row_number",
+          "source_name",
+          "candidate",
+          "outcome",
+          "proposed_player_id",
+          "resolved_player_id",
+          "candidate_players",
+          "reason_code",
+          "explanation"
+        ],
+        "title": "PlayerImportRowRead",
+        "type": "object"
+      },
+      "PlayerImportSessionRead": {
+        "properties": {
+          "ambiguous_count": {
+            "title": "Ambiguous Count",
+            "type": "integer"
+          },
+          "changed_count": {
+            "title": "Changed Count",
+            "type": "integer"
+          },
+          "committed_at": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Committed At"
+          },
+          "created_at": {
+            "title": "Created At",
+            "type": "string"
+          },
+          "filename": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Filename"
+          },
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "ignored_count": {
+            "title": "Ignored Count",
+            "type": "integer"
+          },
+          "invalid_count": {
+            "title": "Invalid Count",
+            "type": "integer"
+          },
+          "matched_count": {
+            "title": "Matched Count",
+            "type": "integer"
+          },
+          "new_count": {
+            "title": "New Count",
+            "type": "integer"
+          },
+          "rows": {
+            "items": {
+              "$ref": "#/components/schemas/PlayerImportRowRead"
+            },
+            "title": "Rows",
+            "type": "array"
+          },
+          "source": {
+            "title": "Source",
+            "type": "string"
+          },
+          "status": {
+            "enum": [
+              "preview",
+              "committed",
+              "cancelled",
+              "failed"
+            ],
+            "title": "Status",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "source",
+          "status",
+          "filename",
+          "new_count",
+          "matched_count",
+          "changed_count",
+          "ambiguous_count",
+          "invalid_count",
+          "ignored_count",
+          "created_at",
+          "committed_at",
+          "rows"
+        ],
+        "title": "PlayerImportSessionRead",
+        "type": "object"
+      },
+      "PlayerListResponse": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/PlayerRead"
+            },
+            "title": "Items",
+            "type": "array"
+          },
+          "limit": {
+            "title": "Limit",
+            "type": "integer"
+          },
+          "offset": {
+            "title": "Offset",
+            "type": "integer"
+          },
+          "total": {
+            "title": "Total",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "items",
+          "total",
+          "limit",
+          "offset"
+        ],
+        "title": "PlayerListResponse",
+        "type": "object"
+      },
+      "PlayerPatch": {
+        "properties": {
+          "display_name": {
+            "anyOf": [
+              {
+                "maxLength": 200,
+                "minLength": 1,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Display Name"
+          },
+          "fantasy_positions": {
+            "anyOf": [
+              {
+                "items": {
+                  "enum": [
+                    "QB",
+                    "RB",
+                    "WR",
+                    "TE",
+                    "K",
+                    "DEF",
+                    "UNKNOWN"
+                  ],
+                  "type": "string"
+                },
+                "minItems": 1,
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Fantasy Positions"
+          },
+          "is_rookie": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Is Rookie"
+          },
+          "primary_position": {
+            "anyOf": [
+              {
+                "enum": [
+                  "QB",
+                  "RB",
+                  "WR",
+                  "TE",
+                  "K",
+                  "DEF",
+                  "UNKNOWN"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Primary Position"
+          },
+          "rookie_class": {
+            "anyOf": [
+              {
+                "maximum": 2200.0,
+                "minimum": 1900.0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Rookie Class"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "enum": [
+                  "active",
+                  "inactive",
+                  "injured",
+                  "reserve",
+                  "unknown"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Status"
+          },
+          "team": {
+            "anyOf": [
+              {
+                "maxLength": 8,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Team"
+          }
+        },
+        "title": "PlayerPatch",
+        "type": "object"
+      },
+      "PlayerRead": {
+        "properties": {
+          "display_name": {
+            "title": "Display Name",
+            "type": "string"
+          },
+          "fantasy_positions": {
+            "items": {
+              "enum": [
+                "QB",
+                "RB",
+                "WR",
+                "TE",
+                "K",
+                "DEF",
+                "UNKNOWN"
+              ],
+              "type": "string"
+            },
+            "title": "Fantasy Positions",
+            "type": "array"
+          },
+          "first_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "First Name"
+          },
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "is_rookie": {
+            "title": "Is Rookie",
+            "type": "boolean"
+          },
+          "last_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Last Name"
+          },
+          "primary_position": {
+            "enum": [
+              "QB",
+              "RB",
+              "WR",
+              "TE",
+              "K",
+              "DEF",
+              "UNKNOWN"
+            ],
+            "title": "Primary Position",
+            "type": "string"
+          },
+          "relevant": {
+            "title": "Relevant",
+            "type": "boolean"
+          },
+          "rookie_class": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Rookie Class"
+          },
+          "status": {
+            "enum": [
+              "active",
+              "inactive",
+              "injured",
+              "reserve",
+              "unknown"
+            ],
+            "title": "Status",
+            "type": "string"
+          },
+          "suffix": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Suffix"
+          },
+          "team": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Team"
+          },
+          "updated_at": {
+            "title": "Updated At",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "display_name",
+          "first_name",
+          "last_name",
+          "suffix",
+          "team",
+          "primary_position",
+          "fantasy_positions",
+          "status",
+          "rookie_class",
+          "is_rookie",
+          "relevant",
+          "updated_at"
+        ],
+        "title": "PlayerRead",
         "type": "object"
       },
       "SafetyConfiguration": {
@@ -365,6 +1084,514 @@
         "summary": "Import Entropy Sample",
         "tags": [
           "league profiles"
+        ]
+      }
+    },
+    "/api/v1/player-imports/csv/preview": {
+      "post": {
+        "operationId": "preview_player_csv_api_v1_player_imports_csv_preview_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CsvPreviewRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PlayerImportSessionRead"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Preview Player Csv",
+        "tags": [
+          "players"
+        ]
+      }
+    },
+    "/api/v1/player-imports/fixture/preview": {
+      "post": {
+        "operationId": "preview_fixture_api_v1_player_imports_fixture_preview_post",
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PlayerImportSessionRead"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Preview Fixture",
+        "tags": [
+          "players"
+        ]
+      }
+    },
+    "/api/v1/player-imports/{session_id}": {
+      "get": {
+        "operationId": "get_player_import_api_v1_player_imports__session_id__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "session_id",
+            "required": true,
+            "schema": {
+              "title": "Session Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PlayerImportSessionRead"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Get Player Import",
+        "tags": [
+          "players"
+        ]
+      }
+    },
+    "/api/v1/player-imports/{session_id}/cancel": {
+      "post": {
+        "operationId": "cancel_player_import_api_v1_player_imports__session_id__cancel_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "session_id",
+            "required": true,
+            "schema": {
+              "title": "Session Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PlayerImportSessionRead"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Cancel Player Import",
+        "tags": [
+          "players"
+        ]
+      }
+    },
+    "/api/v1/player-imports/{session_id}/commit": {
+      "post": {
+        "operationId": "commit_player_import_api_v1_player_imports__session_id__commit_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "session_id",
+            "required": true,
+            "schema": {
+              "title": "Session Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PlayerImportCommitResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Commit Player Import",
+        "tags": [
+          "players"
+        ]
+      }
+    },
+    "/api/v1/player-imports/{session_id}/rows/{row_id}/decision": {
+      "put": {
+        "operationId": "save_player_import_decision_api_v1_player_imports__session_id__rows__row_id__decision_put",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "session_id",
+            "required": true,
+            "schema": {
+              "title": "Session Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "row_id",
+            "required": true,
+            "schema": {
+              "title": "Row Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MappingDecisionRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PlayerImportSessionRead"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Save Player Import Decision",
+        "tags": [
+          "players"
+        ]
+      }
+    },
+    "/api/v1/players": {
+      "get": {
+        "operationId": "list_canonical_players_api_v1_players_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "search",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Search"
+            }
+          },
+          {
+            "in": "query",
+            "name": "position",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "enum": [
+                    "QB",
+                    "RB",
+                    "WR",
+                    "TE",
+                    "K",
+                    "DEF",
+                    "UNKNOWN"
+                  ],
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Position"
+            }
+          },
+          {
+            "in": "query",
+            "name": "status",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "enum": [
+                    "active",
+                    "inactive",
+                    "injured",
+                    "reserve",
+                    "unknown"
+                  ],
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Status"
+            }
+          },
+          {
+            "in": "query",
+            "name": "rookie_class",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maximum": 2200,
+                  "minimum": 1900,
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Rookie Class"
+            }
+          },
+          {
+            "in": "query",
+            "name": "relevant_only",
+            "required": false,
+            "schema": {
+              "default": true,
+              "title": "Relevant Only",
+              "type": "boolean"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 100,
+              "maximum": 500,
+              "minimum": 1,
+              "title": "Limit",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "offset",
+            "required": false,
+            "schema": {
+              "default": 0,
+              "minimum": 0,
+              "title": "Offset",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PlayerListResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "List Canonical Players",
+        "tags": [
+          "players"
+        ]
+      }
+    },
+    "/api/v1/players/export.csv": {
+      "get": {
+        "operationId": "download_players_csv_api_v1_players_export_csv_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Download Players Csv",
+        "tags": [
+          "players"
+        ]
+      }
+    },
+    "/api/v1/players/{player_id}": {
+      "get": {
+        "operationId": "get_canonical_player_api_v1_players__player_id__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "player_id",
+            "required": true,
+            "schema": {
+              "title": "Player Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PlayerRead"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Get Canonical Player",
+        "tags": [
+          "players"
+        ]
+      },
+      "patch": {
+        "operationId": "update_canonical_player_api_v1_players__player_id__patch",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "player_id",
+            "required": true,
+            "schema": {
+              "title": "Player Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PlayerPatch"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PlayerRead"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Update Canonical Player",
+        "tags": [
+          "players"
         ]
       }
     }
