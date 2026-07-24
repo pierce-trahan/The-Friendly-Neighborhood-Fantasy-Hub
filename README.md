@@ -66,6 +66,11 @@ This repository begins with product direction and scope. Implementation will pro
 
 See [ADR-001](docs/adr/0001-local-browser-application-architecture.md) for the decision and tradeoffs. Traditional desktop packaging may be reconsidered during draft-night hardening if time permits.
 
+Entropy's sanitized 2026 settings are the canonical V1 league profile. See the
+[league format reference](docs/requirements/league-format-reference.md) for
+the target roster, scoring, draft behavior, comparison formats, and privacy
+boundary.
+
 ## Development Workflow
 
 GitHub is the shared source of truth for work performed locally, in Codex, or in Google AI Studio. See [CONTRIBUTING.md](CONTRIBUTING.md) for the one-task, one-branch workflow, [AGENTS.md](AGENTS.md) for shared AI guardrails, [AI_STUDIO_BOOTSTRAP.md](AI_STUDIO_BOOTSTRAP.md) for the safe first AI Studio import, and the [AI Studio collaboration workflow](docs/workflows/ai-studio-collaboration.md) for the ongoing design and audit loop.
