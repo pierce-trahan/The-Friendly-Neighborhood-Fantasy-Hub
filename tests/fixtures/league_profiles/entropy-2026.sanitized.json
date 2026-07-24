@@ -1,0 +1,225 @@
+{
+  "schema_version": 1,
+  "profile_id": "league_entropy_sanitized_2026",
+  "league": {
+    "name": "Entropy",
+    "sport": "nfl",
+    "season": 2026,
+    "league_type": "dynasty",
+    "status": "pre_draft",
+    "team_count": 10
+  },
+  "roster": {
+    "starters": [
+      {
+        "slot": "QB",
+        "eligible_positions": [
+          "QB"
+        ],
+        "provider_key": "QB"
+      },
+      {
+        "slot": "RB",
+        "eligible_positions": [
+          "RB"
+        ],
+        "provider_key": "RB"
+      },
+      {
+        "slot": "RB",
+        "eligible_positions": [
+          "RB"
+        ],
+        "provider_key": "RB"
+      },
+      {
+        "slot": "WR",
+        "eligible_positions": [
+          "WR"
+        ],
+        "provider_key": "WR"
+      },
+      {
+        "slot": "WR",
+        "eligible_positions": [
+          "WR"
+        ],
+        "provider_key": "WR"
+      },
+      {
+        "slot": "TE",
+        "eligible_positions": [
+          "TE"
+        ],
+        "provider_key": "TE"
+      },
+      {
+        "slot": "FLEX",
+        "eligible_positions": [
+          "RB",
+          "WR",
+          "TE"
+        ],
+        "provider_key": "FLEX"
+      },
+      {
+        "slot": "FLEX",
+        "eligible_positions": [
+          "RB",
+          "WR",
+          "TE"
+        ],
+        "provider_key": "FLEX"
+      },
+      {
+        "slot": "FLEX",
+        "eligible_positions": [
+          "RB",
+          "WR",
+          "TE"
+        ],
+        "provider_key": "FLEX"
+      },
+      {
+        "slot": "SUPER_FLEX",
+        "eligible_positions": [
+          "QB",
+          "RB",
+          "WR",
+          "TE"
+        ],
+        "provider_key": "SUPER_FLEX"
+      }
+    ],
+    "bench_slots": 10,
+    "taxi_slots": 4,
+    "injured_reserve_slots": 3,
+    "taxi_years": 2,
+    "taxi_allows_veterans": true
+  },
+  "scoring": {
+    "rules": [
+      {
+        "provider_key": "pass_yd",
+        "normalized_stat": "passing_yard",
+        "rule_kind": "multiplier",
+        "points": 0.04,
+        "unit": "yard",
+        "position_scope": null,
+        "parameters": {},
+        "source_value": 0.04,
+        "translation_status": "complete"
+      },
+      {
+        "provider_key": "pass_td",
+        "normalized_stat": "passing_touchdown",
+        "rule_kind": "fixed",
+        "points": 4,
+        "unit": "touchdown",
+        "position_scope": null,
+        "parameters": {},
+        "source_value": 4,
+        "translation_status": "complete"
+      },
+      {
+        "provider_key": "rush_yd",
+        "normalized_stat": "rushing_yard",
+        "rule_kind": "multiplier",
+        "points": 0.1,
+        "unit": "yard",
+        "position_scope": null,
+        "parameters": {},
+        "source_value": 0.1,
+        "translation_status": "complete"
+      },
+      {
+        "provider_key": "rec",
+        "normalized_stat": "reception",
+        "rule_kind": "fixed",
+        "points": 1,
+        "unit": "reception",
+        "position_scope": null,
+        "parameters": {},
+        "source_value": 1,
+        "translation_status": "complete"
+      },
+      {
+        "provider_key": "rec_yd",
+        "normalized_stat": "receiving_yard",
+        "rule_kind": "multiplier",
+        "points": 0.1,
+        "unit": "yard",
+        "position_scope": null,
+        "parameters": {},
+        "source_value": 0.1,
+        "translation_status": "complete"
+      },
+      {
+        "provider_key": "bonus_fd_te",
+        "normalized_stat": "receiving_first_down",
+        "rule_kind": "bonus",
+        "points": 0.5,
+        "unit": "first_down",
+        "position_scope": [
+          "TE"
+        ],
+        "parameters": {},
+        "source_value": 0.5,
+        "translation_status": "complete"
+      },
+      {
+        "provider_key": "fgm_yds",
+        "normalized_stat": "field_goal_yard",
+        "rule_kind": "multiplier",
+        "points": 0.1,
+        "unit": "yard",
+        "position_scope": [
+          "K"
+        ],
+        "parameters": {},
+        "source_value": 0.1,
+        "translation_status": "complete"
+      }
+    ]
+  },
+  "management": {
+    "faab_budget": 100,
+    "waiver_clear_days": 2,
+    "waiver_day": "wednesday",
+    "trade_deadline_week": 12,
+    "draft_pick_trading": true
+  },
+  "playoffs": {
+    "team_count": 4,
+    "start_week": 16
+  },
+  "drafts": [
+    {
+      "draft_id": "draft_startup_sanitized_2026",
+      "purpose": "startup",
+      "format": "snake",
+      "status": "pre_draft",
+      "team_count": 10,
+      "rounds": 24,
+      "pick_timer_seconds": 120,
+      "reversal_round": 3
+    },
+    {
+      "draft_id": "draft_rookie_template_sanitized",
+      "purpose": "rookie",
+      "format": "linear",
+      "status": "pre_draft",
+      "team_count": 10,
+      "rounds": 3,
+      "pick_timer_seconds": null,
+      "reversal_round": null
+    }
+  ],
+  "unmapped_provider_settings": {},
+  "provenance": {
+    "provider": "sleeper",
+    "imported_at": "2026-07-24T00:00:00Z",
+    "source_as_of": "2026-07-24T00:00:00Z",
+    "sanitized": true
+  }
+}

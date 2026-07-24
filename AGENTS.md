@@ -4,7 +4,7 @@ These instructions apply to every AI assistant and coding environment working in
 
 ## Start Here
 
-- Read `README.md`, `PROJECT_ROADMAP.md`, `CONTRIBUTING.md`, and any environment-specific bootstrap instructions before making changes.
+- Read `README.md`, `PROJECT_ROADMAP.md`, `CONTRIBUTING.md`, `docs/adr/0001-local-browser-application-architecture.md`, and any environment-specific bootstrap instructions before making changes.
 - Treat the GitHub `main` branch as the shared source of truth.
 - The project is currently in Phase 0: Foundation and Decisions.
 - Do not silently choose an application framework, database, or deployment model. Record and approve the architecture decision before generating the application skeleton.

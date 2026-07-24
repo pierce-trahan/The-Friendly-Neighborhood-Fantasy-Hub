@@ -54,21 +54,32 @@ See [PROJECT_ROADMAP.md](PROJECT_ROADMAP.md) for the complete product roadmap an
 
 This repository begins with product direction and scope. Implementation will proceed module by module, with each module specified, built, tested against acceptance criteria, and audited before the next begins.
 
-## Planned Technical Direction
+## Accepted Technical Direction
 
-- Python application
-- Local database such as SQLite or DuckDB
+- Local-browser application with a React and TypeScript frontend
+- Python and FastAPI backend
+- SQLite as the authoritative local application database
 - Sleeper and public-data imports with a dedicated player-ID normalization layer
 - Deterministic, inspectable scoring engines
-- A simple local interface optimized for draft-night speed
+- One local launcher that serves the application and opens it in the user's browser
+- No required cloud service for core draft-night workflows
 
-Specific framework choices remain subject to a short architecture decision before implementation.
+See [ADR-001](docs/adr/0001-local-browser-application-architecture.md) for the decision and tradeoffs. Traditional desktop packaging may be reconsidered during draft-night hardening if time permits.
+
+Entropy's sanitized 2026 settings are the canonical V1 league profile. See the
+[league format reference](docs/requirements/league-format-reference.md) for
+the target roster, scoring, draft behavior, comparison formats, and privacy
+boundary. The versioned local storage and import model is recorded in
+[ADR-002](docs/adr/0002-local-data-and-configuration-model.md). The modular
+repository boundary is recorded in
+[ADR-003](docs/adr/0003-repository-and-module-structure.md), with the
+[errors and logging standard](docs/standards/errors-and-logging.md) defining
+how failures protect saved work and communicate recovery steps.
 
 ## Development Workflow
 
-GitHub is the shared source of truth for work performed locally, in Codex, or in Google AI Studio. See [CONTRIBUTING.md](CONTRIBUTING.md) for the one-task, one-branch workflow, [AGENTS.md](AGENTS.md) for shared AI guardrails, and [AI_STUDIO_BOOTSTRAP.md](AI_STUDIO_BOOTSTRAP.md) for the safe first AI Studio import.
+GitHub is the shared source of truth for work performed locally, in Codex, or in Google AI Studio. See [CONTRIBUTING.md](CONTRIBUTING.md) for the one-task, one-branch workflow, [AGENTS.md](AGENTS.md) for shared AI guardrails, [AI_STUDIO_BOOTSTRAP.md](AI_STUDIO_BOOTSTRAP.md) for the safe first AI Studio import, and the [AI Studio collaboration workflow](docs/workflows/ai-studio-collaboration.md) for the ongoing design and audit loop.
 
 ## License
 
 This project is licensed under the [MIT License](LICENSE).
-

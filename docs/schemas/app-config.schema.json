@@ -1,0 +1,92 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://friendly-neighborhood-fantasy-hub.local/schemas/app-config.schema.json",
+  "title": "Friendly Neighborhood Fantasy Hub Application Configuration",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "active_league_season_id",
+    "display",
+    "backups",
+    "safety"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "active_league_season_id": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1
+    },
+    "display": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "timezone",
+        "theme",
+        "reduced_motion"
+      ],
+      "properties": {
+        "timezone": {
+          "type": "string",
+          "minLength": 1,
+          "default": "America/Chicago"
+        },
+        "theme": {
+          "enum": [
+            "system",
+            "light",
+            "dark"
+          ],
+          "default": "system"
+        },
+        "reduced_motion": {
+          "type": "boolean",
+          "default": false
+        }
+      }
+    },
+    "backups": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "automatic",
+        "retention_count"
+      ],
+      "properties": {
+        "automatic": {
+          "type": "boolean",
+          "default": true
+        },
+        "retention_count": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 50,
+          "default": 10
+        }
+      }
+    },
+    "safety": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "confirm_reset",
+        "confirm_delete"
+      ],
+      "properties": {
+        "confirm_reset": {
+          "type": "boolean",
+          "default": true
+        },
+        "confirm_delete": {
+          "type": "boolean",
+          "default": true
+        }
+      }
+    }
+  }
+}
