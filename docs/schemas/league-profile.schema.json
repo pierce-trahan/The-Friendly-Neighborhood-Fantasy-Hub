@@ -1,0 +1,420 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://friendly-neighborhood-fantasy-hub.local/schemas/league-profile.schema.json",
+  "title": "Friendly Neighborhood Fantasy Hub League Profile",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "profile_id",
+    "league",
+    "roster",
+    "scoring",
+    "management",
+    "playoffs",
+    "drafts",
+    "provenance"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "profile_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "league": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "sport",
+        "season",
+        "league_type",
+        "status",
+        "team_count"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sport": {
+          "const": "nfl"
+        },
+        "season": {
+          "type": "integer",
+          "minimum": 2000,
+          "maximum": 2200
+        },
+        "league_type": {
+          "enum": [
+            "dynasty",
+            "keeper",
+            "redraft",
+            "unknown"
+          ]
+        },
+        "status": {
+          "enum": [
+            "pre_draft",
+            "drafting",
+            "in_season",
+            "complete",
+            "unknown"
+          ]
+        },
+        "team_count": {
+          "type": "integer",
+          "minimum": 2,
+          "maximum": 64
+        }
+      }
+    },
+    "roster": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "starters",
+        "bench_slots",
+        "taxi_slots",
+        "injured_reserve_slots"
+      ],
+      "properties": {
+        "starters": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/rosterSlot"
+          }
+        },
+        "bench_slots": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "taxi_slots": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "injured_reserve_slots": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "taxi_years": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "taxi_allows_veterans": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        }
+      }
+    },
+    "scoring": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "rules"
+      ],
+      "properties": {
+        "rules": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/scoringRule"
+          }
+        }
+      }
+    },
+    "management": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "faab_budget",
+        "waiver_clear_days",
+        "waiver_day",
+        "trade_deadline_week",
+        "draft_pick_trading"
+      ],
+      "properties": {
+        "faab_budget": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "waiver_clear_days": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "waiver_day": {
+          "enum": [
+            "monday",
+            "tuesday",
+            "wednesday",
+            "thursday",
+            "friday",
+            "saturday",
+            "sunday",
+            "continuous",
+            "unknown"
+          ]
+        },
+        "trade_deadline_week": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 1,
+          "maximum": 30
+        },
+        "draft_pick_trading": {
+          "type": "boolean"
+        }
+      }
+    },
+    "playoffs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "team_count",
+        "start_week"
+      ],
+      "properties": {
+        "team_count": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 64
+        },
+        "start_week": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 30
+        }
+      }
+    },
+    "drafts": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/draft"
+      }
+    },
+    "unmapped_provider_settings": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "provider",
+        "imported_at",
+        "sanitized"
+      ],
+      "properties": {
+        "provider": {
+          "type": "string",
+          "minLength": 1
+        },
+        "imported_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "source_as_of": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time"
+        },
+        "sanitized": {
+          "type": "boolean"
+        }
+      }
+    }
+  },
+  "$defs": {
+    "rosterSlot": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "slot",
+        "eligible_positions"
+      ],
+      "properties": {
+        "slot": {
+          "enum": [
+            "QB",
+            "RB",
+            "WR",
+            "TE",
+            "FLEX",
+            "SUPER_FLEX",
+            "K",
+            "DEF",
+            "DL",
+            "LB",
+            "DB",
+            "IDP_FLEX",
+            "UNKNOWN"
+          ]
+        },
+        "eligible_positions": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "provider_key": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "scoringRule": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "provider_key",
+        "normalized_stat",
+        "rule_kind",
+        "points",
+        "source_value",
+        "translation_status"
+      ],
+      "properties": {
+        "provider_key": {
+          "type": "string",
+          "minLength": 1
+        },
+        "normalized_stat": {
+          "type": "string",
+          "minLength": 1
+        },
+        "rule_kind": {
+          "enum": [
+            "multiplier",
+            "fixed",
+            "threshold",
+            "bracket",
+            "bonus"
+          ]
+        },
+        "points": {
+          "type": "number"
+        },
+        "unit": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "position_scope": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "parameters": {
+          "type": "object",
+          "additionalProperties": true
+        },
+        "source_value": {
+          "type": [
+            "number",
+            "string",
+            "boolean",
+            "null"
+          ]
+        },
+        "translation_status": {
+          "enum": [
+            "complete",
+            "partial",
+            "review_required"
+          ]
+        }
+      }
+    },
+    "draft": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "draft_id",
+        "purpose",
+        "format",
+        "status",
+        "team_count",
+        "rounds",
+        "pick_timer_seconds",
+        "reversal_round"
+      ],
+      "properties": {
+        "draft_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "purpose": {
+          "enum": [
+            "startup",
+            "rookie",
+            "supplemental",
+            "unknown"
+          ]
+        },
+        "format": {
+          "enum": [
+            "snake",
+            "linear",
+            "auction",
+            "unknown"
+          ]
+        },
+        "status": {
+          "enum": [
+            "pre_draft",
+            "drafting",
+            "complete",
+            "unknown"
+          ]
+        },
+        "team_count": {
+          "type": "integer",
+          "minimum": 2,
+          "maximum": 64
+        },
+        "rounds": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100
+        },
+        "pick_timer_seconds": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "reversal_round": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 2
+        }
+      }
+    }
+  }
+}

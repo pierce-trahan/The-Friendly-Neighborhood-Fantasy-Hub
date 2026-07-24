@@ -69,7 +69,8 @@ See [ADR-001](docs/adr/0001-local-browser-application-architecture.md) for the d
 Entropy's sanitized 2026 settings are the canonical V1 league profile. See the
 [league format reference](docs/requirements/league-format-reference.md) for
 the target roster, scoring, draft behavior, comparison formats, and privacy
-boundary.
+boundary. The versioned local storage and import model is recorded in
+[ADR-002](docs/adr/0002-local-data-and-configuration-model.md).
 
 ## Development Workflow
 
