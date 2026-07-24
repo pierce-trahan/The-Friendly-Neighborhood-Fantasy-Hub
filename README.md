@@ -70,7 +70,11 @@ Entropy's sanitized 2026 settings are the canonical V1 league profile. See the
 [league format reference](docs/requirements/league-format-reference.md) for
 the target roster, scoring, draft behavior, comparison formats, and privacy
 boundary. The versioned local storage and import model is recorded in
-[ADR-002](docs/adr/0002-local-data-and-configuration-model.md).
+[ADR-002](docs/adr/0002-local-data-and-configuration-model.md). The modular
+repository boundary is recorded in
+[ADR-003](docs/adr/0003-repository-and-module-structure.md), with the
+[errors and logging standard](docs/standards/errors-and-logging.md) defining
+how failures protect saved work and communicate recovery steps.
 
 ## Development Workflow
 

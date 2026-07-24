@@ -111,9 +111,9 @@ Electron would provide a traditional desktop window and a single TypeScript-orie
 ## Action Items
 
 1. [x] Record the application architecture and tool boundaries.
-2. [ ] Specify the initial repository and module structure.
+2. [x] Specify the initial repository and module structure.
 3. [x] Define the league settings and application configuration schemas.
 4. [x] Define SQLite ownership, migration, backup, and recovery conventions.
-5. [ ] Define logging and user-facing error conventions.
+5. [x] Define logging and user-facing error conventions.
 6. [x] Create a small sanitized offline test dataset.
 7. [ ] Build a minimal launch/configuration persistence proof before analytical features.
