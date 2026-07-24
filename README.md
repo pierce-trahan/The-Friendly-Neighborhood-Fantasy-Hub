@@ -64,6 +64,10 @@ This repository begins with product direction and scope. Implementation will pro
 
 Specific framework choices remain subject to a short architecture decision before implementation.
 
+## Development Workflow
+
+GitHub is the shared source of truth for work performed locally, in Codex, or in Google AI Studio. See [CONTRIBUTING.md](CONTRIBUTING.md) for the one-task, one-branch workflow, [AGENTS.md](AGENTS.md) for shared AI guardrails, and [AI_STUDIO_BOOTSTRAP.md](AI_STUDIO_BOOTSTRAP.md) for the safe first AI Studio import.
+
 ## License
 
 This project is licensed under the [MIT License](LICENSE).

@@ -1,0 +1,11 @@
+# Keep text files consistent across Windows, Codex, and browser-based editors.
+* text=auto eol=lf
+
+# Common binary assets must never receive line-ending conversion.
+*.gif binary
+*.ico binary
+*.jpeg binary
+*.jpg binary
+*.pdf binary
+*.png binary
+*.webp binary

@@ -52,6 +52,11 @@ temp/
 !.env.example
 secrets.toml
 .streamlit/secrets.toml
+credentials.json
+service-account*.json
+*.key
+*.pem
+*.p12
 
 # Editor and operating-system files
 .vscode/
