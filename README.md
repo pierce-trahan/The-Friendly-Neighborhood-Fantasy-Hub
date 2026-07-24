@@ -66,7 +66,7 @@ Specific framework choices remain subject to a short architecture decision befor
 
 ## Development Workflow
 
-GitHub is the shared source of truth for work performed locally, in Codex, or in Google AI Studio. See [CONTRIBUTING.md](CONTRIBUTING.md) for the one-task, one-branch workflow and [AGENTS.md](AGENTS.md) for the guardrails followed by AI development environments.
+GitHub is the shared source of truth for work performed locally, in Codex, or in Google AI Studio. See [CONTRIBUTING.md](CONTRIBUTING.md) for the one-task, one-branch workflow, [AGENTS.md](AGENTS.md) for shared AI guardrails, and [AI_STUDIO_BOOTSTRAP.md](AI_STUDIO_BOOTSTRAP.md) for the safe first AI Studio import.
 
 ## License
 
