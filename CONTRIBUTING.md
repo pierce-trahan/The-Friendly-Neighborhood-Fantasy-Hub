@@ -2,15 +2,15 @@
 
 This project may be edited from several environments, including Codex and Google AI Studio. GitHub is the shared source of truth.
 
+The detailed handoff loop is documented in [docs/workflows/ai-studio-collaboration.md](docs/workflows/ai-studio-collaboration.md).
+
 ## Architecture Gate
 
-The repository currently contains product direction, not an implemented application. Before either environment generates application code, Phase 0 must produce a short architecture decision covering:
+The repository currently contains product direction, not an implemented application. The accepted application direction is recorded in [ADR-001](docs/adr/0001-local-browser-application-architecture.md). Before either environment generates application code, the remaining Phase 0 work must specify:
 
-- the interface framework;
-- the local database;
 - the application and data-directory structure;
 - configuration and backup formats; and
-- how Google AI Studio fits into a local-first product.
+- logging and user-facing error conventions.
 
 This prevents two environments from building incompatible versions of the same product.
 
