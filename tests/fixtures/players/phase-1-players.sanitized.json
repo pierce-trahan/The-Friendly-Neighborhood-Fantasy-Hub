@@ -1,0 +1,74 @@
+{
+  "fixture_version": 1,
+  "sanitized": true,
+  "source": "sanitized_fixture",
+  "description": "Fictional player identities for offline Phase 1 verification.",
+  "players": [
+    {
+      "name": "Marcus Hale",
+      "position": "QB",
+      "fantasy_positions": ["QB"],
+      "team": "CHI",
+      "status": "active",
+      "rookie_class": 2022,
+      "is_rookie": false,
+      "provider": "sanitized_fixture",
+      "external_id": "demo-qb-001"
+    },
+    {
+      "name": "Devin Cross Jr.",
+      "position": "RB",
+      "fantasy_positions": ["RB"],
+      "team": "ATL",
+      "status": "active",
+      "rookie_class": 2024,
+      "is_rookie": false,
+      "provider": "sanitized_fixture",
+      "external_id": "demo-rb-001"
+    },
+    {
+      "name": "Elias North",
+      "position": "WR",
+      "fantasy_positions": ["WR"],
+      "team": "SEA",
+      "status": "active",
+      "rookie_class": 2026,
+      "is_rookie": true,
+      "provider": "sanitized_fixture",
+      "external_id": "demo-wr-001"
+    },
+    {
+      "name": "Theo Banks",
+      "position": "TE",
+      "fantasy_positions": ["TE"],
+      "team": "DET",
+      "status": "active",
+      "rookie_class": 2023,
+      "is_rookie": false,
+      "provider": "sanitized_fixture",
+      "external_id": "demo-te-001"
+    },
+    {
+      "name": "Andre Vale III",
+      "position": "WR",
+      "fantasy_positions": ["WR"],
+      "team": null,
+      "status": "reserve",
+      "rookie_class": 2026,
+      "is_rookie": true,
+      "provider": "sanitized_fixture",
+      "external_id": "demo-wr-002"
+    },
+    {
+      "name": "Nolan Reed",
+      "position": "RB",
+      "fantasy_positions": ["RB"],
+      "team": "MIN",
+      "status": "injured",
+      "rookie_class": 2021,
+      "is_rookie": false,
+      "provider": "sanitized_fixture",
+      "external_id": "demo-rb-002"
+    }
+  ]
+}

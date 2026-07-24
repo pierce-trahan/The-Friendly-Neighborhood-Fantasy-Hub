@@ -3,7 +3,7 @@ $ErrorActionPreference = "Stop"
 $projectRoot = Split-Path -Parent $PSScriptRoot
 $venvPython = Join-Path $projectRoot ".venv\Scripts\python.exe"
 $frontendRoot = Join-Path $projectRoot "frontend"
-$pytestTemp = Join-Path $projectRoot "tmp\pytest"
+$pytestTemp = Join-Path $projectRoot ("tmp\pytest-" + [guid]::NewGuid().ToString("N"))
 
 if (-not (Test-Path -LiteralPath $venvPython)) {
     throw "The project environment is missing. Run scripts\bootstrap.ps1 first."
@@ -36,4 +36,4 @@ finally {
 }
 
 Write-Host ""
-Write-Host "All Phase 0 verification checks passed."
+Write-Host "All Friendly Hub verification checks passed."

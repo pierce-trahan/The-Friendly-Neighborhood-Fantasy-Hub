@@ -10,6 +10,7 @@ from friendly_hub.api.security import require_local_write_guard
 from friendly_hub.db.engine import get_session
 from friendly_hub.domains.configuration.router import router as configuration_router
 from friendly_hub.domains.leagues.router import router as league_profiles_router
+from friendly_hub.domains.players.router import router as players_router
 
 router = APIRouter(
     prefix="/api/v1",
@@ -37,3 +38,4 @@ def health(session: SessionDependency) -> HealthResponse:
 
 router.include_router(configuration_router)
 router.include_router(league_profiles_router)
+router.include_router(players_router)

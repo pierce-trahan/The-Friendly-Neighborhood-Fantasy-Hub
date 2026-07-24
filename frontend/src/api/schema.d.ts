@@ -73,6 +73,160 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/player-imports/csv/preview": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Preview Player Csv */
+        post: operations["preview_player_csv_api_v1_player_imports_csv_preview_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/player-imports/fixture/preview": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Preview Fixture */
+        post: operations["preview_fixture_api_v1_player_imports_fixture_preview_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/player-imports/{session_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get Player Import */
+        get: operations["get_player_import_api_v1_player_imports__session_id__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/player-imports/{session_id}/cancel": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Cancel Player Import */
+        post: operations["cancel_player_import_api_v1_player_imports__session_id__cancel_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/player-imports/{session_id}/commit": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Commit Player Import */
+        post: operations["commit_player_import_api_v1_player_imports__session_id__commit_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/player-imports/{session_id}/rows/{row_id}/decision": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /** Save Player Import Decision */
+        put: operations["save_player_import_decision_api_v1_player_imports__session_id__rows__row_id__decision_put"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/players": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List Canonical Players */
+        get: operations["list_canonical_players_api_v1_players_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/players/export.csv": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Download Players Csv */
+        get: operations["download_players_csv_api_v1_players_export_csv_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/players/{player_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get Canonical Player */
+        get: operations["get_canonical_player_api_v1_players__player_id__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /** Update Canonical Player */
+        patch: operations["update_canonical_player_api_v1_players__player_id__patch"];
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -96,6 +250,16 @@ export interface components {
             automatic: boolean;
             /** Retention Count */
             retention_count: number;
+        };
+        /** CsvPreviewRequest */
+        CsvPreviewRequest: {
+            /** Csv Text */
+            csv_text: string;
+            /**
+             * Filename
+             * @default players.csv
+             */
+            filename: string;
         };
         /** DisplayConfiguration */
         DisplayConfiguration: {
@@ -141,6 +305,191 @@ export interface components {
             season: number;
             /** Team Count */
             team_count: number;
+        };
+        /** MappingDecisionRequest */
+        MappingDecisionRequest: {
+            /**
+             * Decision
+             * @enum {string}
+             */
+            decision: "match_existing" | "create_new" | "ignore";
+            /** Note */
+            note?: string | null;
+            /** Player Id */
+            player_id?: string | null;
+        };
+        /** PlayerCandidate */
+        PlayerCandidate: {
+            /** Display Name */
+            display_name: string;
+            /** External Id */
+            external_id?: string | null;
+            /** Fantasy Positions */
+            fantasy_positions: ("QB" | "RB" | "WR" | "TE" | "K" | "DEF" | "UNKNOWN")[];
+            /** First Name */
+            first_name?: string | null;
+            /**
+             * Include
+             * @default true
+             */
+            include: boolean;
+            /**
+             * Is Rookie
+             * @default false
+             */
+            is_rookie: boolean;
+            /** Last Name */
+            last_name?: string | null;
+            /**
+             * Primary Position
+             * @enum {string}
+             */
+            primary_position: "QB" | "RB" | "WR" | "TE" | "K" | "DEF" | "UNKNOWN";
+            /** Provider */
+            provider?: string | null;
+            /** Rookie Class */
+            rookie_class?: number | null;
+            /** Search Name */
+            search_name: string;
+            /**
+             * Status
+             * @enum {string}
+             */
+            status: "active" | "inactive" | "injured" | "reserve" | "unknown";
+            /** Suffix */
+            suffix?: string | null;
+            /** Team */
+            team?: string | null;
+        };
+        /** PlayerImportCommitResponse */
+        PlayerImportCommitResponse: {
+            /** Created Players */
+            created_players: number;
+            /** Ignored Rows */
+            ignored_rows: number;
+            session: components["schemas"]["PlayerImportSessionRead"];
+            /** Updated Players */
+            updated_players: number;
+        };
+        /** PlayerImportRowRead */
+        PlayerImportRowRead: {
+            candidate: components["schemas"]["PlayerCandidate"] | null;
+            /** Candidate Players */
+            candidate_players: components["schemas"]["PlayerRead"][];
+            /** Explanation */
+            explanation: string;
+            /** Id */
+            id: string;
+            /**
+             * Outcome
+             * @enum {string}
+             */
+            outcome: "new" | "matched" | "changed" | "ambiguous" | "invalid" | "ignored";
+            /** Proposed Player Id */
+            proposed_player_id: string | null;
+            /** Reason Code */
+            reason_code: string;
+            /** Resolved Player Id */
+            resolved_player_id: string | null;
+            /** Row Number */
+            row_number: number;
+            /** Source Name */
+            source_name: string | null;
+        };
+        /** PlayerImportSessionRead */
+        PlayerImportSessionRead: {
+            /** Ambiguous Count */
+            ambiguous_count: number;
+            /** Changed Count */
+            changed_count: number;
+            /** Committed At */
+            committed_at: string | null;
+            /** Created At */
+            created_at: string;
+            /** Filename */
+            filename: string | null;
+            /** Id */
+            id: string;
+            /** Ignored Count */
+            ignored_count: number;
+            /** Invalid Count */
+            invalid_count: number;
+            /** Matched Count */
+            matched_count: number;
+            /** New Count */
+            new_count: number;
+            /** Rows */
+            rows: components["schemas"]["PlayerImportRowRead"][];
+            /** Source */
+            source: string;
+            /**
+             * Status
+             * @enum {string}
+             */
+            status: "preview" | "committed" | "cancelled" | "failed";
+        };
+        /** PlayerListResponse */
+        PlayerListResponse: {
+            /** Items */
+            items: components["schemas"]["PlayerRead"][];
+            /** Limit */
+            limit: number;
+            /** Offset */
+            offset: number;
+            /** Total */
+            total: number;
+        };
+        /** PlayerPatch */
+        PlayerPatch: {
+            /** Display Name */
+            display_name?: string | null;
+            /** Fantasy Positions */
+            fantasy_positions?: ("QB" | "RB" | "WR" | "TE" | "K" | "DEF" | "UNKNOWN")[] | null;
+            /** Is Rookie */
+            is_rookie?: boolean | null;
+            /** Primary Position */
+            primary_position?: ("QB" | "RB" | "WR" | "TE" | "K" | "DEF" | "UNKNOWN") | null;
+            /** Rookie Class */
+            rookie_class?: number | null;
+            /** Status */
+            status?: ("active" | "inactive" | "injured" | "reserve" | "unknown") | null;
+            /** Team */
+            team?: string | null;
+        };
+        /** PlayerRead */
+        PlayerRead: {
+            /** Display Name */
+            display_name: string;
+            /** Fantasy Positions */
+            fantasy_positions: ("QB" | "RB" | "WR" | "TE" | "K" | "DEF" | "UNKNOWN")[];
+            /** First Name */
+            first_name: string | null;
+            /** Id */
+            id: string;
+            /** Is Rookie */
+            is_rookie: boolean;
+            /** Last Name */
+            last_name: string | null;
+            /**
+             * Primary Position
+             * @enum {string}
+             */
+            primary_position: "QB" | "RB" | "WR" | "TE" | "K" | "DEF" | "UNKNOWN";
+            /** Relevant */
+            relevant: boolean;
+            /** Rookie Class */
+            rookie_class: number | null;
+            /**
+             * Status
+             * @enum {string}
+             */
+            status: "active" | "inactive" | "injured" | "reserve" | "unknown";
+            /** Suffix */
+            suffix: string | null;
+            /** Team */
+            team: string | null;
+            /** Updated At */
+            updated_at: string;
         };
         /** SafetyConfiguration */
         SafetyConfiguration: {
@@ -280,6 +629,311 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["LeagueProfileSummary"];
+                };
+            };
+        };
+    };
+    preview_player_csv_api_v1_player_imports_csv_preview_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CsvPreviewRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PlayerImportSessionRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    preview_fixture_api_v1_player_imports_fixture_preview_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PlayerImportSessionRead"];
+                };
+            };
+        };
+    };
+    get_player_import_api_v1_player_imports__session_id__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                session_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PlayerImportSessionRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    cancel_player_import_api_v1_player_imports__session_id__cancel_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                session_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PlayerImportSessionRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    commit_player_import_api_v1_player_imports__session_id__commit_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                session_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PlayerImportCommitResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    save_player_import_decision_api_v1_player_imports__session_id__rows__row_id__decision_put: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                session_id: string;
+                row_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["MappingDecisionRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PlayerImportSessionRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    list_canonical_players_api_v1_players_get: {
+        parameters: {
+            query?: {
+                search?: string | null;
+                position?: ("QB" | "RB" | "WR" | "TE" | "K" | "DEF" | "UNKNOWN") | null;
+                status?: ("active" | "inactive" | "injured" | "reserve" | "unknown") | null;
+                rookie_class?: number | null;
+                relevant_only?: boolean;
+                limit?: number;
+                offset?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PlayerListResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    download_players_csv_api_v1_players_export_csv_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+        };
+    };
+    get_canonical_player_api_v1_players__player_id__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                player_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PlayerRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    update_canonical_player_api_v1_players__player_id__patch: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                player_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PlayerPatch"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PlayerRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
                 };
             };
         };
