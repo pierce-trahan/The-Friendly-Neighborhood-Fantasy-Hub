@@ -4,6 +4,146 @@
  */
 
 export interface paths {
+    "/api/v1/boards": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List Personal Boards */
+        get: operations["list_personal_boards_api_v1_boards_get"];
+        put?: never;
+        /** Create Personal Board */
+        post: operations["create_personal_board_api_v1_boards_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/boards/{board_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get Personal Board */
+        get: operations["get_personal_board_api_v1_boards__board_id__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /** Update Personal Board */
+        patch: operations["update_personal_board_api_v1_boards__board_id__patch"];
+        trace?: never;
+    };
+    "/api/v1/boards/{board_id}/entries": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Create Board Entry */
+        post: operations["create_board_entry_api_v1_boards__board_id__entries_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/boards/{board_id}/entries/{entry_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /** Delete Board Entry */
+        delete: operations["delete_board_entry_api_v1_boards__board_id__entries__entry_id__delete"];
+        options?: never;
+        head?: never;
+        /** Update Board Entry */
+        patch: operations["update_board_entry_api_v1_boards__board_id__entries__entry_id__patch"];
+        trace?: never;
+    };
+    "/api/v1/boards/{board_id}/export.csv": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Download Personal Board */
+        get: operations["download_personal_board_api_v1_boards__board_id__export_csv_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/boards/{board_id}/order": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /** Save Board Order */
+        put: operations["save_board_order_api_v1_boards__board_id__order_put"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/boards/{board_id}/tiers": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Create Board Tier */
+        post: operations["create_board_tier_api_v1_boards__board_id__tiers_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/boards/{board_id}/tiers/{tier_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /** Delete Board Tier */
+        delete: operations["delete_board_tier_api_v1_boards__board_id__tiers__tier_id__delete"];
+        options?: never;
+        head?: never;
+        /** Update Board Tier */
+        patch: operations["update_board_tier_api_v1_boards__board_id__tiers__tier_id__patch"];
+        trace?: never;
+    };
     "/api/v1/config": {
         parameters: {
             query?: never;
@@ -250,6 +390,159 @@ export interface components {
             automatic: boolean;
             /** Retention Count */
             retention_count: number;
+        };
+        /** BoardCreate */
+        BoardCreate: {
+            /** Description */
+            description?: string | null;
+            /** League Profile Id */
+            league_profile_id?: string | null;
+            /** Name */
+            name: string;
+            /**
+             * Scope
+             * @default overall
+             * @enum {string}
+             */
+            scope: "overall" | "rookie" | "veteran";
+        };
+        /** BoardEntryCreate */
+        BoardEntryCreate: {
+            /** Player Id */
+            player_id: string;
+        };
+        /** BoardEntryPatch */
+        BoardEntryPatch: {
+            /** Favorite */
+            favorite?: boolean | null;
+            /** Note */
+            note?: string | null;
+            /** Tier Id */
+            tier_id?: string | null;
+        };
+        /** BoardEntryRead */
+        BoardEntryRead: {
+            /** Favorite */
+            favorite: boolean;
+            /** Id */
+            id: string;
+            /** Note */
+            note: string | null;
+            player: components["schemas"]["PlayerRead"];
+            /** Rank */
+            rank: number;
+            /** Tier Id */
+            tier_id: string | null;
+            /** Updated At */
+            updated_at: string;
+        };
+        /** BoardListResponse */
+        BoardListResponse: {
+            /** Items */
+            items: components["schemas"]["BoardSummary"][];
+        };
+        /** BoardOrderUpdate */
+        BoardOrderUpdate: {
+            /** Player Ids */
+            player_ids: string[];
+        };
+        /** BoardPatch */
+        BoardPatch: {
+            /** Archived */
+            archived?: boolean | null;
+            /** Description */
+            description?: string | null;
+            /** League Profile Id */
+            league_profile_id?: string | null;
+            /** Name */
+            name?: string | null;
+            /** Scope */
+            scope?: ("overall" | "rookie" | "veteran") | null;
+        };
+        /** BoardRead */
+        BoardRead: {
+            /** Archived */
+            archived: boolean;
+            /** Created At */
+            created_at: string;
+            /** Description */
+            description: string | null;
+            /** Entries */
+            entries: components["schemas"]["BoardEntryRead"][];
+            /** Entry Count */
+            entry_count: number;
+            /** Id */
+            id: string;
+            /** League Profile Id */
+            league_profile_id: string | null;
+            /** Name */
+            name: string;
+            /**
+             * Scope
+             * @enum {string}
+             */
+            scope: "overall" | "rookie" | "veteran";
+            /** Tiers */
+            tiers: components["schemas"]["BoardTierRead"][];
+            /** Updated At */
+            updated_at: string;
+        };
+        /** BoardSummary */
+        BoardSummary: {
+            /** Archived */
+            archived: boolean;
+            /** Created At */
+            created_at: string;
+            /** Description */
+            description: string | null;
+            /** Entry Count */
+            entry_count: number;
+            /** Id */
+            id: string;
+            /** League Profile Id */
+            league_profile_id: string | null;
+            /** Name */
+            name: string;
+            /**
+             * Scope
+             * @enum {string}
+             */
+            scope: "overall" | "rookie" | "veteran";
+            /** Updated At */
+            updated_at: string;
+        };
+        /** BoardTierCreate */
+        BoardTierCreate: {
+            /** Color */
+            color?: string | null;
+            /** Name */
+            name: string;
+            /** Tier Order */
+            tier_order?: number | null;
+        };
+        /** BoardTierPatch */
+        BoardTierPatch: {
+            /** Color */
+            color?: string | null;
+            /** Name */
+            name?: string | null;
+            /** Tier Order */
+            tier_order?: number | null;
+        };
+        /** BoardTierRead */
+        BoardTierRead: {
+            /** Color */
+            color: string | null;
+            /** Created At */
+            created_at: string;
+            /** Id */
+            id: string;
+            /** Name */
+            name: string;
+            /** Tier Order */
+            tier_order: number;
+            /** Updated At */
+            updated_at: string;
         };
         /** CsvPreviewRequest */
         CsvPreviewRequest: {
@@ -520,6 +813,408 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
+    list_personal_boards_api_v1_boards_get: {
+        parameters: {
+            query?: {
+                include_archived?: boolean;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BoardListResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    create_personal_board_api_v1_boards_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["BoardCreate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BoardRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_personal_board_api_v1_boards__board_id__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                board_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BoardRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    update_personal_board_api_v1_boards__board_id__patch: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                board_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["BoardPatch"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BoardRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    create_board_entry_api_v1_boards__board_id__entries_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                board_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["BoardEntryCreate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BoardRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    delete_board_entry_api_v1_boards__board_id__entries__entry_id__delete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                board_id: string;
+                entry_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BoardRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    update_board_entry_api_v1_boards__board_id__entries__entry_id__patch: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                board_id: string;
+                entry_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["BoardEntryPatch"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BoardRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    download_personal_board_api_v1_boards__board_id__export_csv_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                board_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    save_board_order_api_v1_boards__board_id__order_put: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                board_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["BoardOrderUpdate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BoardRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    create_board_tier_api_v1_boards__board_id__tiers_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                board_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["BoardTierCreate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BoardRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    delete_board_tier_api_v1_boards__board_id__tiers__tier_id__delete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                board_id: string;
+                tier_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BoardRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    update_board_tier_api_v1_boards__board_id__tiers__tier_id__patch: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                board_id: string;
+                tier_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["BoardTierPatch"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BoardRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
     read_configuration_api_v1_config_get: {
         parameters: {
             query?: never;
