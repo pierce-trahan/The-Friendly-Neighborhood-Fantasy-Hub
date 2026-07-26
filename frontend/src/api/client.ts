@@ -3,6 +3,27 @@ import type { components } from "./schema";
 export type AppConfiguration = components["schemas"]["AppConfiguration"];
 export type HealthResponse = components["schemas"]["HealthResponse"];
 export type LeagueProfileSummary = components["schemas"]["LeagueProfileSummary"];
+export type CsvPreviewRequest = components["schemas"]["CsvPreviewRequest"];
+export type MappingDecisionRequest =
+  components["schemas"]["MappingDecisionRequest"];
+export type PlayerImportCommitResponse =
+  components["schemas"]["PlayerImportCommitResponse"];
+export type PlayerImportSession = components["schemas"]["PlayerImportSessionRead"];
+export type PlayerListResponse = components["schemas"]["PlayerListResponse"];
+export type PlayerPatch = components["schemas"]["PlayerPatch"];
+export type Player = components["schemas"]["PlayerRead"];
+export type PlayerPosition = Player["primary_position"];
+export type PlayerStatus = Player["status"];
+
+export type PlayerFilters = {
+  search?: string;
+  position?: PlayerPosition | "";
+  status?: PlayerStatus | "";
+  rookieClass?: number;
+  relevantOnly?: boolean;
+  limit?: number;
+  offset?: number;
+};
 
 type ErrorEnvelope = {
   error?: {
@@ -76,4 +97,87 @@ export function loadEntropySample(): Promise<LeagueProfileSummary> {
   return request("/api/v1/league-profiles/samples/entropy", {
     method: "POST",
   });
+}
+
+export function getPlayers(filters: PlayerFilters = {}): Promise<PlayerListResponse> {
+  const parameters = new URLSearchParams();
+  if (filters.search) parameters.set("search", filters.search);
+  if (filters.position) parameters.set("position", filters.position);
+  if (filters.status) parameters.set("status", filters.status);
+  if (filters.rookieClass) {
+    parameters.set("rookie_class", String(filters.rookieClass));
+  }
+  parameters.set("relevant_only", String(filters.relevantOnly ?? true));
+  parameters.set("limit", String(filters.limit ?? 25));
+  parameters.set("offset", String(filters.offset ?? 0));
+  return request(`/api/v1/players?${parameters.toString()}`);
+}
+
+export function getPlayer(playerId: string): Promise<Player> {
+  return request(`/api/v1/players/${encodeURIComponent(playerId)}`);
+}
+
+export function updatePlayer(
+  playerId: string,
+  patch: PlayerPatch,
+): Promise<Player> {
+  return request(`/api/v1/players/${encodeURIComponent(playerId)}`, {
+    method: "PATCH",
+    body: JSON.stringify(patch),
+  });
+}
+
+export function getPlayerExportUrl(): string {
+  return "/api/v1/players/export.csv";
+}
+
+export function previewPlayerFixture(): Promise<PlayerImportSession> {
+  return request("/api/v1/player-imports/fixture/preview", {
+    method: "POST",
+  });
+}
+
+export function previewPlayerCsv(
+  payload: CsvPreviewRequest,
+): Promise<PlayerImportSession> {
+  return request("/api/v1/player-imports/csv/preview", {
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
+}
+
+export function getPlayerImport(sessionId: string): Promise<PlayerImportSession> {
+  return request(`/api/v1/player-imports/${encodeURIComponent(sessionId)}`);
+}
+
+export function decidePlayerImportRow(
+  sessionId: string,
+  rowId: string,
+  decision: MappingDecisionRequest,
+): Promise<PlayerImportSession> {
+  return request(
+    `/api/v1/player-imports/${encodeURIComponent(sessionId)}/rows/${encodeURIComponent(rowId)}/decision`,
+    {
+      method: "PUT",
+      body: JSON.stringify(decision),
+    },
+  );
+}
+
+export function commitPlayerImport(
+  sessionId: string,
+): Promise<PlayerImportCommitResponse> {
+  return request(
+    `/api/v1/player-imports/${encodeURIComponent(sessionId)}/commit`,
+    { method: "POST" },
+  );
+}
+
+export function cancelPlayerImport(
+  sessionId: string,
+): Promise<PlayerImportSession> {
+  return request(
+    `/api/v1/player-imports/${encodeURIComponent(sessionId)}/cancel`,
+    { method: "POST" },
+  );
 }

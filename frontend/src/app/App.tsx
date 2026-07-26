@@ -11,8 +11,10 @@ import {
   loadEntropySample,
   saveConfiguration,
 } from "../api/client";
+import { PlayerWorkspace } from "../features/players/PlayerWorkspace";
 
 type LoadState = "loading" | "ready" | "error";
+type AppSection = "overview" | "players";
 
 function formatError(error: unknown): { message: string; action?: string } {
   if (error instanceof ApiError) {
@@ -25,6 +27,7 @@ function formatError(error: unknown): { message: string; action?: string } {
 }
 
 export function App() {
+  const [section, setSection] = useState<AppSection>("overview");
   const [loadState, setLoadState] = useState<LoadState>("loading");
   const [health, setHealth] = useState<HealthResponse | null>(null);
   const [configuration, setConfiguration] = useState<AppConfiguration | null>(
@@ -121,10 +124,12 @@ export function App() {
   );
 
   return (
-    <main className="app-shell">
+    <main
+      className={`app-shell ${section === "players" ? "app-shell-players" : ""}`}
+    >
       <header className="hero">
         <div>
-          <p className="eyebrow">Phase 0 · Local launch proof</p>
+          <p className="eyebrow">Local Draft Lab · Phase 1</p>
           <h1>Friendly Neighborhood Fantasy Hub</h1>
           <p className="hero-copy">
             Your private draft room foundation is running locally. Judgment stays
@@ -137,19 +142,39 @@ export function App() {
         </div>
       </header>
 
-      {error && (
+      <nav className="app-navigation" aria-label="Primary">
+        <button
+          type="button"
+          aria-current={section === "overview" ? "page" : undefined}
+          onClick={() => setSection("overview")}
+        >
+          Overview
+        </button>
+        <button
+          type="button"
+          aria-current={section === "players" ? "page" : undefined}
+          onClick={() => setSection("players")}
+        >
+          Players
+        </button>
+      </nav>
+
+      {section === "overview" && error && (
         <section className="notice notice-error" role="alert">
           <strong>{error.message}</strong>
           {error.action && <span>{error.action}</span>}
         </section>
       )}
-      {notice && (
+      {section === "overview" && notice && (
         <section className="notice notice-success" role="status">
           {notice}
         </section>
       )}
 
-      <section className="dashboard-grid">
+      {section === "players" ? (
+        <PlayerWorkspace />
+      ) : (
+        <section className="dashboard-grid">
         <article className="card league-card">
           <div className="card-heading">
             <div>
@@ -272,7 +297,8 @@ export function App() {
             {saving ? "Saving…" : "Save settings"}
           </button>
         </article>
-      </section>
+        </section>
+      )}
     </main>
   );
 }
