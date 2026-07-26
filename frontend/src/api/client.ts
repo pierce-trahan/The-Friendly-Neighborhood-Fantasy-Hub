@@ -3,6 +3,15 @@ import type { components } from "./schema";
 export type AppConfiguration = components["schemas"]["AppConfiguration"];
 export type HealthResponse = components["schemas"]["HealthResponse"];
 export type LeagueProfileSummary = components["schemas"]["LeagueProfileSummary"];
+export type Board = components["schemas"]["BoardRead"];
+export type BoardCreate = components["schemas"]["BoardCreate"];
+export type BoardEntryCreate = components["schemas"]["BoardEntryCreate"];
+export type BoardEntryPatch = components["schemas"]["BoardEntryPatch"];
+export type BoardListResponse = components["schemas"]["BoardListResponse"];
+export type BoardOrderUpdate = components["schemas"]["BoardOrderUpdate"];
+export type BoardPatch = components["schemas"]["BoardPatch"];
+export type BoardTierCreate = components["schemas"]["BoardTierCreate"];
+export type BoardTierPatch = components["schemas"]["BoardTierPatch"];
 export type CsvPreviewRequest = components["schemas"]["CsvPreviewRequest"];
 export type MappingDecisionRequest =
   components["schemas"]["MappingDecisionRequest"];
@@ -96,6 +105,113 @@ export function getLeagueProfiles(): Promise<LeagueProfileSummary[]> {
 export function loadEntropySample(): Promise<LeagueProfileSummary> {
   return request("/api/v1/league-profiles/samples/entropy", {
     method: "POST",
+  });
+}
+
+export function getBoards(includeArchived = false): Promise<BoardListResponse> {
+  return request(`/api/v1/boards?include_archived=${String(includeArchived)}`);
+}
+
+export function createBoard(payload: BoardCreate): Promise<Board> {
+  return request("/api/v1/boards", {
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
+}
+
+export function getBoard(boardId: string): Promise<Board> {
+  return request(`/api/v1/boards/${encodeURIComponent(boardId)}`);
+}
+
+export function updateBoard(
+  boardId: string,
+  patch: BoardPatch,
+): Promise<Board> {
+  return request(`/api/v1/boards/${encodeURIComponent(boardId)}`, {
+    method: "PATCH",
+    body: JSON.stringify(patch),
+  });
+}
+
+export function getBoardExportUrl(boardId: string): string {
+  return `/api/v1/boards/${encodeURIComponent(boardId)}/export.csv`;
+}
+
+export function addBoardTier(
+  boardId: string,
+  payload: BoardTierCreate,
+): Promise<Board> {
+  return request(`/api/v1/boards/${encodeURIComponent(boardId)}/tiers`, {
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
+}
+
+export function updateBoardTier(
+  boardId: string,
+  tierId: string,
+  patch: BoardTierPatch,
+): Promise<Board> {
+  return request(
+    `/api/v1/boards/${encodeURIComponent(boardId)}/tiers/${encodeURIComponent(tierId)}`,
+    {
+      method: "PATCH",
+      body: JSON.stringify(patch),
+    },
+  );
+}
+
+export function removeBoardTier(
+  boardId: string,
+  tierId: string,
+): Promise<Board> {
+  return request(
+    `/api/v1/boards/${encodeURIComponent(boardId)}/tiers/${encodeURIComponent(tierId)}`,
+    { method: "DELETE" },
+  );
+}
+
+export function addBoardEntry(
+  boardId: string,
+  payload: BoardEntryCreate,
+): Promise<Board> {
+  return request(`/api/v1/boards/${encodeURIComponent(boardId)}/entries`, {
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
+}
+
+export function updateBoardEntry(
+  boardId: string,
+  entryId: string,
+  patch: BoardEntryPatch,
+): Promise<Board> {
+  return request(
+    `/api/v1/boards/${encodeURIComponent(boardId)}/entries/${encodeURIComponent(entryId)}`,
+    {
+      method: "PATCH",
+      body: JSON.stringify(patch),
+    },
+  );
+}
+
+export function removeBoardEntry(
+  boardId: string,
+  entryId: string,
+): Promise<Board> {
+  return request(
+    `/api/v1/boards/${encodeURIComponent(boardId)}/entries/${encodeURIComponent(entryId)}`,
+    { method: "DELETE" },
+  );
+}
+
+export function reorderBoard(
+  boardId: string,
+  payload: BoardOrderUpdate,
+): Promise<Board> {
+  return request(`/api/v1/boards/${encodeURIComponent(boardId)}/order`, {
+    method: "PUT",
+    body: JSON.stringify(payload),
   });
 }
 

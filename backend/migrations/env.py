@@ -6,6 +6,11 @@ from alembic import context
 from sqlalchemy import engine_from_config, pool
 
 from friendly_hub.db.base import Base
+from friendly_hub.domains.boards.models import (  # noqa: F401
+    BoardEntryRow,
+    BoardTierRow,
+    PersonalBoardRow,
+)
 from friendly_hub.domains.configuration.models import AppConfigurationRow  # noqa: F401
 from friendly_hub.domains.leagues.models import LeagueProfileRow  # noqa: F401
 from friendly_hub.domains.players.models import (  # noqa: F401
