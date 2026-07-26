@@ -661,6 +661,608 @@
         "title": "DisplayConfiguration",
         "type": "object"
       },
+      "GutEloActionCreate": {
+        "properties": {
+          "outcome": {
+            "enum": [
+              "a_win",
+              "b_win",
+              "insufficient",
+              "skip"
+            ],
+            "title": "Outcome",
+            "type": "string"
+          },
+          "player_a_id": {
+            "maxLength": 36,
+            "minLength": 1,
+            "title": "Player A Id",
+            "type": "string"
+          },
+          "player_b_id": {
+            "maxLength": 36,
+            "minLength": 1,
+            "title": "Player B Id",
+            "type": "string"
+          },
+          "revision": {
+            "minimum": 0.0,
+            "title": "Revision",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "revision",
+          "player_a_id",
+          "player_b_id",
+          "outcome"
+        ],
+        "title": "GutEloActionCreate",
+        "type": "object"
+      },
+      "GutEloActionRead": {
+        "properties": {
+          "created_at": {
+            "title": "Created At",
+            "type": "string"
+          },
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "outcome": {
+            "enum": [
+              "a_win",
+              "b_win",
+              "insufficient",
+              "skip"
+            ],
+            "title": "Outcome",
+            "type": "string"
+          },
+          "player_a_id": {
+            "title": "Player A Id",
+            "type": "string"
+          },
+          "player_b_id": {
+            "title": "Player B Id",
+            "type": "string"
+          },
+          "sequence_number": {
+            "title": "Sequence Number",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id",
+          "sequence_number",
+          "player_a_id",
+          "player_b_id",
+          "outcome",
+          "created_at"
+        ],
+        "title": "GutEloActionRead",
+        "type": "object"
+      },
+      "GutEloPairRead": {
+        "properties": {
+          "player_a": {
+            "$ref": "#/components/schemas/PlayerRead"
+          },
+          "player_b": {
+            "$ref": "#/components/schemas/PlayerRead"
+          },
+          "revision": {
+            "title": "Revision",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "revision",
+          "player_a",
+          "player_b"
+        ],
+        "title": "GutEloPairRead",
+        "type": "object"
+      },
+      "GutEloParticipantRead": {
+        "properties": {
+          "decisive_count": {
+            "title": "Decisive Count",
+            "type": "integer"
+          },
+          "gut_rank": {
+            "title": "Gut Rank",
+            "type": "integer"
+          },
+          "player": {
+            "$ref": "#/components/schemas/PlayerRead"
+          },
+          "rating": {
+            "title": "Rating",
+            "type": "number"
+          },
+          "starting_manual_rank": {
+            "title": "Starting Manual Rank",
+            "type": "integer"
+          },
+          "starting_tier_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Starting Tier Name"
+          }
+        },
+        "required": [
+          "player",
+          "starting_manual_rank",
+          "starting_tier_name",
+          "gut_rank",
+          "rating",
+          "decisive_count"
+        ],
+        "title": "GutEloParticipantRead",
+        "type": "object"
+      },
+      "GutEloProgressRead": {
+        "properties": {
+          "coverage_percent": {
+            "title": "Coverage Percent",
+            "type": "integer"
+          },
+          "decisive_count": {
+            "title": "Decisive Count",
+            "type": "integer"
+          },
+          "insufficient_count": {
+            "title": "Insufficient Count",
+            "type": "integer"
+          },
+          "participant_count": {
+            "title": "Participant Count",
+            "type": "integer"
+          },
+          "participants_with_decision": {
+            "title": "Participants With Decision",
+            "type": "integer"
+          },
+          "progress_percent": {
+            "title": "Progress Percent",
+            "type": "integer"
+          },
+          "resolved_count": {
+            "title": "Resolved Count",
+            "type": "integer"
+          },
+          "skip_count": {
+            "title": "Skip Count",
+            "type": "integer"
+          },
+          "stability_explanation": {
+            "title": "Stability Explanation",
+            "type": "string"
+          },
+          "stability_label": {
+            "enum": [
+              "starting",
+              "developing",
+              "useful_signal",
+              "still_moving"
+            ],
+            "title": "Stability Label",
+            "type": "string"
+          },
+          "target_count": {
+            "title": "Target Count",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "resolved_count",
+          "decisive_count",
+          "insufficient_count",
+          "skip_count",
+          "target_count",
+          "progress_percent",
+          "participants_with_decision",
+          "participant_count",
+          "coverage_percent",
+          "stability_label",
+          "stability_explanation"
+        ],
+        "title": "GutEloProgressRead",
+        "type": "object"
+      },
+      "GutEloSessionCreate": {
+        "properties": {
+          "position": {
+            "anyOf": [
+              {
+                "enum": [
+                  "QB",
+                  "RB",
+                  "WR",
+                  "TE",
+                  "K",
+                  "DEF",
+                  "UNKNOWN"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Position"
+          },
+          "queue_mode": {
+            "default": "board",
+            "enum": [
+              "board",
+              "position",
+              "tier",
+              "uncertainty"
+            ],
+            "title": "Queue Mode",
+            "type": "string"
+          },
+          "target_count": {
+            "anyOf": [
+              {
+                "maximum": 40.0,
+                "minimum": 1.0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Target Count"
+          },
+          "tier_id": {
+            "anyOf": [
+              {
+                "maxLength": 36,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Tier Id"
+          }
+        },
+        "title": "GutEloSessionCreate",
+        "type": "object"
+      },
+      "GutEloSessionListResponse": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/GutEloSessionSummary"
+            },
+            "title": "Items",
+            "type": "array"
+          }
+        },
+        "required": [
+          "items"
+        ],
+        "title": "GutEloSessionListResponse",
+        "type": "object"
+      },
+      "GutEloSessionPatch": {
+        "properties": {
+          "status": {
+            "enum": [
+              "active",
+              "paused"
+            ],
+            "title": "Status",
+            "type": "string"
+          }
+        },
+        "required": [
+          "status"
+        ],
+        "title": "GutEloSessionPatch",
+        "type": "object"
+      },
+      "GutEloSessionRead": {
+        "properties": {
+          "actions": {
+            "items": {
+              "$ref": "#/components/schemas/GutEloActionRead"
+            },
+            "title": "Actions",
+            "type": "array"
+          },
+          "board_id": {
+            "title": "Board Id",
+            "type": "string"
+          },
+          "board_name": {
+            "title": "Board Name",
+            "type": "string"
+          },
+          "board_scope": {
+            "enum": [
+              "overall",
+              "rookie",
+              "veteran"
+            ],
+            "title": "Board Scope",
+            "type": "string"
+          },
+          "completed_at": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Completed At"
+          },
+          "created_at": {
+            "title": "Created At",
+            "type": "string"
+          },
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "manual_board_unchanged": {
+            "const": true,
+            "default": true,
+            "title": "Manual Board Unchanged",
+            "type": "boolean"
+          },
+          "next_pair": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/GutEloPairRead"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "participant_count": {
+            "title": "Participant Count",
+            "type": "integer"
+          },
+          "participants": {
+            "items": {
+              "$ref": "#/components/schemas/GutEloParticipantRead"
+            },
+            "title": "Participants",
+            "type": "array"
+          },
+          "position": {
+            "anyOf": [
+              {
+                "enum": [
+                  "QB",
+                  "RB",
+                  "WR",
+                  "TE",
+                  "K",
+                  "DEF",
+                  "UNKNOWN"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Position"
+          },
+          "progress": {
+            "$ref": "#/components/schemas/GutEloProgressRead"
+          },
+          "queue_mode": {
+            "enum": [
+              "board",
+              "position",
+              "tier",
+              "uncertainty"
+            ],
+            "title": "Queue Mode",
+            "type": "string"
+          },
+          "resolved_count": {
+            "title": "Resolved Count",
+            "type": "integer"
+          },
+          "revision": {
+            "title": "Revision",
+            "type": "integer"
+          },
+          "status": {
+            "enum": [
+              "active",
+              "paused",
+              "completed"
+            ],
+            "title": "Status",
+            "type": "string"
+          },
+          "target_count": {
+            "title": "Target Count",
+            "type": "integer"
+          },
+          "tier_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Tier Id"
+          },
+          "updated_at": {
+            "title": "Updated At",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "board_id",
+          "board_name",
+          "board_scope",
+          "queue_mode",
+          "position",
+          "tier_id",
+          "status",
+          "participant_count",
+          "resolved_count",
+          "target_count",
+          "created_at",
+          "updated_at",
+          "completed_at",
+          "revision",
+          "participants",
+          "progress",
+          "actions",
+          "next_pair"
+        ],
+        "title": "GutEloSessionRead",
+        "type": "object"
+      },
+      "GutEloSessionSummary": {
+        "properties": {
+          "board_id": {
+            "title": "Board Id",
+            "type": "string"
+          },
+          "board_name": {
+            "title": "Board Name",
+            "type": "string"
+          },
+          "board_scope": {
+            "enum": [
+              "overall",
+              "rookie",
+              "veteran"
+            ],
+            "title": "Board Scope",
+            "type": "string"
+          },
+          "completed_at": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Completed At"
+          },
+          "created_at": {
+            "title": "Created At",
+            "type": "string"
+          },
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "participant_count": {
+            "title": "Participant Count",
+            "type": "integer"
+          },
+          "position": {
+            "anyOf": [
+              {
+                "enum": [
+                  "QB",
+                  "RB",
+                  "WR",
+                  "TE",
+                  "K",
+                  "DEF",
+                  "UNKNOWN"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Position"
+          },
+          "queue_mode": {
+            "enum": [
+              "board",
+              "position",
+              "tier",
+              "uncertainty"
+            ],
+            "title": "Queue Mode",
+            "type": "string"
+          },
+          "resolved_count": {
+            "title": "Resolved Count",
+            "type": "integer"
+          },
+          "status": {
+            "enum": [
+              "active",
+              "paused",
+              "completed"
+            ],
+            "title": "Status",
+            "type": "string"
+          },
+          "target_count": {
+            "title": "Target Count",
+            "type": "integer"
+          },
+          "tier_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Tier Id"
+          },
+          "updated_at": {
+            "title": "Updated At",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "board_id",
+          "board_name",
+          "board_scope",
+          "queue_mode",
+          "position",
+          "tier_id",
+          "status",
+          "participant_count",
+          "resolved_count",
+          "target_count",
+          "created_at",
+          "updated_at",
+          "completed_at"
+        ],
+        "title": "GutEloSessionSummary",
+        "type": "object"
+      },
       "HTTPValidationError": {
         "properties": {
           "detail": {
@@ -1886,6 +2488,98 @@
         ]
       }
     },
+    "/api/v1/boards/{board_id}/gut-elo-sessions": {
+      "get": {
+        "operationId": "list_board_gut_elo_sessions_api_v1_boards__board_id__gut_elo_sessions_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "board_id",
+            "required": true,
+            "schema": {
+              "title": "Board Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GutEloSessionListResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "List Board Gut Elo Sessions",
+        "tags": [
+          "gut-elo"
+        ]
+      },
+      "post": {
+        "operationId": "create_board_gut_elo_session_api_v1_boards__board_id__gut_elo_sessions_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "board_id",
+            "required": true,
+            "schema": {
+              "title": "Board Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GutEloSessionCreate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GutEloSessionRead"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Create Board Gut Elo Session",
+        "tags": [
+          "gut-elo"
+        ]
+      }
+    },
     "/api/v1/boards/{board_id}/order": {
       "put": {
         "operationId": "save_board_order_api_v1_boards__board_id__order_put",
@@ -2157,6 +2851,192 @@
         "summary": "Write Configuration",
         "tags": [
           "configuration"
+        ]
+      }
+    },
+    "/api/v1/gut-elo-sessions/{session_id}": {
+      "get": {
+        "operationId": "get_gut_elo_session_api_v1_gut_elo_sessions__session_id__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "session_id",
+            "required": true,
+            "schema": {
+              "title": "Session Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GutEloSessionRead"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Get Gut Elo Session",
+        "tags": [
+          "gut-elo"
+        ]
+      },
+      "patch": {
+        "operationId": "update_gut_elo_session_api_v1_gut_elo_sessions__session_id__patch",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "session_id",
+            "required": true,
+            "schema": {
+              "title": "Session Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GutEloSessionPatch"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GutEloSessionRead"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Update Gut Elo Session",
+        "tags": [
+          "gut-elo"
+        ]
+      }
+    },
+    "/api/v1/gut-elo-sessions/{session_id}/actions": {
+      "post": {
+        "operationId": "create_gut_elo_action_api_v1_gut_elo_sessions__session_id__actions_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "session_id",
+            "required": true,
+            "schema": {
+              "title": "Session Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GutEloActionCreate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GutEloSessionRead"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Create Gut Elo Action",
+        "tags": [
+          "gut-elo"
+        ]
+      }
+    },
+    "/api/v1/gut-elo-sessions/{session_id}/undo": {
+      "post": {
+        "operationId": "undo_gut_elo_action_api_v1_gut_elo_sessions__session_id__undo_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "session_id",
+            "required": true,
+            "schema": {
+              "title": "Session Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GutEloSessionRead"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Undo Gut Elo Action",
+        "tags": [
+          "gut-elo"
         ]
       }
     },

@@ -12,6 +12,13 @@ export type BoardOrderUpdate = components["schemas"]["BoardOrderUpdate"];
 export type BoardPatch = components["schemas"]["BoardPatch"];
 export type BoardTierCreate = components["schemas"]["BoardTierCreate"];
 export type BoardTierPatch = components["schemas"]["BoardTierPatch"];
+export type GutEloActionCreate = components["schemas"]["GutEloActionCreate"];
+export type GutEloSession = components["schemas"]["GutEloSessionRead"];
+export type GutEloSessionCreate =
+  components["schemas"]["GutEloSessionCreate"];
+export type GutEloSessionList =
+  components["schemas"]["GutEloSessionListResponse"];
+export type GutEloSessionPatch = components["schemas"]["GutEloSessionPatch"];
 export type CsvPreviewRequest = components["schemas"]["CsvPreviewRequest"];
 export type MappingDecisionRequest =
   components["schemas"]["MappingDecisionRequest"];
@@ -215,7 +222,71 @@ export function reorderBoard(
   });
 }
 
-export function getPlayers(filters: PlayerFilters = {}): Promise<PlayerListResponse> {
+export function getGutEloSessions(boardId: string): Promise<GutEloSessionList> {
+  return request(
+    `/api/v1/boards/${encodeURIComponent(boardId)}/gut-elo-sessions`,
+  );
+}
+
+export function createGutEloSession(
+  boardId: string,
+  payload: GutEloSessionCreate,
+): Promise<GutEloSession> {
+  return request(
+    `/api/v1/boards/${encodeURIComponent(boardId)}/gut-elo-sessions`,
+    {
+      method: "POST",
+      body: JSON.stringify(payload),
+    },
+  );
+}
+
+export function getGutEloSession(
+  sessionId: string,
+): Promise<GutEloSession> {
+  return request(
+    `/api/v1/gut-elo-sessions/${encodeURIComponent(sessionId)}`,
+  );
+}
+
+export function updateGutEloSession(
+  sessionId: string,
+  patch: GutEloSessionPatch,
+): Promise<GutEloSession> {
+  return request(
+    `/api/v1/gut-elo-sessions/${encodeURIComponent(sessionId)}`,
+    {
+      method: "PATCH",
+      body: JSON.stringify(patch),
+    },
+  );
+}
+
+export function recordGutEloAction(
+  sessionId: string,
+  payload: GutEloActionCreate,
+): Promise<GutEloSession> {
+  return request(
+    `/api/v1/gut-elo-sessions/${encodeURIComponent(sessionId)}/actions`,
+    {
+      method: "POST",
+      body: JSON.stringify(payload),
+    },
+  );
+}
+
+export function undoGutEloAction(
+  sessionId: string,
+): Promise<GutEloSession> {
+  return request(
+    `/api/v1/gut-elo-sessions/${encodeURIComponent(sessionId)}/undo`,
+    { method: "POST" },
+  );
+}
+
+export function getPlayers(
+  filters: PlayerFilters = {},
+): Promise<PlayerListResponse> {
   const parameters = new URLSearchParams();
   if (filters.search) parameters.set("search", filters.search);
   if (filters.position) parameters.set("position", filters.position);
