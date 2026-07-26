@@ -12,6 +12,11 @@ from friendly_hub.domains.boards.models import (  # noqa: F401
     PersonalBoardRow,
 )
 from friendly_hub.domains.configuration.models import AppConfigurationRow  # noqa: F401
+from friendly_hub.domains.gut_elo.models import (  # noqa: F401
+    GutEloActionRow,
+    GutEloParticipantRow,
+    GutEloSessionRow,
+)
 from friendly_hub.domains.leagues.models import LeagueProfileRow  # noqa: F401
 from friendly_hub.domains.players.models import (  # noqa: F401
     PlayerExternalIdRow,

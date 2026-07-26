@@ -92,6 +92,24 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/boards/{board_id}/gut-elo-sessions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List Board Gut Elo Sessions */
+        get: operations["list_board_gut_elo_sessions_api_v1_boards__board_id__gut_elo_sessions_get"];
+        put?: never;
+        /** Create Board Gut Elo Session */
+        post: operations["create_board_gut_elo_session_api_v1_boards__board_id__gut_elo_sessions_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/boards/{board_id}/order": {
         parameters: {
             query?: never;
@@ -156,6 +174,58 @@ export interface paths {
         /** Write Configuration */
         put: operations["write_configuration_api_v1_config_put"];
         post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/gut-elo-sessions/{session_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get Gut Elo Session */
+        get: operations["get_gut_elo_session_api_v1_gut_elo_sessions__session_id__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /** Update Gut Elo Session */
+        patch: operations["update_gut_elo_session_api_v1_gut_elo_sessions__session_id__patch"];
+        trace?: never;
+    };
+    "/api/v1/gut-elo-sessions/{session_id}/actions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Create Gut Elo Action */
+        post: operations["create_gut_elo_action_api_v1_gut_elo_sessions__session_id__actions_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/gut-elo-sessions/{session_id}/undo": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Undo Gut Elo Action */
+        post: operations["undo_gut_elo_action_api_v1_gut_elo_sessions__session_id__undo_post"];
         delete?: never;
         options?: never;
         head?: never;
@@ -565,6 +635,209 @@ export interface components {
             theme: "system" | "light" | "dark";
             /** Timezone */
             timezone: string;
+        };
+        /** GutEloActionCreate */
+        GutEloActionCreate: {
+            /**
+             * Outcome
+             * @enum {string}
+             */
+            outcome: "a_win" | "b_win" | "insufficient" | "skip";
+            /** Player A Id */
+            player_a_id: string;
+            /** Player B Id */
+            player_b_id: string;
+            /** Revision */
+            revision: number;
+        };
+        /** GutEloActionRead */
+        GutEloActionRead: {
+            /** Created At */
+            created_at: string;
+            /** Id */
+            id: string;
+            /**
+             * Outcome
+             * @enum {string}
+             */
+            outcome: "a_win" | "b_win" | "insufficient" | "skip";
+            /** Player A Id */
+            player_a_id: string;
+            /** Player B Id */
+            player_b_id: string;
+            /** Sequence Number */
+            sequence_number: number;
+        };
+        /** GutEloPairRead */
+        GutEloPairRead: {
+            player_a: components["schemas"]["PlayerRead"];
+            player_b: components["schemas"]["PlayerRead"];
+            /** Revision */
+            revision: number;
+        };
+        /** GutEloParticipantRead */
+        GutEloParticipantRead: {
+            /** Decisive Count */
+            decisive_count: number;
+            /** Gut Rank */
+            gut_rank: number;
+            player: components["schemas"]["PlayerRead"];
+            /** Rating */
+            rating: number;
+            /** Starting Manual Rank */
+            starting_manual_rank: number;
+            /** Starting Tier Name */
+            starting_tier_name: string | null;
+        };
+        /** GutEloProgressRead */
+        GutEloProgressRead: {
+            /** Coverage Percent */
+            coverage_percent: number;
+            /** Decisive Count */
+            decisive_count: number;
+            /** Insufficient Count */
+            insufficient_count: number;
+            /** Participant Count */
+            participant_count: number;
+            /** Participants With Decision */
+            participants_with_decision: number;
+            /** Progress Percent */
+            progress_percent: number;
+            /** Resolved Count */
+            resolved_count: number;
+            /** Skip Count */
+            skip_count: number;
+            /** Stability Explanation */
+            stability_explanation: string;
+            /**
+             * Stability Label
+             * @enum {string}
+             */
+            stability_label: "starting" | "developing" | "useful_signal" | "still_moving";
+            /** Target Count */
+            target_count: number;
+        };
+        /** GutEloSessionCreate */
+        GutEloSessionCreate: {
+            /** Position */
+            position?: ("QB" | "RB" | "WR" | "TE" | "K" | "DEF" | "UNKNOWN") | null;
+            /**
+             * Queue Mode
+             * @default board
+             * @enum {string}
+             */
+            queue_mode: "board" | "position" | "tier" | "uncertainty";
+            /** Target Count */
+            target_count?: number | null;
+            /** Tier Id */
+            tier_id?: string | null;
+        };
+        /** GutEloSessionListResponse */
+        GutEloSessionListResponse: {
+            /** Items */
+            items: components["schemas"]["GutEloSessionSummary"][];
+        };
+        /** GutEloSessionPatch */
+        GutEloSessionPatch: {
+            /**
+             * Status
+             * @enum {string}
+             */
+            status: "active" | "paused";
+        };
+        /** GutEloSessionRead */
+        GutEloSessionRead: {
+            /** Actions */
+            actions: components["schemas"]["GutEloActionRead"][];
+            /** Board Id */
+            board_id: string;
+            /** Board Name */
+            board_name: string;
+            /**
+             * Board Scope
+             * @enum {string}
+             */
+            board_scope: "overall" | "rookie" | "veteran";
+            /** Completed At */
+            completed_at: string | null;
+            /** Created At */
+            created_at: string;
+            /** Id */
+            id: string;
+            /**
+             * Manual Board Unchanged
+             * @default true
+             * @constant
+             */
+            manual_board_unchanged: true;
+            next_pair: components["schemas"]["GutEloPairRead"] | null;
+            /** Participant Count */
+            participant_count: number;
+            /** Participants */
+            participants: components["schemas"]["GutEloParticipantRead"][];
+            /** Position */
+            position: ("QB" | "RB" | "WR" | "TE" | "K" | "DEF" | "UNKNOWN") | null;
+            progress: components["schemas"]["GutEloProgressRead"];
+            /**
+             * Queue Mode
+             * @enum {string}
+             */
+            queue_mode: "board" | "position" | "tier" | "uncertainty";
+            /** Resolved Count */
+            resolved_count: number;
+            /** Revision */
+            revision: number;
+            /**
+             * Status
+             * @enum {string}
+             */
+            status: "active" | "paused" | "completed";
+            /** Target Count */
+            target_count: number;
+            /** Tier Id */
+            tier_id: string | null;
+            /** Updated At */
+            updated_at: string;
+        };
+        /** GutEloSessionSummary */
+        GutEloSessionSummary: {
+            /** Board Id */
+            board_id: string;
+            /** Board Name */
+            board_name: string;
+            /**
+             * Board Scope
+             * @enum {string}
+             */
+            board_scope: "overall" | "rookie" | "veteran";
+            /** Completed At */
+            completed_at: string | null;
+            /** Created At */
+            created_at: string;
+            /** Id */
+            id: string;
+            /** Participant Count */
+            participant_count: number;
+            /** Position */
+            position: ("QB" | "RB" | "WR" | "TE" | "K" | "DEF" | "UNKNOWN") | null;
+            /**
+             * Queue Mode
+             * @enum {string}
+             */
+            queue_mode: "board" | "position" | "tier" | "uncertainty";
+            /** Resolved Count */
+            resolved_count: number;
+            /**
+             * Status
+             * @enum {string}
+             */
+            status: "active" | "paused" | "completed";
+            /** Target Count */
+            target_count: number;
+            /** Tier Id */
+            tier_id: string | null;
+            /** Updated At */
+            updated_at: string;
         };
         /** HTTPValidationError */
         HTTPValidationError: {
@@ -1077,6 +1350,72 @@ export interface operations {
             };
         };
     };
+    list_board_gut_elo_sessions_api_v1_boards__board_id__gut_elo_sessions_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                board_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GutEloSessionListResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    create_board_gut_elo_session_api_v1_boards__board_id__gut_elo_sessions_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                board_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["GutEloSessionCreate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GutEloSessionRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
     save_board_order_api_v1_boards__board_id__order_put: {
         parameters: {
             query?: never;
@@ -1255,6 +1594,138 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["AppConfiguration"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_gut_elo_session_api_v1_gut_elo_sessions__session_id__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                session_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GutEloSessionRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    update_gut_elo_session_api_v1_gut_elo_sessions__session_id__patch: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                session_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["GutEloSessionPatch"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GutEloSessionRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    create_gut_elo_action_api_v1_gut_elo_sessions__session_id__actions_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                session_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["GutEloActionCreate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GutEloSessionRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    undo_gut_elo_action_api_v1_gut_elo_sessions__session_id__undo_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                session_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GutEloSessionRead"];
                 };
             };
             /** @description Validation Error */

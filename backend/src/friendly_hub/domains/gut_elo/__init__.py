@@ -1,0 +1,1 @@
+"""Gut ELO comparison domain."""
