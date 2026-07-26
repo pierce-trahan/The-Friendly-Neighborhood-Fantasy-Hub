@@ -11,10 +11,11 @@ import {
   loadEntropySample,
   saveConfiguration,
 } from "../api/client";
+import { BoardWorkspace } from "../features/boards/BoardWorkspace";
 import { PlayerWorkspace } from "../features/players/PlayerWorkspace";
 
 type LoadState = "loading" | "ready" | "error";
-type AppSection = "overview" | "players";
+type AppSection = "overview" | "players" | "boards";
 
 function formatError(error: unknown): { message: string; action?: string } {
   if (error instanceof ApiError) {
@@ -125,11 +126,11 @@ export function App() {
 
   return (
     <main
-      className={`app-shell ${section === "players" ? "app-shell-players" : ""}`}
+      className={`app-shell ${section !== "overview" ? "app-shell-workspace" : ""}`}
     >
       <header className="hero">
         <div>
-          <p className="eyebrow">Local Draft Lab · Phase 1</p>
+          <p className="eyebrow">Local Draft Lab · Phase 2</p>
           <h1>Friendly Neighborhood Fantasy Hub</h1>
           <p className="hero-copy">
             Your private draft room foundation is running locally. Judgment stays
@@ -157,6 +158,13 @@ export function App() {
         >
           Players
         </button>
+        <button
+          type="button"
+          aria-current={section === "boards" ? "page" : undefined}
+          onClick={() => setSection("boards")}
+        >
+          Boards
+        </button>
       </nav>
 
       {section === "overview" && error && (
@@ -171,9 +179,9 @@ export function App() {
         </section>
       )}
 
-      {section === "players" ? (
-        <PlayerWorkspace />
-      ) : (
+      {section === "players" && <PlayerWorkspace />}
+      {section === "boards" && <BoardWorkspace />}
+      {section === "overview" && (
         <section className="dashboard-grid">
         <article className="card league-card">
           <div className="card-heading">
