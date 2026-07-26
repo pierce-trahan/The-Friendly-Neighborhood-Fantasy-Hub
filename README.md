@@ -60,8 +60,9 @@ Phase 1 is complete: the Hub now has a canonical player universe, conservative
 identity matching, persisted import review, manual correction, and CSV
 import/export.
 
-Phase 2A is building the authoritative personal-board foundation for tiers,
-notes, favorites, and manual order. See the
+Phase 2A now includes the authoritative personal-board foundation and local
+interface for multiple boards, tiers, notes, favorites, manual order,
+reversible archiving, and CSV export. See the
 [personal board specification](docs/specs/phase-2-personal-board.md) for its
 storage, API, reversibility, privacy, and acceptance rules.
 
