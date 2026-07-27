@@ -66,10 +66,12 @@ reversible archiving, and CSV export. See the
 [personal board specification](docs/specs/phase-2-personal-board.md) for its
 storage, API, reversibility, privacy, and acceptance rules.
 
-Phase 2B is now specified for bounded, resumable Gut ELO comparisons that
-produce a separate preference signal without rewriting the Personal Board.
-See the [Gut ELO specification](docs/specs/phase-2-gut-elo.md) for the
-deterministic rating, queue, undo, progress, and privacy contracts.
+Phase 2B now includes bounded, resumable Gut ELO comparisons with deterministic
+ratings, board/position/tier/uncertainty queues, keyboard controls, pause,
+undo, progress explanations, and a separate results view that never rewrites
+the Personal Board. See the
+[Gut ELO specification](docs/specs/phase-2-gut-elo.md) for its rating, queue,
+reversibility, progress, and privacy contracts.
 
 ## Local Setup
 
