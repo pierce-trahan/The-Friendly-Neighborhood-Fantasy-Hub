@@ -40,6 +40,24 @@ export interface paths {
         patch: operations["update_personal_board_api_v1_boards__board_id__patch"];
         trace?: never;
     };
+    "/api/v1/boards/{board_id}/draft-sessions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List Board Draft Sessions */
+        get: operations["list_board_draft_sessions_api_v1_boards__board_id__draft_sessions_get"];
+        put?: never;
+        /** Create Board Draft Session */
+        post: operations["create_board_draft_session_api_v1_boards__board_id__draft_sessions_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/boards/{board_id}/entries": {
         parameters: {
             query?: never;
@@ -174,6 +192,126 @@ export interface paths {
         /** Write Configuration */
         put: operations["write_configuration_api_v1_config_put"];
         post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/draft-sessions/{session_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get Draft Session */
+        get: operations["get_draft_session_api_v1_draft_sessions__session_id__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /** Update Draft Session */
+        patch: operations["update_draft_session_api_v1_draft_sessions__session_id__patch"];
+        trace?: never;
+    };
+    "/api/v1/draft-sessions/{session_id}/candidates": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get Draft Candidates */
+        get: operations["get_draft_candidates_api_v1_draft_sessions__session_id__candidates_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/draft-sessions/{session_id}/export.csv": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Download Draft Session */
+        get: operations["download_draft_session_api_v1_draft_sessions__session_id__export_csv_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/draft-sessions/{session_id}/picks": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Create Draft Pick */
+        post: operations["create_draft_pick_api_v1_draft_sessions__session_id__picks_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/draft-sessions/{session_id}/picks/{overall_pick}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /** Update Draft Pick */
+        patch: operations["update_draft_pick_api_v1_draft_sessions__session_id__picks__overall_pick__patch"];
+        trace?: never;
+    };
+    "/api/v1/draft-sessions/{session_id}/reset": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Reset Draft Session */
+        post: operations["reset_draft_session_api_v1_draft_sessions__session_id__reset_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/draft-sessions/{session_id}/undo": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Undo Draft Pick */
+        post: operations["undo_draft_pick_api_v1_draft_sessions__session_id__undo_post"];
         delete?: never;
         options?: never;
         head?: never;
@@ -635,6 +773,339 @@ export interface components {
             theme: "system" | "light" | "dark";
             /** Timezone */
             timezone: string;
+        };
+        /** DraftBlindCandidateListResponse */
+        DraftBlindCandidateListResponse: {
+            /** Items */
+            items: components["schemas"]["DraftBlindCandidateRead"][];
+            /** Limit */
+            limit: number;
+            /** Offset */
+            offset: number;
+            /** Total */
+            total: number;
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            view: "blind";
+        };
+        /** DraftBlindCandidateRead */
+        DraftBlindCandidateRead: {
+            /** Display Name */
+            display_name: string;
+            /** Drafted Overall Pick */
+            drafted_overall_pick: number | null;
+            /** Fantasy Positions */
+            fantasy_positions: string[];
+            /** Is Rookie */
+            is_rookie: boolean;
+            /** Player Id */
+            player_id: string;
+            /** Player Status */
+            player_status: string;
+            /** Primary Position */
+            primary_position: string;
+            /** Rookie Class */
+            rookie_class: number | null;
+            /** Team */
+            team: string | null;
+        };
+        /** DraftContextCandidateListResponse */
+        DraftContextCandidateListResponse: {
+            /** Items */
+            items: components["schemas"]["DraftContextCandidateRead"][];
+            /** Limit */
+            limit: number;
+            /** Offset */
+            offset: number;
+            /** Total */
+            total: number;
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            view: "personal" | "position" | "tier";
+        };
+        /** DraftContextCandidateRead */
+        DraftContextCandidateRead: {
+            /** Board Note */
+            board_note: string | null;
+            /** Display Name */
+            display_name: string;
+            /** Drafted Overall Pick */
+            drafted_overall_pick: number | null;
+            /** Fantasy Positions */
+            fantasy_positions: string[];
+            /** Favorite */
+            favorite: boolean;
+            /** Is Rookie */
+            is_rookie: boolean;
+            /** Personal Rank */
+            personal_rank: number | null;
+            /** Player Id */
+            player_id: string;
+            /** Player Status */
+            player_status: string;
+            /** Primary Position */
+            primary_position: string;
+            /** Rookie Class */
+            rookie_class: number | null;
+            /**
+             * Snapshot Source
+             * @enum {string}
+             */
+            snapshot_source: "relevant_pool" | "personal_board" | "late_addition";
+            /** Team */
+            team: string | null;
+            /** Tier Color */
+            tier_color: string | null;
+            /** Tier Name */
+            tier_name: string | null;
+        };
+        /** DraftCurrentPickRead */
+        DraftCurrentPickRead: {
+            /** Overall Pick */
+            overall_pick: number;
+            /** Pick In Round */
+            pick_in_round: number;
+            /** Round Number */
+            round_number: number;
+            /** Selecting Slot */
+            selecting_slot: number;
+            /** Selecting Team */
+            selecting_team: string;
+        };
+        /** DraftPickCorrection */
+        DraftPickCorrection: {
+            /** Expected Current Player Id */
+            expected_current_player_id: string;
+            /** Replacement Player Id */
+            replacement_player_id: string;
+            /** Revision */
+            revision: number;
+        };
+        /** DraftPickCreate */
+        DraftPickCreate: {
+            /** Client Entered At */
+            client_entered_at?: string | null;
+            /** Expected Overall Pick */
+            expected_overall_pick: number;
+            /** Player Id */
+            player_id: string;
+            /** Revision */
+            revision: number;
+        };
+        /** DraftPickRead */
+        DraftPickRead: {
+            /** Correction Count */
+            correction_count: number;
+            /** Overall Pick */
+            overall_pick: number;
+            /** Pick In Round */
+            pick_in_round: number;
+            /** Player Display Name */
+            player_display_name: string;
+            /** Player Id */
+            player_id: string;
+            /** Player Position */
+            player_position: string;
+            /** Player Team */
+            player_team: string | null;
+            /** Recorded At */
+            recorded_at: string;
+            /** Round Number */
+            round_number: number;
+            /** Selecting Slot */
+            selecting_slot: number;
+            /** Selecting Team */
+            selecting_team: string;
+        };
+        /** DraftRevisionGuard */
+        DraftRevisionGuard: {
+            /** Revision */
+            revision: number;
+        };
+        /** DraftSessionCreate */
+        DraftSessionCreate: {
+            /**
+             * Draft Format
+             * @default snake
+             * @enum {string}
+             */
+            draft_format: "linear" | "snake";
+            /** League Profile Id */
+            league_profile_id?: string | null;
+            /**
+             * Mode
+             * @default live
+             * @enum {string}
+             */
+            mode: "live" | "mock";
+            /** Name */
+            name: string;
+            /** Pick Timer Seconds */
+            pick_timer_seconds?: number | null;
+            /** Round Count */
+            round_count: number;
+            /** Team Count */
+            team_count: number;
+            /** Team Names */
+            team_names?: string[] | null;
+            /**
+             * Third Round Reversal
+             * @default false
+             */
+            third_round_reversal: boolean;
+            /** User Slot */
+            user_slot: number;
+        };
+        /** DraftSessionListResponse */
+        DraftSessionListResponse: {
+            /** Items */
+            items: components["schemas"]["DraftSessionSummary"][];
+        };
+        /** DraftSessionPatch */
+        DraftSessionPatch: {
+            /** Revision */
+            revision: number;
+            /**
+             * Status
+             * @enum {string}
+             */
+            status: "active" | "paused";
+        };
+        /** DraftSessionRead */
+        DraftSessionRead: {
+            /** Active Pick Count */
+            active_pick_count: number;
+            /** Available Count */
+            available_count: number;
+            /**
+             * Blind Data Hidden
+             * @default true
+             * @constant
+             */
+            blind_data_hidden: true;
+            /** Board Id */
+            board_id: string;
+            /** Board Name */
+            board_name: string;
+            /** Candidate Total */
+            candidate_total: number;
+            /** Completed At */
+            completed_at: string | null;
+            /** Created At */
+            created_at: string;
+            current_pick: components["schemas"]["DraftCurrentPickRead"] | null;
+            /**
+             * Draft Format
+             * @enum {string}
+             */
+            draft_format: "linear" | "snake";
+            /** Id */
+            id: string;
+            /** League Profile Id */
+            league_profile_id: string | null;
+            /**
+             * Mode
+             * @enum {string}
+             */
+            mode: "live" | "mock";
+            /** Name */
+            name: string;
+            /** Pick Timer Seconds */
+            pick_timer_seconds: number | null;
+            /** Picks */
+            picks: components["schemas"]["DraftPickRead"][];
+            /** Picks Until User */
+            picks_until_user: number | null;
+            /**
+             * Recommendation State Present
+             * @default false
+             * @constant
+             */
+            recommendation_state_present: false;
+            /** Recovery Guidance */
+            recovery_guidance: string | null;
+            /** Reset From Session Id */
+            reset_from_session_id: string | null;
+            /** Revision */
+            revision: number;
+            /** Round Count */
+            round_count: number;
+            /**
+             * Status
+             * @enum {string}
+             */
+            status: "active" | "paused" | "completed" | "reset";
+            /** Team Count */
+            team_count: number;
+            /** Teams */
+            teams: components["schemas"]["DraftTeamRead"][];
+            /** Third Round Reversal */
+            third_round_reversal: boolean;
+            /** Total Picks */
+            total_picks: number;
+            /** Updated At */
+            updated_at: string;
+            /** User On The Clock */
+            user_on_the_clock: boolean;
+            /** User Slot */
+            user_slot: number;
+        };
+        /** DraftSessionSummary */
+        DraftSessionSummary: {
+            /** Active Pick Count */
+            active_pick_count: number;
+            /** Board Id */
+            board_id: string;
+            /** Board Name */
+            board_name: string;
+            /** Created At */
+            created_at: string;
+            /**
+             * Draft Format
+             * @enum {string}
+             */
+            draft_format: "linear" | "snake";
+            /** Id */
+            id: string;
+            /**
+             * Mode
+             * @enum {string}
+             */
+            mode: "live" | "mock";
+            /** Name */
+            name: string;
+            /** Revision */
+            revision: number;
+            /** Round Count */
+            round_count: number;
+            /**
+             * Status
+             * @enum {string}
+             */
+            status: "active" | "paused" | "completed" | "reset";
+            /** Team Count */
+            team_count: number;
+            /** Third Round Reversal */
+            third_round_reversal: boolean;
+            /** Total Picks */
+            total_picks: number;
+            /** Updated At */
+            updated_at: string;
+            /** User Slot */
+            user_slot: number;
+        };
+        /** DraftTeamRead */
+        DraftTeamRead: {
+            /** Display Name */
+            display_name: string;
+            /** Draft Slot */
+            draft_slot: number;
+            /** Is User */
+            is_user: boolean;
         };
         /** GutEloActionCreate */
         GutEloActionCreate: {
@@ -1216,6 +1687,72 @@ export interface operations {
             };
         };
     };
+    list_board_draft_sessions_api_v1_boards__board_id__draft_sessions_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                board_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DraftSessionListResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    create_board_draft_session_api_v1_boards__board_id__draft_sessions_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                board_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["DraftSessionCreate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DraftSessionRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
     create_board_entry_api_v1_boards__board_id__entries_post: {
         parameters: {
             query?: never;
@@ -1594,6 +2131,282 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["AppConfiguration"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_draft_session_api_v1_draft_sessions__session_id__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                session_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DraftSessionRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    update_draft_session_api_v1_draft_sessions__session_id__patch: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                session_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["DraftSessionPatch"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DraftSessionRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_draft_candidates_api_v1_draft_sessions__session_id__candidates_get: {
+        parameters: {
+            query?: {
+                view?: "blind" | "personal" | "position" | "tier";
+                search?: string | null;
+                position?: string[] | null;
+                include_drafted?: boolean;
+                limit?: number;
+                offset?: number;
+            };
+            header?: never;
+            path: {
+                session_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DraftBlindCandidateListResponse"] | components["schemas"]["DraftContextCandidateListResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    download_draft_session_api_v1_draft_sessions__session_id__export_csv_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                session_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    create_draft_pick_api_v1_draft_sessions__session_id__picks_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                session_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["DraftPickCreate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DraftSessionRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    update_draft_pick_api_v1_draft_sessions__session_id__picks__overall_pick__patch: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                session_id: string;
+                overall_pick: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["DraftPickCorrection"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DraftSessionRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    reset_draft_session_api_v1_draft_sessions__session_id__reset_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                session_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["DraftRevisionGuard"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DraftSessionRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    undo_draft_pick_api_v1_draft_sessions__session_id__undo_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                session_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["DraftRevisionGuard"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DraftSessionRead"];
                 };
             };
             /** @description Validation Error */

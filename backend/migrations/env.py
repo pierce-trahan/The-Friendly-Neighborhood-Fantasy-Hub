@@ -12,6 +12,13 @@ from friendly_hub.domains.boards.models import (  # noqa: F401
     PersonalBoardRow,
 )
 from friendly_hub.domains.configuration.models import AppConfigurationRow  # noqa: F401
+from friendly_hub.domains.drafts.models import (  # noqa: F401
+    DraftCandidateRow,
+    DraftPickRevisionRow,
+    DraftPickRow,
+    DraftSessionRow,
+    DraftTeamRow,
+)
 from friendly_hub.domains.gut_elo.models import (  # noqa: F401
     GutEloActionRow,
     GutEloParticipantRow,

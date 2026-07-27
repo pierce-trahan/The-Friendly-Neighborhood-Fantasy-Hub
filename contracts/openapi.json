@@ -661,6 +661,977 @@
         "title": "DisplayConfiguration",
         "type": "object"
       },
+      "DraftBlindCandidateListResponse": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/DraftBlindCandidateRead"
+            },
+            "title": "Items",
+            "type": "array"
+          },
+          "limit": {
+            "title": "Limit",
+            "type": "integer"
+          },
+          "offset": {
+            "title": "Offset",
+            "type": "integer"
+          },
+          "total": {
+            "title": "Total",
+            "type": "integer"
+          },
+          "view": {
+            "const": "blind",
+            "title": "View",
+            "type": "string"
+          }
+        },
+        "required": [
+          "view",
+          "items",
+          "total",
+          "limit",
+          "offset"
+        ],
+        "title": "DraftBlindCandidateListResponse",
+        "type": "object"
+      },
+      "DraftBlindCandidateRead": {
+        "properties": {
+          "display_name": {
+            "title": "Display Name",
+            "type": "string"
+          },
+          "drafted_overall_pick": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Drafted Overall Pick"
+          },
+          "fantasy_positions": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Fantasy Positions",
+            "type": "array"
+          },
+          "is_rookie": {
+            "title": "Is Rookie",
+            "type": "boolean"
+          },
+          "player_id": {
+            "title": "Player Id",
+            "type": "string"
+          },
+          "player_status": {
+            "title": "Player Status",
+            "type": "string"
+          },
+          "primary_position": {
+            "title": "Primary Position",
+            "type": "string"
+          },
+          "rookie_class": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Rookie Class"
+          },
+          "team": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Team"
+          }
+        },
+        "required": [
+          "player_id",
+          "display_name",
+          "primary_position",
+          "fantasy_positions",
+          "team",
+          "player_status",
+          "is_rookie",
+          "rookie_class",
+          "drafted_overall_pick"
+        ],
+        "title": "DraftBlindCandidateRead",
+        "type": "object"
+      },
+      "DraftContextCandidateListResponse": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/DraftContextCandidateRead"
+            },
+            "title": "Items",
+            "type": "array"
+          },
+          "limit": {
+            "title": "Limit",
+            "type": "integer"
+          },
+          "offset": {
+            "title": "Offset",
+            "type": "integer"
+          },
+          "total": {
+            "title": "Total",
+            "type": "integer"
+          },
+          "view": {
+            "enum": [
+              "personal",
+              "position",
+              "tier"
+            ],
+            "title": "View",
+            "type": "string"
+          }
+        },
+        "required": [
+          "view",
+          "items",
+          "total",
+          "limit",
+          "offset"
+        ],
+        "title": "DraftContextCandidateListResponse",
+        "type": "object"
+      },
+      "DraftContextCandidateRead": {
+        "properties": {
+          "board_note": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Board Note"
+          },
+          "display_name": {
+            "title": "Display Name",
+            "type": "string"
+          },
+          "drafted_overall_pick": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Drafted Overall Pick"
+          },
+          "fantasy_positions": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Fantasy Positions",
+            "type": "array"
+          },
+          "favorite": {
+            "title": "Favorite",
+            "type": "boolean"
+          },
+          "is_rookie": {
+            "title": "Is Rookie",
+            "type": "boolean"
+          },
+          "personal_rank": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Personal Rank"
+          },
+          "player_id": {
+            "title": "Player Id",
+            "type": "string"
+          },
+          "player_status": {
+            "title": "Player Status",
+            "type": "string"
+          },
+          "primary_position": {
+            "title": "Primary Position",
+            "type": "string"
+          },
+          "rookie_class": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Rookie Class"
+          },
+          "snapshot_source": {
+            "enum": [
+              "relevant_pool",
+              "personal_board",
+              "late_addition"
+            ],
+            "title": "Snapshot Source",
+            "type": "string"
+          },
+          "team": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Team"
+          },
+          "tier_color": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Tier Color"
+          },
+          "tier_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Tier Name"
+          }
+        },
+        "required": [
+          "player_id",
+          "display_name",
+          "primary_position",
+          "fantasy_positions",
+          "team",
+          "player_status",
+          "is_rookie",
+          "rookie_class",
+          "drafted_overall_pick",
+          "snapshot_source",
+          "personal_rank",
+          "tier_name",
+          "tier_color",
+          "favorite",
+          "board_note"
+        ],
+        "title": "DraftContextCandidateRead",
+        "type": "object"
+      },
+      "DraftCurrentPickRead": {
+        "properties": {
+          "overall_pick": {
+            "title": "Overall Pick",
+            "type": "integer"
+          },
+          "pick_in_round": {
+            "title": "Pick In Round",
+            "type": "integer"
+          },
+          "round_number": {
+            "title": "Round Number",
+            "type": "integer"
+          },
+          "selecting_slot": {
+            "title": "Selecting Slot",
+            "type": "integer"
+          },
+          "selecting_team": {
+            "title": "Selecting Team",
+            "type": "string"
+          }
+        },
+        "required": [
+          "overall_pick",
+          "round_number",
+          "pick_in_round",
+          "selecting_slot",
+          "selecting_team"
+        ],
+        "title": "DraftCurrentPickRead",
+        "type": "object"
+      },
+      "DraftPickCorrection": {
+        "properties": {
+          "expected_current_player_id": {
+            "maxLength": 36,
+            "minLength": 1,
+            "title": "Expected Current Player Id",
+            "type": "string"
+          },
+          "replacement_player_id": {
+            "maxLength": 36,
+            "minLength": 1,
+            "title": "Replacement Player Id",
+            "type": "string"
+          },
+          "revision": {
+            "minimum": 0.0,
+            "title": "Revision",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "revision",
+          "expected_current_player_id",
+          "replacement_player_id"
+        ],
+        "title": "DraftPickCorrection",
+        "type": "object"
+      },
+      "DraftPickCreate": {
+        "properties": {
+          "client_entered_at": {
+            "anyOf": [
+              {
+                "maxLength": 64,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Client Entered At"
+          },
+          "expected_overall_pick": {
+            "minimum": 1.0,
+            "title": "Expected Overall Pick",
+            "type": "integer"
+          },
+          "player_id": {
+            "maxLength": 36,
+            "minLength": 1,
+            "title": "Player Id",
+            "type": "string"
+          },
+          "revision": {
+            "minimum": 0.0,
+            "title": "Revision",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "revision",
+          "expected_overall_pick",
+          "player_id"
+        ],
+        "title": "DraftPickCreate",
+        "type": "object"
+      },
+      "DraftPickRead": {
+        "properties": {
+          "correction_count": {
+            "title": "Correction Count",
+            "type": "integer"
+          },
+          "overall_pick": {
+            "title": "Overall Pick",
+            "type": "integer"
+          },
+          "pick_in_round": {
+            "title": "Pick In Round",
+            "type": "integer"
+          },
+          "player_display_name": {
+            "title": "Player Display Name",
+            "type": "string"
+          },
+          "player_id": {
+            "title": "Player Id",
+            "type": "string"
+          },
+          "player_position": {
+            "title": "Player Position",
+            "type": "string"
+          },
+          "player_team": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Player Team"
+          },
+          "recorded_at": {
+            "title": "Recorded At",
+            "type": "string"
+          },
+          "round_number": {
+            "title": "Round Number",
+            "type": "integer"
+          },
+          "selecting_slot": {
+            "title": "Selecting Slot",
+            "type": "integer"
+          },
+          "selecting_team": {
+            "title": "Selecting Team",
+            "type": "string"
+          }
+        },
+        "required": [
+          "overall_pick",
+          "round_number",
+          "pick_in_round",
+          "selecting_slot",
+          "selecting_team",
+          "player_id",
+          "player_display_name",
+          "player_position",
+          "player_team",
+          "recorded_at",
+          "correction_count"
+        ],
+        "title": "DraftPickRead",
+        "type": "object"
+      },
+      "DraftRevisionGuard": {
+        "properties": {
+          "revision": {
+            "minimum": 0.0,
+            "title": "Revision",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "revision"
+        ],
+        "title": "DraftRevisionGuard",
+        "type": "object"
+      },
+      "DraftSessionCreate": {
+        "properties": {
+          "draft_format": {
+            "default": "snake",
+            "enum": [
+              "linear",
+              "snake"
+            ],
+            "title": "Draft Format",
+            "type": "string"
+          },
+          "league_profile_id": {
+            "anyOf": [
+              {
+                "maxLength": 36,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "League Profile Id"
+          },
+          "mode": {
+            "default": "live",
+            "enum": [
+              "live",
+              "mock"
+            ],
+            "title": "Mode",
+            "type": "string"
+          },
+          "name": {
+            "maxLength": 200,
+            "minLength": 1,
+            "title": "Name",
+            "type": "string"
+          },
+          "pick_timer_seconds": {
+            "anyOf": [
+              {
+                "maximum": 86400.0,
+                "minimum": 1.0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Pick Timer Seconds"
+          },
+          "round_count": {
+            "maximum": 60.0,
+            "minimum": 1.0,
+            "title": "Round Count",
+            "type": "integer"
+          },
+          "team_count": {
+            "maximum": 32.0,
+            "minimum": 2.0,
+            "title": "Team Count",
+            "type": "integer"
+          },
+          "team_names": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "maxItems": 32,
+                "minItems": 2,
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Team Names"
+          },
+          "third_round_reversal": {
+            "default": false,
+            "title": "Third Round Reversal",
+            "type": "boolean"
+          },
+          "user_slot": {
+            "maximum": 32.0,
+            "minimum": 1.0,
+            "title": "User Slot",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "name",
+          "team_count",
+          "round_count",
+          "user_slot"
+        ],
+        "title": "DraftSessionCreate",
+        "type": "object"
+      },
+      "DraftSessionListResponse": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/DraftSessionSummary"
+            },
+            "title": "Items",
+            "type": "array"
+          }
+        },
+        "required": [
+          "items"
+        ],
+        "title": "DraftSessionListResponse",
+        "type": "object"
+      },
+      "DraftSessionPatch": {
+        "properties": {
+          "revision": {
+            "minimum": 0.0,
+            "title": "Revision",
+            "type": "integer"
+          },
+          "status": {
+            "enum": [
+              "active",
+              "paused"
+            ],
+            "title": "Status",
+            "type": "string"
+          }
+        },
+        "required": [
+          "revision",
+          "status"
+        ],
+        "title": "DraftSessionPatch",
+        "type": "object"
+      },
+      "DraftSessionRead": {
+        "properties": {
+          "active_pick_count": {
+            "title": "Active Pick Count",
+            "type": "integer"
+          },
+          "available_count": {
+            "title": "Available Count",
+            "type": "integer"
+          },
+          "blind_data_hidden": {
+            "const": true,
+            "default": true,
+            "title": "Blind Data Hidden",
+            "type": "boolean"
+          },
+          "board_id": {
+            "title": "Board Id",
+            "type": "string"
+          },
+          "board_name": {
+            "title": "Board Name",
+            "type": "string"
+          },
+          "candidate_total": {
+            "title": "Candidate Total",
+            "type": "integer"
+          },
+          "completed_at": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Completed At"
+          },
+          "created_at": {
+            "title": "Created At",
+            "type": "string"
+          },
+          "current_pick": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/DraftCurrentPickRead"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "draft_format": {
+            "enum": [
+              "linear",
+              "snake"
+            ],
+            "title": "Draft Format",
+            "type": "string"
+          },
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "league_profile_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "League Profile Id"
+          },
+          "mode": {
+            "enum": [
+              "live",
+              "mock"
+            ],
+            "title": "Mode",
+            "type": "string"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "pick_timer_seconds": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Pick Timer Seconds"
+          },
+          "picks": {
+            "items": {
+              "$ref": "#/components/schemas/DraftPickRead"
+            },
+            "title": "Picks",
+            "type": "array"
+          },
+          "picks_until_user": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Picks Until User"
+          },
+          "recommendation_state_present": {
+            "const": false,
+            "default": false,
+            "title": "Recommendation State Present",
+            "type": "boolean"
+          },
+          "recovery_guidance": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Recovery Guidance"
+          },
+          "reset_from_session_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reset From Session Id"
+          },
+          "revision": {
+            "title": "Revision",
+            "type": "integer"
+          },
+          "round_count": {
+            "title": "Round Count",
+            "type": "integer"
+          },
+          "status": {
+            "enum": [
+              "active",
+              "paused",
+              "completed",
+              "reset"
+            ],
+            "title": "Status",
+            "type": "string"
+          },
+          "team_count": {
+            "title": "Team Count",
+            "type": "integer"
+          },
+          "teams": {
+            "items": {
+              "$ref": "#/components/schemas/DraftTeamRead"
+            },
+            "title": "Teams",
+            "type": "array"
+          },
+          "third_round_reversal": {
+            "title": "Third Round Reversal",
+            "type": "boolean"
+          },
+          "total_picks": {
+            "title": "Total Picks",
+            "type": "integer"
+          },
+          "updated_at": {
+            "title": "Updated At",
+            "type": "string"
+          },
+          "user_on_the_clock": {
+            "title": "User On The Clock",
+            "type": "boolean"
+          },
+          "user_slot": {
+            "title": "User Slot",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "board_id",
+          "board_name",
+          "mode",
+          "draft_format",
+          "third_round_reversal",
+          "team_count",
+          "round_count",
+          "user_slot",
+          "status",
+          "revision",
+          "active_pick_count",
+          "total_picks",
+          "created_at",
+          "updated_at",
+          "league_profile_id",
+          "pick_timer_seconds",
+          "reset_from_session_id",
+          "teams",
+          "current_pick",
+          "user_on_the_clock",
+          "picks_until_user",
+          "picks",
+          "candidate_total",
+          "available_count",
+          "completed_at",
+          "recovery_guidance"
+        ],
+        "title": "DraftSessionRead",
+        "type": "object"
+      },
+      "DraftSessionSummary": {
+        "properties": {
+          "active_pick_count": {
+            "title": "Active Pick Count",
+            "type": "integer"
+          },
+          "board_id": {
+            "title": "Board Id",
+            "type": "string"
+          },
+          "board_name": {
+            "title": "Board Name",
+            "type": "string"
+          },
+          "created_at": {
+            "title": "Created At",
+            "type": "string"
+          },
+          "draft_format": {
+            "enum": [
+              "linear",
+              "snake"
+            ],
+            "title": "Draft Format",
+            "type": "string"
+          },
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "mode": {
+            "enum": [
+              "live",
+              "mock"
+            ],
+            "title": "Mode",
+            "type": "string"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "revision": {
+            "title": "Revision",
+            "type": "integer"
+          },
+          "round_count": {
+            "title": "Round Count",
+            "type": "integer"
+          },
+          "status": {
+            "enum": [
+              "active",
+              "paused",
+              "completed",
+              "reset"
+            ],
+            "title": "Status",
+            "type": "string"
+          },
+          "team_count": {
+            "title": "Team Count",
+            "type": "integer"
+          },
+          "third_round_reversal": {
+            "title": "Third Round Reversal",
+            "type": "boolean"
+          },
+          "total_picks": {
+            "title": "Total Picks",
+            "type": "integer"
+          },
+          "updated_at": {
+            "title": "Updated At",
+            "type": "string"
+          },
+          "user_slot": {
+            "title": "User Slot",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "board_id",
+          "board_name",
+          "mode",
+          "draft_format",
+          "third_round_reversal",
+          "team_count",
+          "round_count",
+          "user_slot",
+          "status",
+          "revision",
+          "active_pick_count",
+          "total_picks",
+          "created_at",
+          "updated_at"
+        ],
+        "title": "DraftSessionSummary",
+        "type": "object"
+      },
+      "DraftTeamRead": {
+        "properties": {
+          "display_name": {
+            "title": "Display Name",
+            "type": "string"
+          },
+          "draft_slot": {
+            "title": "Draft Slot",
+            "type": "integer"
+          },
+          "is_user": {
+            "title": "Is User",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "draft_slot",
+          "display_name",
+          "is_user"
+        ],
+        "title": "DraftTeamRead",
+        "type": "object"
+      },
       "GutEloActionCreate": {
         "properties": {
           "outcome": {
@@ -2286,6 +3257,98 @@
         ]
       }
     },
+    "/api/v1/boards/{board_id}/draft-sessions": {
+      "get": {
+        "operationId": "list_board_draft_sessions_api_v1_boards__board_id__draft_sessions_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "board_id",
+            "required": true,
+            "schema": {
+              "title": "Board Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DraftSessionListResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "List Board Draft Sessions",
+        "tags": [
+          "drafts"
+        ]
+      },
+      "post": {
+        "operationId": "create_board_draft_session_api_v1_boards__board_id__draft_sessions_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "board_id",
+            "required": true,
+            "schema": {
+              "title": "Board Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DraftSessionCreate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DraftSessionRead"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Create Board Draft Session",
+        "tags": [
+          "drafts"
+        ]
+      }
+    },
     "/api/v1/boards/{board_id}/entries": {
       "post": {
         "operationId": "create_board_entry_api_v1_boards__board_id__entries_post",
@@ -2851,6 +3914,499 @@
         "summary": "Write Configuration",
         "tags": [
           "configuration"
+        ]
+      }
+    },
+    "/api/v1/draft-sessions/{session_id}": {
+      "get": {
+        "operationId": "get_draft_session_api_v1_draft_sessions__session_id__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "session_id",
+            "required": true,
+            "schema": {
+              "title": "Session Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DraftSessionRead"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Get Draft Session",
+        "tags": [
+          "drafts"
+        ]
+      },
+      "patch": {
+        "operationId": "update_draft_session_api_v1_draft_sessions__session_id__patch",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "session_id",
+            "required": true,
+            "schema": {
+              "title": "Session Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DraftSessionPatch"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DraftSessionRead"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Update Draft Session",
+        "tags": [
+          "drafts"
+        ]
+      }
+    },
+    "/api/v1/draft-sessions/{session_id}/candidates": {
+      "get": {
+        "operationId": "get_draft_candidates_api_v1_draft_sessions__session_id__candidates_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "session_id",
+            "required": true,
+            "schema": {
+              "title": "Session Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "view",
+            "required": false,
+            "schema": {
+              "default": "blind",
+              "enum": [
+                "blind",
+                "personal",
+                "position",
+                "tier"
+              ],
+              "title": "View",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "search",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maxLength": 200,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Search"
+            }
+          },
+          {
+            "in": "query",
+            "name": "position",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Position"
+            }
+          },
+          {
+            "in": "query",
+            "name": "include_drafted",
+            "required": false,
+            "schema": {
+              "default": false,
+              "title": "Include Drafted",
+              "type": "boolean"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 100,
+              "maximum": 500,
+              "minimum": 1,
+              "title": "Limit",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "offset",
+            "required": false,
+            "schema": {
+              "default": 0,
+              "minimum": 0,
+              "title": "Offset",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "discriminator": {
+                    "mapping": {
+                      "blind": "#/components/schemas/DraftBlindCandidateListResponse",
+                      "personal": "#/components/schemas/DraftContextCandidateListResponse",
+                      "position": "#/components/schemas/DraftContextCandidateListResponse",
+                      "tier": "#/components/schemas/DraftContextCandidateListResponse"
+                    },
+                    "propertyName": "view"
+                  },
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/DraftBlindCandidateListResponse"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DraftContextCandidateListResponse"
+                    }
+                  ],
+                  "title": "Response Get Draft Candidates Api V1 Draft Sessions  Session Id  Candidates Get"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Get Draft Candidates",
+        "tags": [
+          "drafts"
+        ]
+      }
+    },
+    "/api/v1/draft-sessions/{session_id}/export.csv": {
+      "get": {
+        "operationId": "download_draft_session_api_v1_draft_sessions__session_id__export_csv_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "session_id",
+            "required": true,
+            "schema": {
+              "title": "Session Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Download Draft Session",
+        "tags": [
+          "drafts"
+        ]
+      }
+    },
+    "/api/v1/draft-sessions/{session_id}/picks": {
+      "post": {
+        "operationId": "create_draft_pick_api_v1_draft_sessions__session_id__picks_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "session_id",
+            "required": true,
+            "schema": {
+              "title": "Session Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DraftPickCreate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DraftSessionRead"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Create Draft Pick",
+        "tags": [
+          "drafts"
+        ]
+      }
+    },
+    "/api/v1/draft-sessions/{session_id}/picks/{overall_pick}": {
+      "patch": {
+        "operationId": "update_draft_pick_api_v1_draft_sessions__session_id__picks__overall_pick__patch",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "session_id",
+            "required": true,
+            "schema": {
+              "title": "Session Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "overall_pick",
+            "required": true,
+            "schema": {
+              "title": "Overall Pick",
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DraftPickCorrection"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DraftSessionRead"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Update Draft Pick",
+        "tags": [
+          "drafts"
+        ]
+      }
+    },
+    "/api/v1/draft-sessions/{session_id}/reset": {
+      "post": {
+        "operationId": "reset_draft_session_api_v1_draft_sessions__session_id__reset_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "session_id",
+            "required": true,
+            "schema": {
+              "title": "Session Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DraftRevisionGuard"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DraftSessionRead"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Reset Draft Session",
+        "tags": [
+          "drafts"
+        ]
+      }
+    },
+    "/api/v1/draft-sessions/{session_id}/undo": {
+      "post": {
+        "operationId": "undo_draft_pick_api_v1_draft_sessions__session_id__undo_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "session_id",
+            "required": true,
+            "schema": {
+              "title": "Session Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DraftRevisionGuard"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DraftSessionRead"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Undo Draft Pick",
+        "tags": [
+          "drafts"
         ]
       }
     },
