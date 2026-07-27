@@ -73,6 +73,12 @@ the Personal Board. See the
 [Gut ELO specification](docs/specs/phase-2-gut-elo.md) for its rating, queue,
 reversibility, progress, and privacy contracts.
 
+The desktop interface now follows an
+[editorial draft-workstation direction](docs/design/editorial-workstation-ui.md):
+compact operating chrome, table-first density, low-radius geometry, one
+restrained accent, and no unsupported scouting or film features borrowed from
+its visual references.
+
 ## Local Setup
 
 Requirements:
