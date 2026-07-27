@@ -12,10 +12,11 @@ import {
   saveConfiguration,
 } from "../api/client";
 import { BoardWorkspace } from "../features/boards/BoardWorkspace";
+import { GutEloWorkspace } from "../features/gut-elo/GutEloWorkspace";
 import { PlayerWorkspace } from "../features/players/PlayerWorkspace";
 
 type LoadState = "loading" | "ready" | "error";
-type AppSection = "overview" | "players" | "boards";
+type AppSection = "overview" | "players" | "boards" | "gut-elo";
 
 function formatError(error: unknown): { message: string; action?: string } {
   if (error instanceof ApiError) {
@@ -165,6 +166,13 @@ export function App() {
         >
           Boards
         </button>
+        <button
+          type="button"
+          aria-current={section === "gut-elo" ? "page" : undefined}
+          onClick={() => setSection("gut-elo")}
+        >
+          Gut ELO
+        </button>
       </nav>
 
       {section === "overview" && error && (
@@ -181,6 +189,7 @@ export function App() {
 
       {section === "players" && <PlayerWorkspace />}
       {section === "boards" && <BoardWorkspace />}
+      {section === "gut-elo" && <GutEloWorkspace />}
       {section === "overview" && (
         <section className="dashboard-grid">
         <article className="card league-card">
