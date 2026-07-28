@@ -85,6 +85,13 @@ team names; revision-guarded pick entry, correction, and undo; keyboard
 controls; crash recovery; and no required ADP exposure. See the
 [draft-room specification](docs/specs/phase-3-draft-room.md).
 
+Phase 4 is now drafted for product approval. The proposed Mock Draft Engine and
+Strategy Lab uses seeded, versioned CPU decisions; one saved CPU pick at a
+time; strategy checkpoints that never force a selection; explicit history
+consent; and visible limits when the current data cannot support player-level
+timeline claims. See the
+[mock and strategy specification](docs/specs/phase-4-mock-strategy-lab.md).
+
 ## Local Setup
 
 Requirements:
