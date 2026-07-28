@@ -25,6 +25,13 @@ from friendly_hub.domains.gut_elo.models import (  # noqa: F401
     GutEloSessionRow,
 )
 from friendly_hub.domains.leagues.models import LeagueProfileRow  # noqa: F401
+from friendly_hub.domains.mocks.models import (  # noqa: F401
+    MockConfigurationRow,
+    MockCpuProfileRow,
+    MockGuidanceEventRow,
+    MockPickDecisionRow,
+    MockStrategyRevisionRow,
+)
 from friendly_hub.domains.players.models import (  # noqa: F401
     PlayerExternalIdRow,
     PlayerImportRow,
