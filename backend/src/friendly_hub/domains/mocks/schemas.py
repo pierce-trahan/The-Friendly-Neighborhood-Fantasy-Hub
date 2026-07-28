@@ -147,6 +147,54 @@ class MockConfigurationRead(BaseModel):
     updated_at: str
 
 
+class MockCpuPickCreate(BaseModel):
+    draft_revision: int = Field(ge=0)
+    mock_revision: int = Field(ge=0)
+    expected_overall_pick: int = Field(ge=1)
+    expected_selecting_slot: int = Field(ge=1)
+
+
+class MockScoreComponentsRead(BaseModel):
+    board_order: int
+    starter_need: int
+    depth_need: int
+    archetype_fit: int
+    duplication_penalty: int
+    random_variation: int
+
+
+class MockPickDecisionSummary(BaseModel):
+    id: str
+    overall_pick: int
+    selecting_slot: int
+    chosen_player_id: str
+    chosen_player_display_name: str
+    chosen_player_position: str
+    profile_source: Literal["fallback", "history"]
+    profile_archetype_key: str
+    profile_confidence: Literal["not_applicable", "low", "medium", "high"]
+    engine_version: str
+    rng_version: str
+    total_score: int
+    component_scores: MockScoreComponentsRead
+    reason_codes: list[str]
+    limitation_codes: list[str]
+    decision_status: Literal["active", "historical"]
+    manually_corrected: bool
+    created_at: str
+
+
+class MockDecisionAlternativeRead(BaseModel):
+    player_id: str
+    total_score: int
+    component_scores: MockScoreComponentsRead
+
+
+class MockPickDecisionAudit(MockPickDecisionSummary):
+    random_audit: dict[str, object]
+    alternatives: list[MockDecisionAlternativeRead]
+
+
 class MockSessionRead(BaseModel):
     practice_simulation: Literal[True] = True
     draft: DraftSessionRead
@@ -156,6 +204,6 @@ class MockSessionRead(BaseModel):
     current_checkpoint: MockGuidanceRead
     guidance: list[MockGuidanceRead]
     cpu_profiles: list[MockCpuProfileRead]
-    last_cpu_decision: None = None
+    last_cpu_decision: MockPickDecisionSummary | None = None
     can_advance_cpu: bool
     recovery_guidance: str | None
