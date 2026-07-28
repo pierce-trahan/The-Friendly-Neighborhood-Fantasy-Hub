@@ -13,6 +13,7 @@ from friendly_hub.domains.mocks.definitions import (
     MAX_RANDOMNESS,
     MAX_SEED,
     RNG_VERSION,
+    SUPPORTED_FALLBACK_ARCHETYPES,
 )
 
 _RANDOM_VARIATION_PURPOSE = "candidate-random-variation"
@@ -99,6 +100,28 @@ def content_fingerprint(snapshot: object) -> str:
     except (TypeError, ValueError) as exc:
         raise ValueError("snapshot must contain only finite JSON values") from exc
     return hashlib.sha256(canonical_snapshot.encode("utf-8")).hexdigest()
+
+
+def fallback_archetype_for_slot(seed: str, draft_slot: int) -> str:
+    """Assign a stable synthetic profile without depending on database row IDs."""
+    assignment_fingerprint = content_fingerprint(
+        {
+            "purpose": "fallback-profile-assignment",
+            "supported_archetypes": SUPPORTED_FALLBACK_ARCHETYPES,
+        }
+    )
+    draw = deterministic_draw(
+        seed=seed,
+        fingerprint=assignment_fingerprint,
+        overall_pick=1,
+        selecting_slot=draft_slot,
+        purpose="fallback-profile-assignment",
+        draw_index=0,
+        stable_key=str(draft_slot),
+    )
+    return SUPPORTED_FALLBACK_ARCHETYPES[
+        draw.numerator % len(SUPPORTED_FALLBACK_ARCHETYPES)
+    ]
 
 
 def deterministic_draw(

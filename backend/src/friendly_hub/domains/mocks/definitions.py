@@ -6,9 +6,30 @@ from typing import Final
 
 CPU_ENGINE_VERSION: Final = "practice-board-v1"
 RNG_VERSION: Final = "sha256-counter-v1"
+STRATEGY_DEFINITION_VERSION: Final = "strategy-v1"
 MAX_SEED: Final = (1 << 64) - 1
 MAX_RANDOMNESS: Final = 100
 MAX_RANDOM_CONSIDERATION_COUNT: Final = 21
+
+SUPPORTED_FALLBACK_ARCHETYPES: Final = (
+    "balanced",
+    "qb_priority",
+    "rb_heavy",
+    "wr_heavy",
+    "te_aware",
+    "rookie_lean",
+    "chaotic",
+)
+
+SUPPORTED_STRATEGIES: Final = (
+    "balanced",
+    "win_now",
+    "productive_struggle",
+    "hero_rb",
+    "robust_rb",
+    "wr_heavy",
+    "early_qb_superflex",
+)
 
 
 @dataclass(frozen=True)
