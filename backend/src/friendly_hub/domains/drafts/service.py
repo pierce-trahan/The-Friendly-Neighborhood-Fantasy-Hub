@@ -3,6 +3,7 @@ from __future__ import annotations
 import csv
 import io
 import json
+from dataclasses import dataclass
 from uuid import uuid4
 
 from sqlalchemy import func, select, update
@@ -47,6 +48,14 @@ from friendly_hub.domains.leagues.models import LeagueProfileRow
 from friendly_hub.domains.players.models import PlayerRelevanceRow, PlayerRow
 
 MAX_CANDIDATES = 2_000
+
+
+@dataclass(frozen=True)
+class DraftPickMutation:
+    draft_session: DraftSessionRow
+    pick: DraftPickRow
+    pick_revision: DraftPickRevisionRow
+    candidate: DraftCandidateRow
 
 
 def _error(code: str, message: str, action: str, status_code: int) -> HubError:
@@ -606,13 +615,19 @@ def _drafted_pick(
     )
 
 
-def make_pick(
+def record_pick_in_transaction(
     session: Session,
     session_id: str,
-    payload: DraftPickCreate,
-) -> DraftSessionRead:
+    *,
+    revision: int,
+    expected_overall_pick: int,
+    player_id: str,
+    client_entered_at: str | None = None,
+    expected_selecting_slot: int | None = None,
+) -> DraftPickMutation:
+    """Apply one guarded pick without committing the caller-owned transaction."""
     row = _require_session(session, session_id)
-    _require_revision(row, payload.revision)
+    _require_revision(row, revision)
     if row.status != "active":
         raise _error(
             "DRAFT.NOT_ACTIVE",
@@ -636,14 +651,24 @@ def make_pick(
             "Review or export the completed draft.",
             409,
         )
-    if current.overall_pick != payload.expected_overall_pick:
+    if current.overall_pick != expected_overall_pick:
         raise _error(
             "DRAFT.STALE_CURRENT_PICK",
             "The draft advanced before that pick could be saved.",
             "Refresh the draft room and use the current overall pick.",
             409,
         )
-    duplicate = _drafted_pick(session, row.id, payload.player_id)
+    if (
+        expected_selecting_slot is not None
+        and current.selecting_slot != expected_selecting_slot
+    ):
+        raise _error(
+            "DRAFT.STALE_CURRENT_SLOT",
+            "The draft order changed before that pick could be saved.",
+            "Refresh the draft room and verify the team on the clock.",
+            409,
+        )
+    duplicate = _drafted_pick(session, row.id, player_id)
     if duplicate is not None:
         raise _error(
             "DRAFT.PLAYER_ALREADY_DRAFTED",
@@ -652,29 +677,49 @@ def make_pick(
             409,
         )
     now = utc_now_text()
-    _ensure_candidate(session, row, payload.player_id, now)
-    _advance_revision(session, row, payload.revision)
-    current.player_id = payload.player_id
+    candidate = _ensure_candidate(session, row, player_id, now)
+    _advance_revision(session, row, revision)
+    current.player_id = player_id
     current.recorded_at = now
-    current.client_entered_at = payload.client_entered_at
-    session.add(
-        DraftPickRevisionRow(
-            id=str(uuid4()),
-            session_id=row.id,
-            pick_id=current.id,
-            session_revision=row.revision,
-            action_kind="made",
-            previous_player_id=None,
-            next_player_id=payload.player_id,
-            created_at=now,
-        )
+    current.client_entered_at = client_entered_at
+    pick_revision = DraftPickRevisionRow(
+        id=str(uuid4()),
+        session_id=row.id,
+        pick_id=current.id,
+        session_revision=row.revision,
+        action_kind="made",
+        previous_player_id=None,
+        next_player_id=player_id,
+        created_at=now,
     )
+    session.add(pick_revision)
     row.updated_at = now
     if current.overall_pick == row.team_count * row.round_count:
         row.status = "completed"
         row.completed_at = now
+    return DraftPickMutation(
+        draft_session=row,
+        pick=current,
+        pick_revision=pick_revision,
+        candidate=candidate,
+    )
+
+
+def make_pick(
+    session: Session,
+    session_id: str,
+    payload: DraftPickCreate,
+) -> DraftSessionRead:
+    mutation = record_pick_in_transaction(
+        session,
+        session_id,
+        revision=payload.revision,
+        expected_overall_pick=payload.expected_overall_pick,
+        player_id=payload.player_id,
+        client_entered_at=payload.client_entered_at,
+    )
     _commit(session)
-    return read_session(session, row.id)
+    return read_session(session, mutation.draft_session.id)
 
 
 def correct_pick(
