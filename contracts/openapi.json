@@ -2374,6 +2374,520 @@
         "title": "MappingDecisionRequest",
         "type": "object"
       },
+      "MockConfigurationRead": {
+        "properties": {
+          "content_fingerprint": {
+            "title": "Content Fingerprint",
+            "type": "string"
+          },
+          "cpu_engine_version": {
+            "title": "Cpu Engine Version",
+            "type": "string"
+          },
+          "created_at": {
+            "title": "Created At",
+            "type": "string"
+          },
+          "current_strategy_key": {
+            "title": "Current Strategy Key",
+            "type": "string"
+          },
+          "include_in_learning": {
+            "title": "Include In Learning",
+            "type": "boolean"
+          },
+          "learning_opted_in_at": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Learning Opted In At"
+          },
+          "learning_withdrawn_at": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Learning Withdrawn At"
+          },
+          "randomness": {
+            "title": "Randomness",
+            "type": "integer"
+          },
+          "revision": {
+            "title": "Revision",
+            "type": "integer"
+          },
+          "rng_version": {
+            "title": "Rng Version",
+            "type": "string"
+          },
+          "seed": {
+            "title": "Seed",
+            "type": "string"
+          },
+          "strategy_compatibility": {
+            "enum": [
+              "compatible",
+              "reduced"
+            ],
+            "title": "Strategy Compatibility",
+            "type": "string"
+          },
+          "strategy_definition_version": {
+            "title": "Strategy Definition Version",
+            "type": "string"
+          },
+          "strategy_limitations": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Strategy Limitations",
+            "type": "array"
+          },
+          "updated_at": {
+            "title": "Updated At",
+            "type": "string"
+          }
+        },
+        "required": [
+          "seed",
+          "rng_version",
+          "cpu_engine_version",
+          "strategy_definition_version",
+          "content_fingerprint",
+          "randomness",
+          "current_strategy_key",
+          "strategy_compatibility",
+          "strategy_limitations",
+          "revision",
+          "include_in_learning",
+          "learning_opted_in_at",
+          "learning_withdrawn_at",
+          "created_at",
+          "updated_at"
+        ],
+        "title": "MockConfigurationRead",
+        "type": "object"
+      },
+      "MockCpuProfileRead": {
+        "properties": {
+          "archetype_key": {
+            "title": "Archetype Key",
+            "type": "string"
+          },
+          "confidence": {
+            "enum": [
+              "not_applicable",
+              "low",
+              "medium",
+              "high"
+            ],
+            "title": "Confidence",
+            "type": "string"
+          },
+          "draft_sample_count": {
+            "title": "Draft Sample Count",
+            "type": "integer"
+          },
+          "draft_slot": {
+            "title": "Draft Slot",
+            "type": "integer"
+          },
+          "pick_sample_count": {
+            "title": "Pick Sample Count",
+            "type": "integer"
+          },
+          "source": {
+            "enum": [
+              "fallback",
+              "history"
+            ],
+            "title": "Source",
+            "type": "string"
+          }
+        },
+        "required": [
+          "draft_slot",
+          "source",
+          "archetype_key",
+          "confidence",
+          "draft_sample_count",
+          "pick_sample_count"
+        ],
+        "title": "MockCpuProfileRead",
+        "type": "object"
+      },
+      "MockGuidanceRead": {
+        "properties": {
+          "confidence": {
+            "enum": [
+              "unavailable",
+              "low",
+              "medium",
+              "high"
+            ],
+            "title": "Confidence",
+            "type": "string"
+          },
+          "created_at": {
+            "title": "Created At",
+            "type": "string"
+          },
+          "effective_overall_pick": {
+            "title": "Effective Overall Pick",
+            "type": "integer"
+          },
+          "explanation_template_key": {
+            "title": "Explanation Template Key",
+            "type": "string"
+          },
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "limitation_codes": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Limitation Codes",
+            "type": "array"
+          },
+          "observed_counts": {
+            "additionalProperties": {
+              "type": "integer"
+            },
+            "title": "Observed Counts",
+            "type": "object"
+          },
+          "pivot_template_key": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Pivot Template Key"
+          },
+          "reason_codes": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Reason Codes",
+            "type": "array"
+          },
+          "resolved_at": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Resolved At"
+          },
+          "state": {
+            "enum": [
+              "on_plan",
+              "watch",
+              "off_plan_viable",
+              "risk_checkpoint",
+              "insufficient_evidence"
+            ],
+            "title": "State",
+            "type": "string"
+          },
+          "status": {
+            "enum": [
+              "open",
+              "acknowledged",
+              "dismissed"
+            ],
+            "title": "Status",
+            "type": "string"
+          },
+          "target_ranges": {
+            "additionalProperties": true,
+            "title": "Target Ranges",
+            "type": "object"
+          }
+        },
+        "required": [
+          "id",
+          "effective_overall_pick",
+          "state",
+          "confidence",
+          "observed_counts",
+          "target_ranges",
+          "reason_codes",
+          "limitation_codes",
+          "explanation_template_key",
+          "pivot_template_key",
+          "status",
+          "created_at",
+          "resolved_at"
+        ],
+        "title": "MockGuidanceRead",
+        "type": "object"
+      },
+      "MockSessionCreate": {
+        "properties": {
+          "draft_format": {
+            "default": "snake",
+            "enum": [
+              "linear",
+              "snake"
+            ],
+            "title": "Draft Format",
+            "type": "string"
+          },
+          "fallback_archetypes": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "title": "Fallback Archetypes",
+            "type": "object"
+          },
+          "include_in_learning": {
+            "default": false,
+            "title": "Include In Learning",
+            "type": "boolean"
+          },
+          "league_profile_id": {
+            "anyOf": [
+              {
+                "maxLength": 36,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "League Profile Id"
+          },
+          "name": {
+            "maxLength": 200,
+            "minLength": 1,
+            "title": "Name",
+            "type": "string"
+          },
+          "pick_timer_seconds": {
+            "anyOf": [
+              {
+                "maximum": 86400.0,
+                "minimum": 1.0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Pick Timer Seconds"
+          },
+          "randomness": {
+            "maximum": 100.0,
+            "minimum": 0.0,
+            "title": "Randomness",
+            "type": "integer"
+          },
+          "round_count": {
+            "maximum": 60.0,
+            "minimum": 1.0,
+            "title": "Round Count",
+            "type": "integer"
+          },
+          "seed": {
+            "title": "Seed",
+            "type": "string"
+          },
+          "strategy_key": {
+            "maxLength": 32,
+            "minLength": 1,
+            "title": "Strategy Key",
+            "type": "string"
+          },
+          "team_count": {
+            "maximum": 32.0,
+            "minimum": 2.0,
+            "title": "Team Count",
+            "type": "integer"
+          },
+          "team_names": {
+            "anyOf": [
+              {
+                "items": {
+                  "maxLength": 200,
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "maxItems": 32,
+                "minItems": 2,
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Team Names"
+          },
+          "third_round_reversal": {
+            "default": false,
+            "title": "Third Round Reversal",
+            "type": "boolean"
+          },
+          "user_slot": {
+            "maximum": 32.0,
+            "minimum": 1.0,
+            "title": "User Slot",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "name",
+          "team_count",
+          "round_count",
+          "user_slot",
+          "seed",
+          "randomness",
+          "strategy_key"
+        ],
+        "title": "MockSessionCreate",
+        "type": "object"
+      },
+      "MockSessionRead": {
+        "properties": {
+          "can_advance_cpu": {
+            "title": "Can Advance Cpu",
+            "type": "boolean"
+          },
+          "cpu_profiles": {
+            "items": {
+              "$ref": "#/components/schemas/MockCpuProfileRead"
+            },
+            "title": "Cpu Profiles",
+            "type": "array"
+          },
+          "current_checkpoint": {
+            "$ref": "#/components/schemas/MockGuidanceRead"
+          },
+          "current_strategy_revision": {
+            "$ref": "#/components/schemas/MockStrategyRevisionRead"
+          },
+          "draft": {
+            "$ref": "#/components/schemas/DraftSessionRead"
+          },
+          "guidance": {
+            "items": {
+              "$ref": "#/components/schemas/MockGuidanceRead"
+            },
+            "title": "Guidance",
+            "type": "array"
+          },
+          "last_cpu_decision": {
+            "title": "Last Cpu Decision",
+            "type": "null"
+          },
+          "mock": {
+            "$ref": "#/components/schemas/MockConfigurationRead"
+          },
+          "practice_simulation": {
+            "const": true,
+            "default": true,
+            "title": "Practice Simulation",
+            "type": "boolean"
+          },
+          "recovery_guidance": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Recovery Guidance"
+          },
+          "user_roster_counts": {
+            "additionalProperties": {
+              "type": "integer"
+            },
+            "title": "User Roster Counts",
+            "type": "object"
+          }
+        },
+        "required": [
+          "draft",
+          "mock",
+          "current_strategy_revision",
+          "user_roster_counts",
+          "current_checkpoint",
+          "guidance",
+          "cpu_profiles",
+          "can_advance_cpu",
+          "recovery_guidance"
+        ],
+        "title": "MockSessionRead",
+        "type": "object"
+      },
+      "MockStrategyRevisionRead": {
+        "properties": {
+          "created_at": {
+            "title": "Created At",
+            "type": "string"
+          },
+          "effective_overall_pick": {
+            "title": "Effective Overall Pick",
+            "type": "integer"
+          },
+          "next_strategy_key": {
+            "title": "Next Strategy Key",
+            "type": "string"
+          },
+          "previous_strategy_key": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Previous Strategy Key"
+          },
+          "sequence_number": {
+            "title": "Sequence Number",
+            "type": "integer"
+          },
+          "user_roster_counts": {
+            "additionalProperties": {
+              "type": "integer"
+            },
+            "title": "User Roster Counts",
+            "type": "object"
+          }
+        },
+        "required": [
+          "sequence_number",
+          "previous_strategy_key",
+          "next_strategy_key",
+          "effective_overall_pick",
+          "user_roster_counts",
+          "created_at"
+        ],
+        "title": "MockStrategyRevisionRead",
+        "type": "object"
+      },
       "PlayerCandidate": {
         "properties": {
           "display_name": {
@@ -3657,6 +4171,58 @@
         ]
       }
     },
+    "/api/v1/boards/{board_id}/mock-sessions": {
+      "post": {
+        "operationId": "create_board_mock_session_api_v1_boards__board_id__mock_sessions_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "board_id",
+            "required": true,
+            "schema": {
+              "title": "Board Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MockSessionCreate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MockSessionRead"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Create Board Mock Session",
+        "tags": [
+          "mocks"
+        ]
+      }
+    },
     "/api/v1/boards/{board_id}/order": {
       "put": {
         "operationId": "save_board_order_api_v1_boards__board_id__order_put",
@@ -4674,6 +5240,48 @@
         "summary": "Import Entropy Sample",
         "tags": [
           "league profiles"
+        ]
+      }
+    },
+    "/api/v1/mock-sessions/{session_id}": {
+      "get": {
+        "operationId": "get_mock_session_api_v1_mock_sessions__session_id__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "session_id",
+            "required": true,
+            "schema": {
+              "title": "Session Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MockSessionRead"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Get Mock Session",
+        "tags": [
+          "mocks"
         ]
       }
     },

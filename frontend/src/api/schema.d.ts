@@ -128,6 +128,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/boards/{board_id}/mock-sessions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Create Board Mock Session */
+        post: operations["create_board_mock_session_api_v1_boards__board_id__mock_sessions_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/boards/{board_id}/order": {
         parameters: {
             query?: never;
@@ -415,6 +432,23 @@ export interface paths {
         put?: never;
         /** Import Entropy Sample */
         post: operations["import_entropy_sample_api_v1_league_profiles_samples_entropy_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/mock-sessions/{session_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get Mock Session */
+        get: operations["get_mock_session_api_v1_mock_sessions__session_id__get"];
+        put?: never;
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -1357,6 +1391,192 @@ export interface components {
             /** Player Id */
             player_id?: string | null;
         };
+        /** MockConfigurationRead */
+        MockConfigurationRead: {
+            /** Content Fingerprint */
+            content_fingerprint: string;
+            /** Cpu Engine Version */
+            cpu_engine_version: string;
+            /** Created At */
+            created_at: string;
+            /** Current Strategy Key */
+            current_strategy_key: string;
+            /** Include In Learning */
+            include_in_learning: boolean;
+            /** Learning Opted In At */
+            learning_opted_in_at: string | null;
+            /** Learning Withdrawn At */
+            learning_withdrawn_at: string | null;
+            /** Randomness */
+            randomness: number;
+            /** Revision */
+            revision: number;
+            /** Rng Version */
+            rng_version: string;
+            /** Seed */
+            seed: string;
+            /**
+             * Strategy Compatibility
+             * @enum {string}
+             */
+            strategy_compatibility: "compatible" | "reduced";
+            /** Strategy Definition Version */
+            strategy_definition_version: string;
+            /** Strategy Limitations */
+            strategy_limitations: string[];
+            /** Updated At */
+            updated_at: string;
+        };
+        /** MockCpuProfileRead */
+        MockCpuProfileRead: {
+            /** Archetype Key */
+            archetype_key: string;
+            /**
+             * Confidence
+             * @enum {string}
+             */
+            confidence: "not_applicable" | "low" | "medium" | "high";
+            /** Draft Sample Count */
+            draft_sample_count: number;
+            /** Draft Slot */
+            draft_slot: number;
+            /** Pick Sample Count */
+            pick_sample_count: number;
+            /**
+             * Source
+             * @enum {string}
+             */
+            source: "fallback" | "history";
+        };
+        /** MockGuidanceRead */
+        MockGuidanceRead: {
+            /**
+             * Confidence
+             * @enum {string}
+             */
+            confidence: "unavailable" | "low" | "medium" | "high";
+            /** Created At */
+            created_at: string;
+            /** Effective Overall Pick */
+            effective_overall_pick: number;
+            /** Explanation Template Key */
+            explanation_template_key: string;
+            /** Id */
+            id: string;
+            /** Limitation Codes */
+            limitation_codes: string[];
+            /** Observed Counts */
+            observed_counts: {
+                [key: string]: number;
+            };
+            /** Pivot Template Key */
+            pivot_template_key: string | null;
+            /** Reason Codes */
+            reason_codes: string[];
+            /** Resolved At */
+            resolved_at: string | null;
+            /**
+             * State
+             * @enum {string}
+             */
+            state: "on_plan" | "watch" | "off_plan_viable" | "risk_checkpoint" | "insufficient_evidence";
+            /**
+             * Status
+             * @enum {string}
+             */
+            status: "open" | "acknowledged" | "dismissed";
+            /** Target Ranges */
+            target_ranges: {
+                [key: string]: unknown;
+            };
+        };
+        /** MockSessionCreate */
+        MockSessionCreate: {
+            /**
+             * Draft Format
+             * @default snake
+             * @enum {string}
+             */
+            draft_format: "linear" | "snake";
+            /** Fallback Archetypes */
+            fallback_archetypes?: {
+                [key: string]: string;
+            };
+            /**
+             * Include In Learning
+             * @default false
+             */
+            include_in_learning: boolean;
+            /** League Profile Id */
+            league_profile_id?: string | null;
+            /** Name */
+            name: string;
+            /** Pick Timer Seconds */
+            pick_timer_seconds?: number | null;
+            /** Randomness */
+            randomness: number;
+            /** Round Count */
+            round_count: number;
+            /** Seed */
+            seed: string;
+            /** Strategy Key */
+            strategy_key: string;
+            /** Team Count */
+            team_count: number;
+            /** Team Names */
+            team_names?: string[] | null;
+            /**
+             * Third Round Reversal
+             * @default false
+             */
+            third_round_reversal: boolean;
+            /** User Slot */
+            user_slot: number;
+        };
+        /** MockSessionRead */
+        MockSessionRead: {
+            /** Can Advance Cpu */
+            can_advance_cpu: boolean;
+            /** Cpu Profiles */
+            cpu_profiles: components["schemas"]["MockCpuProfileRead"][];
+            current_checkpoint: components["schemas"]["MockGuidanceRead"];
+            current_strategy_revision: components["schemas"]["MockStrategyRevisionRead"];
+            draft: components["schemas"]["DraftSessionRead"];
+            /** Guidance */
+            guidance: components["schemas"]["MockGuidanceRead"][];
+            /** Last Cpu Decision */
+            last_cpu_decision?: null;
+            mock: components["schemas"]["MockConfigurationRead"];
+            /**
+             * Practice Simulation
+             * @default true
+             * @constant
+             */
+            practice_simulation: true;
+            /** Recovery Guidance */
+            recovery_guidance: string | null;
+            /** User Roster Counts */
+            user_roster_counts: {
+                [key: string]: number;
+            };
+        };
+        /** MockStrategyRevisionRead */
+        MockStrategyRevisionRead: {
+            /** Created At */
+            created_at: string;
+            /** Effective Overall Pick */
+            effective_overall_pick: number;
+            /** Next Strategy Key */
+            next_strategy_key: string;
+            /** Previous Strategy Key */
+            previous_strategy_key: string | null;
+            /** Sequence Number */
+            sequence_number: number;
+            /** User Roster Counts */
+            user_roster_counts: {
+                [key: string]: number;
+            };
+        };
         /** PlayerCandidate */
         PlayerCandidate: {
             /** Display Name */
@@ -1942,6 +2162,41 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["GutEloSessionRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    create_board_mock_session_api_v1_boards__board_id__mock_sessions_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                board_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["MockSessionCreate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MockSessionRead"];
                 };
             };
             /** @description Validation Error */
@@ -2610,6 +2865,37 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["LeagueProfileSummary"];
+                };
+            };
+        };
+    };
+    get_mock_session_api_v1_mock_sessions__session_id__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                session_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MockSessionRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
                 };
             };
         };

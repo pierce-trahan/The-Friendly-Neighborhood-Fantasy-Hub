@@ -13,6 +13,7 @@ from friendly_hub.domains.configuration.router import router as configuration_ro
 from friendly_hub.domains.drafts.router import router as drafts_router
 from friendly_hub.domains.gut_elo.router import router as gut_elo_router
 from friendly_hub.domains.leagues.router import router as league_profiles_router
+from friendly_hub.domains.mocks.router import router as mocks_router
 from friendly_hub.domains.players.router import router as players_router
 
 router = APIRouter(
@@ -45,3 +46,4 @@ router.include_router(players_router)
 router.include_router(boards_router)
 router.include_router(gut_elo_router)
 router.include_router(drafts_router)
+router.include_router(mocks_router)

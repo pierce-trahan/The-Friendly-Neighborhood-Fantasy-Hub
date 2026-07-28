@@ -339,6 +339,17 @@ def create_session(
     board_id: str,
     payload: DraftSessionCreate,
 ) -> DraftSessionRead:
+    row = create_session_in_transaction(session, board_id, payload)
+    _commit(session)
+    return read_session(session, row.id)
+
+
+def create_session_in_transaction(
+    session: Session,
+    board_id: str,
+    payload: DraftSessionCreate,
+) -> DraftSessionRow:
+    """Create Phase 3 rows without committing so another domain can join the unit."""
     board = get_board_row(session, board_id)
     if board is None:
         raise _error(
@@ -347,9 +358,7 @@ def create_session(
             "Return to the board list and choose an available board.",
             404,
         )
-    row = _create_session_rows(session, board, payload)
-    _commit(session)
-    return read_session(session, row.id)
+    return _create_session_rows(session, board, payload)
 
 
 def _summary(
