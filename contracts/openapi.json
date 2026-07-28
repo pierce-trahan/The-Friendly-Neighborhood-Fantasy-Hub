@@ -2824,6 +2824,227 @@
         "title": "MockGuidanceStatusPatch",
         "type": "object"
       },
+      "MockHistoryListResponse": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/MockHistorySummaryRead"
+            },
+            "title": "Items",
+            "type": "array"
+          },
+          "limit": {
+            "title": "Limit",
+            "type": "integer"
+          },
+          "offset": {
+            "title": "Offset",
+            "type": "integer"
+          },
+          "total": {
+            "title": "Total",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "items",
+          "total",
+          "limit",
+          "offset"
+        ],
+        "title": "MockHistoryListResponse",
+        "type": "object"
+      },
+      "MockHistorySummaryRead": {
+        "properties": {
+          "completed_at": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Completed At"
+          },
+          "completion_state": {
+            "enum": [
+              "incomplete",
+              "completed",
+              "reset"
+            ],
+            "title": "Completion State",
+            "type": "string"
+          },
+          "cpu_engine_version": {
+            "title": "Cpu Engine Version",
+            "type": "string"
+          },
+          "created_at": {
+            "title": "Created At",
+            "type": "string"
+          },
+          "current_strategy_key": {
+            "title": "Current Strategy Key",
+            "type": "string"
+          },
+          "draft_format": {
+            "enum": [
+              "linear",
+              "snake"
+            ],
+            "title": "Draft Format",
+            "type": "string"
+          },
+          "include_in_learning": {
+            "title": "Include In Learning",
+            "type": "boolean"
+          },
+          "learning_opted_in_at": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Learning Opted In At"
+          },
+          "learning_withdrawn_at": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Learning Withdrawn At"
+          },
+          "mock_revision": {
+            "title": "Mock Revision",
+            "type": "integer"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "pivot_count": {
+            "title": "Pivot Count",
+            "type": "integer"
+          },
+          "randomness": {
+            "title": "Randomness",
+            "type": "integer"
+          },
+          "reset_at": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reset At"
+          },
+          "rng_version": {
+            "title": "Rng Version",
+            "type": "string"
+          },
+          "round_count": {
+            "title": "Round Count",
+            "type": "integer"
+          },
+          "seed": {
+            "title": "Seed",
+            "type": "string"
+          },
+          "session_id": {
+            "title": "Session Id",
+            "type": "string"
+          },
+          "status": {
+            "enum": [
+              "active",
+              "paused",
+              "completed",
+              "reset"
+            ],
+            "title": "Status",
+            "type": "string"
+          },
+          "strategy_definition_version": {
+            "title": "Strategy Definition Version",
+            "type": "string"
+          },
+          "team_count": {
+            "title": "Team Count",
+            "type": "integer"
+          },
+          "third_round_reversal": {
+            "title": "Third Round Reversal",
+            "type": "boolean"
+          },
+          "updated_at": {
+            "title": "Updated At",
+            "type": "string"
+          },
+          "user_slot": {
+            "title": "User Slot",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "session_id",
+          "name",
+          "status",
+          "completion_state",
+          "seed",
+          "randomness",
+          "current_strategy_key",
+          "pivot_count",
+          "mock_revision",
+          "draft_format",
+          "third_round_reversal",
+          "team_count",
+          "round_count",
+          "user_slot",
+          "include_in_learning",
+          "learning_opted_in_at",
+          "learning_withdrawn_at",
+          "rng_version",
+          "cpu_engine_version",
+          "strategy_definition_version",
+          "created_at",
+          "updated_at",
+          "completed_at",
+          "reset_at"
+        ],
+        "title": "MockHistorySummaryRead",
+        "type": "object"
+      },
+      "MockLearningPatch": {
+        "properties": {
+          "include_in_learning": {
+            "title": "Include In Learning",
+            "type": "boolean"
+          },
+          "mock_revision": {
+            "minimum": 0.0,
+            "title": "Mock Revision",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "mock_revision",
+          "include_in_learning"
+        ],
+        "title": "MockLearningPatch",
+        "type": "object"
+      },
       "MockPickDecisionAudit": {
         "properties": {
           "alternatives": {
@@ -4695,6 +4916,69 @@
       }
     },
     "/api/v1/boards/{board_id}/mock-sessions": {
+      "get": {
+        "operationId": "list_board_mock_sessions_api_v1_boards__board_id__mock_sessions_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "board_id",
+            "required": true,
+            "schema": {
+              "title": "Board Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 20,
+              "maximum": 100,
+              "minimum": 1,
+              "title": "Limit",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "offset",
+            "required": false,
+            "schema": {
+              "default": 0,
+              "minimum": 0,
+              "title": "Offset",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MockHistoryListResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "List Board Mock Sessions",
+        "tags": [
+          "mocks"
+        ]
+      },
       "post": {
         "operationId": "create_board_mock_session_api_v1_boards__board_id__mock_sessions_post",
         "parameters": [
@@ -6033,6 +6317,58 @@
           }
         },
         "summary": "Update Mock Guidance",
+        "tags": [
+          "mocks"
+        ]
+      }
+    },
+    "/api/v1/mock-sessions/{session_id}/learning": {
+      "patch": {
+        "operationId": "update_mock_learning_api_v1_mock_sessions__session_id__learning_patch",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "session_id",
+            "required": true,
+            "schema": {
+              "title": "Session Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MockLearningPatch"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MockSessionRead"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Update Mock Learning",
         "tags": [
           "mocks"
         ]

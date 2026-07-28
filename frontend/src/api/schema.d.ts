@@ -135,7 +135,8 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get?: never;
+        /** List Board Mock Sessions */
+        get: operations["list_board_mock_sessions_api_v1_boards__board_id__mock_sessions_get"];
         put?: never;
         /** Create Board Mock Session */
         post: operations["create_board_mock_session_api_v1_boards__board_id__mock_sessions_post"];
@@ -521,6 +522,23 @@ export interface paths {
         head?: never;
         /** Update Mock Guidance */
         patch: operations["update_mock_guidance_api_v1_mock_sessions__session_id__guidance__event_id__patch"];
+        trace?: never;
+    };
+    "/api/v1/mock-sessions/{session_id}/learning": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /** Update Mock Learning */
+        patch: operations["update_mock_learning_api_v1_mock_sessions__session_id__learning_patch"];
         trace?: never;
     };
     "/api/v1/mock-sessions/{session_id}/strategy": {
@@ -1637,6 +1655,84 @@ export interface components {
              */
             status: "open" | "acknowledged" | "dismissed";
         };
+        /** MockHistoryListResponse */
+        MockHistoryListResponse: {
+            /** Items */
+            items: components["schemas"]["MockHistorySummaryRead"][];
+            /** Limit */
+            limit: number;
+            /** Offset */
+            offset: number;
+            /** Total */
+            total: number;
+        };
+        /** MockHistorySummaryRead */
+        MockHistorySummaryRead: {
+            /** Completed At */
+            completed_at: string | null;
+            /**
+             * Completion State
+             * @enum {string}
+             */
+            completion_state: "incomplete" | "completed" | "reset";
+            /** Cpu Engine Version */
+            cpu_engine_version: string;
+            /** Created At */
+            created_at: string;
+            /** Current Strategy Key */
+            current_strategy_key: string;
+            /**
+             * Draft Format
+             * @enum {string}
+             */
+            draft_format: "linear" | "snake";
+            /** Include In Learning */
+            include_in_learning: boolean;
+            /** Learning Opted In At */
+            learning_opted_in_at: string | null;
+            /** Learning Withdrawn At */
+            learning_withdrawn_at: string | null;
+            /** Mock Revision */
+            mock_revision: number;
+            /** Name */
+            name: string;
+            /** Pivot Count */
+            pivot_count: number;
+            /** Randomness */
+            randomness: number;
+            /** Reset At */
+            reset_at: string | null;
+            /** Rng Version */
+            rng_version: string;
+            /** Round Count */
+            round_count: number;
+            /** Seed */
+            seed: string;
+            /** Session Id */
+            session_id: string;
+            /**
+             * Status
+             * @enum {string}
+             */
+            status: "active" | "paused" | "completed" | "reset";
+            /** Strategy Definition Version */
+            strategy_definition_version: string;
+            /** Team Count */
+            team_count: number;
+            /** Third Round Reversal */
+            third_round_reversal: boolean;
+            /** Updated At */
+            updated_at: string;
+            /** User Slot */
+            user_slot: number;
+        };
+        /** MockLearningPatch */
+        MockLearningPatch: {
+            /** Include In Learning */
+            include_in_learning: boolean;
+            /** Mock Revision */
+            mock_revision: number;
+        };
         /** MockPickDecisionAudit */
         MockPickDecisionAudit: {
             /** Alternatives */
@@ -2439,6 +2535,40 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["GutEloSessionRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    list_board_mock_sessions_api_v1_boards__board_id__mock_sessions_get: {
+        parameters: {
+            query?: {
+                limit?: number;
+                offset?: number;
+            };
+            header?: never;
+            path: {
+                board_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MockHistoryListResponse"];
                 };
             };
             /** @description Validation Error */
@@ -3291,6 +3421,41 @@ export interface operations {
         requestBody: {
             content: {
                 "application/json": components["schemas"]["MockGuidanceStatusPatch"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MockSessionRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    update_mock_learning_api_v1_mock_sessions__session_id__learning_patch: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                session_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["MockLearningPatch"];
             };
         };
         responses: {

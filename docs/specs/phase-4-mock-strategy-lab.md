@@ -1156,6 +1156,9 @@ Phase 4 is complete when:
 The bounded contract for implementation step 8 is recorded in
 [Phase 4 Mock Correction Controls](phase-4-mock-correction-controls.md).
 
+The bounded contract for implementation step 9 is recorded in
+[Phase 4 Learning Consent and Mock Summaries](phase-4-learning-consent-summaries.md).
+
 ## Deferred Revisit
 
 - approved market baselines after Phase 5 source decisions;
