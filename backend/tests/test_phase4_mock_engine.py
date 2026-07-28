@@ -7,9 +7,12 @@ from friendly_hub.domains.mocks.engine import (
     build_consideration_set,
     content_fingerprint,
     deterministic_draw,
+    effective_randomness,
+    emphasized_position,
     normalize_seed,
     practice_board_score,
     random_variation,
+    roster_score_components,
     score_candidates,
     select_candidate,
 )
@@ -298,3 +301,67 @@ def test_scoring_is_explainable_bounded_and_ties_use_canonical_id() -> None:
         )
     with pytest.raises(ValueError, match="at least one scored"):
         select_candidate(())
+
+
+def test_fallback_archetypes_change_only_bounded_documented_components() -> None:
+    shared = {
+        "position": "QB",
+        "is_rookie": False,
+        "roster_counts": {},
+        "unfilled_starter_positions": ("QB",),
+        "tight_end_premium": False,
+    }
+    balanced = roster_score_components(archetype_key="balanced", **shared)
+    qb_priority = roster_score_components(archetype_key="qb_priority", **shared)
+    rb_heavy = roster_score_components(
+        archetype_key="rb_heavy",
+        **(shared | {"position": "RB"}),
+    )
+    wr_heavy = roster_score_components(
+        archetype_key="wr_heavy",
+        **(shared | {"position": "WR"}),
+    )
+    te_aware = roster_score_components(
+        archetype_key="te_aware",
+        **(shared | {"position": "TE", "tight_end_premium": True}),
+    )
+    rookie_lean = roster_score_components(
+        archetype_key="rookie_lean",
+        **(shared | {"position": "WR", "is_rookie": True}),
+    )
+    chaotic = roster_score_components(archetype_key="chaotic", **shared)
+
+    assert balanced.starter_need == 200
+    assert balanced.depth_need == 100
+    assert balanced.archetype_fit == 0
+    assert qb_priority.archetype_fit == 200
+    assert rb_heavy.archetype_fit == 175
+    assert wr_heavy.archetype_fit == 175
+    assert te_aware.archetype_fit == 200
+    assert rookie_lean.archetype_fit == 100
+    assert chaotic.archetype_fit == 0
+    assert emphasized_position("qb_priority") == "QB"
+    assert emphasized_position("rookie_lean") is None
+    assert effective_randomness(35, "balanced") == 35
+    assert effective_randomness(35, "chaotic") == 70
+    assert effective_randomness(75, "chaotic") == 100
+    assert effective_randomness(0, "chaotic") == 0
+
+    concentrated = roster_score_components(
+        position="WR",
+        is_rookie=False,
+        roster_counts={"WR": 5},
+        unfilled_starter_positions=(),
+        archetype_key="balanced",
+        tight_end_premium=False,
+    )
+    assert concentrated.depth_need == 0
+    assert concentrated.duplication_penalty == -300
+
+    with pytest.raises(ValueError, match="archetype"):
+        roster_score_components(archetype_key="unknown", **shared)
+    with pytest.raises(ValueError, match="roster counts"):
+        roster_score_components(
+            archetype_key="balanced",
+            **(shared | {"roster_counts": {"QB": -1}}),
+        )

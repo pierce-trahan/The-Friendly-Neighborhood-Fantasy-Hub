@@ -7,13 +7,20 @@ from dataclasses import dataclass
 from fractions import Fraction
 
 from friendly_hub.domains.mocks.definitions import (
+    ARCHETYPE_DEFINITIONS,
     COMPONENT_BOUNDS,
     CPU_ENGINE_VERSION,
+    DEPTH_NEED_EMPTY_SCORE,
+    DEPTH_NEED_SINGLE_SCORE,
+    DUPLICATION_PENALTY_PER_EXTRA,
+    DUPLICATION_PENALTY_START_COUNT,
     MAX_RANDOM_CONSIDERATION_COUNT,
     MAX_RANDOMNESS,
     MAX_SEED,
     RNG_VERSION,
+    STARTER_NEED_SCORE,
     SUPPORTED_FALLBACK_ARCHETYPES,
+    ArchetypeDefinition,
 )
 
 _RANDOM_VARIATION_PURPOSE = "candidate-random-variation"
@@ -79,6 +86,14 @@ class ScoredCandidate:
     random_draw: DeterministicDraw
 
 
+@dataclass(frozen=True)
+class RosterScoreComponents:
+    starter_need: int
+    depth_need: int
+    archetype_fit: int
+    duplication_penalty: int
+
+
 def normalize_seed(seed: str) -> str:
     if not isinstance(seed, str) or not seed or not seed.isascii() or not seed.isdecimal():
         raise ValueError("seed must be an unsigned decimal string")
@@ -122,6 +137,76 @@ def fallback_archetype_for_slot(seed: str, draft_slot: int) -> str:
     return SUPPORTED_FALLBACK_ARCHETYPES[
         draw.numerator % len(SUPPORTED_FALLBACK_ARCHETYPES)
     ]
+
+
+def emphasized_position(archetype_key: str) -> str | None:
+    return _archetype_definition(archetype_key).emphasized_position
+
+
+def effective_randomness(randomness: int, archetype_key: str) -> int:
+    _validate_randomness(randomness)
+    definition = _archetype_definition(archetype_key)
+    return min(MAX_RANDOMNESS, randomness * definition.randomness_multiplier)
+
+
+def roster_score_components(
+    *,
+    position: str,
+    is_rookie: bool,
+    roster_counts: Mapping[str, int],
+    unfilled_starter_positions: Iterable[str],
+    archetype_key: str,
+    tight_end_premium: bool,
+) -> RosterScoreComponents:
+    normalized_position = position.strip().upper()
+    if not normalized_position:
+        raise ValueError("position must not be empty")
+    if not isinstance(is_rookie, bool):
+        raise ValueError("is_rookie must be a boolean")
+    if not isinstance(tight_end_premium, bool):
+        raise ValueError("tight_end_premium must be a boolean")
+    normalized_counts = {
+        key.strip().upper(): value
+        for key, value in roster_counts.items()
+        if isinstance(key, str) and key.strip()
+    }
+    if any(not _is_integer(value) or value < 0 for value in normalized_counts.values()):
+        raise ValueError("roster counts must be non-negative integers")
+    count = normalized_counts.get(normalized_position, 0)
+    unfilled = {
+        candidate_position.strip().upper()
+        for candidate_position in unfilled_starter_positions
+        if isinstance(candidate_position, str) and candidate_position.strip()
+    }
+    definition = _archetype_definition(archetype_key)
+    if count == 0:
+        depth_need = DEPTH_NEED_EMPTY_SCORE
+    elif count == 1:
+        depth_need = DEPTH_NEED_SINGLE_SCORE
+    else:
+        depth_need = 0
+    archetype_fit = 0
+    if definition.emphasized_position == normalized_position:
+        archetype_fit += definition.position_bonus
+    if is_rookie:
+        archetype_fit += definition.rookie_bonus
+    if (
+        normalized_position == "TE"
+        and tight_end_premium
+        and definition.te_premium_bonus
+    ):
+        archetype_fit += definition.te_premium_bonus
+    duplication_penalty = -min(
+        300,
+        max(0, count - DUPLICATION_PENALTY_START_COUNT + 1)
+        * DUPLICATION_PENALTY_PER_EXTRA,
+    )
+    return RosterScoreComponents(
+        starter_need=STARTER_NEED_SCORE if normalized_position in unfilled else 0,
+        depth_need=depth_need,
+        archetype_fit=archetype_fit,
+        duplication_penalty=duplication_penalty,
+    )
 
 
 def deterministic_draw(
@@ -372,6 +457,12 @@ def _top_at_position(
         for candidate in candidates
         if candidate.position.strip().upper() == normalized_position
     )[:count]
+
+
+def _archetype_definition(archetype_key: str) -> ArchetypeDefinition:
+    if not isinstance(archetype_key, str) or archetype_key not in ARCHETYPE_DEFINITIONS:
+        raise ValueError("archetype_key is not supported")
+    return ARCHETYPE_DEFINITIONS[archetype_key]
 
 
 def _is_integer(value: object) -> bool:

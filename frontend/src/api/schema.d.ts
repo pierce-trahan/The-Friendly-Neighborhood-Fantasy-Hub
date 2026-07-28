@@ -455,6 +455,40 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/mock-sessions/{session_id}/cpu-pick": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Create Cpu Pick */
+        post: operations["create_cpu_pick_api_v1_mock_sessions__session_id__cpu_pick_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/mock-sessions/{session_id}/decisions/{overall_pick}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get Cpu Decision */
+        get: operations["get_cpu_decision_api_v1_mock_sessions__session_id__decisions__overall_pick__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/player-imports/csv/preview": {
         parameters: {
             query?: never;
@@ -1427,6 +1461,17 @@ export interface components {
             /** Updated At */
             updated_at: string;
         };
+        /** MockCpuPickCreate */
+        MockCpuPickCreate: {
+            /** Draft Revision */
+            draft_revision: number;
+            /** Expected Overall Pick */
+            expected_overall_pick: number;
+            /** Expected Selecting Slot */
+            expected_selecting_slot: number;
+            /** Mock Revision */
+            mock_revision: number;
+        };
         /** MockCpuProfileRead */
         MockCpuProfileRead: {
             /** Archetype Key */
@@ -1447,6 +1492,14 @@ export interface components {
              * @enum {string}
              */
             source: "fallback" | "history";
+        };
+        /** MockDecisionAlternativeRead */
+        MockDecisionAlternativeRead: {
+            component_scores: components["schemas"]["MockScoreComponentsRead"];
+            /** Player Id */
+            player_id: string;
+            /** Total Score */
+            total_score: number;
         };
         /** MockGuidanceRead */
         MockGuidanceRead: {
@@ -1489,6 +1542,121 @@ export interface components {
             target_ranges: {
                 [key: string]: unknown;
             };
+        };
+        /** MockPickDecisionAudit */
+        MockPickDecisionAudit: {
+            /** Alternatives */
+            alternatives: components["schemas"]["MockDecisionAlternativeRead"][];
+            /** Chosen Player Display Name */
+            chosen_player_display_name: string;
+            /** Chosen Player Id */
+            chosen_player_id: string;
+            /** Chosen Player Position */
+            chosen_player_position: string;
+            component_scores: components["schemas"]["MockScoreComponentsRead"];
+            /** Created At */
+            created_at: string;
+            /**
+             * Decision Status
+             * @enum {string}
+             */
+            decision_status: "active" | "historical";
+            /** Engine Version */
+            engine_version: string;
+            /** Id */
+            id: string;
+            /** Limitation Codes */
+            limitation_codes: string[];
+            /** Manually Corrected */
+            manually_corrected: boolean;
+            /** Overall Pick */
+            overall_pick: number;
+            /** Profile Archetype Key */
+            profile_archetype_key: string;
+            /**
+             * Profile Confidence
+             * @enum {string}
+             */
+            profile_confidence: "not_applicable" | "low" | "medium" | "high";
+            /**
+             * Profile Source
+             * @enum {string}
+             */
+            profile_source: "fallback" | "history";
+            /** Random Audit */
+            random_audit: {
+                [key: string]: unknown;
+            };
+            /** Reason Codes */
+            reason_codes: string[];
+            /** Rng Version */
+            rng_version: string;
+            /** Selecting Slot */
+            selecting_slot: number;
+            /** Total Score */
+            total_score: number;
+        };
+        /** MockPickDecisionSummary */
+        MockPickDecisionSummary: {
+            /** Chosen Player Display Name */
+            chosen_player_display_name: string;
+            /** Chosen Player Id */
+            chosen_player_id: string;
+            /** Chosen Player Position */
+            chosen_player_position: string;
+            component_scores: components["schemas"]["MockScoreComponentsRead"];
+            /** Created At */
+            created_at: string;
+            /**
+             * Decision Status
+             * @enum {string}
+             */
+            decision_status: "active" | "historical";
+            /** Engine Version */
+            engine_version: string;
+            /** Id */
+            id: string;
+            /** Limitation Codes */
+            limitation_codes: string[];
+            /** Manually Corrected */
+            manually_corrected: boolean;
+            /** Overall Pick */
+            overall_pick: number;
+            /** Profile Archetype Key */
+            profile_archetype_key: string;
+            /**
+             * Profile Confidence
+             * @enum {string}
+             */
+            profile_confidence: "not_applicable" | "low" | "medium" | "high";
+            /**
+             * Profile Source
+             * @enum {string}
+             */
+            profile_source: "fallback" | "history";
+            /** Reason Codes */
+            reason_codes: string[];
+            /** Rng Version */
+            rng_version: string;
+            /** Selecting Slot */
+            selecting_slot: number;
+            /** Total Score */
+            total_score: number;
+        };
+        /** MockScoreComponentsRead */
+        MockScoreComponentsRead: {
+            /** Archetype Fit */
+            archetype_fit: number;
+            /** Board Order */
+            board_order: number;
+            /** Depth Need */
+            depth_need: number;
+            /** Duplication Penalty */
+            duplication_penalty: number;
+            /** Random Variation */
+            random_variation: number;
+            /** Starter Need */
+            starter_need: number;
         };
         /** MockSessionCreate */
         MockSessionCreate: {
@@ -1544,8 +1712,7 @@ export interface components {
             draft: components["schemas"]["DraftSessionRead"];
             /** Guidance */
             guidance: components["schemas"]["MockGuidanceRead"][];
-            /** Last Cpu Decision */
-            last_cpu_decision?: null;
+            last_cpu_decision?: components["schemas"]["MockPickDecisionSummary"] | null;
             mock: components["schemas"]["MockConfigurationRead"];
             /**
              * Practice Simulation
@@ -2887,6 +3054,73 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["MockSessionRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    create_cpu_pick_api_v1_mock_sessions__session_id__cpu_pick_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                session_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["MockCpuPickCreate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MockSessionRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_cpu_decision_api_v1_mock_sessions__session_id__decisions__overall_pick__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                session_id: string;
+                overall_pick: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MockPickDecisionAudit"];
                 };
             };
             /** @description Validation Error */

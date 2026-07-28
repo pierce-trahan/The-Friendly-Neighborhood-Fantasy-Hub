@@ -2478,6 +2478,38 @@
         "title": "MockConfigurationRead",
         "type": "object"
       },
+      "MockCpuPickCreate": {
+        "properties": {
+          "draft_revision": {
+            "minimum": 0.0,
+            "title": "Draft Revision",
+            "type": "integer"
+          },
+          "expected_overall_pick": {
+            "minimum": 1.0,
+            "title": "Expected Overall Pick",
+            "type": "integer"
+          },
+          "expected_selecting_slot": {
+            "minimum": 1.0,
+            "title": "Expected Selecting Slot",
+            "type": "integer"
+          },
+          "mock_revision": {
+            "minimum": 0.0,
+            "title": "Mock Revision",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "draft_revision",
+          "mock_revision",
+          "expected_overall_pick",
+          "expected_selecting_slot"
+        ],
+        "title": "MockCpuPickCreate",
+        "type": "object"
+      },
       "MockCpuProfileRead": {
         "properties": {
           "archetype_key": {
@@ -2524,6 +2556,28 @@
           "pick_sample_count"
         ],
         "title": "MockCpuProfileRead",
+        "type": "object"
+      },
+      "MockDecisionAlternativeRead": {
+        "properties": {
+          "component_scores": {
+            "$ref": "#/components/schemas/MockScoreComponentsRead"
+          },
+          "player_id": {
+            "title": "Player Id",
+            "type": "string"
+          },
+          "total_score": {
+            "title": "Total Score",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "player_id",
+          "total_score",
+          "component_scores"
+        ],
+        "title": "MockDecisionAlternativeRead",
         "type": "object"
       },
       "MockGuidanceRead": {
@@ -2639,6 +2693,292 @@
           "resolved_at"
         ],
         "title": "MockGuidanceRead",
+        "type": "object"
+      },
+      "MockPickDecisionAudit": {
+        "properties": {
+          "alternatives": {
+            "items": {
+              "$ref": "#/components/schemas/MockDecisionAlternativeRead"
+            },
+            "title": "Alternatives",
+            "type": "array"
+          },
+          "chosen_player_display_name": {
+            "title": "Chosen Player Display Name",
+            "type": "string"
+          },
+          "chosen_player_id": {
+            "title": "Chosen Player Id",
+            "type": "string"
+          },
+          "chosen_player_position": {
+            "title": "Chosen Player Position",
+            "type": "string"
+          },
+          "component_scores": {
+            "$ref": "#/components/schemas/MockScoreComponentsRead"
+          },
+          "created_at": {
+            "title": "Created At",
+            "type": "string"
+          },
+          "decision_status": {
+            "enum": [
+              "active",
+              "historical"
+            ],
+            "title": "Decision Status",
+            "type": "string"
+          },
+          "engine_version": {
+            "title": "Engine Version",
+            "type": "string"
+          },
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "limitation_codes": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Limitation Codes",
+            "type": "array"
+          },
+          "manually_corrected": {
+            "title": "Manually Corrected",
+            "type": "boolean"
+          },
+          "overall_pick": {
+            "title": "Overall Pick",
+            "type": "integer"
+          },
+          "profile_archetype_key": {
+            "title": "Profile Archetype Key",
+            "type": "string"
+          },
+          "profile_confidence": {
+            "enum": [
+              "not_applicable",
+              "low",
+              "medium",
+              "high"
+            ],
+            "title": "Profile Confidence",
+            "type": "string"
+          },
+          "profile_source": {
+            "enum": [
+              "fallback",
+              "history"
+            ],
+            "title": "Profile Source",
+            "type": "string"
+          },
+          "random_audit": {
+            "additionalProperties": true,
+            "title": "Random Audit",
+            "type": "object"
+          },
+          "reason_codes": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Reason Codes",
+            "type": "array"
+          },
+          "rng_version": {
+            "title": "Rng Version",
+            "type": "string"
+          },
+          "selecting_slot": {
+            "title": "Selecting Slot",
+            "type": "integer"
+          },
+          "total_score": {
+            "title": "Total Score",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id",
+          "overall_pick",
+          "selecting_slot",
+          "chosen_player_id",
+          "chosen_player_display_name",
+          "chosen_player_position",
+          "profile_source",
+          "profile_archetype_key",
+          "profile_confidence",
+          "engine_version",
+          "rng_version",
+          "total_score",
+          "component_scores",
+          "reason_codes",
+          "limitation_codes",
+          "decision_status",
+          "manually_corrected",
+          "created_at",
+          "random_audit",
+          "alternatives"
+        ],
+        "title": "MockPickDecisionAudit",
+        "type": "object"
+      },
+      "MockPickDecisionSummary": {
+        "properties": {
+          "chosen_player_display_name": {
+            "title": "Chosen Player Display Name",
+            "type": "string"
+          },
+          "chosen_player_id": {
+            "title": "Chosen Player Id",
+            "type": "string"
+          },
+          "chosen_player_position": {
+            "title": "Chosen Player Position",
+            "type": "string"
+          },
+          "component_scores": {
+            "$ref": "#/components/schemas/MockScoreComponentsRead"
+          },
+          "created_at": {
+            "title": "Created At",
+            "type": "string"
+          },
+          "decision_status": {
+            "enum": [
+              "active",
+              "historical"
+            ],
+            "title": "Decision Status",
+            "type": "string"
+          },
+          "engine_version": {
+            "title": "Engine Version",
+            "type": "string"
+          },
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "limitation_codes": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Limitation Codes",
+            "type": "array"
+          },
+          "manually_corrected": {
+            "title": "Manually Corrected",
+            "type": "boolean"
+          },
+          "overall_pick": {
+            "title": "Overall Pick",
+            "type": "integer"
+          },
+          "profile_archetype_key": {
+            "title": "Profile Archetype Key",
+            "type": "string"
+          },
+          "profile_confidence": {
+            "enum": [
+              "not_applicable",
+              "low",
+              "medium",
+              "high"
+            ],
+            "title": "Profile Confidence",
+            "type": "string"
+          },
+          "profile_source": {
+            "enum": [
+              "fallback",
+              "history"
+            ],
+            "title": "Profile Source",
+            "type": "string"
+          },
+          "reason_codes": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Reason Codes",
+            "type": "array"
+          },
+          "rng_version": {
+            "title": "Rng Version",
+            "type": "string"
+          },
+          "selecting_slot": {
+            "title": "Selecting Slot",
+            "type": "integer"
+          },
+          "total_score": {
+            "title": "Total Score",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id",
+          "overall_pick",
+          "selecting_slot",
+          "chosen_player_id",
+          "chosen_player_display_name",
+          "chosen_player_position",
+          "profile_source",
+          "profile_archetype_key",
+          "profile_confidence",
+          "engine_version",
+          "rng_version",
+          "total_score",
+          "component_scores",
+          "reason_codes",
+          "limitation_codes",
+          "decision_status",
+          "manually_corrected",
+          "created_at"
+        ],
+        "title": "MockPickDecisionSummary",
+        "type": "object"
+      },
+      "MockScoreComponentsRead": {
+        "properties": {
+          "archetype_fit": {
+            "title": "Archetype Fit",
+            "type": "integer"
+          },
+          "board_order": {
+            "title": "Board Order",
+            "type": "integer"
+          },
+          "depth_need": {
+            "title": "Depth Need",
+            "type": "integer"
+          },
+          "duplication_penalty": {
+            "title": "Duplication Penalty",
+            "type": "integer"
+          },
+          "random_variation": {
+            "title": "Random Variation",
+            "type": "integer"
+          },
+          "starter_need": {
+            "title": "Starter Need",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "board_order",
+          "starter_need",
+          "depth_need",
+          "archetype_fit",
+          "duplication_penalty",
+          "random_variation"
+        ],
+        "title": "MockScoreComponentsRead",
         "type": "object"
       },
       "MockSessionCreate": {
@@ -2795,8 +3135,14 @@
             "type": "array"
           },
           "last_cpu_decision": {
-            "title": "Last Cpu Decision",
-            "type": "null"
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/MockPickDecisionSummary"
+              },
+              {
+                "type": "null"
+              }
+            ]
           },
           "mock": {
             "$ref": "#/components/schemas/MockConfigurationRead"
@@ -5280,6 +5626,110 @@
           }
         },
         "summary": "Get Mock Session",
+        "tags": [
+          "mocks"
+        ]
+      }
+    },
+    "/api/v1/mock-sessions/{session_id}/cpu-pick": {
+      "post": {
+        "operationId": "create_cpu_pick_api_v1_mock_sessions__session_id__cpu_pick_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "session_id",
+            "required": true,
+            "schema": {
+              "title": "Session Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MockCpuPickCreate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MockSessionRead"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Create Cpu Pick",
+        "tags": [
+          "mocks"
+        ]
+      }
+    },
+    "/api/v1/mock-sessions/{session_id}/decisions/{overall_pick}": {
+      "get": {
+        "operationId": "get_cpu_decision_api_v1_mock_sessions__session_id__decisions__overall_pick__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "session_id",
+            "required": true,
+            "schema": {
+              "title": "Session Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "overall_pick",
+            "required": true,
+            "schema": {
+              "minimum": 1,
+              "title": "Overall Pick",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MockPickDecisionAudit"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Get Cpu Decision",
         "tags": [
           "mocks"
         ]

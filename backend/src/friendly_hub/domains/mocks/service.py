@@ -4,7 +4,7 @@ import json
 from typing import Any
 from uuid import uuid4
 
-from sqlalchemy import select
+from sqlalchemy import select, update
 from sqlalchemy.orm import Session
 
 from friendly_hub.core.errors import HubError
@@ -18,6 +18,7 @@ from friendly_hub.domains.drafts.schemas import DraftSessionCreate
 from friendly_hub.domains.drafts.service import (
     create_session_in_transaction,
     read_session,
+    record_pick_in_transaction,
 )
 from friendly_hub.domains.leagues.models import LeagueProfileRow
 from friendly_hub.domains.leagues.schemas import LeagueProfileDocument
@@ -27,19 +28,34 @@ from friendly_hub.domains.mocks.definitions import (
     STRATEGY_DEFINITION_VERSION,
 )
 from friendly_hub.domains.mocks.engine import (
+    CandidateInput,
+    CandidateScoreInput,
+    ScoredCandidate,
+    build_consideration_set,
     content_fingerprint,
+    effective_randomness,
+    emphasized_position,
     fallback_archetype_for_slot,
+    roster_score_components,
+    score_candidates,
+    select_candidate,
 )
 from friendly_hub.domains.mocks.models import (
     MockConfigurationRow,
     MockCpuProfileRow,
     MockGuidanceEventRow,
+    MockPickDecisionRow,
     MockStrategyRevisionRow,
 )
 from friendly_hub.domains.mocks.schemas import (
     MockConfigurationRead,
+    MockCpuPickCreate,
     MockCpuProfileRead,
+    MockDecisionAlternativeRead,
     MockGuidanceRead,
+    MockPickDecisionAudit,
+    MockPickDecisionSummary,
+    MockScoreComponentsRead,
     MockSessionCreate,
     MockSessionRead,
     MockStrategyRevisionRead,
@@ -199,10 +215,10 @@ def _validate_strategy_compatibility(
         )
 
 
-def _candidate_snapshot(
+def _ordered_candidate_rows(
     session: Session,
     draft_session_id: str,
-) -> list[dict[str, object]]:
+) -> list[DraftCandidateRow]:
     rows = list(
         session.scalars(
             select(DraftCandidateRow).where(
@@ -210,7 +226,7 @@ def _candidate_snapshot(
             )
         )
     )
-    ordered = sorted(
+    return sorted(
         rows,
         key=lambda row: (
             row.manual_rank is None,
@@ -219,6 +235,13 @@ def _candidate_snapshot(
             row.player_id,
         ),
     )
+
+
+def _candidate_snapshot(
+    session: Session,
+    draft_session_id: str,
+) -> list[dict[str, object]]:
+    ordered = _ordered_candidate_rows(session, draft_session_id)
     return [
         {
             "practice_index": index,
@@ -422,6 +445,415 @@ def create_mock_session(
     return read_mock_session(session, draft_row.id)
 
 
+def _require_cpu_mock(
+    session: Session,
+    session_id: str,
+) -> tuple[DraftSessionRow, MockConfigurationRow]:
+    draft_row = session.get(DraftSessionRow, session_id)
+    if draft_row is None:
+        raise _error(
+            "MOCK.NOT_FOUND",
+            "That mock session could not be found.",
+            "Return to the Personal Board and choose an available mock.",
+            404,
+        )
+    if draft_row.mode != "mock":
+        raise _error(
+            "MOCK.LIVE_SESSION",
+            "CPU automation is available only in a practice simulation.",
+            "Continue the live draft manually or create a mock session.",
+            409,
+        )
+    configuration = session.scalar(
+        select(MockConfigurationRow).where(
+            MockConfigurationRow.draft_session_id == session_id
+        )
+    )
+    if configuration is None:
+        raise _error(
+            "MOCK.STATE_INCOMPLETE",
+            "That practice session is missing its mock configuration.",
+            "Keep the session for audit and create a fresh mock.",
+            409,
+        )
+    return draft_row, configuration
+
+
+def _current_pick(
+    session: Session,
+    session_id: str,
+) -> DraftPickRow | None:
+    return session.scalar(
+        select(DraftPickRow)
+        .where(
+            DraftPickRow.session_id == session_id,
+            DraftPickRow.player_id.is_(None),
+        )
+        .order_by(DraftPickRow.overall_pick)
+        .limit(1)
+    )
+
+
+def _cpu_roster_counts(
+    picks: list[DraftPickRow],
+    candidates_by_id: dict[str, DraftCandidateRow],
+    selecting_slot: int,
+) -> dict[str, int]:
+    counts: dict[str, int] = {}
+    for pick in picks:
+        if pick.selecting_slot != selecting_slot or pick.player_id is None:
+            continue
+        candidate = candidates_by_id.get(pick.player_id)
+        if candidate is None:
+            continue
+        position = candidate.primary_position.strip().upper()
+        counts[position] = counts.get(position, 0) + 1
+    return counts
+
+
+def _unfilled_starter_positions(
+    league_shape: dict[str, Any],
+    roster_counts: dict[str, int],
+) -> set[str]:
+    raw_slots = league_shape.get("starter_slots", [])
+    if not isinstance(raw_slots, list):
+        return set()
+    remaining = dict(roster_counts)
+    eligible_slots: list[list[str]] = []
+    for raw_slot in raw_slots:
+        if not isinstance(raw_slot, dict):
+            continue
+        positions = _normalized_positions(raw_slot.get("eligible_positions"))
+        if positions:
+            eligible_slots.append(positions)
+    unfilled: set[str] = set()
+    for positions in sorted(eligible_slots, key=lambda value: (len(value), value)):
+        available = sorted(
+            (remaining.get(position, 0), position)
+            for position in positions
+            if remaining.get(position, 0) > 0
+        )
+        if available:
+            _, assigned_position = available[-1]
+            remaining[assigned_position] -= 1
+        else:
+            unfilled.update(positions)
+    return unfilled
+
+
+def _score_components_read(candidate: ScoredCandidate) -> MockScoreComponentsRead:
+    return MockScoreComponentsRead(
+        board_order=candidate.components.board_order,
+        starter_need=candidate.components.starter_need,
+        depth_need=candidate.components.depth_need,
+        archetype_fit=candidate.components.archetype_fit,
+        duplication_penalty=candidate.components.duplication_penalty,
+        random_variation=candidate.components.random_variation,
+    )
+
+
+def _decision_reason_codes(candidate: ScoredCandidate) -> list[str]:
+    reasons = ["PRACTICE_BOARD_BASELINE"]
+    if candidate.components.starter_need > 0:
+        reasons.append("STARTER_COVERAGE")
+    if candidate.components.depth_need > 0:
+        reasons.append("ROSTER_DEPTH")
+    if candidate.components.archetype_fit > 0:
+        reasons.append("PROFILE_ARCHETYPE_FIT")
+    if candidate.components.duplication_penalty < 0:
+        reasons.append("POSITION_CONCENTRATION_PENALTY")
+    if candidate.components.random_variation != 0:
+        reasons.append("SEEDED_VARIATION")
+    return reasons
+
+
+def _decision_limitations(
+    profile: MockCpuProfileRow,
+    league_shape: dict[str, Any],
+) -> list[str]:
+    limitations = {
+        value
+        for value in league_shape.get("limitations", [])
+        if isinstance(value, str)
+    }
+    if profile.source == "fallback":
+        limitations.add("FALLBACK_PROFILE_NO_HISTORY")
+    elif profile.confidence == "low":
+        limitations.add("LOW_CONFIDENCE_HISTORY_PROFILE")
+    return sorted(limitations)
+
+
+def _advance_mock_revision(
+    session: Session,
+    configuration: MockConfigurationRow,
+    expected_revision: int,
+    now: str,
+) -> None:
+    result = session.execute(
+        update(MockConfigurationRow)
+        .where(
+            MockConfigurationRow.id == configuration.id,
+            MockConfigurationRow.revision == expected_revision,
+        )
+        .values(revision=expected_revision + 1, updated_at=now)
+    )
+    if result.rowcount != 1:
+        session.rollback()
+        raise _error(
+            "MOCK.STALE_REVISION",
+            "The mock changed before that CPU pick could be saved.",
+            "Refresh the practice room and retry from the current pick.",
+            409,
+        )
+    session.refresh(configuration)
+
+
+def _build_cpu_decision_row(
+    *,
+    configuration: MockConfigurationRow,
+    mutation,
+    profile: MockCpuProfileRow,
+    chosen: ScoredCandidate,
+    scored: tuple[ScoredCandidate, ...],
+    configured_randomness: int,
+    applied_randomness: int,
+    limitation_codes: list[str],
+    now: str,
+) -> MockPickDecisionRow:
+    alternatives = [
+        {
+            "player_id": candidate.player_id,
+            "total_score": candidate.total_score,
+            "component_scores": _score_components_read(candidate).model_dump(),
+        }
+        for candidate in scored
+        if candidate.player_id != chosen.player_id
+    ][:5]
+    return MockPickDecisionRow(
+        id=str(uuid4()),
+        mock_configuration_id=configuration.id,
+        draft_pick_revision_id=mutation.pick_revision.id,
+        overall_pick=mutation.pick.overall_pick,
+        selecting_slot=mutation.pick.selecting_slot,
+        chosen_player_id=chosen.player_id,
+        profile_source=profile.source,
+        profile_archetype_key=profile.archetype_key,
+        engine_version=configuration.cpu_engine_version,
+        rng_version=configuration.rng_version,
+        total_score=chosen.total_score,
+        component_scores_json=_json(_score_components_read(chosen).model_dump()),
+        random_audit_json=_json(
+            {
+                "canonical_input": chosen.random_draw.canonical_input,
+                "configured_randomness": configured_randomness,
+                "digest_hex": chosen.random_draw.digest_hex,
+                "effective_randomness": applied_randomness,
+                "numerator": str(chosen.random_draw.numerator),
+                "denominator": str(1 << 64),
+                "purpose": "candidate-random-variation",
+            }
+        ),
+        alternatives_json=_json(alternatives),
+        reason_codes_json=_json(_decision_reason_codes(chosen)),
+        limitation_codes_json=_json(limitation_codes),
+        created_at=now,
+    )
+
+
+def advance_cpu_pick(
+    session: Session,
+    session_id: str,
+    payload: MockCpuPickCreate,
+) -> MockSessionRead:
+    draft_row, configuration = _require_cpu_mock(session, session_id)
+    if draft_row.status != "active":
+        raise _error(
+            "MOCK.NOT_ACTIVE",
+            "A CPU pick can be recorded only while the mock is active.",
+            "Resume the mock or start a new practice session.",
+            409,
+        )
+    if configuration.revision != payload.mock_revision:
+        raise _error(
+            "MOCK.STALE_REVISION",
+            "The mock changed before that CPU pick could be saved.",
+            "Refresh the practice room and retry from the current pick.",
+            409,
+        )
+    if (
+        configuration.cpu_engine_version != CPU_ENGINE_VERSION
+        or configuration.rng_version != RNG_VERSION
+    ):
+        raise _error(
+            "MOCK.VERSION_UNSUPPORTED",
+            "This saved mock uses an unsupported CPU or random-draw version.",
+            "Keep it for audit and create a new mock with the current engine.",
+            409,
+        )
+    current = _current_pick(session, session_id)
+    if current is None:
+        raise _error(
+            "MOCK.COMPLETE",
+            "Every pick in this mock is already filled.",
+            "Review the completed practice session.",
+            409,
+        )
+    if current.overall_pick != payload.expected_overall_pick:
+        raise _error(
+            "MOCK.STALE_CURRENT_PICK",
+            "The mock advanced before that CPU request could be saved.",
+            "Refresh the practice room and use the current overall pick.",
+            409,
+        )
+    if current.selecting_slot != payload.expected_selecting_slot:
+        raise _error(
+            "MOCK.STALE_CURRENT_SLOT",
+            "The team on the clock changed before that CPU request could be saved.",
+            "Refresh the practice room and verify the current draft slot.",
+            409,
+        )
+    if current.selecting_slot == draft_row.user_slot:
+        raise _error(
+            "MOCK.USER_SLOT",
+            "The user's draft slot cannot be automated.",
+            "Make this pick manually from the ordinary draft candidate table.",
+            409,
+        )
+
+    profile = session.scalar(
+        select(MockCpuProfileRow).where(
+            MockCpuProfileRow.mock_configuration_id == configuration.id,
+            MockCpuProfileRow.draft_slot == current.selecting_slot,
+        )
+    )
+    if profile is None:
+        raise _error(
+            "MOCK.PROFILE_MISSING",
+            "The CPU slot is missing its saved profile snapshot.",
+            "Keep the session for audit and create a fresh mock.",
+            409,
+        )
+    try:
+        applied_randomness = effective_randomness(
+            configuration.randomness,
+            profile.archetype_key,
+        )
+        profile_emphasis = emphasized_position(profile.archetype_key)
+    except ValueError as exc:
+        raise _error(
+            "MOCK.PROFILE_UNSUPPORTED",
+            "The CPU slot uses an unsupported profile archetype.",
+            "Keep the session for audit and create a fresh mock.",
+            409,
+        ) from exc
+
+    candidate_rows = _ordered_candidate_rows(session, session_id)
+    picks = list(
+        session.scalars(
+            select(DraftPickRow)
+            .where(DraftPickRow.session_id == session_id)
+            .order_by(DraftPickRow.overall_pick)
+        )
+    )
+    drafted_ids = {pick.player_id for pick in picks if pick.player_id is not None}
+    available_inputs = tuple(
+        CandidateInput(
+            player_id=row.player_id,
+            position=row.primary_position,
+            practice_index=index,
+        )
+        for index, row in enumerate(candidate_rows)
+        if row.player_id not in drafted_ids
+    )
+    if not available_inputs:
+        raise _error(
+            "MOCK.CANDIDATES_EXHAUSTED",
+            "No frozen candidates remain available for the CPU pick.",
+            "Review the draft or create a mock with a larger player pool.",
+            409,
+        )
+    candidates_by_id = {row.player_id: row for row in candidate_rows}
+    roster_counts = _cpu_roster_counts(
+        picks,
+        candidates_by_id,
+        current.selecting_slot,
+    )
+    league_shape: dict[str, Any] = json.loads(configuration.league_shape_json)
+    unfilled_positions = _unfilled_starter_positions(league_shape, roster_counts)
+    considered = build_consideration_set(
+        available_inputs,
+        randomness=applied_randomness,
+        unfilled_starter_positions=unfilled_positions,
+        emphasized_position=profile_emphasis,
+    )
+    score_inputs: list[CandidateScoreInput] = []
+    for candidate in considered:
+        row = candidates_by_id[candidate.player_id]
+        roster_components = roster_score_components(
+            position=row.primary_position,
+            is_rookie=row.is_rookie,
+            roster_counts=roster_counts,
+            unfilled_starter_positions=unfilled_positions,
+            archetype_key=profile.archetype_key,
+            tight_end_premium=league_shape.get("tight_end_premium") is True,
+        )
+        score_inputs.append(
+            CandidateScoreInput(
+                player_id=row.player_id,
+                practice_index=candidate.practice_index,
+                starter_need=roster_components.starter_need,
+                depth_need=roster_components.depth_need,
+                archetype_fit=roster_components.archetype_fit,
+                duplication_penalty=roster_components.duplication_penalty,
+            )
+        )
+    scored = score_candidates(
+        tuple(score_inputs),
+        candidate_count=len(candidate_rows),
+        seed=configuration.seed,
+        fingerprint=configuration.content_fingerprint,
+        overall_pick=current.overall_pick,
+        selecting_slot=current.selecting_slot,
+        randomness=applied_randomness,
+    )
+    chosen = select_candidate(scored)
+    now = utc_now_text()
+    limitations = _decision_limitations(profile, league_shape)
+    try:
+        mutation = record_pick_in_transaction(
+            session,
+            session_id,
+            revision=payload.draft_revision,
+            expected_overall_pick=payload.expected_overall_pick,
+            expected_selecting_slot=payload.expected_selecting_slot,
+            player_id=chosen.player_id,
+        )
+        session.flush()
+        _advance_mock_revision(
+            session,
+            configuration,
+            payload.mock_revision,
+            now,
+        )
+        decision = _build_cpu_decision_row(
+            configuration=configuration,
+            mutation=mutation,
+            profile=profile,
+            chosen=chosen,
+            scored=scored,
+            configured_randomness=configuration.randomness,
+            applied_randomness=applied_randomness,
+            limitation_codes=limitations,
+            now=now,
+        )
+        session.add(decision)
+        session.commit()
+    except Exception:
+        session.rollback()
+        raise
+    return read_mock_session(session, session_id)
+
+
 def _guidance_read(row: MockGuidanceEventRow) -> MockGuidanceRead:
     return MockGuidanceRead(
         id=row.id,
@@ -437,6 +869,112 @@ def _guidance_read(row: MockGuidanceEventRow) -> MockGuidanceRead:
         status=row.status,
         created_at=row.created_at,
         resolved_at=row.resolved_at,
+    )
+
+
+def _decision_summary(
+    session: Session,
+    row: MockPickDecisionRow,
+    *,
+    profile_by_slot: dict[int, MockCpuProfileRow] | None = None,
+) -> MockPickDecisionSummary:
+    configuration = session.get(MockConfigurationRow, row.mock_configuration_id)
+    if configuration is None:
+        raise _error(
+            "MOCK.STATE_INCOMPLETE",
+            "A saved CPU decision is missing required snapshot state.",
+            "Keep the session for audit and create a fresh mock.",
+            409,
+        )
+    candidate = session.scalar(
+        select(DraftCandidateRow).where(
+            DraftCandidateRow.session_id == configuration.draft_session_id,
+            DraftCandidateRow.player_id == row.chosen_player_id,
+        )
+    )
+    pick = (
+        session.scalar(
+            select(DraftPickRow).where(
+                DraftPickRow.session_id == configuration.draft_session_id,
+                DraftPickRow.overall_pick == row.overall_pick,
+            )
+        )
+        if candidate is not None
+        else None
+    )
+    profile = (
+        profile_by_slot.get(row.selecting_slot)
+        if profile_by_slot is not None
+        else session.scalar(
+            select(MockCpuProfileRow).where(
+                MockCpuProfileRow.mock_configuration_id
+                == row.mock_configuration_id,
+                MockCpuProfileRow.draft_slot == row.selecting_slot,
+            )
+        )
+    )
+    if candidate is None or pick is None or profile is None:
+        raise _error(
+            "MOCK.STATE_INCOMPLETE",
+            "A saved CPU decision is missing required snapshot state.",
+            "Keep the session for audit and create a fresh mock.",
+            409,
+        )
+    active = pick.player_id == row.chosen_player_id
+    return MockPickDecisionSummary(
+        id=row.id,
+        overall_pick=row.overall_pick,
+        selecting_slot=row.selecting_slot,
+        chosen_player_id=row.chosen_player_id,
+        chosen_player_display_name=candidate.display_name,
+        chosen_player_position=candidate.primary_position,
+        profile_source=row.profile_source,
+        profile_archetype_key=row.profile_archetype_key,
+        profile_confidence=profile.confidence,
+        engine_version=row.engine_version,
+        rng_version=row.rng_version,
+        total_score=row.total_score,
+        component_scores=MockScoreComponentsRead.model_validate_json(
+            row.component_scores_json
+        ),
+        reason_codes=json.loads(row.reason_codes_json),
+        limitation_codes=json.loads(row.limitation_codes_json),
+        decision_status="active" if active else "historical",
+        manually_corrected=pick.correction_count > 0,
+        created_at=row.created_at,
+    )
+
+
+def read_mock_decision(
+    session: Session,
+    session_id: str,
+    overall_pick: int,
+) -> MockPickDecisionAudit:
+    _, configuration = _require_cpu_mock(session, session_id)
+    row = session.scalar(
+        select(MockPickDecisionRow)
+        .where(
+            MockPickDecisionRow.mock_configuration_id == configuration.id,
+            MockPickDecisionRow.overall_pick == overall_pick,
+        )
+        .order_by(MockPickDecisionRow.created_at.desc(), MockPickDecisionRow.id.desc())
+        .limit(1)
+    )
+    if row is None:
+        raise _error(
+            "MOCK.DECISION_NOT_FOUND",
+            "No CPU decision audit exists for that overall pick.",
+            "Choose a CPU-made pick from the practice draft.",
+            404,
+        )
+    summary = _decision_summary(session, row)
+    return MockPickDecisionAudit(
+        **summary.model_dump(),
+        random_audit=json.loads(row.random_audit_json),
+        alternatives=[
+            MockDecisionAlternativeRead.model_validate(alternative)
+            for alternative in json.loads(row.alternatives_json)
+        ],
     )
 
 
@@ -468,6 +1006,17 @@ def read_mock_session(session: Session, session_id: str) -> MockSessionRead:
             .where(MockCpuProfileRow.mock_configuration_id == configuration.id)
             .order_by(MockCpuProfileRow.draft_slot)
         )
+    )
+    profile_by_slot = {profile.draft_slot: profile for profile in profiles}
+    last_decision_row = session.scalar(
+        select(MockPickDecisionRow)
+        .where(MockPickDecisionRow.mock_configuration_id == configuration.id)
+        .order_by(
+            MockPickDecisionRow.overall_pick.desc(),
+            MockPickDecisionRow.created_at.desc(),
+            MockPickDecisionRow.id.desc(),
+        )
+        .limit(1)
     )
     guidance_rows = list(
         session.scalars(
@@ -536,6 +1085,15 @@ def read_mock_session(session: Session, session_id: str) -> MockSessionRead:
             )
             for row in profiles
         ],
+        last_cpu_decision=(
+            _decision_summary(
+                session,
+                last_decision_row,
+                profile_by_slot=profile_by_slot,
+            )
+            if last_decision_row
+            else None
+        ),
         can_advance_cpu=bool(
             draft.status == "active"
             and draft.current_pick
