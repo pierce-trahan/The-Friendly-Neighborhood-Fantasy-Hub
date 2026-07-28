@@ -416,6 +416,8 @@ export function DraftWorkspace() {
   async function refreshSessionAfterError(sessionId: string) {
     try {
       setDraft(await getDraftSession(sessionId));
+      setCorrectingPick(null);
+      setPendingCandidateId(null);
     } catch {
       // The original actionable error remains the useful message.
     }
@@ -805,7 +807,12 @@ export function DraftWorkspace() {
       )}
 
       {selectedBoard && !draft && (
-        <Setup board={selectedBoard} busy={busy} onStart={startSession} />
+        <Setup
+          key={selectedBoard.id}
+          board={selectedBoard}
+          busy={busy}
+          onStart={startSession}
+        />
       )}
 
       {draft && (

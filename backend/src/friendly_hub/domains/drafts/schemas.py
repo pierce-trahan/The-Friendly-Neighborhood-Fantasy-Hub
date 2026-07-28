@@ -2,12 +2,13 @@ from __future__ import annotations
 
 from typing import Annotated, Literal
 
-from pydantic import BaseModel, Field, model_validator
+from pydantic import BaseModel, Field, field_validator, model_validator
 
 DraftMode = Literal["live", "mock"]
 DraftFormat = Literal["linear", "snake"]
 DraftStatus = Literal["active", "paused", "completed", "reset"]
 DraftView = Literal["blind", "personal", "position", "tier"]
+TeamName = Annotated[str, Field(min_length=1, max_length=200)]
 
 
 class DraftSessionCreate(BaseModel):
@@ -20,7 +21,27 @@ class DraftSessionCreate(BaseModel):
     round_count: int = Field(ge=1, le=60)
     user_slot: int = Field(ge=1, le=32)
     pick_timer_seconds: int | None = Field(default=None, ge=1, le=86_400)
-    team_names: list[str] | None = Field(default=None, min_length=2, max_length=32)
+    team_names: list[TeamName] | None = Field(
+        default=None, min_length=2, max_length=32
+    )
+
+    @field_validator("name")
+    @classmethod
+    def normalize_name(cls, value: str) -> str:
+        cleaned = value.strip()
+        if not cleaned:
+            raise ValueError("name must contain at least one visible character")
+        return cleaned
+
+    @field_validator("team_names")
+    @classmethod
+    def normalize_team_names(cls, value: list[str] | None) -> list[str] | None:
+        if value is None:
+            return None
+        cleaned = [team_name.strip() for team_name in value]
+        if any(not team_name for team_name in cleaned):
+            raise ValueError("every team name must contain a visible character")
+        return cleaned
 
     @model_validator(mode="after")
     def validate_configuration(self) -> DraftSessionCreate:
@@ -113,6 +134,7 @@ class DraftSessionRead(DraftSessionSummary):
     blind_data_hidden: Literal[True] = True
     recommendation_state_present: Literal[False] = False
     completed_at: str | None
+    reset_at: str | None
     recovery_guidance: str | None
 
 

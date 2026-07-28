@@ -68,6 +68,7 @@ const draft: DraftSession = {
   blind_data_hidden: true,
   recommendation_state_present: false,
   completed_at: null,
+  reset_at: null,
   recovery_guidance: null,
 };
 

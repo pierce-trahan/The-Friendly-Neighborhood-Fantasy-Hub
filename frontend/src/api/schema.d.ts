@@ -1028,6 +1028,8 @@ export interface components {
             recommendation_state_present: false;
             /** Recovery Guidance */
             recovery_guidance: string | null;
+            /** Reset At */
+            reset_at: string | null;
             /** Reset From Session Id */
             reset_from_session_id: string | null;
             /** Revision */

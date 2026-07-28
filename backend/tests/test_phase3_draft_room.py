@@ -3,10 +3,12 @@ from __future__ import annotations
 from uuid import uuid4
 
 from fastapi.testclient import TestClient
+from sqlalchemy import select
 
 from friendly_hub.core.settings import RuntimeSettings
 from friendly_hub.core.time import utc_now_text
 from friendly_hub.domains.drafts.engine import build_draft_order, picks_until_slot
+from friendly_hub.domains.drafts.models import DraftPickRevisionRow
 from friendly_hub.domains.players.models import PlayerRow
 from friendly_hub.main import create_app
 
@@ -173,6 +175,41 @@ def test_invalid_and_archived_session_configuration_is_rejected(
         )
         assert invalid.status_code == 422
 
+        whitespace_name = client.post(
+            f"/api/v1/boards/{board['id']}/draft-sessions",
+            json={
+                "name": "   ",
+                "team_count": 2,
+                "round_count": 2,
+                "user_slot": 1,
+            },
+        )
+        assert whitespace_name.status_code == 422
+
+        invalid_team_names = client.post(
+            f"/api/v1/boards/{board['id']}/draft-sessions",
+            json={
+                "name": "Invalid team names",
+                "team_count": 2,
+                "round_count": 2,
+                "user_slot": 1,
+                "team_names": ["Alpha", "x" * 201],
+            },
+        )
+        assert invalid_team_names.status_code == 422
+
+        blank_team_name = client.post(
+            f"/api/v1/boards/{board['id']}/draft-sessions",
+            json={
+                "name": "Blank team name",
+                "team_count": 2,
+                "round_count": 2,
+                "user_slot": 1,
+                "team_names": ["Alpha", "   "],
+            },
+        )
+        assert blank_team_name.status_code == 422
+
         archived = client.patch(
             f"/api/v1/boards/{board['id']}",
             json={"archived": True},
@@ -222,6 +259,17 @@ def test_pick_guards_candidate_views_correction_and_undo(
         assert blind.json()["total"] == len(players)
         for item in blind.json()["items"]:
             assert PRIVATE_CANDIDATE_KEYS.isdisjoint(item)
+        default_page = client.get(
+            f"/api/v1/draft-sessions/{draft['id']}/candidates",
+            params={"view": "blind"},
+        )
+        assert default_page.status_code == 200
+        assert default_page.json()["limit"] == 75
+        oversized_page = client.get(
+            f"/api/v1/draft-sessions/{draft['id']}/candidates",
+            params={"view": "blind", "limit": 251},
+        )
+        assert oversized_page.status_code == 422
 
         personal = client.get(
             f"/api/v1/draft-sessions/{draft['id']}/candidates",
@@ -288,6 +336,15 @@ def test_pick_guards_candidate_views_correction_and_undo(
         assert undone.status_code == 200
         assert undone.json()["current_pick"]["overall_pick"] == 1
         assert undone.json()["active_pick_count"] == 0
+        with app.state.session_factory() as database:
+            action_kinds = list(
+                database.scalars(
+                    select(DraftPickRevisionRow.action_kind)
+                    .where(DraftPickRevisionRow.session_id == draft["id"])
+                    .order_by(DraftPickRevisionRow.session_revision)
+                )
+            )
+        assert action_kinds == ["made", "corrected", "undone"]
 
 
 def test_late_addition_pause_completion_reset_and_safe_export(
@@ -350,6 +407,30 @@ def test_late_addition_pause_completion_reset_and_safe_export(
         assert after_late["candidate_total"] == len(players) + 1
         assert after_late["picks"][0]["player_display_name"] == "Late Arrival"
 
+        paused_after_pick = client.patch(
+            f"/api/v1/draft-sessions/{draft['id']}",
+            json={"revision": after_late["revision"], "status": "paused"},
+        )
+        assert paused_after_pick.status_code == 200
+        undone_while_paused = client.post(
+            f"/api/v1/draft-sessions/{draft['id']}/undo",
+            json={"revision": paused_after_pick.json()["revision"]},
+        )
+        assert undone_while_paused.status_code == 200
+        assert undone_while_paused.json()["status"] == "paused"
+        assert undone_while_paused.json()["current_pick"]["overall_pick"] == 1
+        resumed_after_undo = client.patch(
+            f"/api/v1/draft-sessions/{draft['id']}",
+            json={
+                "revision": undone_while_paused.json()["revision"],
+                "status": "active",
+            },
+        )
+        assert resumed_after_undo.status_code == 200
+        late_pick_again = _pick(client, resumed_after_undo.json(), late_player.id)
+        assert late_pick_again.status_code == 200
+        after_late = late_pick_again.json()
+
         completed = _pick(client, after_late, players[0]["id"])
         assert completed.status_code == 200
         completed_body = completed.json()
@@ -387,3 +468,4 @@ def test_late_addition_pause_completion_reset_and_safe_export(
         assert old.status_code == 200
         assert old.json()["status"] == "reset"
         assert old.json()["active_pick_count"] == 1
+        assert old.json()["reset_at"] is not None

@@ -98,7 +98,7 @@ def get_draft_candidates(
     search: str | None = Query(default=None, max_length=200),
     position: Annotated[list[str] | None, Query()] = None,
     include_drafted: bool = False,
-    limit: int = Query(default=100, ge=1, le=500),
+    limit: int = Query(default=75, ge=1, le=250),
     offset: int = Query(default=0, ge=0),
 ) -> DraftCandidateListResponse:
     return list_candidates(

@@ -274,6 +274,7 @@ def _create_session_rows(
         created_at=now,
         updated_at=now,
         completed_at=None,
+        reset_at=None,
     )
     session.add(row)
     session.flush()
@@ -511,6 +512,7 @@ def read_session(session: Session, session_id: str) -> DraftSessionRead:
         candidate_total=len(candidate_by_player),
         available_count=len(candidate_by_player) - len(completed_picks),
         completed_at=row.completed_at,
+        reset_at=row.reset_at,
         recovery_guidance=guidance,
     )
 
@@ -661,7 +663,7 @@ def make_pick(
             session_id=row.id,
             pick_id=current.id,
             session_revision=row.revision,
-            action_kind="pick",
+            action_kind="made",
             previous_player_id=None,
             next_player_id=payload.player_id,
             created_at=now,
@@ -738,7 +740,7 @@ def correct_pick(
             session_id=row.id,
             pick_id=pick.id,
             session_revision=row.revision,
-            action_kind="correction",
+            action_kind="corrected",
             previous_player_id=previous_player_id,
             next_player_id=payload.replacement_player_id,
             created_at=now,
@@ -788,7 +790,7 @@ def undo_latest_pick(
             session_id=row.id,
             pick_id=pick.id,
             session_revision=row.revision,
-            action_kind="undo",
+            action_kind="undone",
             previous_player_id=previous_player_id,
             next_player_id=None,
             created_at=now,
@@ -797,7 +799,8 @@ def undo_latest_pick(
     pick.player_id = None
     pick.recorded_at = None
     pick.client_entered_at = None
-    row.status = "active"
+    if row.status == "completed":
+        row.status = "active"
     row.completed_at = None
     row.updated_at = now
     _commit(session)
@@ -843,6 +846,7 @@ def reset_session(
     _advance_revision(session, row, payload.revision)
     row.status = "reset"
     row.updated_at = now
+    row.reset_at = now
     replacement = _create_session_rows(
         session,
         board,

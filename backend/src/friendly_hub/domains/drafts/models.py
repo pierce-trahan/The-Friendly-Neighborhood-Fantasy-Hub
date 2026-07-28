@@ -32,6 +32,7 @@ class DraftSessionRow(Base):
     created_at: Mapped[str] = mapped_column(String(32), nullable=False)
     updated_at: Mapped[str] = mapped_column(String(32), nullable=False)
     completed_at: Mapped[str | None] = mapped_column(String(32))
+    reset_at: Mapped[str | None] = mapped_column(String(32))
 
 
 class DraftTeamRow(Base):

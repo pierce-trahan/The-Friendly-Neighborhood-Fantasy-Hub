@@ -1207,6 +1207,8 @@
             "anyOf": [
               {
                 "items": {
+                  "maxLength": 200,
+                  "minLength": 1,
                   "type": "string"
                 },
                 "maxItems": 32,
@@ -1413,6 +1415,17 @@
             ],
             "title": "Recovery Guidance"
           },
+          "reset_at": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reset At"
+          },
           "reset_from_session_id": {
             "anyOf": [
               {
@@ -1502,6 +1515,7 @@
           "candidate_total",
           "available_count",
           "completed_at",
+          "reset_at",
           "recovery_guidance"
         ],
         "title": "DraftSessionRead",
@@ -4089,8 +4103,8 @@
             "name": "limit",
             "required": false,
             "schema": {
-              "default": 100,
-              "maximum": 500,
+              "default": 75,
+              "maximum": 250,
               "minimum": 1,
               "title": "Limit",
               "type": "integer"
