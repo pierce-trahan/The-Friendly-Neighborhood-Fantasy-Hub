@@ -1,12 +1,15 @@
 # Phase 4 Specification: Mock Draft Engine and Strategy Lab
 
-**Status:** Draft for product approval
+**Status:** Approved for bounded implementation
 
 **Date:** 2026-07-28
 
+**Product approval:** All four gate decisions were approved by the product
+owner on 2026-07-28.
+
 ## How to Use This Document
 
-- The product owner approves the four product-gate decisions and initial
+- The product owner has approved the four product-gate decisions and initial
   checkpoint definitions.
 - The implementation engineer follows the persistence, API, deterministic
   engine, and recommended-build-order contracts.
@@ -36,10 +39,9 @@ settings, engine version, and random seed reproduce the same CPU decisions.
 The module teaches draft process. It does not predict a real market, claim that
 a player will be available, or turn a strategy into an autopilot.
 
-## Product Approval Gate
+## Product Approval Decision
 
-Implementation must not begin until the following recommended decisions are
-approved:
+The product owner approved the following four decisions on 2026-07-28:
 
 1. **Practice-board baseline:** CPU player valuation uses the mock's snapshotted
    Personal Board order because V1 does not yet have an approved market-value
@@ -57,8 +59,8 @@ approved:
 4. **Learning consent:** completed mocks are excluded from learned local signals
    by default. The user must opt in per mock, and may reverse that choice.
 
-These limits preserve the roadmap without inventing evidence the application
-does not possess.
+These approved limits preserve the roadmap without inventing evidence the
+application does not possess.
 
 ## Design Trade-offs
 
