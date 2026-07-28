@@ -63,5 +63,6 @@ describe("App", () => {
       screen.getByRole("button", { name: "Load Entropy sample" }),
     ).toBeEnabled();
     expect(screen.getByRole("button", { name: "Gut ELO" })).toBeEnabled();
+    expect(screen.getByRole("button", { name: "Draft room" })).toBeEnabled();
   });
 });

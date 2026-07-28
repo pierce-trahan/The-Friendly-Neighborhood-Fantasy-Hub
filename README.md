@@ -79,9 +79,10 @@ compact operating chrome, table-first density, low-radius geometry, one
 restrained accent, and no unsupported scouting or film features borrowed from
 its visual references.
 
-Phase 3 is now specified for a recoverable local draft room with deterministic
-linear, snake, and third-round-reversal order; blind and personal views; exact
-pick correction and undo; crash recovery; and no required ADP exposure. See the
+Phase 3 now includes a recoverable local draft room with deterministic linear,
+snake, and third-round-reversal order; blind and personal views; configurable
+team names; revision-guarded pick entry, correction, and undo; keyboard
+controls; crash recovery; and no required ADP exposure. See the
 [draft-room specification](docs/specs/phase-3-draft-room.md).
 
 ## Local Setup
