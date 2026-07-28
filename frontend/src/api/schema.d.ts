@@ -489,6 +489,57 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/mock-sessions/{session_id}/guidance": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get Mock Guidance */
+        get: operations["get_mock_guidance_api_v1_mock_sessions__session_id__guidance_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/mock-sessions/{session_id}/guidance/{event_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /** Update Mock Guidance */
+        patch: operations["update_mock_guidance_api_v1_mock_sessions__session_id__guidance__event_id__patch"];
+        trace?: never;
+    };
+    "/api/v1/mock-sessions/{session_id}/strategy": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /** Update Mock Strategy */
+        patch: operations["update_mock_strategy_api_v1_mock_sessions__session_id__strategy_patch"];
+        trace?: never;
+    };
     "/api/v1/player-imports/csv/preview": {
         parameters: {
             query?: never;
@@ -1501,8 +1552,21 @@ export interface components {
             /** Total Score */
             total_score: number;
         };
+        /** MockGuidanceListResponse */
+        MockGuidanceListResponse: {
+            /** Items */
+            items: components["schemas"]["MockGuidanceRead"][];
+            /** Limit */
+            limit: number;
+            /** Offset */
+            offset: number;
+            /** Total */
+            total: number;
+        };
         /** MockGuidanceRead */
         MockGuidanceRead: {
+            /** Affected Positions */
+            affected_positions: string[];
             /**
              * Confidence
              * @enum {string}
@@ -1512,6 +1576,8 @@ export interface components {
             created_at: string;
             /** Effective Overall Pick */
             effective_overall_pick: number;
+            /** Explanation */
+            explanation: string;
             /** Explanation Template Key */
             explanation_template_key: string;
             /** Id */
@@ -1538,10 +1604,26 @@ export interface components {
              * @enum {string}
              */
             status: "open" | "acknowledged" | "dismissed";
+            /** Strategy Definition Version */
+            strategy_definition_version: string;
+            /** Strategy Key */
+            strategy_key: string;
             /** Target Ranges */
             target_ranges: {
                 [key: string]: unknown;
             };
+            /** Viable Pivot Explanation */
+            viable_pivot_explanation: string | null;
+        };
+        /** MockGuidanceStatusPatch */
+        MockGuidanceStatusPatch: {
+            /** Mock Revision */
+            mock_revision: number;
+            /**
+             * Status
+             * @enum {string}
+             */
+            status: "open" | "acknowledged" | "dismissed";
         };
         /** MockPickDecisionAudit */
         MockPickDecisionAudit: {
@@ -1727,6 +1809,17 @@ export interface components {
                 [key: string]: number;
             };
         };
+        /** MockStrategyPivotCreate */
+        MockStrategyPivotCreate: {
+            /** Expected Current Overall Pick */
+            expected_current_overall_pick: number;
+            /** Mock Revision */
+            mock_revision: number;
+            /** Private User Note */
+            private_user_note?: string | null;
+            /** Strategy Key */
+            strategy_key: string;
+        };
         /** MockStrategyRevisionRead */
         MockStrategyRevisionRead: {
             /** Created At */
@@ -1737,6 +1830,11 @@ export interface components {
             next_strategy_key: string;
             /** Previous Strategy Key */
             previous_strategy_key: string | null;
+            /**
+             * Reason
+             * @enum {string}
+             */
+            reason: "initial_strategy" | "user_pivot";
             /** Sequence Number */
             sequence_number: number;
             /** User Roster Counts */
@@ -3121,6 +3219,111 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["MockPickDecisionAudit"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_mock_guidance_api_v1_mock_sessions__session_id__guidance_get: {
+        parameters: {
+            query?: {
+                limit?: number;
+                offset?: number;
+            };
+            header?: never;
+            path: {
+                session_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MockGuidanceListResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    update_mock_guidance_api_v1_mock_sessions__session_id__guidance__event_id__patch: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                session_id: string;
+                event_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["MockGuidanceStatusPatch"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MockSessionRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    update_mock_strategy_api_v1_mock_sessions__session_id__strategy_patch: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                session_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["MockStrategyPivotCreate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MockSessionRead"];
                 };
             };
             /** @description Validation Error */

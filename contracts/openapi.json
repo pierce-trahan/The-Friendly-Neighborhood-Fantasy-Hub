@@ -2580,8 +2580,46 @@
         "title": "MockDecisionAlternativeRead",
         "type": "object"
       },
+      "MockGuidanceListResponse": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/MockGuidanceRead"
+            },
+            "title": "Items",
+            "type": "array"
+          },
+          "limit": {
+            "title": "Limit",
+            "type": "integer"
+          },
+          "offset": {
+            "title": "Offset",
+            "type": "integer"
+          },
+          "total": {
+            "title": "Total",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "items",
+          "total",
+          "limit",
+          "offset"
+        ],
+        "title": "MockGuidanceListResponse",
+        "type": "object"
+      },
       "MockGuidanceRead": {
         "properties": {
+          "affected_positions": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Affected Positions",
+            "type": "array"
+          },
           "confidence": {
             "enum": [
               "unavailable",
@@ -2599,6 +2637,10 @@
           "effective_overall_pick": {
             "title": "Effective Overall Pick",
             "type": "integer"
+          },
+          "explanation": {
+            "title": "Explanation",
+            "type": "string"
           },
           "explanation_template_key": {
             "title": "Explanation Template Key",
@@ -2671,28 +2713,76 @@
             "title": "Status",
             "type": "string"
           },
+          "strategy_definition_version": {
+            "title": "Strategy Definition Version",
+            "type": "string"
+          },
+          "strategy_key": {
+            "title": "Strategy Key",
+            "type": "string"
+          },
           "target_ranges": {
             "additionalProperties": true,
             "title": "Target Ranges",
             "type": "object"
+          },
+          "viable_pivot_explanation": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Viable Pivot Explanation"
           }
         },
         "required": [
           "id",
+          "strategy_key",
+          "strategy_definition_version",
           "effective_overall_pick",
           "state",
           "confidence",
           "observed_counts",
           "target_ranges",
+          "affected_positions",
           "reason_codes",
           "limitation_codes",
           "explanation_template_key",
+          "explanation",
           "pivot_template_key",
+          "viable_pivot_explanation",
           "status",
           "created_at",
           "resolved_at"
         ],
         "title": "MockGuidanceRead",
+        "type": "object"
+      },
+      "MockGuidanceStatusPatch": {
+        "properties": {
+          "mock_revision": {
+            "minimum": 0.0,
+            "title": "Mock Revision",
+            "type": "integer"
+          },
+          "status": {
+            "enum": [
+              "open",
+              "acknowledged",
+              "dismissed"
+            ],
+            "title": "Status",
+            "type": "string"
+          }
+        },
+        "required": [
+          "mock_revision",
+          "status"
+        ],
+        "title": "MockGuidanceStatusPatch",
         "type": "object"
       },
       "MockPickDecisionAudit": {
@@ -3186,6 +3276,45 @@
         "title": "MockSessionRead",
         "type": "object"
       },
+      "MockStrategyPivotCreate": {
+        "properties": {
+          "expected_current_overall_pick": {
+            "minimum": 1.0,
+            "title": "Expected Current Overall Pick",
+            "type": "integer"
+          },
+          "mock_revision": {
+            "minimum": 0.0,
+            "title": "Mock Revision",
+            "type": "integer"
+          },
+          "private_user_note": {
+            "anyOf": [
+              {
+                "maxLength": 5000,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Private User Note"
+          },
+          "strategy_key": {
+            "maxLength": 32,
+            "minLength": 1,
+            "title": "Strategy Key",
+            "type": "string"
+          }
+        },
+        "required": [
+          "mock_revision",
+          "expected_current_overall_pick",
+          "strategy_key"
+        ],
+        "title": "MockStrategyPivotCreate",
+        "type": "object"
+      },
       "MockStrategyRevisionRead": {
         "properties": {
           "created_at": {
@@ -3211,6 +3340,14 @@
             ],
             "title": "Previous Strategy Key"
           },
+          "reason": {
+            "enum": [
+              "initial_strategy",
+              "user_pivot"
+            ],
+            "title": "Reason",
+            "type": "string"
+          },
           "sequence_number": {
             "title": "Sequence Number",
             "type": "integer"
@@ -3225,6 +3362,7 @@
         },
         "required": [
           "sequence_number",
+          "reason",
           "previous_strategy_key",
           "next_strategy_key",
           "effective_overall_pick",
@@ -5730,6 +5868,184 @@
           }
         },
         "summary": "Get Cpu Decision",
+        "tags": [
+          "mocks"
+        ]
+      }
+    },
+    "/api/v1/mock-sessions/{session_id}/guidance": {
+      "get": {
+        "operationId": "get_mock_guidance_api_v1_mock_sessions__session_id__guidance_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "session_id",
+            "required": true,
+            "schema": {
+              "title": "Session Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 20,
+              "maximum": 100,
+              "minimum": 1,
+              "title": "Limit",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "offset",
+            "required": false,
+            "schema": {
+              "default": 0,
+              "minimum": 0,
+              "title": "Offset",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MockGuidanceListResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Get Mock Guidance",
+        "tags": [
+          "mocks"
+        ]
+      }
+    },
+    "/api/v1/mock-sessions/{session_id}/guidance/{event_id}": {
+      "patch": {
+        "operationId": "update_mock_guidance_api_v1_mock_sessions__session_id__guidance__event_id__patch",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "session_id",
+            "required": true,
+            "schema": {
+              "title": "Session Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "event_id",
+            "required": true,
+            "schema": {
+              "title": "Event Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MockGuidanceStatusPatch"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MockSessionRead"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Update Mock Guidance",
+        "tags": [
+          "mocks"
+        ]
+      }
+    },
+    "/api/v1/mock-sessions/{session_id}/strategy": {
+      "patch": {
+        "operationId": "update_mock_strategy_api_v1_mock_sessions__session_id__strategy_patch",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "session_id",
+            "required": true,
+            "schema": {
+              "title": "Session Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MockStrategyPivotCreate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MockSessionRead"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Update Mock Strategy",
         "tags": [
           "mocks"
         ]

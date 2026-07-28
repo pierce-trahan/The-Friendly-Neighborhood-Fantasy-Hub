@@ -100,6 +100,7 @@ class MockCpuProfileRead(BaseModel):
 
 class MockStrategyRevisionRead(BaseModel):
     sequence_number: int
+    reason: Literal["initial_strategy", "user_pivot"]
     previous_strategy_key: str | None
     next_strategy_key: str
     effective_overall_pick: int
@@ -109,6 +110,8 @@ class MockStrategyRevisionRead(BaseModel):
 
 class MockGuidanceRead(BaseModel):
     id: str
+    strategy_key: str
+    strategy_definition_version: str
     effective_overall_pick: int
     state: Literal[
         "on_plan",
@@ -120,13 +123,50 @@ class MockGuidanceRead(BaseModel):
     confidence: Literal["unavailable", "low", "medium", "high"]
     observed_counts: dict[str, int]
     target_ranges: dict[str, object]
+    affected_positions: list[str]
     reason_codes: list[str]
     limitation_codes: list[str]
     explanation_template_key: str
+    explanation: str
     pivot_template_key: str | None
+    viable_pivot_explanation: str | None
     status: Literal["open", "acknowledged", "dismissed"]
     created_at: str
     resolved_at: str | None
+
+
+class MockStrategyPivotCreate(BaseModel):
+    mock_revision: int = Field(ge=0)
+    expected_current_overall_pick: int = Field(ge=1)
+    strategy_key: str = Field(min_length=1, max_length=32)
+    private_user_note: str | None = Field(default=None, max_length=5_000)
+
+    @field_validator("strategy_key")
+    @classmethod
+    def validate_strategy(cls, value: str) -> str:
+        if value not in SUPPORTED_STRATEGIES:
+            raise ValueError("strategy_key is not supported")
+        return value
+
+    @field_validator("private_user_note")
+    @classmethod
+    def normalize_note(cls, value: str | None) -> str | None:
+        if value is None:
+            return None
+        cleaned = value.strip()
+        return cleaned or None
+
+
+class MockGuidanceStatusPatch(BaseModel):
+    mock_revision: int = Field(ge=0)
+    status: Literal["open", "acknowledged", "dismissed"]
+
+
+class MockGuidanceListResponse(BaseModel):
+    items: list[MockGuidanceRead]
+    total: int
+    limit: int
+    offset: int
 
 
 class MockConfigurationRead(BaseModel):

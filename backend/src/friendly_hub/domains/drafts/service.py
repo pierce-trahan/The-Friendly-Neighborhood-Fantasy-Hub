@@ -727,6 +727,15 @@ def make_pick(
         player_id=payload.player_id,
         client_entered_at=payload.client_entered_at,
     )
+    if (
+        mutation.draft_session.mode == "mock"
+        and mutation.pick.selecting_slot == mutation.draft_session.user_slot
+    ):
+        from friendly_hub.domains.mocks.strategy_service import (
+            record_guidance_after_user_pick_in_transaction,
+        )
+
+        record_guidance_after_user_pick_in_transaction(session, mutation)
     _commit(session)
     return read_session(session, mutation.draft_session.id)
 

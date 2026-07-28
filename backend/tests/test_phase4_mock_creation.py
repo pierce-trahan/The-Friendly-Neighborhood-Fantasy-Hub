@@ -103,7 +103,7 @@ def test_mock_creation_is_atomic_deterministic_and_restart_safe(
         assert created["mock"]["include_in_learning"] is False
         assert created["mock"]["learning_opted_in_at"] is None
         assert created["current_strategy_revision"]["sequence_number"] == 1
-        assert created["current_checkpoint"]["state"] == "on_plan"
+        assert created["current_checkpoint"]["state"] == "watch"
         assert [profile["draft_slot"] for profile in created["cpu_profiles"]] == [
             1,
             3,

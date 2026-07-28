@@ -60,6 +60,12 @@ from friendly_hub.domains.mocks.schemas import (
     MockSessionRead,
     MockStrategyRevisionRead,
 )
+from friendly_hub.domains.mocks.strategy import (
+    evaluate_strategy,
+    explanation_text,
+    pivot_text,
+    user_roster_counts,
+)
 
 
 def _error(code: str, message: str, action: str, status_code: int) -> HubError:
@@ -391,8 +397,14 @@ def _add_mock_rows(
             )
         )
 
-    limitations = _strategy_limitations(payload.strategy_key, league_shape)
-    missing_timeline_evidence = "TIMELINE_EVIDENCE_UNAVAILABLE" in limitations
+    evaluation = evaluate_strategy(
+        strategy_key=payload.strategy_key,
+        round_count=payload.round_count,
+        team_count=payload.team_count,
+        effective_overall_pick=1,
+        roster=(),
+        league_shape=league_shape,
+    )
     guidance = MockGuidanceEventRow(
         id=str(uuid4()),
         mock_configuration_id=configuration.id,
@@ -401,14 +413,14 @@ def _add_mock_rows(
             f"{STRATEGY_DEFINITION_VERSION}:{payload.strategy_key}:initial:1"
         ),
         effective_overall_pick=1,
-        state="insufficient_evidence" if missing_timeline_evidence else "on_plan",
-        confidence="low" if limitations else "medium",
-        observed_counts_json="{}",
-        target_ranges_json=_json({"checkpoint": "initial"}),
-        reason_codes_json=_json(["STRATEGY_REHEARSAL_STARTED"]),
-        limitation_codes_json=_json(limitations),
-        explanation_template_key=f"{payload.strategy_key}.initial",
-        pivot_template_key=None,
+        state=evaluation.state,
+        confidence=evaluation.confidence,
+        observed_counts_json=_json(evaluation.observed_counts),
+        target_ranges_json=_json(evaluation.target_ranges),
+        reason_codes_json=_json(evaluation.reason_codes),
+        limitation_codes_json=_json(evaluation.limitation_codes),
+        explanation_template_key=evaluation.explanation_template_key,
+        pivot_template_key=evaluation.pivot_template_key,
         status="open",
         created_at=now,
         resolved_at=None,
@@ -854,22 +866,60 @@ def advance_cpu_pick(
     return read_mock_session(session, session_id)
 
 
-def _guidance_read(row: MockGuidanceEventRow) -> MockGuidanceRead:
+def _guidance_read(
+    row: MockGuidanceEventRow,
+    strategy_revision: MockStrategyRevisionRow,
+    strategy_definition_version: str,
+) -> MockGuidanceRead:
+    target_ranges = json.loads(row.target_ranges_json)
+    affected_positions = target_ranges.get("affected_positions", [])
     return MockGuidanceRead(
         id=row.id,
+        strategy_key=strategy_revision.next_strategy_key,
+        strategy_definition_version=strategy_definition_version,
         effective_overall_pick=row.effective_overall_pick,
         state=row.state,
         confidence=row.confidence,
         observed_counts=json.loads(row.observed_counts_json),
-        target_ranges=json.loads(row.target_ranges_json),
+        target_ranges=target_ranges,
+        affected_positions=affected_positions,
         reason_codes=json.loads(row.reason_codes_json),
         limitation_codes=json.loads(row.limitation_codes_json),
         explanation_template_key=row.explanation_template_key,
+        explanation=explanation_text(row.explanation_template_key),
         pivot_template_key=row.pivot_template_key,
+        viable_pivot_explanation=pivot_text(row.pivot_template_key),
         status=row.status,
         created_at=row.created_at,
         resolved_at=row.resolved_at,
     )
+
+
+def _user_roster(
+    session: Session,
+    draft_row: DraftSessionRow,
+) -> list[tuple[str, bool]]:
+    candidates = {
+        candidate.player_id: candidate
+        for candidate in _ordered_candidate_rows(session, draft_row.id)
+    }
+    picks = session.scalars(
+        select(DraftPickRow)
+        .where(
+            DraftPickRow.session_id == draft_row.id,
+            DraftPickRow.selecting_slot == draft_row.user_slot,
+            DraftPickRow.player_id.is_not(None),
+        )
+        .order_by(DraftPickRow.overall_pick)
+    )
+    return [
+        (
+            candidates[pick.player_id].primary_position,
+            candidates[pick.player_id].is_rookie,
+        )
+        for pick in picks
+        if pick.player_id in candidates
+    ]
 
 
 def _decision_summary(
@@ -992,14 +1042,17 @@ def read_mock_session(session: Session, session_id: str) -> MockSessionRead:
             "Return to the Personal Board and choose an available mock.",
             404,
         )
-    strategy_revision = session.scalar(
+    strategy_revisions = list(
+        session.scalars(
         select(MockStrategyRevisionRow)
         .where(
             MockStrategyRevisionRow.mock_configuration_id == configuration.id
         )
-        .order_by(MockStrategyRevisionRow.sequence_number.desc())
-        .limit(1)
+            .order_by(MockStrategyRevisionRow.sequence_number)
+        )
     )
+    strategy_revision = strategy_revisions[-1] if strategy_revisions else None
+    strategy_revision_by_id = {row.id: row for row in strategy_revisions}
     profiles = list(
         session.scalars(
             select(MockCpuProfileRow)
@@ -1025,7 +1078,9 @@ def read_mock_session(session: Session, session_id: str) -> MockSessionRead:
             .order_by(
                 MockGuidanceEventRow.effective_overall_pick.desc(),
                 MockGuidanceEventRow.created_at.desc(),
+                MockGuidanceEventRow.id.desc(),
             )
+            .limit(20)
         )
     )
     if strategy_revision is None or not guidance_rows:
@@ -1042,8 +1097,27 @@ def read_mock_session(session: Session, session_id: str) -> MockSessionRead:
         configuration.current_strategy_key,
         league_shape,
     )
-    guidance = [_guidance_read(row) for row in guidance_rows]
-    roster_counts = json.loads(strategy_revision.user_roster_counts_json)
+    guidance = [
+        _guidance_read(
+            row,
+            strategy_revision_by_id[row.strategy_revision_id],
+            configuration.strategy_definition_version,
+        )
+        for row in guidance_rows
+        if row.strategy_revision_id in strategy_revision_by_id
+    ]
+    if not guidance:
+        raise _error(
+            "MOCK.STATE_INCOMPLETE",
+            "The mock session is missing required strategy guidance.",
+            "Keep the session for audit and create a fresh mock.",
+            409,
+        )
+    limitations = sorted(
+        set(limitations) | set(guidance[0].limitation_codes)
+    )
+    roster_counts = user_roster_counts(_user_roster(session, draft_row))
+    revision_roster_counts = json.loads(strategy_revision.user_roster_counts_json)
     return MockSessionRead(
         draft=draft,
         mock=MockConfigurationRead(
@@ -1065,10 +1139,15 @@ def read_mock_session(session: Session, session_id: str) -> MockSessionRead:
         ),
         current_strategy_revision=MockStrategyRevisionRead(
             sequence_number=strategy_revision.sequence_number,
+            reason=(
+                "initial_strategy"
+                if strategy_revision.sequence_number == 1
+                else "user_pivot"
+            ),
             previous_strategy_key=strategy_revision.previous_strategy_key,
             next_strategy_key=strategy_revision.next_strategy_key,
             effective_overall_pick=strategy_revision.effective_overall_pick,
-            user_roster_counts=roster_counts,
+            user_roster_counts=revision_roster_counts,
             created_at=strategy_revision.created_at,
         ),
         user_roster_counts=roster_counts,
