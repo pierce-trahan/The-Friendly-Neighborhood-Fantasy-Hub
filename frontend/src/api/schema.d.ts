@@ -1040,6 +1040,13 @@ export interface components {
             /** Selecting Team */
             selecting_team: string;
         };
+        /** DraftResetCreate */
+        DraftResetCreate: {
+            /** Revision */
+            revision: number;
+            /** Seed */
+            seed?: string | null;
+        };
         /** DraftRevisionGuard */
         DraftRevisionGuard: {
             /** Revision */
@@ -1494,6 +1501,11 @@ export interface components {
             learning_withdrawn_at: string | null;
             /** Randomness */
             randomness: number;
+            /**
+             * Reset Replay Status
+             * @enum {string}
+             */
+            reset_replay_status: "original" | "exact_replay" | "new_seed" | "snapshot_changed" | "unavailable";
             /** Revision */
             revision: number;
             /** Rng Version */
@@ -2883,7 +2895,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["DraftRevisionGuard"];
+                "application/json": components["schemas"]["DraftResetCreate"];
             };
         };
         responses: {

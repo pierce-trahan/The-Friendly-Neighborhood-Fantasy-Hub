@@ -179,6 +179,13 @@ class MockConfigurationRead(BaseModel):
     current_strategy_key: str
     strategy_compatibility: Literal["compatible", "reduced"]
     strategy_limitations: list[str]
+    reset_replay_status: Literal[
+        "original",
+        "exact_replay",
+        "new_seed",
+        "snapshot_changed",
+        "unavailable",
+    ]
     revision: int
     include_in_learning: bool
     learning_opted_in_at: str | None

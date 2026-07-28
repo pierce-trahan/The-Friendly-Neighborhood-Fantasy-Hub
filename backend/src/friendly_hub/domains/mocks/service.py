@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import json
-from typing import Any
+from typing import Any, Literal
 from uuid import uuid4
 
 from sqlalchemy import select, update
@@ -11,6 +11,7 @@ from friendly_hub.core.errors import HubError
 from friendly_hub.core.time import utc_now_text
 from friendly_hub.domains.drafts.models import (
     DraftCandidateRow,
+    DraftPickRevisionRow,
     DraftPickRow,
     DraftSessionRow,
 )
@@ -306,10 +307,54 @@ def _profile_snapshot(
     ]
 
 
+def _copied_profile_snapshot(
+    session: Session,
+    configuration: MockConfigurationRow,
+) -> list[dict[str, object]]:
+    rows = session.scalars(
+        select(MockCpuProfileRow)
+        .where(MockCpuProfileRow.mock_configuration_id == configuration.id)
+        .order_by(MockCpuProfileRow.draft_slot)
+    )
+    return [
+        {
+            "draft_slot": row.draft_slot,
+            "source": row.source,
+            "archetype_key": row.archetype_key,
+            "confidence": row.confidence,
+            "draft_sample_count": row.draft_sample_count,
+            "pick_sample_count": row.pick_sample_count,
+            "tendency_snapshot_json": row.tendency_snapshot_json,
+            "internal_manager_reference": row.internal_manager_reference,
+            "source_timestamp": row.source_timestamp,
+        }
+        for row in rows
+    ]
+
+
+def _profile_fingerprint_snapshot(
+    profile_snapshot: list[dict[str, object]],
+) -> list[dict[str, object]]:
+    keys = (
+        "draft_slot",
+        "source",
+        "archetype_key",
+        "confidence",
+        "draft_sample_count",
+        "pick_sample_count",
+    )
+    return [
+        {key: profile[key] for key in keys}
+        for profile in profile_snapshot
+    ]
+
+
 def _add_mock_rows(
     session: Session,
     draft_row: DraftSessionRow,
     payload: MockSessionCreate,
+    *,
+    copy_from_configuration: MockConfigurationRow | None = None,
 ) -> MockConfigurationRow:
     candidate_snapshot = _candidate_snapshot(session, draft_row.id)
     if len(candidate_snapshot) < 2:
@@ -320,23 +365,41 @@ def _add_mock_rows(
             409,
         )
 
-    league_row = (
-        session.get(LeagueProfileRow, payload.league_profile_id)
-        if payload.league_profile_id
-        else None
-    )
-    league_shape, league_shape_source_timestamp = _normalize_league_shape(
-        league_row,
-        team_count=payload.team_count,
-    )
+    if copy_from_configuration is None:
+        league_row = (
+            session.get(LeagueProfileRow, payload.league_profile_id)
+            if payload.league_profile_id
+            else None
+        )
+        league_shape, league_shape_source_timestamp = _normalize_league_shape(
+            league_row,
+            team_count=payload.team_count,
+        )
+        profile_snapshot = _profile_snapshot(payload)
+        rng_version = RNG_VERSION
+        cpu_engine_version = CPU_ENGINE_VERSION
+        strategy_definition_version = STRATEGY_DEFINITION_VERSION
+    else:
+        league_shape = json.loads(copy_from_configuration.league_shape_json)
+        league_shape_source_timestamp = (
+            copy_from_configuration.league_shape_source_timestamp
+        )
+        profile_snapshot = _copied_profile_snapshot(
+            session,
+            copy_from_configuration,
+        )
+        rng_version = copy_from_configuration.rng_version
+        cpu_engine_version = copy_from_configuration.cpu_engine_version
+        strategy_definition_version = (
+            copy_from_configuration.strategy_definition_version
+        )
     _validate_strategy_compatibility(payload.strategy_key, league_shape)
-    profile_snapshot = _profile_snapshot(payload)
     fingerprint = content_fingerprint(
         {
             "candidates": candidate_snapshot,
             "draft_order": _draft_order_snapshot(session, draft_row.id),
             "league_shape": league_shape,
-            "profiles": profile_snapshot,
+            "profiles": _profile_fingerprint_snapshot(profile_snapshot),
         }
     )
     now = utc_now_text()
@@ -344,9 +407,9 @@ def _add_mock_rows(
         id=str(uuid4()),
         draft_session_id=draft_row.id,
         seed=payload.seed,
-        rng_version=RNG_VERSION,
-        cpu_engine_version=CPU_ENGINE_VERSION,
-        strategy_definition_version=STRATEGY_DEFINITION_VERSION,
+        rng_version=rng_version,
+        cpu_engine_version=cpu_engine_version,
+        strategy_definition_version=strategy_definition_version,
         league_shape_json=_json(league_shape),
         league_shape_source_timestamp=league_shape_source_timestamp,
         content_fingerprint=fingerprint,
@@ -380,19 +443,24 @@ def _add_mock_rows(
                 id=str(uuid4()),
                 mock_configuration_id=configuration.id,
                 draft_slot=profile["draft_slot"],
-                source="fallback",
+                source=profile["source"],
                 archetype_key=profile["archetype_key"],
-                confidence="not_applicable",
-                draft_sample_count=0,
-                pick_sample_count=0,
-                tendency_snapshot_json=_json(
-                    {
-                        "archetype_key": profile["archetype_key"],
-                        "source": "fallback",
-                    }
+                confidence=profile["confidence"],
+                draft_sample_count=profile["draft_sample_count"],
+                pick_sample_count=profile["pick_sample_count"],
+                tendency_snapshot_json=str(
+                    profile.get("tendency_snapshot_json")
+                    or _json(
+                        {
+                            "archetype_key": profile["archetype_key"],
+                            "source": profile["source"],
+                        }
+                    )
                 ),
-                internal_manager_reference=None,
-                source_timestamp=now,
+                internal_manager_reference=profile.get(
+                    "internal_manager_reference"
+                ),
+                source_timestamp=str(profile.get("source_timestamp") or now),
                 created_at=now,
             )
         )
@@ -410,7 +478,7 @@ def _add_mock_rows(
         mock_configuration_id=configuration.id,
         strategy_revision_id=strategy_revision.id,
         deterministic_event_key=(
-            f"{STRATEGY_DEFINITION_VERSION}:{payload.strategy_key}:initial:1"
+            f"{strategy_definition_version}:{payload.strategy_key}:initial:1"
         ),
         effective_overall_pick=1,
         state=evaluation.state,
@@ -970,7 +1038,35 @@ def _decision_summary(
             "Keep the session for audit and create a fresh mock.",
             409,
         )
-    active = pick.player_id == row.chosen_player_id
+    latest_pick_revision = session.scalar(
+        select(DraftPickRevisionRow)
+        .where(DraftPickRevisionRow.pick_id == pick.id)
+        .order_by(DraftPickRevisionRow.session_revision.desc())
+        .limit(1)
+    )
+    active = bool(
+        latest_pick_revision is not None
+        and latest_pick_revision.id == row.draft_pick_revision_id
+        and pick.player_id == row.chosen_player_id
+    )
+    decision_pick_revision = session.get(
+        DraftPickRevisionRow,
+        row.draft_pick_revision_id,
+    )
+    manually_corrected = bool(
+        decision_pick_revision is not None
+        and session.scalar(
+            select(DraftPickRevisionRow.id)
+            .where(
+                DraftPickRevisionRow.pick_id == pick.id,
+                DraftPickRevisionRow.action_kind == "corrected",
+                DraftPickRevisionRow.session_revision
+                > decision_pick_revision.session_revision,
+            )
+            .limit(1)
+        )
+        is not None
+    )
     return MockPickDecisionSummary(
         id=row.id,
         overall_pick=row.overall_pick,
@@ -990,7 +1086,7 @@ def _decision_summary(
         reason_codes=json.loads(row.reason_codes_json),
         limitation_codes=json.loads(row.limitation_codes_json),
         decision_status="active" if active else "historical",
-        manually_corrected=pick.correction_count > 0,
+        manually_corrected=manually_corrected,
         created_at=row.created_at,
     )
 
@@ -1026,6 +1122,34 @@ def read_mock_decision(
             for alternative in json.loads(row.alternatives_json)
         ],
     )
+
+
+def _reset_replay_status(
+    session: Session,
+    draft_row: DraftSessionRow,
+    configuration: MockConfigurationRow,
+) -> Literal[
+    "original",
+    "exact_replay",
+    "new_seed",
+    "snapshot_changed",
+    "unavailable",
+]:
+    if draft_row.reset_from_session_id is None:
+        return "original"
+    source = session.scalar(
+        select(MockConfigurationRow).where(
+            MockConfigurationRow.draft_session_id
+            == draft_row.reset_from_session_id
+        )
+    )
+    if source is None:
+        return "unavailable"
+    if source.content_fingerprint != configuration.content_fingerprint:
+        return "snapshot_changed"
+    if source.seed != configuration.seed:
+        return "new_seed"
+    return "exact_replay"
 
 
 def read_mock_session(session: Session, session_id: str) -> MockSessionRead:
@@ -1076,9 +1200,9 @@ def read_mock_session(session: Session, session_id: str) -> MockSessionRead:
             select(MockGuidanceEventRow)
             .where(MockGuidanceEventRow.mock_configuration_id == configuration.id)
             .order_by(
-                MockGuidanceEventRow.effective_overall_pick.desc(),
                 MockGuidanceEventRow.created_at.desc(),
                 MockGuidanceEventRow.id.desc(),
+                MockGuidanceEventRow.effective_overall_pick.desc(),
             )
             .limit(20)
         )
@@ -1130,6 +1254,11 @@ def read_mock_session(session: Session, session_id: str) -> MockSessionRead:
             current_strategy_key=configuration.current_strategy_key,
             strategy_compatibility="reduced" if limitations else "compatible",
             strategy_limitations=limitations,
+            reset_replay_status=_reset_replay_status(
+                session,
+                draft_row,
+                configuration,
+            ),
             revision=configuration.revision,
             include_in_learning=configuration.include_in_learning,
             learning_opted_in_at=configuration.learning_opted_in_at,

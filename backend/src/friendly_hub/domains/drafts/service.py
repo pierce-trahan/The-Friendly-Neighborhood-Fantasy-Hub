@@ -35,6 +35,7 @@ from friendly_hub.domains.drafts.schemas import (
     DraftPickCorrection,
     DraftPickCreate,
     DraftPickRead,
+    DraftResetCreate,
     DraftRevisionGuard,
     DraftSessionCreate,
     DraftSessionListResponse,
@@ -791,14 +792,14 @@ def correct_pick(
             409,
         )
     now = utc_now_text()
-    _ensure_candidate(session, row, payload.replacement_player_id, now)
     previous_player_id = pick.player_id
-    _advance_revision(session, row, payload.revision)
-    pick.player_id = payload.replacement_player_id
-    pick.recorded_at = now
-    pick.correction_count += 1
-    session.add(
-        DraftPickRevisionRow(
+    try:
+        _ensure_candidate(session, row, payload.replacement_player_id, now)
+        _advance_revision(session, row, payload.revision)
+        pick.player_id = payload.replacement_player_id
+        pick.recorded_at = now
+        pick.correction_count += 1
+        pick_revision = DraftPickRevisionRow(
             id=str(uuid4()),
             session_id=row.id,
             pick_id=pick.id,
@@ -808,9 +809,23 @@ def correct_pick(
             next_player_id=payload.replacement_player_id,
             created_at=now,
         )
-    )
-    row.updated_at = now
-    _commit(session)
+        session.add(pick_revision)
+        row.updated_at = now
+        if row.mode == "mock":
+            from friendly_hub.domains.mocks.lifecycle_service import (
+                record_mock_correction_in_transaction,
+            )
+
+            record_mock_correction_in_transaction(
+                session,
+                draft_row=row,
+                pick=pick,
+                pick_revision=pick_revision,
+            )
+        _commit(session)
+    except Exception:
+        session.rollback()
+        raise
     return read_session(session, row.id)
 
 
@@ -846,9 +861,9 @@ def undo_latest_pick(
         )
     now = utc_now_text()
     previous_player_id = pick.player_id
-    _advance_revision(session, row, payload.revision)
-    session.add(
-        DraftPickRevisionRow(
+    try:
+        _advance_revision(session, row, payload.revision)
+        pick_revision = DraftPickRevisionRow(
             id=str(uuid4()),
             session_id=row.id,
             pick_id=pick.id,
@@ -858,22 +873,36 @@ def undo_latest_pick(
             next_player_id=None,
             created_at=now,
         )
-    )
-    pick.player_id = None
-    pick.recorded_at = None
-    pick.client_entered_at = None
-    if row.status == "completed":
-        row.status = "active"
-    row.completed_at = None
-    row.updated_at = now
-    _commit(session)
+        session.add(pick_revision)
+        pick.player_id = None
+        pick.recorded_at = None
+        pick.client_entered_at = None
+        if row.status == "completed":
+            row.status = "active"
+        row.completed_at = None
+        row.updated_at = now
+        if row.mode == "mock":
+            from friendly_hub.domains.mocks.lifecycle_service import (
+                record_mock_undo_in_transaction,
+            )
+
+            record_mock_undo_in_transaction(
+                session,
+                draft_row=row,
+                pick=pick,
+                pick_revision=pick_revision,
+            )
+        _commit(session)
+    except Exception:
+        session.rollback()
+        raise
     return read_session(session, row.id)
 
 
 def reset_session(
     session: Session,
     session_id: str,
-    payload: DraftRevisionGuard,
+    payload: DraftResetCreate,
 ) -> DraftSessionRead:
     row = _require_session(session, session_id)
     _require_revision(row, payload.revision)
@@ -883,6 +912,13 @@ def reset_session(
             "That draft session has already been reset.",
             "Open its linked replacement session.",
             409,
+        )
+    if payload.seed is not None and row.mode != "mock":
+        raise _error(
+            "DRAFT.SEED_NOT_APPLICABLE",
+            "A replacement seed is available only for practice simulations.",
+            "Remove the seed or reset a mock draft instead.",
+            422,
         )
     board = get_board_row(session, row.board_id)
     if board is None:
@@ -906,17 +942,32 @@ def reset_session(
         team_names=team_names,
     )
     now = utc_now_text()
-    _advance_revision(session, row, payload.revision)
-    row.status = "reset"
-    row.updated_at = now
-    row.reset_at = now
-    replacement = _create_session_rows(
-        session,
-        board,
-        new_payload,
-        reset_from_session_id=row.id,
-    )
-    _commit(session)
+    try:
+        _advance_revision(session, row, payload.revision)
+        row.status = "reset"
+        row.updated_at = now
+        row.reset_at = now
+        replacement = _create_session_rows(
+            session,
+            board,
+            new_payload,
+            reset_from_session_id=row.id,
+        )
+        if row.mode == "mock":
+            from friendly_hub.domains.mocks.lifecycle_service import (
+                reset_mock_in_transaction,
+            )
+
+            reset_mock_in_transaction(
+                session,
+                source_draft=row,
+                replacement_draft=replacement,
+                replacement_seed=payload.seed,
+            )
+        _commit(session)
+    except Exception:
+        session.rollback()
+        raise
     return read_session(session, replacement.id)
 
 

@@ -290,7 +290,9 @@ def record_guidance_after_user_pick_in_transaction(
         strategy_revision=strategy_revision,
         effective_overall_pick=effective_pick,
         evaluation=evaluation,
-        event_kind=f"user-pick-{mutation.pick.overall_pick}",
+        event_kind=(
+            f"user-pick-revision-{mutation.pick_revision.session_revision}"
+        ),
         now=now,
     )
     _update_mock_strategy(
@@ -325,9 +327,9 @@ def list_guidance(
             select(MockGuidanceEventRow)
             .where(MockGuidanceEventRow.mock_configuration_id == configuration.id)
             .order_by(
-                MockGuidanceEventRow.effective_overall_pick.desc(),
                 MockGuidanceEventRow.created_at.desc(),
                 MockGuidanceEventRow.id.desc(),
+                MockGuidanceEventRow.effective_overall_pick.desc(),
             )
             .limit(limit)
             .offset(offset)

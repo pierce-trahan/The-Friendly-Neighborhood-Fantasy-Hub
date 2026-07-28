@@ -9,6 +9,7 @@ from friendly_hub.domains.drafts.schemas import (
     DraftCandidateListResponse,
     DraftPickCorrection,
     DraftPickCreate,
+    DraftResetCreate,
     DraftRevisionGuard,
     DraftSessionCreate,
     DraftSessionListResponse,
@@ -81,7 +82,7 @@ def update_draft_session(
 )
 def reset_draft_session(
     session_id: str,
-    payload: DraftRevisionGuard,
+    payload: DraftResetCreate,
     session: SessionDependency,
 ) -> DraftSessionRead:
     return reset_session(session, session_id, payload)
