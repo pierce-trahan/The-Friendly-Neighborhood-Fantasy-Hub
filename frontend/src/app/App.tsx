@@ -12,11 +12,12 @@ import {
   saveConfiguration,
 } from "../api/client";
 import { BoardWorkspace } from "../features/boards/BoardWorkspace";
+import { DraftWorkspace } from "../features/drafts/DraftWorkspace";
 import { GutEloWorkspace } from "../features/gut-elo/GutEloWorkspace";
 import { PlayerWorkspace } from "../features/players/PlayerWorkspace";
 
 type LoadState = "loading" | "ready" | "error";
-type AppSection = "overview" | "players" | "boards" | "gut-elo";
+type AppSection = "overview" | "players" | "boards" | "gut-elo" | "drafts";
 
 function formatError(error: unknown): { message: string; action?: string } {
   if (error instanceof ApiError) {
@@ -131,7 +132,7 @@ export function App() {
     >
       <header className="hero">
         <div>
-          <p className="eyebrow">Local Draft Lab · Phase 2</p>
+          <p className="eyebrow">Local Draft Lab · Phase 3</p>
           <h1>Friendly Neighborhood Fantasy Hub</h1>
           <p className="hero-copy">
             Your private draft room foundation is running locally. Judgment stays
@@ -173,6 +174,13 @@ export function App() {
         >
           Gut ELO
         </button>
+        <button
+          type="button"
+          aria-current={section === "drafts" ? "page" : undefined}
+          onClick={() => setSection("drafts")}
+        >
+          Draft room
+        </button>
       </nav>
 
       {section === "overview" && error && (
@@ -190,6 +198,7 @@ export function App() {
       {section === "players" && <PlayerWorkspace />}
       {section === "boards" && <BoardWorkspace />}
       {section === "gut-elo" && <GutEloWorkspace />}
+      {section === "drafts" && <DraftWorkspace />}
       {section === "overview" && (
         <section className="dashboard-grid">
         <article className="card league-card">
@@ -240,7 +249,7 @@ export function App() {
 
         <article className="card">
           <p className="eyebrow">System check</p>
-          <h2>Ready for the next phase</h2>
+          <h2>Draft room ready</h2>
           <dl className="system-list">
             <div>
               <dt>Application</dt>

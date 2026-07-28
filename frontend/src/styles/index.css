@@ -2419,6 +2419,763 @@ kbd {
   }
 }
 
+/* Phase 3 desktop draft room */
+
+.draft-workspace {
+  border: 1px solid var(--line);
+  padding: 14px;
+  background: var(--surface);
+}
+
+.draft-workspace-heading,
+.draft-board-bar,
+.draft-live-strip,
+.draft-session-actions,
+.draft-candidate-toolbar,
+.draft-candidate-heading,
+.draft-setup-heading,
+.draft-setup-footer,
+.draft-reset-control > div {
+  display: flex;
+  align-items: center;
+}
+
+.draft-workspace-heading {
+  justify-content: space-between;
+  gap: 20px;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 13px;
+}
+
+.draft-workspace-heading h2,
+.draft-setup-heading h3,
+.draft-candidate-heading h3,
+.draft-room-panel h3,
+.draft-pick-rail h3 {
+  font-family:
+    "Arial Narrow", "Franklin Gothic Condensed", "Roboto Condensed", Arial,
+    sans-serif;
+  font-weight: 900;
+  letter-spacing: -0.025em;
+  text-transform: uppercase;
+}
+
+.draft-workspace-heading h2 {
+  margin: 0 0 5px;
+  font-size: clamp(1.7rem, 3vw, 2.65rem);
+}
+
+.draft-workspace-heading p:not(.eyebrow) {
+  max-width: 880px;
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+
+.draft-board-bar {
+  gap: 10px;
+  margin-top: 10px;
+  border: 1px solid var(--line);
+  padding: 9px;
+  background: #0e0e0c;
+}
+
+.draft-board-bar label {
+  display: grid;
+  min-width: 300px;
+  gap: 5px;
+  color: var(--muted);
+  font-family: Consolas, "Courier New", monospace;
+  font-size: 0.64rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.draft-board-bar select,
+.draft-setup-grid input,
+.draft-setup-grid select,
+.draft-team-name-grid input,
+.draft-candidate-toolbar input,
+.draft-candidate-toolbar select {
+  min-height: 35px;
+  border: 1px solid var(--line);
+  border-radius: 2px;
+  padding: 7px 9px;
+  color: #eee9df;
+  background: #0b0b0a;
+}
+
+.draft-board-bar > div {
+  display: grid;
+  min-width: 100px;
+  padding: 3px 12px;
+  border-left: 1px solid var(--line);
+}
+
+.draft-board-bar > div strong {
+  color: var(--accent);
+  font-family: Consolas, "Courier New", monospace;
+  font-size: 1rem;
+}
+
+.draft-board-bar > div span {
+  color: var(--muted);
+  font-size: 0.62rem;
+  text-transform: uppercase;
+}
+
+.draft-board-bar > button {
+  margin-left: auto;
+}
+
+.draft-empty {
+  border: 1px dashed var(--line);
+  padding: 22px;
+  color: var(--muted);
+  text-align: center;
+}
+
+.draft-empty strong {
+  display: block;
+  margin-bottom: 5px;
+  color: #eee9df;
+}
+
+.draft-setup {
+  margin-top: 10px;
+  border: 1px solid var(--line);
+  padding: 18px;
+  background: #11110f;
+}
+
+.draft-setup-heading,
+.draft-setup-footer {
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.draft-setup-heading {
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 12px;
+}
+
+.draft-setup-heading h3 {
+  margin: 0;
+  font-size: 1.45rem;
+}
+
+.draft-setup-heading > span {
+  border: 1px solid #574136;
+  padding: 6px 9px;
+  color: #ffd8c4;
+  background: #241812;
+  font-family: Consolas, "Courier New", monospace;
+  font-size: 0.66rem;
+  text-transform: uppercase;
+}
+
+.draft-setup-grid {
+  display: grid;
+  grid-template-columns: 1.5fr repeat(6, minmax(100px, 0.7fr));
+  gap: 7px;
+  margin: 13px 0;
+}
+
+.draft-setup-grid label {
+  display: grid;
+  align-content: start;
+  gap: 5px;
+  color: var(--muted);
+  font-family: Consolas, "Courier New", monospace;
+  font-size: 0.64rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.draft-name-field {
+  grid-column: span 2;
+}
+
+.draft-reversal-field {
+  grid-column: 1 / -1;
+  grid-template-columns: auto auto 1fr;
+  align-items: center;
+  justify-content: start;
+  border-top: 1px solid #302e29;
+  padding-top: 10px;
+}
+
+.draft-reversal-field input {
+  min-height: auto;
+  accent-color: var(--accent);
+}
+
+.draft-reversal-field small {
+  color: #79766e;
+  font-family: Arial, Helvetica, sans-serif;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.draft-team-name-editor {
+  margin: 0 0 13px;
+  border: 1px solid #302e29;
+  padding: 9px 11px;
+  background: #0c0c0b;
+}
+
+.draft-team-name-editor summary {
+  cursor: pointer;
+  color: #d8d2c8;
+  font-family: Consolas, "Courier New", monospace;
+  font-size: 0.67rem;
+  text-transform: uppercase;
+}
+
+.draft-team-name-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 7px;
+  margin-top: 10px;
+}
+
+.draft-team-name-grid label {
+  display: grid;
+  gap: 4px;
+  color: var(--muted);
+  font-family: Consolas, "Courier New", monospace;
+  font-size: 0.61rem;
+  text-transform: uppercase;
+}
+
+.draft-team-name-grid small {
+  color: var(--accent);
+  font-size: 0.56rem;
+}
+
+.draft-setup-footer {
+  border-top: 1px solid var(--line);
+  padding-top: 12px;
+}
+
+.draft-setup-footer p {
+  max-width: 640px;
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.72rem;
+}
+
+.draft-session-tabs {
+  display: flex;
+  overflow-x: auto;
+  margin-top: 10px;
+  border: 1px solid var(--line);
+  background: #0c0c0b;
+}
+
+.draft-session-tabs button {
+  display: grid;
+  min-width: 175px;
+  gap: 3px;
+  border: 0;
+  border-right: 1px solid var(--line);
+  border-radius: 0;
+  padding: 9px 11px;
+  color: #c0bbb0;
+  background: transparent;
+  text-align: left;
+}
+
+.draft-session-tabs button[aria-current="page"] {
+  color: #fff1e9;
+  background: #2b1a12;
+  box-shadow: inset 0 -2px var(--accent);
+}
+
+.draft-session-tabs button strong {
+  font-size: 0.75rem;
+}
+
+.draft-session-tabs button span {
+  color: var(--muted);
+  font-family: Consolas, "Courier New", monospace;
+  font-size: 0.6rem;
+  text-transform: uppercase;
+}
+
+.draft-live-strip {
+  align-items: stretch;
+  margin-top: 7px;
+  border: 1px solid var(--line);
+  background: #151511;
+}
+
+.draft-live-strip > div {
+  display: grid;
+  min-width: 175px;
+  align-content: center;
+  gap: 3px;
+  border-right: 1px solid var(--line);
+  padding: 10px 12px;
+}
+
+.draft-live-strip > div:first-child {
+  min-width: 260px;
+}
+
+.draft-live-strip > div > span,
+.draft-live-strip > div > small {
+  color: var(--muted);
+  font-family: Consolas, "Courier New", monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.draft-live-strip > div > strong {
+  font-size: 0.86rem;
+}
+
+.draft-status {
+  width: fit-content;
+  border: 1px solid #416c4b;
+  padding: 3px 5px;
+  color: #cdebd2 !important;
+  background: #152219;
+}
+
+.draft-status-paused {
+  border-color: #80602e;
+  color: #ffe1b0 !important;
+  background: #291f0e;
+}
+
+.draft-status-completed,
+.draft-status-reset {
+  border-color: #574136;
+  color: #ffd8c4 !important;
+  background: #241812;
+}
+
+.draft-clock-block strong {
+  color: var(--accent);
+  font-family: Consolas, "Courier New", monospace;
+  font-size: 1.25rem !important;
+}
+
+.draft-live-strip .is-user-clock {
+  background: #2b1a12;
+  box-shadow: inset 3px 0 var(--accent);
+}
+
+.draft-live-strip .is-user-clock strong {
+  color: #ffb18c;
+}
+
+.draft-live-strip .draft-session-actions {
+  display: flex;
+  min-width: 390px;
+  flex: 1;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 6px;
+  border-right: 0;
+}
+
+.draft-operating-grid {
+  display: grid;
+  grid-template-columns: minmax(620px, 1fr) 230px 300px;
+  gap: 7px;
+  margin-top: 7px;
+}
+
+.draft-candidate-panel,
+.draft-room-panel,
+.draft-pick-rail {
+  min-width: 0;
+  border: 1px solid var(--line);
+  background: #11110f;
+}
+
+.draft-candidate-toolbar {
+  flex-wrap: wrap;
+  gap: 7px;
+  border-bottom: 1px solid var(--line);
+  padding: 8px;
+  background: #0c0c0b;
+}
+
+.draft-view-tabs {
+  display: flex;
+}
+
+.draft-view-tabs button {
+  border: 1px solid var(--line);
+  border-right: 0;
+  border-radius: 0;
+  padding: 8px 9px;
+  color: var(--muted);
+  background: #131310;
+  font-family: Consolas, "Courier New", monospace;
+  font-size: 0.62rem;
+  text-transform: uppercase;
+}
+
+.draft-view-tabs button:last-child {
+  border-right: 1px solid var(--line);
+}
+
+.draft-view-tabs button[aria-current="page"] {
+  color: var(--accent);
+  background: #241812;
+  box-shadow: inset 0 -2px var(--accent);
+}
+
+.draft-candidate-toolbar > label:not(.draft-audit-toggle) {
+  flex: 1;
+}
+
+.draft-candidate-toolbar input[type="search"] {
+  width: 100%;
+}
+
+.draft-audit-toggle {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--muted);
+  font-family: Consolas, "Courier New", monospace;
+  font-size: 0.62rem;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.draft-audit-toggle input {
+  min-height: auto;
+  accent-color: var(--accent);
+}
+
+.draft-shortcuts {
+  flex-basis: 100%;
+  color: #78746c;
+  font-family: Consolas, "Courier New", monospace;
+  font-size: 0.58rem;
+  text-align: right;
+  text-transform: uppercase;
+}
+
+.draft-shortcuts kbd {
+  border: 1px solid #45423c;
+  border-bottom-color: #6c675e;
+  padding: 1px 4px;
+  color: #d8d2c8;
+  background: #1d1c18;
+  font: inherit;
+}
+
+.draft-candidate-heading {
+  justify-content: space-between;
+  min-height: 65px;
+  padding: 10px 12px;
+}
+
+.draft-candidate-heading h3 {
+  margin: 0;
+  font-size: 1.15rem;
+}
+
+.draft-correction-banner {
+  border-width: 1px 0;
+  border-style: solid;
+  border-color: #8d4a2c;
+  padding: 8px 12px;
+  color: #ffd8c4;
+  background: #2b1a12;
+  font-size: 0.72rem;
+}
+
+.draft-candidate-table-wrap {
+  max-height: 650px;
+  overflow: auto;
+  border-top: 1px solid var(--line);
+}
+
+.draft-candidate-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: Consolas, "Courier New", monospace;
+  font-size: 0.7rem;
+}
+
+.draft-candidate-table th,
+.draft-candidate-table td {
+  border-bottom: 1px solid #2d2b27;
+  padding: 8px 9px;
+  text-align: left;
+}
+
+.draft-candidate-table thead {
+  position: sticky;
+  z-index: 1;
+  top: 0;
+  color: #d8d2c8;
+  background: #27251f;
+  font-size: 0.6rem;
+  text-transform: uppercase;
+}
+
+.draft-candidate-table tbody tr:hover {
+  background: #211914;
+}
+
+.draft-candidate-table tbody tr:focus {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+  background: #211914;
+}
+
+.draft-candidate-table tbody tr.is-pending {
+  background: #2b1a12;
+  box-shadow: inset 3px 0 var(--accent);
+}
+
+.draft-candidate-table tbody tr.is-drafted {
+  color: #77736a;
+  background: #10100e;
+}
+
+.draft-candidate-table tbody th strong,
+.draft-candidate-table tbody th span {
+  display: block;
+}
+
+.draft-candidate-table tbody th span {
+  margin-top: 3px;
+  color: var(--muted);
+  font-size: 0.6rem;
+  font-weight: 400;
+}
+
+.draft-rank-cell {
+  width: 65px;
+  color: var(--accent);
+}
+
+.draft-context-cell {
+  color: var(--muted);
+}
+
+.draft-candidate-table button {
+  padding: 6px 8px;
+  font-size: 0.6rem;
+  white-space: nowrap;
+}
+
+.draft-confirmation-row td {
+  padding: 9px 12px;
+  color: #ffd8c4;
+  background: #241812;
+}
+
+.draft-confirmation-row td,
+.draft-confirmation-row td > div,
+.draft-pagination,
+.draft-pagination > div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 7px;
+}
+
+.draft-pagination {
+  border-top: 1px solid var(--line);
+  padding: 8px 10px;
+  color: var(--muted);
+  font-family: Consolas, "Courier New", monospace;
+  font-size: 0.62rem;
+  text-transform: uppercase;
+}
+
+.drafted-label {
+  color: #8d8980;
+  font-size: 0.62rem;
+}
+
+.draft-room-panel,
+.draft-pick-rail {
+  padding: 11px;
+}
+
+.draft-room-panel h3,
+.draft-pick-rail h3 {
+  margin: 0 0 10px;
+  font-size: 1.15rem;
+}
+
+.draft-room-metrics {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 3px;
+  margin-bottom: 10px;
+}
+
+.draft-room-metrics div {
+  display: grid;
+  gap: 2px;
+  padding: 7px;
+  background: #1b1a16;
+}
+
+.draft-room-metrics strong {
+  color: var(--accent);
+  font-family: Consolas, "Courier New", monospace;
+}
+
+.draft-room-metrics span {
+  color: var(--muted);
+  font-size: 0.55rem;
+  text-transform: uppercase;
+}
+
+.draft-team-order,
+.draft-pick-rail ol {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.draft-current-marker {
+  display: grid;
+  gap: 3px;
+  margin-bottom: 8px;
+  border: 1px solid #8d4a2c;
+  padding: 8px;
+  color: #ffd8c4;
+  background: #2b1a12;
+}
+
+.draft-current-marker span {
+  color: var(--accent);
+  font-family: Consolas, "Courier New", monospace;
+  font-size: 0.57rem;
+  text-transform: uppercase;
+}
+
+.draft-current-marker strong {
+  font-size: 0.72rem;
+}
+
+.draft-team-order {
+  max-height: 415px;
+  overflow: auto;
+}
+
+.draft-team-order li {
+  display: grid;
+  grid-template-columns: 24px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 6px;
+  border-bottom: 1px solid #2d2b27;
+  padding: 7px 5px;
+}
+
+.draft-team-order li > span {
+  color: var(--muted);
+  font-family: Consolas, "Courier New", monospace;
+  font-size: 0.65rem;
+}
+
+.draft-team-order li strong {
+  overflow: hidden;
+  font-size: 0.68rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.draft-team-order li small {
+  color: var(--accent);
+  font-size: 0.58rem;
+  text-transform: uppercase;
+}
+
+.draft-team-order li.is-user {
+  box-shadow: inset 2px 0 #6d3d29;
+}
+
+.draft-team-order li.is-selecting {
+  color: #fff1e9;
+  background: #2b1a12;
+  box-shadow: inset 3px 0 var(--accent);
+}
+
+.draft-recovery,
+.draft-rail-empty {
+  color: var(--muted);
+  font-size: 0.66rem;
+  line-height: 1.4;
+}
+
+.draft-reset-control {
+  margin-top: 12px;
+  border-top: 1px solid var(--line);
+  padding-top: 10px;
+}
+
+.draft-reset-control > p {
+  color: #ffd0c9;
+  font-size: 0.67rem;
+}
+
+.draft-reset-control > div {
+  justify-content: flex-end;
+  gap: 5px;
+}
+
+.draft-pick-rail ol {
+  max-height: 615px;
+  overflow: auto;
+  border-top: 1px solid var(--line);
+}
+
+.draft-pick-rail li {
+  display: grid;
+  grid-template-columns: 30px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 7px;
+  border-bottom: 1px solid #2d2b27;
+  padding: 8px 2px;
+}
+
+.draft-pick-rail li > span {
+  color: var(--accent);
+  font-family: Consolas, "Courier New", monospace;
+  font-size: 0.72rem;
+}
+
+.draft-pick-rail li strong,
+.draft-pick-rail li small {
+  display: block;
+}
+
+.draft-pick-rail li strong {
+  overflow: hidden;
+  font-size: 0.68rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.draft-pick-rail li small {
+  margin-top: 3px;
+  color: var(--muted);
+  font-size: 0.57rem;
+}
+
+.draft-pick-rail li button {
+  padding: 4px;
+  font-size: 0.57rem;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

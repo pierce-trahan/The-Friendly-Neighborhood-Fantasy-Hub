@@ -19,6 +19,18 @@ export type GutEloSessionCreate =
 export type GutEloSessionList =
   components["schemas"]["GutEloSessionListResponse"];
 export type GutEloSessionPatch = components["schemas"]["GutEloSessionPatch"];
+export type DraftCandidateResponse =
+  | components["schemas"]["DraftBlindCandidateListResponse"]
+  | components["schemas"]["DraftContextCandidateListResponse"];
+export type DraftPickCorrection =
+  components["schemas"]["DraftPickCorrection"];
+export type DraftPickCreate = components["schemas"]["DraftPickCreate"];
+export type DraftRevisionGuard = components["schemas"]["DraftRevisionGuard"];
+export type DraftSession = components["schemas"]["DraftSessionRead"];
+export type DraftSessionCreate = components["schemas"]["DraftSessionCreate"];
+export type DraftSessionList =
+  components["schemas"]["DraftSessionListResponse"];
+export type DraftSessionPatch = components["schemas"]["DraftSessionPatch"];
 export type CsvPreviewRequest = components["schemas"]["CsvPreviewRequest"];
 export type MappingDecisionRequest =
   components["schemas"]["MappingDecisionRequest"];
@@ -282,6 +294,120 @@ export function undoGutEloAction(
     `/api/v1/gut-elo-sessions/${encodeURIComponent(sessionId)}/undo`,
     { method: "POST" },
   );
+}
+
+export function getDraftSessions(boardId: string): Promise<DraftSessionList> {
+  return request(`/api/v1/boards/${encodeURIComponent(boardId)}/draft-sessions`);
+}
+
+export function createDraftSession(
+  boardId: string,
+  payload: DraftSessionCreate,
+): Promise<DraftSession> {
+  return request(
+    `/api/v1/boards/${encodeURIComponent(boardId)}/draft-sessions`,
+    {
+      method: "POST",
+      body: JSON.stringify(payload),
+    },
+  );
+}
+
+export function getDraftSession(sessionId: string): Promise<DraftSession> {
+  return request(`/api/v1/draft-sessions/${encodeURIComponent(sessionId)}`);
+}
+
+export function updateDraftSession(
+  sessionId: string,
+  payload: DraftSessionPatch,
+): Promise<DraftSession> {
+  return request(`/api/v1/draft-sessions/${encodeURIComponent(sessionId)}`, {
+    method: "PATCH",
+    body: JSON.stringify(payload),
+  });
+}
+
+export function resetDraftSession(
+  sessionId: string,
+  payload: DraftRevisionGuard,
+): Promise<DraftSession> {
+  return request(
+    `/api/v1/draft-sessions/${encodeURIComponent(sessionId)}/reset`,
+    {
+      method: "POST",
+      body: JSON.stringify(payload),
+    },
+  );
+}
+
+export function getDraftCandidates(
+  sessionId: string,
+  options: {
+    view: DraftCandidateResponse["view"];
+    search?: string;
+    positions?: string[];
+    includeDrafted?: boolean;
+    limit?: number;
+    offset?: number;
+  },
+): Promise<DraftCandidateResponse> {
+  const parameters = new URLSearchParams({
+    view: options.view,
+    include_drafted: String(options.includeDrafted ?? false),
+    limit: String(options.limit ?? 200),
+    offset: String(options.offset ?? 0),
+  });
+  if (options.search) parameters.set("search", options.search);
+  for (const position of options.positions ?? []) {
+    parameters.append("position", position);
+  }
+  return request(
+    `/api/v1/draft-sessions/${encodeURIComponent(sessionId)}/candidates?${parameters.toString()}`,
+  );
+}
+
+export function recordDraftPick(
+  sessionId: string,
+  payload: DraftPickCreate,
+): Promise<DraftSession> {
+  return request(
+    `/api/v1/draft-sessions/${encodeURIComponent(sessionId)}/picks`,
+    {
+      method: "POST",
+      body: JSON.stringify(payload),
+    },
+  );
+}
+
+export function correctDraftPick(
+  sessionId: string,
+  overallPick: number,
+  payload: DraftPickCorrection,
+): Promise<DraftSession> {
+  return request(
+    `/api/v1/draft-sessions/${encodeURIComponent(sessionId)}/picks/${overallPick}`,
+    {
+      method: "PATCH",
+      body: JSON.stringify(payload),
+    },
+  );
+}
+
+export function undoDraftPick(
+  sessionId: string,
+  payload: DraftRevisionGuard,
+): Promise<DraftSession> {
+  return request(
+    `/api/v1/draft-sessions/${encodeURIComponent(sessionId)}/undo`,
+    {
+      method: "POST",
+      body: JSON.stringify(payload),
+    },
+  );
+}
+
+export function getDraftExportUrl(sessionId: string): string {
+  return `/api/v1/draft-sessions/${encodeURIComponent(sessionId)}/export.csv`;
 }
 
 export function getPlayers(
