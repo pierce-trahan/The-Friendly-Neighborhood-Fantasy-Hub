@@ -4,10 +4,16 @@ from fastapi import APIRouter, Depends, Path, Query
 from sqlalchemy.orm import Session
 
 from friendly_hub.db.engine import get_session
+from friendly_hub.domains.mocks.history_service import (
+    list_mock_history,
+    update_learning_consent,
+)
 from friendly_hub.domains.mocks.schemas import (
     MockCpuPickCreate,
     MockGuidanceListResponse,
     MockGuidanceStatusPatch,
+    MockHistoryListResponse,
+    MockLearningPatch,
     MockPickDecisionAudit,
     MockSessionCreate,
     MockSessionRead,
@@ -40,6 +46,24 @@ def create_board_mock_session(
     session: SessionDependency,
 ) -> MockSessionRead:
     return create_mock_session(session, board_id, payload)
+
+
+@router.get(
+    "/boards/{board_id}/mock-sessions",
+    response_model=MockHistoryListResponse,
+)
+def list_board_mock_sessions(
+    board_id: str,
+    session: SessionDependency,
+    limit: int = Query(default=20, ge=1, le=100),
+    offset: int = Query(default=0, ge=0),
+) -> MockHistoryListResponse:
+    return list_mock_history(
+        session,
+        board_id,
+        limit=limit,
+        offset=offset,
+    )
 
 
 @router.get("/mock-sessions/{session_id}", response_model=MockSessionRead)
@@ -115,3 +139,15 @@ def update_mock_guidance(
     session: SessionDependency,
 ) -> MockSessionRead:
     return update_guidance_status(session, session_id, event_id, payload)
+
+
+@router.patch(
+    "/mock-sessions/{session_id}/learning",
+    response_model=MockSessionRead,
+)
+def update_mock_learning(
+    session_id: str,
+    payload: MockLearningPatch,
+    session: SessionDependency,
+) -> MockSessionRead:
+    return update_learning_consent(session, session_id, payload)

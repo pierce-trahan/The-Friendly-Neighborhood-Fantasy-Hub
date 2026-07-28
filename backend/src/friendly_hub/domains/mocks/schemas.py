@@ -4,7 +4,12 @@ from typing import Literal
 
 from pydantic import BaseModel, Field, field_validator, model_validator
 
-from friendly_hub.domains.drafts.schemas import DraftFormat, DraftSessionRead, TeamName
+from friendly_hub.domains.drafts.schemas import (
+    DraftFormat,
+    DraftSessionRead,
+    DraftStatus,
+    TeamName,
+)
 from friendly_hub.domains.mocks.definitions import (
     MAX_RANDOMNESS,
     SUPPORTED_FALLBACK_ARCHETYPES,
@@ -164,6 +169,45 @@ class MockGuidanceStatusPatch(BaseModel):
 
 class MockGuidanceListResponse(BaseModel):
     items: list[MockGuidanceRead]
+    total: int
+    limit: int
+    offset: int
+
+
+class MockLearningPatch(BaseModel):
+    mock_revision: int = Field(ge=0)
+    include_in_learning: bool
+
+
+class MockHistorySummaryRead(BaseModel):
+    session_id: str
+    name: str
+    status: DraftStatus
+    completion_state: Literal["incomplete", "completed", "reset"]
+    seed: str
+    randomness: int
+    current_strategy_key: str
+    pivot_count: int
+    mock_revision: int
+    draft_format: DraftFormat
+    third_round_reversal: bool
+    team_count: int
+    round_count: int
+    user_slot: int
+    include_in_learning: bool
+    learning_opted_in_at: str | None
+    learning_withdrawn_at: str | None
+    rng_version: str
+    cpu_engine_version: str
+    strategy_definition_version: str
+    created_at: str
+    updated_at: str
+    completed_at: str | None
+    reset_at: str | None
+
+
+class MockHistoryListResponse(BaseModel):
+    items: list[MockHistorySummaryRead]
     total: int
     limit: int
     offset: int
