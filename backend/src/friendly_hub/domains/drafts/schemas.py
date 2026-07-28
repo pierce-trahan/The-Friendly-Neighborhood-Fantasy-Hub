@@ -63,6 +63,10 @@ class DraftRevisionGuard(BaseModel):
     revision: int = Field(ge=0)
 
 
+class DraftResetCreate(DraftRevisionGuard):
+    seed: str | None = Field(default=None, min_length=1, max_length=20)
+
+
 class DraftPickCreate(DraftRevisionGuard):
     expected_overall_pick: int = Field(ge=1)
     player_id: str = Field(min_length=1, max_length=36)

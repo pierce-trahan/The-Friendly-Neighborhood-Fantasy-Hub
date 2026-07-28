@@ -1126,6 +1126,33 @@
         "title": "DraftPickRead",
         "type": "object"
       },
+      "DraftResetCreate": {
+        "properties": {
+          "revision": {
+            "minimum": 0.0,
+            "title": "Revision",
+            "type": "integer"
+          },
+          "seed": {
+            "anyOf": [
+              {
+                "maxLength": 20,
+                "minLength": 1,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Seed"
+          }
+        },
+        "required": [
+          "revision"
+        ],
+        "title": "DraftResetCreate",
+        "type": "object"
+      },
       "DraftRevisionGuard": {
         "properties": {
           "revision": {
@@ -2422,6 +2449,17 @@
             "title": "Randomness",
             "type": "integer"
           },
+          "reset_replay_status": {
+            "enum": [
+              "original",
+              "exact_replay",
+              "new_seed",
+              "snapshot_changed",
+              "unavailable"
+            ],
+            "title": "Reset Replay Status",
+            "type": "string"
+          },
           "revision": {
             "title": "Revision",
             "type": "integer"
@@ -2468,6 +2506,7 @@
           "current_strategy_key",
           "strategy_compatibility",
           "strategy_limitations",
+          "reset_replay_status",
           "revision",
           "include_in_learning",
           "learning_opted_in_at",
@@ -5388,7 +5427,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/DraftRevisionGuard"
+                "$ref": "#/components/schemas/DraftResetCreate"
               }
             }
           },

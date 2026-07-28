@@ -1153,6 +1153,9 @@ Phase 4 is complete when:
 11. Run specification audit, fix critical gaps, and complete the live workflow
     audit.
 
+The bounded contract for implementation step 8 is recorded in
+[Phase 4 Mock Correction Controls](phase-4-mock-correction-controls.md).
+
 ## Deferred Revisit
 
 - approved market baselines after Phase 5 source decisions;
