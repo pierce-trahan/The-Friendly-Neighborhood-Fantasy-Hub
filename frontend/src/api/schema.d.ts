@@ -403,7 +403,8 @@ export interface paths {
         delete?: never;
         options?: never;
         head?: never;
-        patch?: never;
+        /** Patch Draft Alert */
+        patch: operations["patch_draft_alert_api_v1_draft_sessions__session_id__alerts__alert_id__patch"];
         trace?: never;
     };
     "/api/v1/draft-sessions/{session_id}/candidates": {
@@ -917,6 +918,8 @@ export interface components {
             confidence: "high" | "medium" | "low" | "unavailable";
             /** Created At */
             created_at: string;
+            /** Dismissed At */
+            dismissed_at: string | null;
             evidence: components["schemas"]["AlertEvidenceRead"];
             /** Explanation Template Keys */
             explanation_template_keys: string[];
@@ -938,11 +941,15 @@ export interface components {
             last_confirmed_draft_revision: number;
             /** Limitation Codes */
             limitation_codes: string[];
+            /** Snooze Boundary */
+            snooze_boundary: number | null;
             /**
              * Status
              * @enum {string}
              */
             status: "open" | "snoozed" | "dismissed" | "superseded";
+            /** Superseded At */
+            superseded_at: string | null;
             /** Updated At */
             updated_at: string;
         };
@@ -1694,6 +1701,21 @@ export interface components {
             alerts: components["schemas"]["DraftAlertListResponse"];
             evaluation: components["schemas"]["DraftAlertEvaluationRead"];
         };
+        /** DraftAlertEventStatusPatch */
+        DraftAlertEventStatusPatch: {
+            /** Configuration Revision */
+            configuration_revision: number;
+            /**
+             * Expected Status
+             * @enum {string}
+             */
+            expected_status: "open" | "snoozed" | "dismissed" | "superseded";
+            /**
+             * Status
+             * @enum {string}
+             */
+            status: "open" | "snoozed" | "dismissed";
+        };
         /** DraftAlertListResponse */
         DraftAlertListResponse: {
             /** Alerts Enabled */
@@ -1871,6 +1893,11 @@ export interface components {
         };
         /** DraftResetCreate */
         DraftResetCreate: {
+            /**
+             * Copy Alert Configuration
+             * @default false
+             */
+            copy_alert_configuration: boolean;
             /** Revision */
             revision: number;
             /** Seed */
@@ -4065,6 +4092,42 @@ export interface operations {
             cookie?: never;
         };
         requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AlertDetailRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    patch_draft_alert_api_v1_draft_sessions__session_id__alerts__alert_id__patch: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                session_id: string;
+                alert_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["DraftAlertEventStatusPatch"];
+            };
+        };
         responses: {
             /** @description Successful Response */
             200: {

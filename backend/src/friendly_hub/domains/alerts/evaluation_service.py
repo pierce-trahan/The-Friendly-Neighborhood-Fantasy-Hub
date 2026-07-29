@@ -925,6 +925,34 @@ def _add_trade_reference(
     )
 
 
+def _lifecycle_coordinate(state: EvaluationState) -> int | None:
+    if state.current_pick is not None:
+        return state.current_pick.overall_pick
+    if state.draft.status == "completed":
+        return (state.draft.team_count * state.draft.round_count) + 1
+    return None
+
+
+def _presentation_state(
+    rows: list[DraftAlertEventRow],
+    *,
+    player_id: str,
+    alert_kind: str,
+    coordinate: int | None,
+) -> tuple[str, int | None, str | None]:
+    matching = [row for row in rows if row.player_id == player_id and row.alert_kind == alert_kind]
+    if not matching:
+        return "open", None, None
+    latest = max(matching, key=lambda row: (row.updated_at, row.id))
+    if latest.dismissed_at is not None:
+        return "dismissed", None, latest.dismissed_at
+    if latest.snooze_boundary is not None and (
+        coordinate is None or coordinate < latest.snooze_boundary
+    ):
+        return "snoozed", latest.snooze_boundary, None
+    return "open", None, None
+
+
 def _reconcile_events(
     session: Session,
     state: EvaluationState,
@@ -939,6 +967,17 @@ def _reconcile_events(
             )
         )
     )
+    coordinate = _lifecycle_coordinate(state)
+    for row in rows:
+        if (
+            row.status == "snoozed"
+            and row.snooze_boundary is not None
+            and coordinate is not None
+            and coordinate >= row.snooze_boundary
+        ):
+            row.status = "open"
+            row.snooze_boundary = None
+            row.updated_at = now
     active = _active_event_map(rows, state.configuration.revision)
     matched_ids: set[str] = set()
     opened = 0
@@ -948,6 +987,12 @@ def _reconcile_events(
         row = active.get(key)
         evidence_json = _json(item.evidence)
         if row is None:
+            status, snooze_boundary, dismissed_at = _presentation_state(
+                rows,
+                player_id=item.candidate.player_id,
+                alert_kind=item.kind,
+                coordinate=coordinate,
+            )
             row = DraftAlertEventRow(
                 id=str(uuid4()),
                 configuration_id=state.configuration.id,
@@ -959,7 +1004,7 @@ def _reconcile_events(
                     item.kind,
                 ),
                 alert_kind=item.kind,
-                status="open",
+                status=status,
                 confidence=item.confidence,
                 freshness=item.freshness,
                 first_confirmed_draft_revision=state.draft.revision,
@@ -968,8 +1013,8 @@ def _reconcile_events(
                 current_evidence_json=evidence_json,
                 explanation_template_keys_json=_json(item.explanation_template_keys),
                 limitation_codes_json=_json(item.limitation_codes),
-                snooze_boundary=None,
-                dismissed_at=None,
+                snooze_boundary=snooze_boundary,
+                dismissed_at=dismissed_at,
                 superseded_at=None,
                 created_at=now,
                 updated_at=now,
@@ -1091,6 +1136,9 @@ def _event_read(row: DraftAlertEventRow) -> AlertEventRead:
         last_confirmed_draft_revision=row.last_confirmed_draft_revision,
         explanation_template_keys=list(_load_json(row.explanation_template_keys_json)),
         limitation_codes=list(_load_json(row.limitation_codes_json)),
+        snooze_boundary=row.snooze_boundary,
+        dismissed_at=row.dismissed_at,
+        superseded_at=row.superseded_at,
         evidence=_load_json(row.current_evidence_json),
         created_at=row.created_at,
         updated_at=row.updated_at,
@@ -1109,8 +1157,8 @@ def _list_response(
 ) -> DraftAlertListResponse:
     filters = [DraftAlertEventRow.configuration_id == configuration.id]
     if scope == "current":
-        filters.append(DraftAlertEventRow.status.in_(("open", "snoozed")))
-    if scope == "current" and not configuration.enabled:
+        filters.append(DraftAlertEventRow.status == "open")
+    if scope == "current" and (not configuration.enabled or draft.status == "reset"):
         total = 0
         selected_ids: list[str] = []
     else:

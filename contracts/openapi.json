@@ -89,6 +89,17 @@
             "title": "Created At",
             "type": "string"
           },
+          "dismissed_at": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Dismissed At"
+          },
           "evidence": {
             "$ref": "#/components/schemas/AlertEvidenceRead"
           },
@@ -139,6 +150,17 @@
             "title": "Limitation Codes",
             "type": "array"
           },
+          "snooze_boundary": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Snooze Boundary"
+          },
           "status": {
             "enum": [
               "open",
@@ -148,6 +170,17 @@
             ],
             "title": "Status",
             "type": "string"
+          },
+          "superseded_at": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Superseded At"
           },
           "updated_at": {
             "title": "Updated At",
@@ -164,6 +197,9 @@
           "last_confirmed_draft_revision",
           "explanation_template_keys",
           "limitation_codes",
+          "snooze_boundary",
+          "dismissed_at",
+          "superseded_at",
           "evidence",
           "created_at",
           "updated_at"
@@ -2427,6 +2463,42 @@
         "title": "DraftAlertEvaluationResponse",
         "type": "object"
       },
+      "DraftAlertEventStatusPatch": {
+        "additionalProperties": false,
+        "properties": {
+          "configuration_revision": {
+            "minimum": 0.0,
+            "title": "Configuration Revision",
+            "type": "integer"
+          },
+          "expected_status": {
+            "enum": [
+              "open",
+              "snoozed",
+              "dismissed",
+              "superseded"
+            ],
+            "title": "Expected Status",
+            "type": "string"
+          },
+          "status": {
+            "enum": [
+              "open",
+              "snoozed",
+              "dismissed"
+            ],
+            "title": "Status",
+            "type": "string"
+          }
+        },
+        "required": [
+          "configuration_revision",
+          "expected_status",
+          "status"
+        ],
+        "title": "DraftAlertEventStatusPatch",
+        "type": "object"
+      },
       "DraftAlertListResponse": {
         "properties": {
           "alerts_enabled": {
@@ -2970,6 +3042,11 @@
       },
       "DraftResetCreate": {
         "properties": {
+          "copy_alert_configuration": {
+            "default": false,
+            "title": "Copy Alert Configuration",
+            "type": "boolean"
+          },
           "revision": {
             "minimum": 0.0,
             "title": "Revision",
@@ -7851,6 +7928,65 @@
           }
         },
         "summary": "Get Draft Alert",
+        "tags": [
+          "alerts"
+        ]
+      },
+      "patch": {
+        "operationId": "patch_draft_alert_api_v1_draft_sessions__session_id__alerts__alert_id__patch",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "session_id",
+            "required": true,
+            "schema": {
+              "title": "Session Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "alert_id",
+            "required": true,
+            "schema": {
+              "title": "Alert Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DraftAlertEventStatusPatch"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AlertDetailRead"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Patch Draft Alert",
         "tags": [
           "alerts"
         ]

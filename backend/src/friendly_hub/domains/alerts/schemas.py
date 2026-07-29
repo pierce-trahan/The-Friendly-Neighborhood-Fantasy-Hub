@@ -335,6 +335,14 @@ class DraftAlertEvaluationRequest(BaseModel):
     last_evaluation_draft_revision: int | None = Field(default=None, ge=0)
 
 
+class DraftAlertEventStatusPatch(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    configuration_revision: int = Field(ge=0)
+    expected_status: AlertStatus
+    status: Literal["open", "snoozed", "dismissed"]
+
+
 class AlertRangeRead(BaseModel):
     low: int
     high: int
@@ -398,6 +406,9 @@ class AlertEventRead(BaseModel):
     last_confirmed_draft_revision: int
     explanation_template_keys: list[str]
     limitation_codes: list[str]
+    snooze_boundary: int | None
+    dismissed_at: str | None
+    superseded_at: str | None
     evidence: AlertEvidenceRead
     created_at: str
     updated_at: str
