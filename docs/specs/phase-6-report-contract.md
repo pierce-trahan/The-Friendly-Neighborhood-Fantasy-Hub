@@ -281,3 +281,6 @@ report definitions and engine needed to reproduce the expected fixtures.
 
 Database migrations, report persistence, APIs, exports, and desktop components
 remain out of scope until their later implementation steps.
+
+The bounded step 3 implementation is recorded in
+[Phase 6 Deterministic Report Engine Fixtures](phase-6-report-engine-fixtures.md).

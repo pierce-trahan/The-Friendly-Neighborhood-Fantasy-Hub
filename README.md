@@ -111,7 +111,9 @@ starter coverage, bounded decision moments, compatible comparisons, safe HTML
 export, and visible unavailable states where V1 lacks approved evidence. The
 [report definitions and expected-fixture contract](docs/specs/phase-6-report-contract.md)
 freezes the V1 section registry and calculation boundaries before engine or
-persistence work begins.
+persistence work begins. The bounded
+[deterministic report engine](docs/specs/phase-6-report-engine-fixtures.md)
+now reproduces those approved fixtures without persistence or transport code.
 
 ## Local Setup
 
