@@ -96,6 +96,13 @@ the bounded
 records the passing 10-team, 24-round offline simulation and full repository
 verification.
 
+Phase 5 is approved for bounded implementation. The Value and Trade-Up Alerts
+contract keeps Personal Board conviction separate from provenance-tracked
+market evidence, preserves Blind view, and prohibits automatic picks, trades,
+and objective-value claims. The four approved product decisions and ordered
+implementation plan are recorded in the
+[Phase 5 specification](docs/specs/phase-5-value-trade-up-alerts.md).
+
 ## Local Setup
 
 Requirements:

@@ -272,6 +272,9 @@ Exit criteria:
 
 ### Phase 5 — Value and Trade-Up Alerts
 
+**Status:** Approved for bounded implementation as of 2026-07-28. See the
+[Phase 5 specification](docs/specs/phase-5-value-trade-up-alerts.md).
+
 **Goal:** Surface decision points without exposing ADP as the primary interface.
 
 Deliverables:
@@ -388,4 +391,3 @@ V1 succeeds when a user can:
 - evaluate a pick-only move-up range;
 - compare completed roster constructions; and
 - use the app confidently on draft night.
-
