@@ -1,6 +1,176 @@
 {
   "components": {
     "schemas": {
+      "AlertComponentRead": {
+        "properties": {
+          "band": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Band"
+          },
+          "reasons": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Reasons",
+            "type": "array"
+          },
+          "state": {
+            "enum": [
+              "available",
+              "unavailable"
+            ],
+            "title": "State",
+            "type": "string"
+          }
+        },
+        "required": [
+          "state",
+          "band",
+          "reasons"
+        ],
+        "title": "AlertComponentRead",
+        "type": "object"
+      },
+      "AlertDetailRead": {
+        "properties": {
+          "current_evidence": {
+            "$ref": "#/components/schemas/AlertEvidenceRead"
+          },
+          "event": {
+            "$ref": "#/components/schemas/AlertEventRead"
+          },
+          "original_evidence": {
+            "$ref": "#/components/schemas/AlertEvidenceRead"
+          },
+          "player": {
+            "$ref": "#/components/schemas/AlertPlayerRead"
+          },
+          "trade_reference": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/AlertTradeReferenceRead"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "player",
+          "event",
+          "original_evidence",
+          "current_evidence",
+          "trade_reference"
+        ],
+        "title": "AlertDetailRead",
+        "type": "object"
+      },
+      "AlertEventRead": {
+        "properties": {
+          "confidence": {
+            "enum": [
+              "high",
+              "medium",
+              "low",
+              "unavailable"
+            ],
+            "title": "Confidence",
+            "type": "string"
+          },
+          "created_at": {
+            "title": "Created At",
+            "type": "string"
+          },
+          "evidence": {
+            "$ref": "#/components/schemas/AlertEvidenceRead"
+          },
+          "explanation_template_keys": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Explanation Template Keys",
+            "type": "array"
+          },
+          "first_confirmed_draft_revision": {
+            "title": "First Confirmed Draft Revision",
+            "type": "integer"
+          },
+          "freshness": {
+            "enum": [
+              "fresh",
+              "aging",
+              "stale",
+              "expired",
+              "invalid"
+            ],
+            "title": "Freshness",
+            "type": "string"
+          },
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "kind": {
+            "enum": [
+              "value_watch",
+              "return_risk",
+              "trade_up_window",
+              "evidence_warning"
+            ],
+            "title": "Kind",
+            "type": "string"
+          },
+          "last_confirmed_draft_revision": {
+            "title": "Last Confirmed Draft Revision",
+            "type": "integer"
+          },
+          "limitation_codes": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Limitation Codes",
+            "type": "array"
+          },
+          "status": {
+            "enum": [
+              "open",
+              "snoozed",
+              "dismissed",
+              "superseded"
+            ],
+            "title": "Status",
+            "type": "string"
+          },
+          "updated_at": {
+            "title": "Updated At",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "kind",
+          "status",
+          "confidence",
+          "freshness",
+          "first_confirmed_draft_revision",
+          "last_confirmed_draft_revision",
+          "explanation_template_keys",
+          "limitation_codes",
+          "evidence",
+          "created_at",
+          "updated_at"
+        ],
+        "title": "AlertEventRead",
+        "type": "object"
+      },
       "AlertEvidenceCandidateRead": {
         "properties": {
           "display_name": {
@@ -615,6 +785,167 @@
         "title": "AlertEvidencePreviewRequest",
         "type": "object"
       },
+      "AlertEvidenceRead": {
+        "properties": {
+          "components": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/AlertComponentRead"
+            },
+            "title": "Components",
+            "type": "object"
+          },
+          "confidence_reasons": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Confidence Reasons",
+            "type": "array"
+          },
+          "configuration_revision": {
+            "title": "Configuration Revision",
+            "type": "integer"
+          },
+          "cost_availability": {
+            "enum": [
+              "available",
+              "unavailable",
+              "not_applicable"
+            ],
+            "title": "Cost Availability",
+            "type": "string"
+          },
+          "current_overall_pick": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Current Overall Pick"
+          },
+          "draft_revision": {
+            "title": "Draft Revision",
+            "type": "integer"
+          },
+          "engine_version": {
+            "title": "Engine Version",
+            "type": "string"
+          },
+          "expected_selection": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/AlertRangeRead"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "format_compatibility": {
+            "enum": [
+              "exact",
+              "family",
+              "partial",
+              "incompatible",
+              "unknown"
+            ],
+            "title": "Format Compatibility",
+            "type": "string"
+          },
+          "freshness_policy_version": {
+            "title": "Freshness Policy Version",
+            "type": "string"
+          },
+          "limitation_codes": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Limitation Codes",
+            "type": "array"
+          },
+          "market_gap": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/AlertRangeRead"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "next_user_pick": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Next User Pick"
+          },
+          "personal_reason": {
+            "$ref": "#/components/schemas/AlertPersonalReasonRead"
+          },
+          "return_risk": {
+            "enum": [
+              "likely_to_return",
+              "uncertain",
+              "unlikely_to_return",
+              "unavailable"
+            ],
+            "title": "Return Risk",
+            "type": "string"
+          },
+          "rule_version": {
+            "title": "Rule Version",
+            "type": "string"
+          },
+          "source_as_of": {
+            "title": "Source As Of",
+            "type": "string"
+          },
+          "source_label": {
+            "title": "Source Label",
+            "type": "string"
+          },
+          "target_pick_window": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/AlertRangeRead"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "source_label",
+          "source_as_of",
+          "format_compatibility",
+          "expected_selection",
+          "market_gap",
+          "return_risk",
+          "current_overall_pick",
+          "next_user_pick",
+          "personal_reason",
+          "components",
+          "target_pick_window",
+          "cost_availability",
+          "confidence_reasons",
+          "limitation_codes",
+          "engine_version",
+          "rule_version",
+          "freshness_policy_version",
+          "configuration_revision",
+          "draft_revision"
+        ],
+        "title": "AlertEvidenceRead",
+        "type": "object"
+      },
       "AlertEvidenceSnapshotListResponse": {
         "properties": {
           "items": {
@@ -805,6 +1136,219 @@
           "as_of"
         ],
         "title": "AlertEvidenceSourceSummary",
+        "type": "object"
+      },
+      "AlertGroupRead": {
+        "properties": {
+          "events": {
+            "items": {
+              "$ref": "#/components/schemas/AlertEventRead"
+            },
+            "title": "Events",
+            "type": "array"
+          },
+          "player": {
+            "$ref": "#/components/schemas/AlertPlayerRead"
+          }
+        },
+        "required": [
+          "player",
+          "events"
+        ],
+        "title": "AlertGroupRead",
+        "type": "object"
+      },
+      "AlertPersonalReasonRead": {
+        "properties": {
+          "favorite": {
+            "title": "Favorite",
+            "type": "boolean"
+          },
+          "manual_rank": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Manual Rank"
+          },
+          "qualified": {
+            "title": "Qualified",
+            "type": "boolean"
+          },
+          "qualifier_mode": {
+            "enum": [
+              "tier_or_favorite",
+              "tier_only",
+              "favorite_only"
+            ],
+            "title": "Qualifier Mode",
+            "type": "string"
+          },
+          "tier_order": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Tier Order"
+          }
+        },
+        "required": [
+          "manual_rank",
+          "tier_order",
+          "favorite",
+          "qualifier_mode",
+          "qualified"
+        ],
+        "title": "AlertPersonalReasonRead",
+        "type": "object"
+      },
+      "AlertPickOnlyReferenceRead": {
+        "properties": {
+          "label": {
+            "title": "Label",
+            "type": "string"
+          },
+          "round": {
+            "title": "Round",
+            "type": "integer"
+          },
+          "season_offset": {
+            "title": "Season Offset",
+            "type": "integer"
+          },
+          "value": {
+            "$ref": "#/components/schemas/AlertRangeRead"
+          }
+        },
+        "required": [
+          "label",
+          "season_offset",
+          "round",
+          "value"
+        ],
+        "title": "AlertPickOnlyReferenceRead",
+        "type": "object"
+      },
+      "AlertPlayerRead": {
+        "properties": {
+          "display_name": {
+            "title": "Display Name",
+            "type": "string"
+          },
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "primary_position": {
+            "title": "Primary Position",
+            "type": "string"
+          },
+          "team": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Team"
+          }
+        },
+        "required": [
+          "id",
+          "display_name",
+          "primary_position",
+          "team"
+        ],
+        "title": "AlertPlayerRead",
+        "type": "object"
+      },
+      "AlertRangeRead": {
+        "properties": {
+          "high": {
+            "title": "High",
+            "type": "integer"
+          },
+          "low": {
+            "title": "Low",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "low",
+          "high"
+        ],
+        "title": "AlertRangeRead",
+        "type": "object"
+      },
+      "AlertTradeReferenceRead": {
+        "properties": {
+          "cost_availability": {
+            "enum": [
+              "available",
+              "unavailable"
+            ],
+            "title": "Cost Availability",
+            "type": "string"
+          },
+          "explanation_template_key": {
+            "title": "Explanation Template Key",
+            "type": "string"
+          },
+          "incremental_cost": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/AlertRangeRead"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "limitation_codes": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Limitation Codes",
+            "type": "array"
+          },
+          "pick_only_references": {
+            "items": {
+              "$ref": "#/components/schemas/AlertPickOnlyReferenceRead"
+            },
+            "title": "Pick Only References",
+            "type": "array"
+          },
+          "target_pick_window": {
+            "$ref": "#/components/schemas/AlertRangeRead"
+          },
+          "target_round_pick_labels": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Target Round Pick Labels",
+            "type": "array"
+          }
+        },
+        "required": [
+          "target_pick_window",
+          "target_round_pick_labels",
+          "incremental_cost",
+          "pick_only_references",
+          "cost_availability",
+          "explanation_template_key",
+          "limitation_codes"
+        ],
+        "title": "AlertTradeReferenceRead",
         "type": "object"
       },
       "AppConfiguration": {
@@ -1735,6 +2279,228 @@
           "updated_at"
         ],
         "title": "DraftAlertConfigurationRead",
+        "type": "object"
+      },
+      "DraftAlertEvaluationRead": {
+        "properties": {
+          "candidate_count": {
+            "title": "Candidate Count",
+            "type": "integer"
+          },
+          "configuration_revision": {
+            "title": "Configuration Revision",
+            "type": "integer"
+          },
+          "current_overall_pick": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Current Overall Pick"
+          },
+          "draft_revision": {
+            "title": "Draft Revision",
+            "type": "integer"
+          },
+          "evaluated_at": {
+            "title": "Evaluated At",
+            "type": "string"
+          },
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "idempotent": {
+            "title": "Idempotent",
+            "type": "boolean"
+          },
+          "limitation_codes": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Limitation Codes",
+            "type": "array"
+          },
+          "next_user_pick": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Next User Pick"
+          },
+          "opened_count": {
+            "title": "Opened Count",
+            "type": "integer"
+          },
+          "superseded_count": {
+            "title": "Superseded Count",
+            "type": "integer"
+          },
+          "updated_count": {
+            "title": "Updated Count",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id",
+          "draft_revision",
+          "configuration_revision",
+          "current_overall_pick",
+          "next_user_pick",
+          "candidate_count",
+          "opened_count",
+          "updated_count",
+          "superseded_count",
+          "limitation_codes",
+          "evaluated_at",
+          "idempotent"
+        ],
+        "title": "DraftAlertEvaluationRead",
+        "type": "object"
+      },
+      "DraftAlertEvaluationRequest": {
+        "additionalProperties": false,
+        "properties": {
+          "configuration_revision": {
+            "minimum": 0.0,
+            "title": "Configuration Revision",
+            "type": "integer"
+          },
+          "draft_revision": {
+            "minimum": 0.0,
+            "title": "Draft Revision",
+            "type": "integer"
+          },
+          "expected_current_overall_pick": {
+            "anyOf": [
+              {
+                "minimum": 1.0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Expected Current Overall Pick"
+          },
+          "last_evaluation_draft_revision": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Last Evaluation Draft Revision"
+          }
+        },
+        "required": [
+          "draft_revision",
+          "configuration_revision"
+        ],
+        "title": "DraftAlertEvaluationRequest",
+        "type": "object"
+      },
+      "DraftAlertEvaluationResponse": {
+        "properties": {
+          "alerts": {
+            "$ref": "#/components/schemas/DraftAlertListResponse"
+          },
+          "evaluation": {
+            "$ref": "#/components/schemas/DraftAlertEvaluationRead"
+          }
+        },
+        "required": [
+          "evaluation",
+          "alerts"
+        ],
+        "title": "DraftAlertEvaluationResponse",
+        "type": "object"
+      },
+      "DraftAlertListResponse": {
+        "properties": {
+          "alerts_enabled": {
+            "title": "Alerts Enabled",
+            "type": "boolean"
+          },
+          "configuration_revision": {
+            "title": "Configuration Revision",
+            "type": "integer"
+          },
+          "draft_revision": {
+            "title": "Draft Revision",
+            "type": "integer"
+          },
+          "evaluation_state": {
+            "enum": [
+              "missing",
+              "current",
+              "stale"
+            ],
+            "title": "Evaluation State",
+            "type": "string"
+          },
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/AlertGroupRead"
+            },
+            "title": "Items",
+            "type": "array"
+          },
+          "latest_evaluation": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/DraftAlertEvaluationRead"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "limit": {
+            "title": "Limit",
+            "type": "integer"
+          },
+          "offset": {
+            "title": "Offset",
+            "type": "integer"
+          },
+          "scope": {
+            "enum": [
+              "current",
+              "history"
+            ],
+            "title": "Scope",
+            "type": "string"
+          },
+          "total": {
+            "title": "Total",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "scope",
+          "evaluation_state",
+          "draft_revision",
+          "configuration_revision",
+          "alerts_enabled",
+          "latest_evaluation",
+          "items",
+          "total",
+          "limit",
+          "offset"
+        ],
+        "title": "DraftAlertListResponse",
         "type": "object"
       },
       "DraftBlindCandidateListResponse": {
@@ -6903,6 +7669,188 @@
           }
         },
         "summary": "Attach Draft Alert Configuration",
+        "tags": [
+          "alerts"
+        ]
+      }
+    },
+    "/api/v1/draft-sessions/{session_id}/alerts": {
+      "get": {
+        "operationId": "get_draft_alerts_api_v1_draft_sessions__session_id__alerts_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "session_id",
+            "required": true,
+            "schema": {
+              "title": "Session Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "scope",
+            "required": false,
+            "schema": {
+              "default": "current",
+              "enum": [
+                "current",
+                "history"
+              ],
+              "title": "Scope",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 25,
+              "maximum": 100,
+              "minimum": 1,
+              "title": "Limit",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "offset",
+            "required": false,
+            "schema": {
+              "default": 0,
+              "minimum": 0,
+              "title": "Offset",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DraftAlertListResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Get Draft Alerts",
+        "tags": [
+          "alerts"
+        ]
+      }
+    },
+    "/api/v1/draft-sessions/{session_id}/alerts/evaluate": {
+      "post": {
+        "operationId": "evaluate_alerts_api_v1_draft_sessions__session_id__alerts_evaluate_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "session_id",
+            "required": true,
+            "schema": {
+              "title": "Session Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DraftAlertEvaluationRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DraftAlertEvaluationResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Evaluate Alerts",
+        "tags": [
+          "alerts"
+        ]
+      }
+    },
+    "/api/v1/draft-sessions/{session_id}/alerts/{alert_id}": {
+      "get": {
+        "operationId": "get_draft_alert_api_v1_draft_sessions__session_id__alerts__alert_id__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "session_id",
+            "required": true,
+            "schema": {
+              "title": "Session Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "alert_id",
+            "required": true,
+            "schema": {
+              "title": "Alert Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AlertDetailRead"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Get Draft Alert",
         "tags": [
           "alerts"
         ]

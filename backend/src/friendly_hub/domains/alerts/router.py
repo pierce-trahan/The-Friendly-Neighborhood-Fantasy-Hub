@@ -1,4 +1,4 @@
-from typing import Annotated
+from typing import Annotated, Literal
 
 from fastapi import APIRouter, Depends, Query, Request
 from sqlalchemy.orm import Session
@@ -9,7 +9,13 @@ from friendly_hub.domains.alerts.configuration_service import (
     read_draft_alert_configuration,
     update_draft_alert_configuration,
 )
+from friendly_hub.domains.alerts.evaluation_service import (
+    evaluate_draft_alerts,
+    list_draft_alerts,
+    read_draft_alert,
+)
 from friendly_hub.domains.alerts.schemas import (
+    AlertDetailRead,
     AlertEvidenceCommitRequest,
     AlertEvidenceCommitResponse,
     AlertEvidenceMappingDecisionRequest,
@@ -20,6 +26,9 @@ from friendly_hub.domains.alerts.schemas import (
     DraftAlertConfigurationCreate,
     DraftAlertConfigurationPatch,
     DraftAlertConfigurationRead,
+    DraftAlertEvaluationRequest,
+    DraftAlertEvaluationResponse,
+    DraftAlertListResponse,
 )
 from friendly_hub.domains.alerts.service import (
     AlertEvidencePreviewStore,
@@ -181,4 +190,56 @@ def patch_draft_alert_configuration(
         session,
         session_id=session_id,
         payload=payload,
+    )
+
+
+@router.post(
+    "/draft-sessions/{session_id}/alerts/evaluate",
+    response_model=DraftAlertEvaluationResponse,
+)
+def evaluate_alerts(
+    session_id: str,
+    payload: DraftAlertEvaluationRequest,
+    session: SessionDependency,
+) -> DraftAlertEvaluationResponse:
+    return evaluate_draft_alerts(
+        session,
+        session_id=session_id,
+        payload=payload,
+    )
+
+
+@router.get(
+    "/draft-sessions/{session_id}/alerts",
+    response_model=DraftAlertListResponse,
+)
+def get_draft_alerts(
+    session_id: str,
+    session: SessionDependency,
+    scope: Literal["current", "history"] = Query(default="current"),
+    limit: int = Query(default=25, ge=1, le=100),
+    offset: int = Query(default=0, ge=0),
+) -> DraftAlertListResponse:
+    return list_draft_alerts(
+        session,
+        session_id=session_id,
+        scope=scope,
+        limit=limit,
+        offset=offset,
+    )
+
+
+@router.get(
+    "/draft-sessions/{session_id}/alerts/{alert_id}",
+    response_model=AlertDetailRead,
+)
+def get_draft_alert(
+    session_id: str,
+    alert_id: str,
+    session: SessionDependency,
+) -> AlertDetailRead:
+    return read_draft_alert(
+        session,
+        session_id=session_id,
+        alert_id=alert_id,
     )

@@ -313,3 +313,154 @@ class DraftAlertConfigurationRead(BaseModel):
     evidence_snapshot: AlertEvidenceSnapshotSummaryRead
     created_at: str
     updated_at: str
+
+
+AlertKind = Literal[
+    "value_watch",
+    "return_risk",
+    "trade_up_window",
+    "evidence_warning",
+]
+AlertStatus = Literal["open", "snoozed", "dismissed", "superseded"]
+AlertConfidence = Literal["high", "medium", "low", "unavailable"]
+AlertFreshness = Literal["fresh", "aging", "stale", "expired", "invalid"]
+
+
+class DraftAlertEvaluationRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    draft_revision: int = Field(ge=0)
+    configuration_revision: int = Field(ge=0)
+    expected_current_overall_pick: int | None = Field(default=None, ge=1)
+    last_evaluation_draft_revision: int | None = Field(default=None, ge=0)
+
+
+class AlertRangeRead(BaseModel):
+    low: int
+    high: int
+
+
+class AlertComponentRead(BaseModel):
+    state: Literal["available", "unavailable"]
+    band: str | None
+    reasons: list[str]
+
+
+class AlertPersonalReasonRead(BaseModel):
+    manual_rank: int | None
+    tier_order: int | None
+    favorite: bool
+    qualifier_mode: PersonalQualifierMode
+    qualified: bool
+
+
+class AlertEvidenceRead(BaseModel):
+    source_label: str
+    source_as_of: str
+    format_compatibility: FormatCompatibility
+    expected_selection: AlertRangeRead | None
+    market_gap: AlertRangeRead | None
+    return_risk: Literal[
+        "likely_to_return",
+        "uncertain",
+        "unlikely_to_return",
+        "unavailable",
+    ]
+    current_overall_pick: int | None
+    next_user_pick: int | None
+    personal_reason: AlertPersonalReasonRead
+    components: dict[str, AlertComponentRead]
+    target_pick_window: AlertRangeRead | None
+    cost_availability: Literal["available", "unavailable", "not_applicable"]
+    confidence_reasons: list[str]
+    limitation_codes: list[str]
+    engine_version: str
+    rule_version: str
+    freshness_policy_version: str
+    configuration_revision: int
+    draft_revision: int
+
+
+class AlertPlayerRead(BaseModel):
+    id: str
+    display_name: str
+    primary_position: str
+    team: str | None
+
+
+class AlertEventRead(BaseModel):
+    id: str
+    kind: AlertKind
+    status: AlertStatus
+    confidence: AlertConfidence
+    freshness: AlertFreshness
+    first_confirmed_draft_revision: int
+    last_confirmed_draft_revision: int
+    explanation_template_keys: list[str]
+    limitation_codes: list[str]
+    evidence: AlertEvidenceRead
+    created_at: str
+    updated_at: str
+
+
+class AlertGroupRead(BaseModel):
+    player: AlertPlayerRead
+    events: list[AlertEventRead]
+
+
+class DraftAlertEvaluationRead(BaseModel):
+    id: str
+    draft_revision: int
+    configuration_revision: int
+    current_overall_pick: int | None
+    next_user_pick: int | None
+    candidate_count: int
+    opened_count: int
+    updated_count: int
+    superseded_count: int
+    limitation_codes: list[str]
+    evaluated_at: str
+    idempotent: bool
+
+
+class DraftAlertListResponse(BaseModel):
+    scope: Literal["current", "history"]
+    evaluation_state: Literal["missing", "current", "stale"]
+    draft_revision: int
+    configuration_revision: int
+    alerts_enabled: bool
+    latest_evaluation: DraftAlertEvaluationRead | None
+    items: list[AlertGroupRead]
+    total: int
+    limit: int
+    offset: int
+
+
+class DraftAlertEvaluationResponse(BaseModel):
+    evaluation: DraftAlertEvaluationRead
+    alerts: DraftAlertListResponse
+
+
+class AlertPickOnlyReferenceRead(BaseModel):
+    label: str
+    season_offset: int
+    round: int
+    value: AlertRangeRead
+
+
+class AlertTradeReferenceRead(BaseModel):
+    target_pick_window: AlertRangeRead
+    target_round_pick_labels: list[str]
+    incremental_cost: AlertRangeRead | None
+    pick_only_references: list[AlertPickOnlyReferenceRead]
+    cost_availability: Literal["available", "unavailable"]
+    explanation_template_key: str
+    limitation_codes: list[str]
+
+
+class AlertDetailRead(BaseModel):
+    player: AlertPlayerRead
+    event: AlertEventRead
+    original_evidence: AlertEvidenceRead
+    current_evidence: AlertEvidenceRead
+    trade_reference: AlertTradeReferenceRead | None
