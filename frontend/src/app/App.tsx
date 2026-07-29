@@ -139,7 +139,7 @@ export function App() {
     >
       <header className="hero">
         <div>
-          <p className="eyebrow">Local Draft Lab · Phase 4</p>
+          <p className="eyebrow">Local Draft Lab · Phase 5</p>
           <h1>Friendly Neighborhood Fantasy Hub</h1>
           <p className="hero-copy">
             Your private draft room foundation is running locally. Judgment stays

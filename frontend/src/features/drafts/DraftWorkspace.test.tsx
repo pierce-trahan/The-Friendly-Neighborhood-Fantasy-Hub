@@ -13,6 +13,7 @@ import { DraftWorkspace } from "./DraftWorkspace";
 function response(payload: unknown, ok = true) {
   return {
     ok,
+    status: ok ? 200 : 400,
     json: async () => payload,
   };
 }
@@ -227,6 +228,94 @@ describe("DraftWorkspace", () => {
     });
   });
 
+  it("optionally attaches a selected evidence snapshot after creating the room", async () => {
+    const fetchMock = vi.fn(
+      async (input: RequestInfo | URL, init?: RequestInit) => {
+        const url = String(input);
+        if (url === "/api/v1/boards?include_archived=false") {
+          return response({ items: [board] });
+        }
+        if (
+          url.endsWith("/boards/board-1/draft-sessions") &&
+          init?.method === "POST"
+        ) {
+          return response(draft);
+        }
+        if (url.endsWith("/boards/board-1/draft-sessions")) {
+          return response({ items: [] });
+        }
+        if (url.includes("/alert-evidence-snapshots?")) {
+          return response({
+            items: [
+              {
+                id: "snapshot-1",
+                source_label: "Neighborhood Synthetic Market",
+                source_as_of: "2026-07-28T00:00:00Z",
+                freshness_states: { market: "fresh" },
+                compatibility_state: "not_evaluated",
+              },
+            ],
+            total: 1,
+            limit: 100,
+            offset: 0,
+          });
+        }
+        if (
+          url.endsWith("/draft-sessions/draft-1/alert-configuration") &&
+          init?.method === "POST"
+        ) {
+          return response({}, true);
+        }
+        if (url.includes("/draft-sessions/draft-1/candidates?")) {
+          return response(candidates);
+        }
+        throw new Error(`Unhandled request: ${url}`);
+      },
+    );
+    vi.stubGlobal("fetch", fetchMock);
+
+    render(<DraftWorkspace />);
+    expect(
+      await screen.findByRole("button", { name: "Create draft room" }),
+    ).toBeEnabled();
+    expect(
+      fetchMock.mock.calls.some(([url]) =>
+        String(url).includes("/alert-evidence-snapshots"),
+      ),
+    ).toBe(false);
+
+    fireEvent.click(screen.getByText("Decision support (optional)"));
+    fireEvent.click(
+      await screen.findByLabelText(
+        "Attach decision support when this room opens",
+      ),
+    );
+    fireEvent.click(screen.getByRole("button", { name: "Create draft room" }));
+
+    await waitFor(() => {
+      const attachCall = fetchMock.mock.calls.find(
+        ([url, init]) =>
+          String(url).endsWith(
+            "/draft-sessions/draft-1/alert-configuration",
+          ) && init?.method === "POST",
+      );
+      expect(JSON.parse(String(attachCall?.[1]?.body))).toEqual({
+        draft_revision: 7,
+        evidence_snapshot_id: "snapshot-1",
+        enabled: true,
+        personal_qualifier_mode: "tier_or_favorite",
+        eligible_tier_count: 2,
+        minimum_conservative_gap: 6,
+        snooze_pick_count: 5,
+      });
+    });
+    expect(
+      await screen.findByText(
+        "Draft room created. Decision support is attached outside Blind view.",
+      ),
+    ).toBeInTheDocument();
+  });
+
   it("submits exact revision and current-pick guards", async () => {
     const updated: DraftSession = {
       ...draft,
@@ -389,6 +478,9 @@ describe("DraftWorkspace", () => {
     expect(
       screen.queryByRole("columnheader", { name: "Tier" }),
     ).not.toBeInTheDocument();
+    expect(
+      fetchMock.mock.calls.some(([url]) => String(url).includes("/alert")),
+    ).toBe(false);
 
     fireEvent.keyDown(window, { key: "/" });
     expect(screen.getByPlaceholderText("Search candidates")).toHaveFocus();
@@ -399,6 +491,74 @@ describe("DraftWorkspace", () => {
     fireEvent.keyDown(playerRow, { key: "Escape" });
     expect(
       screen.queryByRole("button", { name: "Confirm pick" }),
+    ).not.toBeInTheDocument();
+  });
+
+  it("mounts decision support only after leaving Blind view", async () => {
+    const fetchMock = vi.fn(async (input: RequestInfo | URL) => {
+      const url = String(input);
+      if (url === "/api/v1/boards?include_archived=false") {
+        return response({ items: [board] });
+      }
+      if (url.endsWith("/boards/board-1/draft-sessions")) {
+        return response({ items: [summary(draft)] });
+      }
+      if (url.includes("/draft-sessions/draft-1/candidates?")) {
+        return response({
+          ...candidates,
+          view: url.includes("view=personal") ? "personal" : "blind",
+          items: url.includes("view=personal")
+            ? candidates.items.map((candidate, index) => ({
+                ...candidate,
+                personal_rank: index + 1,
+                tier_order: 1,
+                favorite: index === 0,
+              }))
+            : candidates.items,
+        });
+      }
+      if (url.endsWith("/draft-sessions/draft-1")) return response(draft);
+      if (url.endsWith("/alert-configuration")) {
+        return {
+          ...response(
+            {
+              error: { message: "No decision-support evidence is attached." },
+            },
+            false,
+          ),
+          status: 404,
+        };
+      }
+      if (url.includes("/alert-evidence-snapshots?")) {
+        return response({ items: [], total: 0, limit: 100, offset: 0 });
+      }
+      throw new Error(`Unhandled request: ${url}`);
+    });
+    vi.stubGlobal("fetch", fetchMock);
+
+    render(<DraftWorkspace />);
+    await screen.findByRole("row", { name: /Marcus Hale/ });
+    expect(
+      screen.queryByRole("complementary", { name: "Decision support" }),
+    ).not.toBeInTheDocument();
+    expect(
+      fetchMock.mock.calls.some(([url]) => String(url).includes("/alert")),
+    ).toBe(false);
+
+    fireEvent.click(screen.getByRole("button", { name: "personal" }));
+    expect(
+      await screen.findByRole("complementary", { name: "Decision support" }),
+    ).toBeInTheDocument();
+    expect(await screen.findByText("No evidence attached")).toBeInTheDocument();
+    expect(
+      fetchMock.mock.calls.some(([url]) =>
+        String(url).endsWith("/alert-configuration"),
+      ),
+    ).toBe(true);
+
+    fireEvent.click(screen.getByRole("button", { name: "blind" }));
+    expect(
+      screen.queryByRole("complementary", { name: "Decision support" }),
     ).not.toBeInTheDocument();
   });
 
