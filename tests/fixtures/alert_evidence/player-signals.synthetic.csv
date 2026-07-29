@@ -1,0 +1,7 @@
+source_player_key,display_name,position,team,expected_pick_low,expected_pick_high,market_band,win_now_production_band,age_risk_band,evidence_as_of,limitation_codes
+demo-qb-001,Marcus Hale,QB,CHI,4,8,premium,high,middle,2026-07-28T00:00:00Z,
+demo-rb-001,Devin Cross Jr.,RB,ATL,12,20,strong,high,higher,2026-07-28T00:00:00Z,
+demo-wr-001,Elias North,WR,SEA,18,30,strong,medium,lower,2026-07-28T00:00:00Z,
+demo-te-001,Theo Banks,TE,DET,35,48,standard,medium,middle,2026-07-28T00:00:00Z,
+demo-wr-002,Andre Vale III,WR,,55,80,depth,,lower,2026-07-28T00:00:00Z,PRODUCTION_UNAVAILABLE
+demo-rb-002,Nolan Reed,RB,MIN,,,fringe,low,higher,2026-07-28T00:00:00Z,EXPECTED_SELECTION_UNAVAILABLE
