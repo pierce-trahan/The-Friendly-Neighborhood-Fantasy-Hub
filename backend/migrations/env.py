@@ -6,6 +6,16 @@ from alembic import context
 from sqlalchemy import engine_from_config, pool
 
 from friendly_hub.db.base import Base
+from friendly_hub.domains.alerts.models import (  # noqa: F401
+    AlertEvidenceSnapshotRow,
+    AlertPickValueSignalRow,
+    AlertPlayerSignalRow,
+    DraftAlertConfigurationRevisionRow,
+    DraftAlertConfigurationRow,
+    DraftAlertEvaluationRow,
+    DraftAlertEventRow,
+    DraftAlertTradeReferenceRow,
+)
 from friendly_hub.domains.boards.models import (  # noqa: F401
     BoardEntryRow,
     BoardTierRow,
