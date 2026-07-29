@@ -8,6 +8,7 @@ from sqlalchemy.orm import Session
 from friendly_hub import __version__
 from friendly_hub.api.security import require_local_write_guard
 from friendly_hub.db.engine import get_session
+from friendly_hub.domains.alerts.router import router as alerts_router
 from friendly_hub.domains.boards.router import router as boards_router
 from friendly_hub.domains.configuration.router import router as configuration_router
 from friendly_hub.domains.drafts.router import router as drafts_router
@@ -43,6 +44,7 @@ def health(session: SessionDependency) -> HealthResponse:
 router.include_router(configuration_router)
 router.include_router(league_profiles_router)
 router.include_router(players_router)
+router.include_router(alerts_router)
 router.include_router(boards_router)
 router.include_router(gut_elo_router)
 router.include_router(drafts_router)

@@ -15,6 +15,7 @@ from friendly_hub.core.logging import configure_logging
 from friendly_hub.core.settings import RuntimeSettings
 from friendly_hub.db.engine import create_database_engine, create_session_factory
 from friendly_hub.db.migrate import run_migrations
+from friendly_hub.domains.alerts.service import AlertEvidencePreviewStore
 from friendly_hub.domains.configuration.service import ensure_default_configuration
 
 
@@ -31,6 +32,7 @@ def create_app(runtime: RuntimeSettings | None = None) -> FastAPI:
         application.state.runtime = runtime_settings
         application.state.engine = engine
         application.state.session_factory = session_factory
+        application.state.alert_evidence_preview_store = AlertEvidencePreviewStore()
         with session_factory() as session:
             ensure_default_configuration(session)
         yield

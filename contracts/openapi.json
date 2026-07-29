@@ -1,6 +1,805 @@
 {
   "components": {
     "schemas": {
+      "AlertEvidenceCandidateRead": {
+        "properties": {
+          "display_name": {
+            "title": "Display Name",
+            "type": "string"
+          },
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "position": {
+            "title": "Position",
+            "type": "string"
+          },
+          "team": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Team"
+          }
+        },
+        "required": [
+          "id",
+          "display_name",
+          "position",
+          "team"
+        ],
+        "title": "AlertEvidenceCandidateRead",
+        "type": "object"
+      },
+      "AlertEvidenceCommitRequest": {
+        "properties": {
+          "content_hash": {
+            "maxLength": 64,
+            "minLength": 64,
+            "title": "Content Hash",
+            "type": "string"
+          },
+          "permitted_use_confirmed": {
+            "title": "Permitted Use Confirmed",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "content_hash",
+          "permitted_use_confirmed"
+        ],
+        "title": "AlertEvidenceCommitRequest",
+        "type": "object"
+      },
+      "AlertEvidenceCommitResponse": {
+        "properties": {
+          "idempotent": {
+            "title": "Idempotent",
+            "type": "boolean"
+          },
+          "snapshot": {
+            "$ref": "#/components/schemas/AlertEvidenceSnapshotSummaryRead"
+          }
+        },
+        "required": [
+          "snapshot",
+          "idempotent"
+        ],
+        "title": "AlertEvidenceCommitResponse",
+        "type": "object"
+      },
+      "AlertEvidenceFormatSummary": {
+        "properties": {
+          "draft_format": {
+            "enum": [
+              "snake",
+              "linear"
+            ],
+            "title": "Draft Format",
+            "type": "string"
+          },
+          "draft_purpose": {
+            "enum": [
+              "startup",
+              "rookie",
+              "supplemental"
+            ],
+            "title": "Draft Purpose",
+            "type": "string"
+          },
+          "league_type": {
+            "enum": [
+              "dynasty",
+              "keeper",
+              "redraft"
+            ],
+            "title": "League Type",
+            "type": "string"
+          },
+          "qb_mode": {
+            "enum": [
+              "one_qb",
+              "superflex"
+            ],
+            "title": "Qb Mode",
+            "type": "string"
+          },
+          "reception_scoring": {
+            "enum": [
+              "standard",
+              "half_ppr",
+              "ppr"
+            ],
+            "title": "Reception Scoring",
+            "type": "string"
+          },
+          "rounds": {
+            "title": "Rounds",
+            "type": "integer"
+          },
+          "te_premium": {
+            "title": "Te Premium",
+            "type": "boolean"
+          },
+          "team_count": {
+            "title": "Team Count",
+            "type": "integer"
+          },
+          "third_round_reversal": {
+            "title": "Third Round Reversal",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "league_type",
+          "draft_purpose",
+          "team_count",
+          "draft_format",
+          "third_round_reversal",
+          "rounds",
+          "qb_mode",
+          "reception_scoring",
+          "te_premium"
+        ],
+        "title": "AlertEvidenceFormatSummary",
+        "type": "object"
+      },
+      "AlertEvidenceMappingDecisionRequest": {
+        "properties": {
+          "decision": {
+            "enum": [
+              "confirm",
+              "ignore",
+              "reject",
+              "clear"
+            ],
+            "title": "Decision",
+            "type": "string"
+          },
+          "player_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Player Id"
+          }
+        },
+        "required": [
+          "decision"
+        ],
+        "title": "AlertEvidenceMappingDecisionRequest",
+        "type": "object"
+      },
+      "AlertEvidenceMappingRowRead": {
+        "properties": {
+          "candidates": {
+            "items": {
+              "$ref": "#/components/schemas/AlertEvidenceCandidateRead"
+            },
+            "title": "Candidates",
+            "type": "array"
+          },
+          "display_name": {
+            "title": "Display Name",
+            "type": "string"
+          },
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "limitation_codes": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Limitation Codes",
+            "type": "array"
+          },
+          "position": {
+            "title": "Position",
+            "type": "string"
+          },
+          "reason_code": {
+            "title": "Reason Code",
+            "type": "string"
+          },
+          "resolved_player_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Resolved Player Id"
+          },
+          "row_number": {
+            "title": "Row Number",
+            "type": "integer"
+          },
+          "source_player_key": {
+            "title": "Source Player Key",
+            "type": "string"
+          },
+          "status": {
+            "enum": [
+              "matched",
+              "review_required",
+              "unmatched",
+              "ignored",
+              "invalid"
+            ],
+            "title": "Status",
+            "type": "string"
+          },
+          "team": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Team"
+          }
+        },
+        "required": [
+          "id",
+          "row_number",
+          "source_player_key",
+          "display_name",
+          "position",
+          "team",
+          "status",
+          "resolved_player_id",
+          "candidates",
+          "reason_code",
+          "limitation_codes"
+        ],
+        "title": "AlertEvidenceMappingRowRead",
+        "type": "object"
+      },
+      "AlertEvidencePreviewMetadata": {
+        "properties": {
+          "as_of": {
+            "format": "date-time",
+            "title": "As Of",
+            "type": "string"
+          },
+          "draft_format": {
+            "enum": [
+              "snake",
+              "linear"
+            ],
+            "title": "Draft Format",
+            "type": "string"
+          },
+          "draft_purpose": {
+            "enum": [
+              "startup",
+              "rookie",
+              "supplemental"
+            ],
+            "title": "Draft Purpose",
+            "type": "string"
+          },
+          "league_type": {
+            "enum": [
+              "dynasty",
+              "keeper",
+              "redraft"
+            ],
+            "title": "League Type",
+            "type": "string"
+          },
+          "permitted_use_confirmed": {
+            "title": "Permitted Use Confirmed",
+            "type": "boolean"
+          },
+          "private_source_reference": {
+            "anyOf": [
+              {
+                "maxLength": 256,
+                "minLength": 1,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Private Source Reference"
+          },
+          "quarterback_mode": {
+            "enum": [
+              "one_qb",
+              "superflex"
+            ],
+            "title": "Quarterback Mode",
+            "type": "string"
+          },
+          "reception_scoring": {
+            "enum": [
+              "standard",
+              "half_ppr",
+              "ppr"
+            ],
+            "title": "Reception Scoring",
+            "type": "string"
+          },
+          "round_count": {
+            "maximum": 60.0,
+            "minimum": 1.0,
+            "title": "Round Count",
+            "type": "integer"
+          },
+          "snapshot_key": {
+            "anyOf": [
+              {
+                "maxLength": 128,
+                "minLength": 1,
+                "pattern": "^[a-z0-9][a-z0-9._-]*$",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Snapshot Key"
+          },
+          "source_kind": {
+            "enum": [
+              "synthetic",
+              "user_entered",
+              "public",
+              "licensed"
+            ],
+            "title": "Source Kind",
+            "type": "string"
+          },
+          "source_label": {
+            "maxLength": 120,
+            "minLength": 1,
+            "title": "Source Label",
+            "type": "string"
+          },
+          "source_namespace": {
+            "maxLength": 64,
+            "minLength": 1,
+            "pattern": "^[a-z0-9][a-z0-9._-]*$",
+            "title": "Source Namespace",
+            "type": "string"
+          },
+          "supported_draft_depth": {
+            "maximum": 10000.0,
+            "minimum": 1.0,
+            "title": "Supported Draft Depth",
+            "type": "integer"
+          },
+          "team_count": {
+            "maximum": 32.0,
+            "minimum": 2.0,
+            "title": "Team Count",
+            "type": "integer"
+          },
+          "third_round_reversal": {
+            "title": "Third Round Reversal",
+            "type": "boolean"
+          },
+          "tight_end_premium": {
+            "title": "Tight End Premium",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "source_label",
+          "source_kind",
+          "source_namespace",
+          "permitted_use_confirmed",
+          "as_of",
+          "league_type",
+          "draft_purpose",
+          "team_count",
+          "draft_format",
+          "third_round_reversal",
+          "round_count",
+          "quarterback_mode",
+          "reception_scoring",
+          "tight_end_premium",
+          "supported_draft_depth"
+        ],
+        "title": "AlertEvidencePreviewMetadata",
+        "type": "object"
+      },
+      "AlertEvidencePreviewRead": {
+        "properties": {
+          "committed_snapshot_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Committed Snapshot Id"
+          },
+          "content_hash": {
+            "title": "Content Hash",
+            "type": "string"
+          },
+          "expected_selection_available": {
+            "title": "Expected Selection Available",
+            "type": "boolean"
+          },
+          "format": {
+            "$ref": "#/components/schemas/AlertEvidenceFormatSummary"
+          },
+          "freshness_states": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "title": "Freshness States",
+            "type": "object"
+          },
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "ignored_player_count": {
+            "title": "Ignored Player Count",
+            "type": "integer"
+          },
+          "invalid_player_count": {
+            "title": "Invalid Player Count",
+            "type": "integer"
+          },
+          "limitation_codes": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Limitation Codes",
+            "type": "array"
+          },
+          "matched_player_count": {
+            "title": "Matched Player Count",
+            "type": "integer"
+          },
+          "pick_curve_available": {
+            "title": "Pick Curve Available",
+            "type": "boolean"
+          },
+          "review_required_player_count": {
+            "title": "Review Required Player Count",
+            "type": "integer"
+          },
+          "rows": {
+            "items": {
+              "$ref": "#/components/schemas/AlertEvidenceMappingRowRead"
+            },
+            "title": "Rows",
+            "type": "array"
+          },
+          "schema_version": {
+            "title": "Schema Version",
+            "type": "integer"
+          },
+          "source": {
+            "$ref": "#/components/schemas/AlertEvidenceSourceSummary"
+          },
+          "status": {
+            "enum": [
+              "preview",
+              "committed"
+            ],
+            "title": "Status",
+            "type": "string"
+          },
+          "supported_draft_depth": {
+            "title": "Supported Draft Depth",
+            "type": "integer"
+          },
+          "total_pick_value_count": {
+            "title": "Total Pick Value Count",
+            "type": "integer"
+          },
+          "total_player_count": {
+            "title": "Total Player Count",
+            "type": "integer"
+          },
+          "unmatched_player_count": {
+            "title": "Unmatched Player Count",
+            "type": "integer"
+          },
+          "valid_pick_value_count": {
+            "title": "Valid Pick Value Count",
+            "type": "integer"
+          },
+          "valid_player_count": {
+            "title": "Valid Player Count",
+            "type": "integer"
+          },
+          "warnings": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Warnings",
+            "type": "array"
+          }
+        },
+        "required": [
+          "schema_version",
+          "id",
+          "status",
+          "content_hash",
+          "source",
+          "format",
+          "supported_draft_depth",
+          "freshness_states",
+          "total_player_count",
+          "valid_player_count",
+          "matched_player_count",
+          "review_required_player_count",
+          "unmatched_player_count",
+          "ignored_player_count",
+          "invalid_player_count",
+          "total_pick_value_count",
+          "valid_pick_value_count",
+          "expected_selection_available",
+          "pick_curve_available",
+          "warnings",
+          "limitation_codes",
+          "rows",
+          "committed_snapshot_id"
+        ],
+        "title": "AlertEvidencePreviewRead",
+        "type": "object"
+      },
+      "AlertEvidencePreviewRequest": {
+        "properties": {
+          "metadata": {
+            "$ref": "#/components/schemas/AlertEvidencePreviewMetadata"
+          },
+          "pick_csv_text": {
+            "anyOf": [
+              {
+                "maxLength": 1100000,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Pick Csv Text"
+          },
+          "pick_filename": {
+            "anyOf": [
+              {
+                "maxLength": 200,
+                "minLength": 1,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Pick Filename"
+          },
+          "player_csv_text": {
+            "maxLength": 2100000,
+            "minLength": 1,
+            "title": "Player Csv Text",
+            "type": "string"
+          },
+          "player_filename": {
+            "default": "player-signals.csv",
+            "maxLength": 200,
+            "minLength": 1,
+            "title": "Player Filename",
+            "type": "string"
+          }
+        },
+        "required": [
+          "player_csv_text",
+          "metadata"
+        ],
+        "title": "AlertEvidencePreviewRequest",
+        "type": "object"
+      },
+      "AlertEvidenceSnapshotListResponse": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/AlertEvidenceSnapshotSummaryRead"
+            },
+            "title": "Items",
+            "type": "array"
+          },
+          "limit": {
+            "title": "Limit",
+            "type": "integer"
+          },
+          "offset": {
+            "title": "Offset",
+            "type": "integer"
+          },
+          "total": {
+            "title": "Total",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "items",
+          "total",
+          "limit",
+          "offset"
+        ],
+        "title": "AlertEvidenceSnapshotListResponse",
+        "type": "object"
+      },
+      "AlertEvidenceSnapshotSummaryRead": {
+        "properties": {
+          "compatibility_state": {
+            "const": "not_evaluated",
+            "title": "Compatibility State",
+            "type": "string"
+          },
+          "content_hash": {
+            "title": "Content Hash",
+            "type": "string"
+          },
+          "expected_selection_available": {
+            "title": "Expected Selection Available",
+            "type": "boolean"
+          },
+          "expected_selection_count": {
+            "title": "Expected Selection Count",
+            "type": "integer"
+          },
+          "format": {
+            "$ref": "#/components/schemas/AlertEvidenceFormatSummary"
+          },
+          "freshness_states": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "title": "Freshness States",
+            "type": "object"
+          },
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "imported_at": {
+            "title": "Imported At",
+            "type": "string"
+          },
+          "limitation_codes": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Limitation Codes",
+            "type": "array"
+          },
+          "mapped_player_count": {
+            "title": "Mapped Player Count",
+            "type": "integer"
+          },
+          "pick_curve_available": {
+            "title": "Pick Curve Available",
+            "type": "boolean"
+          },
+          "pick_value_count": {
+            "title": "Pick Value Count",
+            "type": "integer"
+          },
+          "schema_version": {
+            "title": "Schema Version",
+            "type": "integer"
+          },
+          "source_as_of": {
+            "title": "Source As Of",
+            "type": "string"
+          },
+          "source_kind": {
+            "enum": [
+              "synthetic",
+              "user_entered",
+              "public",
+              "licensed"
+            ],
+            "title": "Source Kind",
+            "type": "string"
+          },
+          "source_label": {
+            "title": "Source Label",
+            "type": "string"
+          },
+          "source_namespace": {
+            "title": "Source Namespace",
+            "type": "string"
+          },
+          "status": {
+            "title": "Status",
+            "type": "string"
+          },
+          "supported_draft_depth": {
+            "title": "Supported Draft Depth",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id",
+          "schema_version",
+          "source_label",
+          "source_kind",
+          "source_namespace",
+          "source_as_of",
+          "imported_at",
+          "content_hash",
+          "status",
+          "format",
+          "supported_draft_depth",
+          "freshness_states",
+          "mapped_player_count",
+          "expected_selection_count",
+          "pick_value_count",
+          "expected_selection_available",
+          "pick_curve_available",
+          "compatibility_state",
+          "limitation_codes"
+        ],
+        "title": "AlertEvidenceSnapshotSummaryRead",
+        "type": "object"
+      },
+      "AlertEvidenceSourceSummary": {
+        "properties": {
+          "as_of": {
+            "title": "As Of",
+            "type": "string"
+          },
+          "kind": {
+            "enum": [
+              "synthetic",
+              "user_entered",
+              "public",
+              "licensed"
+            ],
+            "title": "Kind",
+            "type": "string"
+          },
+          "label": {
+            "title": "Label",
+            "type": "string"
+          },
+          "namespace": {
+            "title": "Namespace",
+            "type": "string"
+          },
+          "permitted_use_confirmed": {
+            "title": "Permitted Use Confirmed",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "label",
+          "kind",
+          "namespace",
+          "permitted_use_confirmed",
+          "as_of"
+        ],
+        "title": "AlertEvidenceSourceSummary",
+        "type": "object"
+      },
       "AppConfiguration": {
         "additionalProperties": false,
         "properties": {
@@ -4355,6 +5154,300 @@
   },
   "openapi": "3.1.0",
   "paths": {
+    "/api/v1/alert-evidence-imports/preview": {
+      "post": {
+        "operationId": "preview_evidence_api_v1_alert_evidence_imports_preview_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AlertEvidencePreviewRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AlertEvidencePreviewRead"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Preview Evidence",
+        "tags": [
+          "alerts"
+        ]
+      }
+    },
+    "/api/v1/alert-evidence-imports/{preview_id}": {
+      "get": {
+        "operationId": "get_evidence_preview_api_v1_alert_evidence_imports__preview_id__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "preview_id",
+            "required": true,
+            "schema": {
+              "title": "Preview Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AlertEvidencePreviewRead"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Get Evidence Preview",
+        "tags": [
+          "alerts"
+        ]
+      }
+    },
+    "/api/v1/alert-evidence-imports/{preview_id}/commit": {
+      "post": {
+        "operationId": "commit_evidence_api_v1_alert_evidence_imports__preview_id__commit_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "preview_id",
+            "required": true,
+            "schema": {
+              "title": "Preview Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AlertEvidenceCommitRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AlertEvidenceCommitResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Commit Evidence",
+        "tags": [
+          "alerts"
+        ]
+      }
+    },
+    "/api/v1/alert-evidence-imports/{preview_id}/rows/{row_id}/decision": {
+      "put": {
+        "operationId": "save_evidence_mapping_api_v1_alert_evidence_imports__preview_id__rows__row_id__decision_put",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "preview_id",
+            "required": true,
+            "schema": {
+              "title": "Preview Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "row_id",
+            "required": true,
+            "schema": {
+              "title": "Row Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AlertEvidenceMappingDecisionRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AlertEvidencePreviewRead"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Save Evidence Mapping",
+        "tags": [
+          "alerts"
+        ]
+      }
+    },
+    "/api/v1/alert-evidence-snapshots": {
+      "get": {
+        "operationId": "list_evidence_snapshots_api_v1_alert_evidence_snapshots_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 25,
+              "maximum": 100,
+              "minimum": 1,
+              "title": "Limit",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "offset",
+            "required": false,
+            "schema": {
+              "default": 0,
+              "minimum": 0,
+              "title": "Offset",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AlertEvidenceSnapshotListResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "List Evidence Snapshots",
+        "tags": [
+          "alerts"
+        ]
+      }
+    },
+    "/api/v1/alert-evidence-snapshots/{snapshot_id}": {
+      "get": {
+        "operationId": "get_evidence_snapshot_api_v1_alert_evidence_snapshots__snapshot_id__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "snapshot_id",
+            "required": true,
+            "schema": {
+              "title": "Snapshot Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AlertEvidenceSnapshotSummaryRead"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Get Evidence Snapshot",
+        "tags": [
+          "alerts"
+        ]
+      }
+    },
     "/api/v1/boards": {
       "get": {
         "operationId": "list_personal_boards_api_v1_boards_get",
