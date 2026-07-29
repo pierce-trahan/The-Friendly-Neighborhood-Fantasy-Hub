@@ -964,6 +964,16 @@ def reset_session(
                 replacement_draft=replacement,
                 replacement_seed=payload.seed,
             )
+        if payload.copy_alert_configuration:
+            from friendly_hub.domains.alerts.configuration_service import (
+                copy_alert_configuration_on_reset_in_transaction,
+            )
+
+            copy_alert_configuration_on_reset_in_transaction(
+                session,
+                source_draft=row,
+                replacement_draft=replacement,
+            )
         _commit(session)
     except Exception:
         session.rollback()

@@ -14,6 +14,9 @@ from friendly_hub.domains.alerts.evaluation_service import (
     list_draft_alerts,
     read_draft_alert,
 )
+from friendly_hub.domains.alerts.lifecycle_service import (
+    update_draft_alert_status,
+)
 from friendly_hub.domains.alerts.schemas import (
     AlertDetailRead,
     AlertEvidenceCommitRequest,
@@ -28,6 +31,7 @@ from friendly_hub.domains.alerts.schemas import (
     DraftAlertConfigurationRead,
     DraftAlertEvaluationRequest,
     DraftAlertEvaluationResponse,
+    DraftAlertEventStatusPatch,
     DraftAlertListResponse,
 )
 from friendly_hub.domains.alerts.service import (
@@ -242,4 +246,22 @@ def get_draft_alert(
         session,
         session_id=session_id,
         alert_id=alert_id,
+    )
+
+
+@router.patch(
+    "/draft-sessions/{session_id}/alerts/{alert_id}",
+    response_model=AlertDetailRead,
+)
+def patch_draft_alert(
+    session_id: str,
+    alert_id: str,
+    payload: DraftAlertEventStatusPatch,
+    session: SessionDependency,
+) -> AlertDetailRead:
+    return update_draft_alert_status(
+        session,
+        session_id=session_id,
+        alert_id=alert_id,
+        payload=payload,
     )

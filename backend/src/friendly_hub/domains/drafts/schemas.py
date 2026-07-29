@@ -65,6 +65,7 @@ class DraftRevisionGuard(BaseModel):
 
 class DraftResetCreate(DraftRevisionGuard):
     seed: str | None = Field(default=None, min_length=1, max_length=20)
+    copy_alert_configuration: bool = False
 
 
 class DraftPickCreate(DraftRevisionGuard):

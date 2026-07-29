@@ -333,6 +333,54 @@ def _settings_json(settings: dict[str, object]) -> str:
     return json.dumps(settings, separators=(",", ":"), sort_keys=True)
 
 
+def copy_alert_configuration_on_reset_in_transaction(
+    session: Session,
+    *,
+    source_draft: DraftSessionRow,
+    replacement_draft: DraftSessionRow,
+) -> DraftAlertConfigurationRow | None:
+    source = session.scalar(
+        select(DraftAlertConfigurationRow).where(
+            DraftAlertConfigurationRow.draft_session_id == source_draft.id
+        )
+    )
+    if source is None:
+        return None
+    now = utc_now_text()
+    copied = DraftAlertConfigurationRow(
+        id=str(uuid4()),
+        draft_session_id=replacement_draft.id,
+        evidence_snapshot_id=source.evidence_snapshot_id,
+        enabled=source.enabled,
+        personal_qualifier_mode=source.personal_qualifier_mode,
+        eligible_tier_count=source.eligible_tier_count,
+        minimum_conservative_gap=source.minimum_conservative_gap,
+        snooze_pick_count=source.snooze_pick_count,
+        engine_version=source.engine_version,
+        rule_version=source.rule_version,
+        freshness_policy_version=source.freshness_policy_version,
+        revision=0,
+        created_at=now,
+        updated_at=now,
+    )
+    settings_json = _settings_json(_settings(source))
+    revision = DraftAlertConfigurationRevisionRow(
+        id=str(uuid4()),
+        configuration_id=copied.id,
+        sequence_number=1,
+        previous_evidence_snapshot_id=source.evidence_snapshot_id,
+        next_evidence_snapshot_id=source.evidence_snapshot_id,
+        previous_settings_json=settings_json,
+        next_settings_json=settings_json,
+        reason="reset_copy",
+        created_at=now,
+    )
+    session.add(copied)
+    session.flush()
+    session.add(revision)
+    return copied
+
+
 def _commit_transaction(session: Session) -> None:
     session.commit()
 
