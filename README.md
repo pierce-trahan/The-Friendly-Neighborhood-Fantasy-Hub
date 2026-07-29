@@ -96,12 +96,13 @@ the bounded
 records the passing 10-team, 24-round offline simulation and full repository
 verification.
 
-Phase 5 is approved for bounded implementation. The Value and Trade-Up Alerts
-contract keeps Personal Board conviction separate from provenance-tracked
-market evidence, preserves Blind view, and prohibits automatic picks, trades,
-and objective-value claims. The four approved product decisions and ordered
-implementation plan are recorded in the
-[Phase 5 specification](docs/specs/phase-5-value-trade-up-alerts.md).
+Phase 5 is complete. Value and Trade-Up Alerts keep Personal Board conviction
+separate from provenance-tracked market evidence, preserve Blind view, and
+prohibit automatic picks, trades, and objective-value claims. See the
+[Phase 5 specification](docs/specs/phase-5-value-trade-up-alerts.md) and the
+[Phase 5 live workflow audit](docs/audits/phase-5-live-workflow-audit.md),
+which records the passing 10-team, 24-round offline rehearsal and full
+specification traceability.
 
 ## Local Setup
 

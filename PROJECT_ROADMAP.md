@@ -272,8 +272,9 @@ Exit criteria:
 
 ### Phase 5 — Value and Trade-Up Alerts
 
-**Status:** Approved for bounded implementation as of 2026-07-28. See the
-[Phase 5 specification](docs/specs/phase-5-value-trade-up-alerts.md).
+**Status:** Complete as of 2026-07-29. See the
+[Phase 5 specification](docs/specs/phase-5-value-trade-up-alerts.md) and the
+[Phase 5 live workflow audit](docs/audits/phase-5-live-workflow-audit.md).
 
 **Goal:** Surface decision points without exposing ADP as the primary interface.
 
