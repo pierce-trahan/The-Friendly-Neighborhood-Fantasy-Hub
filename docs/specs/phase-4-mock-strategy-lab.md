@@ -1159,6 +1159,9 @@ The bounded contract for implementation step 8 is recorded in
 The bounded contract for implementation step 9 is recorded in
 [Phase 4 Learning Consent and Mock Summaries](phase-4-learning-consent-summaries.md).
 
+The bounded contract for implementation step 10 is recorded in
+[Phase 4 Desktop Mock Strategy Module](phase-4-desktop-mock-strategy.md).
+
 ## Deferred Revisit
 
 - approved market baselines after Phase 5 source decisions;

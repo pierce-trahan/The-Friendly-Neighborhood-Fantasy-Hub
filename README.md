@@ -90,7 +90,9 @@ Strategy Lab contract uses seeded, versioned CPU decisions; one saved CPU pick
 at a time; strategy checkpoints that never force a selection; explicit
 history consent; and visible limits when the current data cannot support
 player-level timeline claims. See the
-[mock and strategy specification](docs/specs/phase-4-mock-strategy-lab.md).
+[mock and strategy specification](docs/specs/phase-4-mock-strategy-lab.md) and
+the bounded
+[desktop Mock Lab contract](docs/specs/phase-4-desktop-mock-strategy.md).
 
 ## Local Setup
 
