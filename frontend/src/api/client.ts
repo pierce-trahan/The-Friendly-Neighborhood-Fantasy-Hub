@@ -31,6 +31,18 @@ export type DraftSessionCreate = components["schemas"]["DraftSessionCreate"];
 export type DraftSessionList =
   components["schemas"]["DraftSessionListResponse"];
 export type DraftSessionPatch = components["schemas"]["DraftSessionPatch"];
+export type MockCpuPickCreate = components["schemas"]["MockCpuPickCreate"];
+export type MockGuidanceStatusPatch =
+  components["schemas"]["MockGuidanceStatusPatch"];
+export type MockHistoryList =
+  components["schemas"]["MockHistoryListResponse"];
+export type MockLearningPatch = components["schemas"]["MockLearningPatch"];
+export type MockPickDecision =
+  components["schemas"]["MockPickDecisionAudit"];
+export type MockSession = components["schemas"]["MockSessionRead"];
+export type MockSessionCreate = components["schemas"]["MockSessionCreate"];
+export type MockStrategyPivot =
+  components["schemas"]["MockStrategyPivotCreate"];
 export type CsvPreviewRequest = components["schemas"]["CsvPreviewRequest"];
 export type MappingDecisionRequest =
   components["schemas"]["MappingDecisionRequest"];
@@ -408,6 +420,95 @@ export function undoDraftPick(
 
 export function getDraftExportUrl(sessionId: string): string {
   return `/api/v1/draft-sessions/${encodeURIComponent(sessionId)}/export.csv`;
+}
+
+export function getMockSessions(
+  boardId: string,
+  limit = 20,
+  offset = 0,
+): Promise<MockHistoryList> {
+  return request(
+    `/api/v1/boards/${encodeURIComponent(boardId)}/mock-sessions?limit=${limit}&offset=${offset}`,
+  );
+}
+
+export function createMockSession(
+  boardId: string,
+  payload: MockSessionCreate,
+): Promise<MockSession> {
+  return request(
+    `/api/v1/boards/${encodeURIComponent(boardId)}/mock-sessions`,
+    {
+      method: "POST",
+      body: JSON.stringify(payload),
+    },
+  );
+}
+
+export function getMockSession(sessionId: string): Promise<MockSession> {
+  return request(`/api/v1/mock-sessions/${encodeURIComponent(sessionId)}`);
+}
+
+export function advanceMockCpuPick(
+  sessionId: string,
+  payload: MockCpuPickCreate,
+): Promise<MockSession> {
+  return request(
+    `/api/v1/mock-sessions/${encodeURIComponent(sessionId)}/cpu-pick`,
+    {
+      method: "POST",
+      body: JSON.stringify(payload),
+    },
+  );
+}
+
+export function getMockDecision(
+  sessionId: string,
+  overallPick: number,
+): Promise<MockPickDecision> {
+  return request(
+    `/api/v1/mock-sessions/${encodeURIComponent(sessionId)}/decisions/${overallPick}`,
+  );
+}
+
+export function updateMockStrategy(
+  sessionId: string,
+  payload: MockStrategyPivot,
+): Promise<MockSession> {
+  return request(
+    `/api/v1/mock-sessions/${encodeURIComponent(sessionId)}/strategy`,
+    {
+      method: "PATCH",
+      body: JSON.stringify(payload),
+    },
+  );
+}
+
+export function updateMockGuidanceStatus(
+  sessionId: string,
+  eventId: string,
+  payload: MockGuidanceStatusPatch,
+): Promise<MockSession> {
+  return request(
+    `/api/v1/mock-sessions/${encodeURIComponent(sessionId)}/guidance/${encodeURIComponent(eventId)}`,
+    {
+      method: "PATCH",
+      body: JSON.stringify(payload),
+    },
+  );
+}
+
+export function updateMockLearning(
+  sessionId: string,
+  payload: MockLearningPatch,
+): Promise<MockSession> {
+  return request(
+    `/api/v1/mock-sessions/${encodeURIComponent(sessionId)}/learning`,
+    {
+      method: "PATCH",
+      body: JSON.stringify(payload),
+    },
+  );
 }
 
 export function getPlayers(

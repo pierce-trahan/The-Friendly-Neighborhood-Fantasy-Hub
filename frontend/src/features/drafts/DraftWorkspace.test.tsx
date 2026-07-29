@@ -141,6 +141,38 @@ describe("DraftWorkspace", () => {
     expect(
       await screen.findByText("A Personal Board is the call sheet for this room."),
     ).toBeInTheDocument();
+    expect(
+      screen.queryByRole("button", { name: "Run to my pick" }),
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole("button", { name: "Advance one CPU pick" }),
+    ).not.toBeInTheDocument();
+  });
+
+  it("keeps practice sessions in the dedicated Mock Lab", async () => {
+    const fetchMock = vi.fn(
+      async (input: RequestInfo | URL) => {
+        const url = String(input);
+        if (url === "/api/v1/boards?include_archived=false") {
+          return response({ items: [board] });
+        }
+        if (url.endsWith("/boards/board-1/draft-sessions")) {
+          return response({
+            items: [{ ...summary(draft), mode: "mock" as const }],
+          });
+        }
+        throw new Error(`Unhandled request: ${url}`);
+      },
+    );
+    vi.stubGlobal("fetch", fetchMock);
+
+    render(<DraftWorkspace />);
+
+    expect(
+      await screen.findByRole("button", { name: "Create draft room" }),
+    ).toBeEnabled();
+    expect(screen.queryByText("Entropy Draft")).not.toBeInTheDocument();
+    expect(screen.queryByLabelText("Mode")).not.toBeInTheDocument();
   });
 
   it("submits one editable team name per configured draft slot", async () => {
@@ -188,6 +220,7 @@ describe("DraftWorkspace", () => {
       );
       expect(createCall).toBeDefined();
       expect(JSON.parse(String(createCall?.[1]?.body))).toMatchObject({
+        mode: "live",
         team_count: 2,
         team_names: ["Alpha", "Beta"],
       });

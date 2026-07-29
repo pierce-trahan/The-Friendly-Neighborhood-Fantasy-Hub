@@ -83,7 +83,6 @@ function Setup({
   onStart: (payload: DraftSessionCreate) => Promise<void>;
 }) {
   const [name, setName] = useState(`${board.name} Draft`);
-  const [mode, setMode] = useState<DraftSessionCreate["mode"]>("live");
   const [draftFormat, setDraftFormat] =
     useState<DraftSessionCreate["draft_format"]>("snake");
   const [thirdRoundReversal, setThirdRoundReversal] = useState(false);
@@ -111,7 +110,7 @@ function Setup({
     event.preventDefault();
     await onStart({
       name,
-      mode,
+      mode: "live",
       draft_format: draftFormat,
       third_round_reversal:
         draftFormat === "snake" && thirdRoundReversal,
@@ -142,18 +141,6 @@ function Setup({
             value={name}
             onChange={(event) => setName(event.target.value)}
           />
-        </label>
-        <label>
-          Mode
-          <select
-            value={mode}
-            onChange={(event) =>
-              setMode(event.target.value as DraftSessionCreate["mode"])
-            }
-          >
-            <option value="live">Live room</option>
-            <option value="mock">Mock draft</option>
-          </select>
         </label>
         <label>
           Format
@@ -431,8 +418,9 @@ export function DraftWorkspace() {
     setCandidates(null);
     try {
       const result = await getDraftSessions(nextBoardId);
-      setSessions(result.items);
-      if (result.items[0]) await loadSession(result.items[0].id);
+      const liveSessions = result.items.filter((item) => item.mode === "live");
+      setSessions(liveSessions);
+      if (liveSessions[0]) await loadSession(liveSessions[0].id);
     } catch (caught) {
       setError(formatError(caught));
     } finally {

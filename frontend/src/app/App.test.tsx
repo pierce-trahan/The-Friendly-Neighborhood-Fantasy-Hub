@@ -64,5 +64,6 @@ describe("App", () => {
     ).toBeEnabled();
     expect(screen.getByRole("button", { name: "Gut ELO" })).toBeEnabled();
     expect(screen.getByRole("button", { name: "Draft room" })).toBeEnabled();
+    expect(screen.getByRole("button", { name: "Mock lab" })).toBeEnabled();
   });
 });
