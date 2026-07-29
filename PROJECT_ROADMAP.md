@@ -311,6 +311,9 @@ Exit criteria:
 
 ### Phase 6 — Post-Draft Report
 
+**Status:** Proposed for product-owner approval as of 2026-07-29. See the
+[Phase 6 Post-Draft Report specification](docs/specs/phase-6-post-draft-report.md).
+
 **Goal:** Turn each completed mock or live draft into a learning artifact.
 
 Deliverables:
