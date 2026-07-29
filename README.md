@@ -85,14 +85,16 @@ team names; revision-guarded pick entry, correction, and undo; keyboard
 controls; crash recovery; and no required ADP exposure. See the
 [draft-room specification](docs/specs/phase-3-draft-room.md).
 
-Phase 4 is approved for bounded implementation. The Mock Draft Engine and
-Strategy Lab contract uses seeded, versioned CPU decisions; one saved CPU pick
-at a time; strategy checkpoints that never force a selection; explicit
-history consent; and visible limits when the current data cannot support
-player-level timeline claims. See the
+Phase 4 is complete. The Mock Draft Engine and Strategy Lab uses seeded,
+versioned CPU decisions; one saved CPU pick at a time; strategy checkpoints
+that never force a selection; explicit history consent; and visible limits
+when the current data cannot support player-level timeline claims. See the
 [mock and strategy specification](docs/specs/phase-4-mock-strategy-lab.md) and
 the bounded
-[desktop Mock Lab contract](docs/specs/phase-4-desktop-mock-strategy.md).
+[desktop Mock Lab contract](docs/specs/phase-4-desktop-mock-strategy.md). The
+[Phase 4 live workflow audit](docs/audits/phase-4-live-workflow-audit.md)
+records the passing 10-team, 24-round offline simulation and full repository
+verification.
 
 ## Local Setup
 
