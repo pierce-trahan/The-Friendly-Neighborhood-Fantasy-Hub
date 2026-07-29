@@ -649,7 +649,14 @@
       "AlertEvidenceSnapshotSummaryRead": {
         "properties": {
           "compatibility_state": {
-            "const": "not_evaluated",
+            "enum": [
+              "not_evaluated",
+              "exact",
+              "family",
+              "partial",
+              "incompatible",
+              "unknown"
+            ],
             "title": "Compatibility State",
             "type": "string"
           },
@@ -1458,6 +1465,276 @@
           "reduced_motion"
         ],
         "title": "DisplayConfiguration",
+        "type": "object"
+      },
+      "DraftAlertConfigurationCreate": {
+        "additionalProperties": false,
+        "properties": {
+          "draft_revision": {
+            "minimum": 0.0,
+            "title": "Draft Revision",
+            "type": "integer"
+          },
+          "eligible_tier_count": {
+            "default": 2,
+            "maximum": 100.0,
+            "minimum": 0.0,
+            "title": "Eligible Tier Count",
+            "type": "integer"
+          },
+          "enabled": {
+            "default": true,
+            "title": "Enabled",
+            "type": "boolean"
+          },
+          "evidence_snapshot_id": {
+            "maxLength": 36,
+            "minLength": 1,
+            "title": "Evidence Snapshot Id",
+            "type": "string"
+          },
+          "minimum_conservative_gap": {
+            "default": 6,
+            "maximum": 10000.0,
+            "minimum": 0.0,
+            "title": "Minimum Conservative Gap",
+            "type": "integer"
+          },
+          "personal_qualifier_mode": {
+            "default": "tier_or_favorite",
+            "enum": [
+              "tier_or_favorite",
+              "tier_only",
+              "favorite_only"
+            ],
+            "title": "Personal Qualifier Mode",
+            "type": "string"
+          },
+          "snooze_pick_count": {
+            "default": 5,
+            "maximum": 100.0,
+            "minimum": 1.0,
+            "title": "Snooze Pick Count",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "draft_revision",
+          "evidence_snapshot_id"
+        ],
+        "title": "DraftAlertConfigurationCreate",
+        "type": "object"
+      },
+      "DraftAlertConfigurationPatch": {
+        "additionalProperties": false,
+        "properties": {
+          "configuration_revision": {
+            "minimum": 0.0,
+            "title": "Configuration Revision",
+            "type": "integer"
+          },
+          "draft_revision": {
+            "minimum": 0.0,
+            "title": "Draft Revision",
+            "type": "integer"
+          },
+          "eligible_tier_count": {
+            "anyOf": [
+              {
+                "maximum": 100.0,
+                "minimum": 0.0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Eligible Tier Count"
+          },
+          "enabled": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Enabled"
+          },
+          "evidence_snapshot_id": {
+            "anyOf": [
+              {
+                "maxLength": 36,
+                "minLength": 1,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Evidence Snapshot Id"
+          },
+          "minimum_conservative_gap": {
+            "anyOf": [
+              {
+                "maximum": 10000.0,
+                "minimum": 0.0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Minimum Conservative Gap"
+          },
+          "personal_qualifier_mode": {
+            "anyOf": [
+              {
+                "enum": [
+                  "tier_or_favorite",
+                  "tier_only",
+                  "favorite_only"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Personal Qualifier Mode"
+          },
+          "snooze_pick_count": {
+            "anyOf": [
+              {
+                "maximum": 100.0,
+                "minimum": 1.0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Snooze Pick Count"
+          }
+        },
+        "required": [
+          "draft_revision",
+          "configuration_revision"
+        ],
+        "title": "DraftAlertConfigurationPatch",
+        "type": "object"
+      },
+      "DraftAlertConfigurationRead": {
+        "properties": {
+          "compatibility_reasons": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Compatibility Reasons",
+            "type": "array"
+          },
+          "created_at": {
+            "title": "Created At",
+            "type": "string"
+          },
+          "draft_revision": {
+            "title": "Draft Revision",
+            "type": "integer"
+          },
+          "draft_session_id": {
+            "title": "Draft Session Id",
+            "type": "string"
+          },
+          "eligible_tier_count": {
+            "title": "Eligible Tier Count",
+            "type": "integer"
+          },
+          "enabled": {
+            "title": "Enabled",
+            "type": "boolean"
+          },
+          "engine_version": {
+            "title": "Engine Version",
+            "type": "string"
+          },
+          "evidence_snapshot": {
+            "$ref": "#/components/schemas/AlertEvidenceSnapshotSummaryRead"
+          },
+          "evidence_snapshot_id": {
+            "title": "Evidence Snapshot Id",
+            "type": "string"
+          },
+          "format_compatibility": {
+            "enum": [
+              "exact",
+              "family",
+              "partial",
+              "incompatible",
+              "unknown"
+            ],
+            "title": "Format Compatibility",
+            "type": "string"
+          },
+          "freshness_policy_version": {
+            "title": "Freshness Policy Version",
+            "type": "string"
+          },
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "minimum_conservative_gap": {
+            "title": "Minimum Conservative Gap",
+            "type": "integer"
+          },
+          "personal_qualifier_mode": {
+            "enum": [
+              "tier_or_favorite",
+              "tier_only",
+              "favorite_only"
+            ],
+            "title": "Personal Qualifier Mode",
+            "type": "string"
+          },
+          "revision": {
+            "title": "Revision",
+            "type": "integer"
+          },
+          "rule_version": {
+            "title": "Rule Version",
+            "type": "string"
+          },
+          "snooze_pick_count": {
+            "title": "Snooze Pick Count",
+            "type": "integer"
+          },
+          "updated_at": {
+            "title": "Updated At",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "draft_session_id",
+          "draft_revision",
+          "evidence_snapshot_id",
+          "enabled",
+          "personal_qualifier_mode",
+          "eligible_tier_count",
+          "minimum_conservative_gap",
+          "snooze_pick_count",
+          "engine_version",
+          "rule_version",
+          "freshness_policy_version",
+          "revision",
+          "format_compatibility",
+          "compatibility_reasons",
+          "evidence_snapshot",
+          "created_at",
+          "updated_at"
+        ],
+        "title": "DraftAlertConfigurationRead",
         "type": "object"
       },
       "DraftBlindCandidateListResponse": {
@@ -6486,6 +6763,148 @@
         "summary": "Update Draft Session",
         "tags": [
           "drafts"
+        ]
+      }
+    },
+    "/api/v1/draft-sessions/{session_id}/alert-configuration": {
+      "get": {
+        "operationId": "get_draft_alert_configuration_api_v1_draft_sessions__session_id__alert_configuration_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "session_id",
+            "required": true,
+            "schema": {
+              "title": "Session Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DraftAlertConfigurationRead"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Get Draft Alert Configuration",
+        "tags": [
+          "alerts"
+        ]
+      },
+      "patch": {
+        "operationId": "patch_draft_alert_configuration_api_v1_draft_sessions__session_id__alert_configuration_patch",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "session_id",
+            "required": true,
+            "schema": {
+              "title": "Session Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DraftAlertConfigurationPatch"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DraftAlertConfigurationRead"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Patch Draft Alert Configuration",
+        "tags": [
+          "alerts"
+        ]
+      },
+      "post": {
+        "operationId": "attach_draft_alert_configuration_api_v1_draft_sessions__session_id__alert_configuration_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "session_id",
+            "required": true,
+            "schema": {
+              "title": "Session Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DraftAlertConfigurationCreate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DraftAlertConfigurationRead"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Attach Draft Alert Configuration",
+        "tags": [
+          "alerts"
         ]
       }
     },

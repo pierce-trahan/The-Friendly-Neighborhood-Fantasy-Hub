@@ -4,6 +4,11 @@ from fastapi import APIRouter, Depends, Query, Request
 from sqlalchemy.orm import Session
 
 from friendly_hub.db.engine import get_session
+from friendly_hub.domains.alerts.configuration_service import (
+    create_draft_alert_configuration,
+    read_draft_alert_configuration,
+    update_draft_alert_configuration,
+)
 from friendly_hub.domains.alerts.schemas import (
     AlertEvidenceCommitRequest,
     AlertEvidenceCommitResponse,
@@ -12,6 +17,9 @@ from friendly_hub.domains.alerts.schemas import (
     AlertEvidencePreviewRequest,
     AlertEvidenceSnapshotListResponse,
     AlertEvidenceSnapshotSummaryRead,
+    DraftAlertConfigurationCreate,
+    DraftAlertConfigurationPatch,
+    DraftAlertConfigurationRead,
 )
 from friendly_hub.domains.alerts.service import (
     AlertEvidencePreviewStore,
@@ -127,3 +135,50 @@ def get_evidence_snapshot(
     session: SessionDependency,
 ) -> AlertEvidenceSnapshotSummaryRead:
     return read_alert_evidence_snapshot(session, snapshot_id)
+
+
+@router.post(
+    "/draft-sessions/{session_id}/alert-configuration",
+    response_model=DraftAlertConfigurationRead,
+    status_code=201,
+)
+def attach_draft_alert_configuration(
+    session_id: str,
+    payload: DraftAlertConfigurationCreate,
+    session: SessionDependency,
+) -> DraftAlertConfigurationRead:
+    return create_draft_alert_configuration(
+        session,
+        session_id=session_id,
+        payload=payload,
+    )
+
+
+@router.get(
+    "/draft-sessions/{session_id}/alert-configuration",
+    response_model=DraftAlertConfigurationRead,
+)
+def get_draft_alert_configuration(
+    session_id: str,
+    session: SessionDependency,
+) -> DraftAlertConfigurationRead:
+    return read_draft_alert_configuration(
+        session,
+        session_id=session_id,
+    )
+
+
+@router.patch(
+    "/draft-sessions/{session_id}/alert-configuration",
+    response_model=DraftAlertConfigurationRead,
+)
+def patch_draft_alert_configuration(
+    session_id: str,
+    payload: DraftAlertConfigurationPatch,
+    session: SessionDependency,
+) -> DraftAlertConfigurationRead:
+    return update_draft_alert_configuration(
+        session,
+        session_id=session_id,
+        payload=payload,
+    )

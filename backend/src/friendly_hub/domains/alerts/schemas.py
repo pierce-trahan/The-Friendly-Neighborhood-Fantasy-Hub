@@ -3,7 +3,13 @@ from __future__ import annotations
 from datetime import datetime
 from typing import Literal
 
-from pydantic import BaseModel, Field, field_validator, model_validator
+from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
+
+from friendly_hub.domains.alerts.definitions import (
+    DEFAULT_ELIGIBLE_TIER_COUNT,
+    DEFAULT_SNOOZE_PICK_COUNT,
+    DEFAULT_VALUE_GAP_MINIMUM,
+)
 
 SourceKind = Literal["synthetic", "user_entered", "public", "licensed"]
 LeagueType = Literal["dynasty", "keeper", "redraft"]
@@ -17,6 +23,18 @@ MappingStatus = Literal[
     "unmatched",
     "ignored",
     "invalid",
+]
+FormatCompatibility = Literal[
+    "exact",
+    "family",
+    "partial",
+    "incompatible",
+    "unknown",
+]
+PersonalQualifierMode = Literal[
+    "tier_or_favorite",
+    "tier_only",
+    "favorite_only",
 ]
 
 
@@ -89,9 +107,7 @@ class AlertEvidencePreviewRequest(BaseModel):
         has_name = self.pick_filename is not None
         has_text = self.pick_csv_text is not None
         if has_name != has_text:
-            raise ValueError(
-                "pick_filename and pick_csv_text must be provided together"
-            )
+            raise ValueError("pick_filename and pick_csv_text must be provided together")
         return self
 
 
@@ -200,7 +216,14 @@ class AlertEvidenceSnapshotSummaryRead(BaseModel):
     pick_value_count: int
     expected_selection_available: bool
     pick_curve_available: bool
-    compatibility_state: Literal["not_evaluated"]
+    compatibility_state: Literal[
+        "not_evaluated",
+        "exact",
+        "family",
+        "partial",
+        "incompatible",
+        "unknown",
+    ]
     limitation_codes: list[str]
 
 
@@ -214,3 +237,79 @@ class AlertEvidenceSnapshotListResponse(BaseModel):
 class AlertEvidenceCommitResponse(BaseModel):
     snapshot: AlertEvidenceSnapshotSummaryRead
     idempotent: bool
+
+
+class DraftAlertConfigurationCreate(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    draft_revision: int = Field(ge=0)
+    evidence_snapshot_id: str = Field(min_length=1, max_length=36)
+    enabled: bool = True
+    personal_qualifier_mode: PersonalQualifierMode = "tier_or_favorite"
+    eligible_tier_count: int = Field(
+        default=DEFAULT_ELIGIBLE_TIER_COUNT,
+        ge=0,
+        le=100,
+    )
+    minimum_conservative_gap: int = Field(
+        default=DEFAULT_VALUE_GAP_MINIMUM,
+        ge=0,
+        le=10_000,
+    )
+    snooze_pick_count: int = Field(
+        default=DEFAULT_SNOOZE_PICK_COUNT,
+        ge=1,
+        le=100,
+    )
+
+
+class DraftAlertConfigurationPatch(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    draft_revision: int = Field(ge=0)
+    configuration_revision: int = Field(ge=0)
+    evidence_snapshot_id: str | None = Field(
+        default=None,
+        min_length=1,
+        max_length=36,
+    )
+    enabled: bool | None = None
+    personal_qualifier_mode: PersonalQualifierMode | None = None
+    eligible_tier_count: int | None = Field(default=None, ge=0, le=100)
+    minimum_conservative_gap: int | None = Field(
+        default=None,
+        ge=0,
+        le=10_000,
+    )
+    snooze_pick_count: int | None = Field(default=None, ge=1, le=100)
+
+    @model_validator(mode="after")
+    def require_change(self) -> DraftAlertConfigurationPatch:
+        changes = self.model_dump(
+            exclude={"draft_revision", "configuration_revision"},
+            exclude_none=True,
+        )
+        if not changes:
+            raise ValueError("at least one configuration change is required")
+        return self
+
+
+class DraftAlertConfigurationRead(BaseModel):
+    id: str
+    draft_session_id: str
+    draft_revision: int
+    evidence_snapshot_id: str
+    enabled: bool
+    personal_qualifier_mode: PersonalQualifierMode
+    eligible_tier_count: int
+    minimum_conservative_gap: int
+    snooze_pick_count: int
+    engine_version: str
+    rule_version: str
+    freshness_policy_version: str
+    revision: int
+    format_compatibility: FormatCompatibility
+    compatibility_reasons: list[str]
+    evidence_snapshot: AlertEvidenceSnapshotSummaryRead
+    created_at: str
+    updated_at: str
