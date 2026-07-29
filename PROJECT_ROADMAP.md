@@ -236,6 +236,9 @@ Exit criteria:
 
 ### Phase 4 — Mock Draft Engine and Strategy Lab
 
+**Status:** Complete as of 2026-07-28. See the
+[Phase 4 live workflow audit](docs/audits/phase-4-live-workflow-audit.md).
+
 **Goal:** Let users practice roster-building philosophies and learn when to pivot.
 
 Initial strategy guides:
