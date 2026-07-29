@@ -355,6 +355,57 @@ export interface paths {
         patch: operations["patch_draft_alert_configuration_api_v1_draft_sessions__session_id__alert_configuration_patch"];
         trace?: never;
     };
+    "/api/v1/draft-sessions/{session_id}/alerts": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get Draft Alerts */
+        get: operations["get_draft_alerts_api_v1_draft_sessions__session_id__alerts_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/draft-sessions/{session_id}/alerts/evaluate": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Evaluate Alerts */
+        post: operations["evaluate_alerts_api_v1_draft_sessions__session_id__alerts_evaluate_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/draft-sessions/{session_id}/alerts/{alert_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get Draft Alert */
+        get: operations["get_draft_alert_api_v1_draft_sessions__session_id__alerts__alert_id__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/draft-sessions/{session_id}/candidates": {
         parameters: {
             query?: never;
@@ -837,6 +888,64 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
+        /** AlertComponentRead */
+        AlertComponentRead: {
+            /** Band */
+            band: string | null;
+            /** Reasons */
+            reasons: string[];
+            /**
+             * State
+             * @enum {string}
+             */
+            state: "available" | "unavailable";
+        };
+        /** AlertDetailRead */
+        AlertDetailRead: {
+            current_evidence: components["schemas"]["AlertEvidenceRead"];
+            event: components["schemas"]["AlertEventRead"];
+            original_evidence: components["schemas"]["AlertEvidenceRead"];
+            player: components["schemas"]["AlertPlayerRead"];
+            trade_reference: components["schemas"]["AlertTradeReferenceRead"] | null;
+        };
+        /** AlertEventRead */
+        AlertEventRead: {
+            /**
+             * Confidence
+             * @enum {string}
+             */
+            confidence: "high" | "medium" | "low" | "unavailable";
+            /** Created At */
+            created_at: string;
+            evidence: components["schemas"]["AlertEvidenceRead"];
+            /** Explanation Template Keys */
+            explanation_template_keys: string[];
+            /** First Confirmed Draft Revision */
+            first_confirmed_draft_revision: number;
+            /**
+             * Freshness
+             * @enum {string}
+             */
+            freshness: "fresh" | "aging" | "stale" | "expired" | "invalid";
+            /** Id */
+            id: string;
+            /**
+             * Kind
+             * @enum {string}
+             */
+            kind: "value_watch" | "return_risk" | "trade_up_window" | "evidence_warning";
+            /** Last Confirmed Draft Revision */
+            last_confirmed_draft_revision: number;
+            /** Limitation Codes */
+            limitation_codes: string[];
+            /**
+             * Status
+             * @enum {string}
+             */
+            status: "open" | "snoozed" | "dismissed" | "superseded";
+            /** Updated At */
+            updated_at: string;
+        };
         /** AlertEvidenceCandidateRead */
         AlertEvidenceCandidateRead: {
             /** Display Name */
@@ -1060,6 +1169,54 @@ export interface components {
              */
             player_filename: string;
         };
+        /** AlertEvidenceRead */
+        AlertEvidenceRead: {
+            /** Components */
+            components: {
+                [key: string]: components["schemas"]["AlertComponentRead"];
+            };
+            /** Confidence Reasons */
+            confidence_reasons: string[];
+            /** Configuration Revision */
+            configuration_revision: number;
+            /**
+             * Cost Availability
+             * @enum {string}
+             */
+            cost_availability: "available" | "unavailable" | "not_applicable";
+            /** Current Overall Pick */
+            current_overall_pick: number | null;
+            /** Draft Revision */
+            draft_revision: number;
+            /** Engine Version */
+            engine_version: string;
+            expected_selection: components["schemas"]["AlertRangeRead"] | null;
+            /**
+             * Format Compatibility
+             * @enum {string}
+             */
+            format_compatibility: "exact" | "family" | "partial" | "incompatible" | "unknown";
+            /** Freshness Policy Version */
+            freshness_policy_version: string;
+            /** Limitation Codes */
+            limitation_codes: string[];
+            market_gap: components["schemas"]["AlertRangeRead"] | null;
+            /** Next User Pick */
+            next_user_pick: number | null;
+            personal_reason: components["schemas"]["AlertPersonalReasonRead"];
+            /**
+             * Return Risk
+             * @enum {string}
+             */
+            return_risk: "likely_to_return" | "uncertain" | "unlikely_to_return" | "unavailable";
+            /** Rule Version */
+            rule_version: string;
+            /** Source As Of */
+            source_as_of: string;
+            /** Source Label */
+            source_label: string;
+            target_pick_window: components["schemas"]["AlertRangeRead"] | null;
+        };
         /** AlertEvidenceSnapshotListResponse */
         AlertEvidenceSnapshotListResponse: {
             /** Items */
@@ -1134,6 +1291,74 @@ export interface components {
             namespace: string;
             /** Permitted Use Confirmed */
             permitted_use_confirmed: boolean;
+        };
+        /** AlertGroupRead */
+        AlertGroupRead: {
+            /** Events */
+            events: components["schemas"]["AlertEventRead"][];
+            player: components["schemas"]["AlertPlayerRead"];
+        };
+        /** AlertPersonalReasonRead */
+        AlertPersonalReasonRead: {
+            /** Favorite */
+            favorite: boolean;
+            /** Manual Rank */
+            manual_rank: number | null;
+            /** Qualified */
+            qualified: boolean;
+            /**
+             * Qualifier Mode
+             * @enum {string}
+             */
+            qualifier_mode: "tier_or_favorite" | "tier_only" | "favorite_only";
+            /** Tier Order */
+            tier_order: number | null;
+        };
+        /** AlertPickOnlyReferenceRead */
+        AlertPickOnlyReferenceRead: {
+            /** Label */
+            label: string;
+            /** Round */
+            round: number;
+            /** Season Offset */
+            season_offset: number;
+            value: components["schemas"]["AlertRangeRead"];
+        };
+        /** AlertPlayerRead */
+        AlertPlayerRead: {
+            /** Display Name */
+            display_name: string;
+            /** Id */
+            id: string;
+            /** Primary Position */
+            primary_position: string;
+            /** Team */
+            team: string | null;
+        };
+        /** AlertRangeRead */
+        AlertRangeRead: {
+            /** High */
+            high: number;
+            /** Low */
+            low: number;
+        };
+        /** AlertTradeReferenceRead */
+        AlertTradeReferenceRead: {
+            /**
+             * Cost Availability
+             * @enum {string}
+             */
+            cost_availability: "available" | "unavailable";
+            /** Explanation Template Key */
+            explanation_template_key: string;
+            incremental_cost: components["schemas"]["AlertRangeRead"] | null;
+            /** Limitation Codes */
+            limitation_codes: string[];
+            /** Pick Only References */
+            pick_only_references: components["schemas"]["AlertPickOnlyReferenceRead"][];
+            target_pick_window: components["schemas"]["AlertRangeRead"];
+            /** Target Round Pick Labels */
+            target_round_pick_labels: string[];
         };
         /** AppConfiguration */
         AppConfiguration: {
@@ -1425,6 +1650,77 @@ export interface components {
             snooze_pick_count: number;
             /** Updated At */
             updated_at: string;
+        };
+        /** DraftAlertEvaluationRead */
+        DraftAlertEvaluationRead: {
+            /** Candidate Count */
+            candidate_count: number;
+            /** Configuration Revision */
+            configuration_revision: number;
+            /** Current Overall Pick */
+            current_overall_pick: number | null;
+            /** Draft Revision */
+            draft_revision: number;
+            /** Evaluated At */
+            evaluated_at: string;
+            /** Id */
+            id: string;
+            /** Idempotent */
+            idempotent: boolean;
+            /** Limitation Codes */
+            limitation_codes: string[];
+            /** Next User Pick */
+            next_user_pick: number | null;
+            /** Opened Count */
+            opened_count: number;
+            /** Superseded Count */
+            superseded_count: number;
+            /** Updated Count */
+            updated_count: number;
+        };
+        /** DraftAlertEvaluationRequest */
+        DraftAlertEvaluationRequest: {
+            /** Configuration Revision */
+            configuration_revision: number;
+            /** Draft Revision */
+            draft_revision: number;
+            /** Expected Current Overall Pick */
+            expected_current_overall_pick?: number | null;
+            /** Last Evaluation Draft Revision */
+            last_evaluation_draft_revision?: number | null;
+        };
+        /** DraftAlertEvaluationResponse */
+        DraftAlertEvaluationResponse: {
+            alerts: components["schemas"]["DraftAlertListResponse"];
+            evaluation: components["schemas"]["DraftAlertEvaluationRead"];
+        };
+        /** DraftAlertListResponse */
+        DraftAlertListResponse: {
+            /** Alerts Enabled */
+            alerts_enabled: boolean;
+            /** Configuration Revision */
+            configuration_revision: number;
+            /** Draft Revision */
+            draft_revision: number;
+            /**
+             * Evaluation State
+             * @enum {string}
+             */
+            evaluation_state: "missing" | "current" | "stale";
+            /** Items */
+            items: components["schemas"]["AlertGroupRead"][];
+            latest_evaluation: components["schemas"]["DraftAlertEvaluationRead"] | null;
+            /** Limit */
+            limit: number;
+            /** Offset */
+            offset: number;
+            /**
+             * Scope
+             * @enum {string}
+             */
+            scope: "current" | "history";
+            /** Total */
+            total: number;
         };
         /** DraftBlindCandidateListResponse */
         DraftBlindCandidateListResponse: {
@@ -3675,6 +3971,108 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["DraftAlertConfigurationRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_draft_alerts_api_v1_draft_sessions__session_id__alerts_get: {
+        parameters: {
+            query?: {
+                scope?: "current" | "history";
+                limit?: number;
+                offset?: number;
+            };
+            header?: never;
+            path: {
+                session_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DraftAlertListResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    evaluate_alerts_api_v1_draft_sessions__session_id__alerts_evaluate_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                session_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["DraftAlertEvaluationRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DraftAlertEvaluationResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_draft_alert_api_v1_draft_sessions__session_id__alerts__alert_id__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                session_id: string;
+                alert_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AlertDetailRead"];
                 };
             };
             /** @description Validation Error */
