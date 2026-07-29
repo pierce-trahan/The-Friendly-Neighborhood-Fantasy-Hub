@@ -1208,6 +1208,9 @@ reviewable commit before the next step begins.
 The bounded contract for implementation step 2 is recorded in
 [Phase 5 Evidence Import and Freshness Contract](phase-5-evidence-contract.md).
 
+The bounded contract for implementation step 3 is recorded in
+[Phase 5 Deterministic Alert Engine Fixtures](phase-5-alert-engine-fixtures.md).
+
 ## Deferred Revisit
 
 - direct authenticated market-provider refresh;
