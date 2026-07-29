@@ -1,0 +1,314 @@
+{
+  "schema_version": 1,
+  "snapshot_key": "entropy-alert-evidence-synthetic-2026-07-28",
+  "source": {
+    "label": "Neighborhood Synthetic Market",
+    "kind": "synthetic",
+    "namespace": "sanitized_fixture",
+    "permitted_use_confirmed": true
+  },
+  "as_of": "2026-07-28T00:00:00Z",
+  "format": {
+    "sport": "nfl",
+    "league_type": "dynasty",
+    "draft_purpose": "startup",
+    "team_count": 10,
+    "draft_format": "snake",
+    "third_round_reversal": true,
+    "rounds": 24,
+    "qb_mode": "superflex",
+    "reception_scoring": "ppr",
+    "te_premium": true
+  },
+  "supported_draft_depth": 240,
+  "player_signals": [
+    {
+      "source_player_key": "demo-qb-001",
+      "display_name": "Marcus Hale",
+      "position": "QB",
+      "team": "CHI",
+      "expected_pick": {
+        "low": 4,
+        "high": 8
+      },
+      "market_band": "premium",
+      "win_now_production_band": "high",
+      "age_risk_band": "middle",
+      "evidence_as_of": "2026-07-28T00:00:00Z",
+      "limitation_codes": []
+    },
+    {
+      "source_player_key": "demo-rb-001",
+      "display_name": "Devin Cross Jr.",
+      "position": "RB",
+      "team": "ATL",
+      "expected_pick": {
+        "low": 12,
+        "high": 20
+      },
+      "market_band": "strong",
+      "win_now_production_band": "high",
+      "age_risk_band": "higher",
+      "evidence_as_of": "2026-07-28T00:00:00Z",
+      "limitation_codes": []
+    },
+    {
+      "source_player_key": "demo-rb-002",
+      "display_name": "Nolan Reed",
+      "position": "RB",
+      "team": "MIN",
+      "expected_pick": null,
+      "market_band": "fringe",
+      "win_now_production_band": "low",
+      "age_risk_band": "higher",
+      "evidence_as_of": "2026-07-28T00:00:00Z",
+      "limitation_codes": [
+        "EXPECTED_SELECTION_UNAVAILABLE"
+      ]
+    },
+    {
+      "source_player_key": "demo-te-001",
+      "display_name": "Theo Banks",
+      "position": "TE",
+      "team": "DET",
+      "expected_pick": {
+        "low": 35,
+        "high": 48
+      },
+      "market_band": "standard",
+      "win_now_production_band": "medium",
+      "age_risk_band": "middle",
+      "evidence_as_of": "2026-07-28T00:00:00Z",
+      "limitation_codes": []
+    },
+    {
+      "source_player_key": "demo-wr-001",
+      "display_name": "Elias North",
+      "position": "WR",
+      "team": "SEA",
+      "expected_pick": {
+        "low": 18,
+        "high": 30
+      },
+      "market_band": "strong",
+      "win_now_production_band": "medium",
+      "age_risk_band": "lower",
+      "evidence_as_of": "2026-07-28T00:00:00Z",
+      "limitation_codes": []
+    },
+    {
+      "source_player_key": "demo-wr-002",
+      "display_name": "Andre Vale III",
+      "position": "WR",
+      "team": null,
+      "expected_pick": {
+        "low": 55,
+        "high": 80
+      },
+      "market_band": "depth",
+      "win_now_production_band": null,
+      "age_risk_band": "lower",
+      "evidence_as_of": "2026-07-28T00:00:00Z",
+      "limitation_codes": [
+        "PRODUCTION_UNAVAILABLE"
+      ]
+    }
+  ],
+  "pick_values": [
+    {
+      "asset_key": "startup-pick-001",
+      "asset_type": "current_draft_pick",
+      "overall_pick": 1,
+      "season_offset": null,
+      "round": null,
+      "value_low": 980,
+      "value_high": 1020,
+      "evidence_as_of": "2026-07-28T00:00:00Z",
+      "limitation_codes": []
+    },
+    {
+      "asset_key": "startup-pick-010",
+      "asset_type": "current_draft_pick",
+      "overall_pick": 10,
+      "season_offset": null,
+      "round": null,
+      "value_low": 850,
+      "value_high": 900,
+      "evidence_as_of": "2026-07-28T00:00:00Z",
+      "limitation_codes": []
+    },
+    {
+      "asset_key": "startup-pick-020",
+      "asset_type": "current_draft_pick",
+      "overall_pick": 20,
+      "season_offset": null,
+      "round": null,
+      "value_low": 720,
+      "value_high": 770,
+      "evidence_as_of": "2026-07-28T00:00:00Z",
+      "limitation_codes": []
+    },
+    {
+      "asset_key": "startup-pick-040",
+      "asset_type": "current_draft_pick",
+      "overall_pick": 40,
+      "season_offset": null,
+      "round": null,
+      "value_low": 540,
+      "value_high": 590,
+      "evidence_as_of": "2026-07-28T00:00:00Z",
+      "limitation_codes": []
+    },
+    {
+      "asset_key": "startup-pick-060",
+      "asset_type": "current_draft_pick",
+      "overall_pick": 60,
+      "season_offset": null,
+      "round": null,
+      "value_low": 410,
+      "value_high": 450,
+      "evidence_as_of": "2026-07-28T00:00:00Z",
+      "limitation_codes": []
+    },
+    {
+      "asset_key": "startup-pick-080",
+      "asset_type": "current_draft_pick",
+      "overall_pick": 80,
+      "season_offset": null,
+      "round": null,
+      "value_low": 310,
+      "value_high": 345,
+      "evidence_as_of": "2026-07-28T00:00:00Z",
+      "limitation_codes": []
+    },
+    {
+      "asset_key": "startup-pick-120",
+      "asset_type": "current_draft_pick",
+      "overall_pick": 120,
+      "season_offset": null,
+      "round": null,
+      "value_low": 190,
+      "value_high": 220,
+      "evidence_as_of": "2026-07-28T00:00:00Z",
+      "limitation_codes": []
+    },
+    {
+      "asset_key": "startup-pick-180",
+      "asset_type": "current_draft_pick",
+      "overall_pick": 180,
+      "season_offset": null,
+      "round": null,
+      "value_low": 85,
+      "value_high": 105,
+      "evidence_as_of": "2026-07-28T00:00:00Z",
+      "limitation_codes": []
+    },
+    {
+      "asset_key": "startup-pick-240",
+      "asset_type": "current_draft_pick",
+      "overall_pick": 240,
+      "season_offset": null,
+      "round": null,
+      "value_low": 20,
+      "value_high": 30,
+      "evidence_as_of": "2026-07-28T00:00:00Z",
+      "limitation_codes": []
+    },
+    {
+      "asset_key": "future-y1-r1",
+      "asset_type": "future_round",
+      "overall_pick": null,
+      "season_offset": 1,
+      "round": 1,
+      "value_low": 500,
+      "value_high": 650,
+      "evidence_as_of": "2026-07-28T00:00:00Z",
+      "limitation_codes": []
+    },
+    {
+      "asset_key": "future-y1-r2",
+      "asset_type": "future_round",
+      "overall_pick": null,
+      "season_offset": 1,
+      "round": 2,
+      "value_low": 210,
+      "value_high": 300,
+      "evidence_as_of": "2026-07-28T00:00:00Z",
+      "limitation_codes": []
+    },
+    {
+      "asset_key": "future-y1-r3",
+      "asset_type": "future_round",
+      "overall_pick": null,
+      "season_offset": 1,
+      "round": 3,
+      "value_low": 80,
+      "value_high": 140,
+      "evidence_as_of": "2026-07-28T00:00:00Z",
+      "limitation_codes": []
+    },
+    {
+      "asset_key": "future-y1-r4",
+      "asset_type": "future_round",
+      "overall_pick": null,
+      "season_offset": 1,
+      "round": 4,
+      "value_low": 25,
+      "value_high": 60,
+      "evidence_as_of": "2026-07-28T00:00:00Z",
+      "limitation_codes": []
+    },
+    {
+      "asset_key": "future-y2-r1",
+      "asset_type": "future_round",
+      "overall_pick": null,
+      "season_offset": 2,
+      "round": 1,
+      "value_low": 430,
+      "value_high": 570,
+      "evidence_as_of": "2026-07-28T00:00:00Z",
+      "limitation_codes": [
+        "FUTURE_DISCOUNT_ASSUMPTION"
+      ]
+    },
+    {
+      "asset_key": "future-y2-r2",
+      "asset_type": "future_round",
+      "overall_pick": null,
+      "season_offset": 2,
+      "round": 2,
+      "value_low": 180,
+      "value_high": 260,
+      "evidence_as_of": "2026-07-28T00:00:00Z",
+      "limitation_codes": [
+        "FUTURE_DISCOUNT_ASSUMPTION"
+      ]
+    },
+    {
+      "asset_key": "future-y2-r3",
+      "asset_type": "future_round",
+      "overall_pick": null,
+      "season_offset": 2,
+      "round": 3,
+      "value_low": 65,
+      "value_high": 120,
+      "evidence_as_of": "2026-07-28T00:00:00Z",
+      "limitation_codes": [
+        "FUTURE_DISCOUNT_ASSUMPTION"
+      ]
+    },
+    {
+      "asset_key": "future-y2-r4",
+      "asset_type": "future_round",
+      "overall_pick": null,
+      "season_offset": 2,
+      "round": 4,
+      "value_low": 20,
+      "value_high": 50,
+      "evidence_as_of": "2026-07-28T00:00:00Z",
+      "limitation_codes": [
+        "FUTURE_DISCOUNT_ASSUMPTION"
+      ]
+    }
+  ]
+}

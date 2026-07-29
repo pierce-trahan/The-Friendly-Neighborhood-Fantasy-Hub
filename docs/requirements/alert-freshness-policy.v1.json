@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "policy_version": "alert-freshness-v1",
+  "timezone": "UTC",
+  "future_timestamp_status": "invalid",
+  "elapsed_day_rules": {
+    "expected_selection": {
+      "fresh_through_days": 7,
+      "aging_through_days": 21,
+      "stale_through_days": 45,
+      "after_status": "expired"
+    },
+    "dynasty_market": {
+      "fresh_through_days": 7,
+      "aging_through_days": 21,
+      "stale_through_days": 45,
+      "after_status": "expired"
+    },
+    "pick_value": {
+      "fresh_through_days": 30,
+      "aging_through_days": 60,
+      "stale_through_days": 90,
+      "after_status": "expired"
+    },
+    "in_season_production": {
+      "fresh_through_days": 14,
+      "aging_through_days": 30,
+      "stale_through_days": 60,
+      "after_status": "expired"
+    }
+  },
+  "season_label_rules": {
+    "offseason_production": {
+      "current": "fresh",
+      "one_prior": "aging",
+      "older": "stale",
+      "unknown": "expired"
+    }
+  },
+  "validity_rules": {
+    "age_risk_birthdate": {
+      "valid": "fresh",
+      "source_conflict": "stale",
+      "missing_or_invalid": "expired"
+    }
+  }
+}

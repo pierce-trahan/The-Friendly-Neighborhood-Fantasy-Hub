@@ -1,0 +1,151 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://friendly-neighborhood-fantasy-hub.local/schemas/alert-freshness-policy.schema.json",
+  "title": "Friendly Neighborhood Fantasy Hub Alert Freshness Policy",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "policy_version",
+    "timezone",
+    "future_timestamp_status",
+    "elapsed_day_rules",
+    "season_label_rules",
+    "validity_rules"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "policy_version": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 64,
+      "pattern": "^[a-z0-9][a-z0-9._-]*$"
+    },
+    "timezone": {
+      "const": "UTC"
+    },
+    "future_timestamp_status": {
+      "const": "invalid"
+    },
+    "elapsed_day_rules": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "expected_selection",
+        "dynasty_market",
+        "pick_value",
+        "in_season_production"
+      ],
+      "properties": {
+        "expected_selection": {
+          "$ref": "#/$defs/elapsedRule"
+        },
+        "dynasty_market": {
+          "$ref": "#/$defs/elapsedRule"
+        },
+        "pick_value": {
+          "$ref": "#/$defs/elapsedRule"
+        },
+        "in_season_production": {
+          "$ref": "#/$defs/elapsedRule"
+        }
+      }
+    },
+    "season_label_rules": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "offseason_production"
+      ],
+      "properties": {
+        "offseason_production": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "current",
+            "one_prior",
+            "older",
+            "unknown"
+          ],
+          "properties": {
+            "current": {
+              "const": "fresh"
+            },
+            "one_prior": {
+              "const": "aging"
+            },
+            "older": {
+              "const": "stale"
+            },
+            "unknown": {
+              "const": "expired"
+            }
+          }
+        }
+      }
+    },
+    "validity_rules": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "age_risk_birthdate"
+      ],
+      "properties": {
+        "age_risk_birthdate": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "valid",
+            "source_conflict",
+            "missing_or_invalid"
+          ],
+          "properties": {
+            "valid": {
+              "const": "fresh"
+            },
+            "source_conflict": {
+              "const": "stale"
+            },
+            "missing_or_invalid": {
+              "const": "expired"
+            }
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "elapsedRule": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "fresh_through_days",
+        "aging_through_days",
+        "stale_through_days",
+        "after_status"
+      ],
+      "properties": {
+        "fresh_through_days": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 3650
+        },
+        "aging_through_days": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 3650
+        },
+        "stale_through_days": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 3650
+        },
+        "after_status": {
+          "const": "expired"
+        }
+      }
+    }
+  }
+}

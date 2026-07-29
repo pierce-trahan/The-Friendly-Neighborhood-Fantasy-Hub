@@ -1205,6 +1205,9 @@ Phase 5 is complete when:
 Each implementation step receives its own bounded contract, tests, audit, and
 reviewable commit before the next step begins.
 
+The bounded contract for implementation step 2 is recorded in
+[Phase 5 Evidence Import and Freshness Contract](phase-5-evidence-contract.md).
+
 ## Deferred Revisit
 
 - direct authenticated market-provider refresh;
