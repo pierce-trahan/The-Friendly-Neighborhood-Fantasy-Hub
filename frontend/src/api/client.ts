@@ -31,6 +31,35 @@ export type DraftSessionCreate = components["schemas"]["DraftSessionCreate"];
 export type DraftSessionList =
   components["schemas"]["DraftSessionListResponse"];
 export type DraftSessionPatch = components["schemas"]["DraftSessionPatch"];
+export type AlertDetail = components["schemas"]["AlertDetailRead"];
+export type AlertEvent = components["schemas"]["AlertEventRead"];
+export type AlertGroup = components["schemas"]["AlertGroupRead"];
+export type DraftAlertConfiguration =
+  components["schemas"]["DraftAlertConfigurationRead"];
+export type DraftAlertConfigurationCreate =
+  components["schemas"]["DraftAlertConfigurationCreate"];
+export type DraftAlertConfigurationPatch =
+  components["schemas"]["DraftAlertConfigurationPatch"];
+export type DraftAlertEvaluationRequest =
+  components["schemas"]["DraftAlertEvaluationRequest"];
+export type DraftAlertEvaluationResponse =
+  components["schemas"]["DraftAlertEvaluationResponse"];
+export type DraftAlertEventStatusPatch =
+  components["schemas"]["DraftAlertEventStatusPatch"];
+export type DraftAlertList =
+  components["schemas"]["DraftAlertListResponse"];
+export type AlertEvidenceSnapshotList =
+  components["schemas"]["AlertEvidenceSnapshotListResponse"];
+export type AlertEvidenceSnapshot =
+  components["schemas"]["AlertEvidenceSnapshotSummaryRead"];
+export type AlertEvidencePreview =
+  components["schemas"]["AlertEvidencePreviewRead"];
+export type AlertEvidencePreviewRequest =
+  components["schemas"]["AlertEvidencePreviewRequest"];
+export type AlertEvidenceMappingDecision =
+  components["schemas"]["AlertEvidenceMappingDecisionRequest"];
+export type AlertEvidenceCommitResponse =
+  components["schemas"]["AlertEvidenceCommitResponse"];
 export type MockCpuPickCreate = components["schemas"]["MockCpuPickCreate"];
 export type MockGuidanceStatusPatch =
   components["schemas"]["MockGuidanceStatusPatch"];
@@ -76,12 +105,19 @@ type ErrorEnvelope = {
 export class ApiError extends Error {
   action?: string;
   correlationId?: string;
+  status?: number;
 
-  constructor(message: string, action?: string, correlationId?: string) {
+  constructor(
+    message: string,
+    action?: string,
+    correlationId?: string,
+    status?: number,
+  ) {
     super(message);
     this.name = "ApiError";
     this.action = action;
     this.correlationId = correlationId;
+    this.status = status;
   }
 }
 
@@ -106,6 +142,7 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
       payload.error?.message ?? "The Hub could not complete that request.",
       payload.error?.action,
       payload.error?.correlation_id,
+      response.status,
     );
   }
 
@@ -420,6 +457,135 @@ export function undoDraftPick(
 
 export function getDraftExportUrl(sessionId: string): string {
   return `/api/v1/draft-sessions/${encodeURIComponent(sessionId)}/export.csv`;
+}
+
+export function getAlertEvidenceSnapshots(
+  limit = 100,
+  offset = 0,
+): Promise<AlertEvidenceSnapshotList> {
+  return request(
+    `/api/v1/alert-evidence-snapshots?limit=${limit}&offset=${offset}`,
+  );
+}
+
+export function previewAlertEvidence(
+  payload: AlertEvidencePreviewRequest,
+): Promise<AlertEvidencePreview> {
+  return request("/api/v1/alert-evidence-imports/preview", {
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
+}
+
+export function saveAlertEvidenceMapping(
+  previewId: string,
+  rowId: string,
+  payload: AlertEvidenceMappingDecision,
+): Promise<AlertEvidencePreview> {
+  return request(
+    `/api/v1/alert-evidence-imports/${encodeURIComponent(previewId)}/rows/${encodeURIComponent(rowId)}/decision`,
+    {
+      method: "PUT",
+      body: JSON.stringify(payload),
+    },
+  );
+}
+
+export function commitAlertEvidence(
+  previewId: string,
+  contentHash: string,
+): Promise<AlertEvidenceCommitResponse> {
+  return request(
+    `/api/v1/alert-evidence-imports/${encodeURIComponent(previewId)}/commit`,
+    {
+      method: "POST",
+      body: JSON.stringify({
+        content_hash: contentHash,
+        permitted_use_confirmed: true,
+      }),
+    },
+  );
+}
+
+export function getDraftAlertConfiguration(
+  sessionId: string,
+): Promise<DraftAlertConfiguration> {
+  return request(
+    `/api/v1/draft-sessions/${encodeURIComponent(sessionId)}/alert-configuration`,
+  );
+}
+
+export function attachDraftAlertConfiguration(
+  sessionId: string,
+  payload: DraftAlertConfigurationCreate,
+): Promise<DraftAlertConfiguration> {
+  return request(
+    `/api/v1/draft-sessions/${encodeURIComponent(sessionId)}/alert-configuration`,
+    {
+      method: "POST",
+      body: JSON.stringify(payload),
+    },
+  );
+}
+
+export function updateDraftAlertConfiguration(
+  sessionId: string,
+  payload: DraftAlertConfigurationPatch,
+): Promise<DraftAlertConfiguration> {
+  return request(
+    `/api/v1/draft-sessions/${encodeURIComponent(sessionId)}/alert-configuration`,
+    {
+      method: "PATCH",
+      body: JSON.stringify(payload),
+    },
+  );
+}
+
+export function evaluateDraftAlerts(
+  sessionId: string,
+  payload: DraftAlertEvaluationRequest,
+): Promise<DraftAlertEvaluationResponse> {
+  return request(
+    `/api/v1/draft-sessions/${encodeURIComponent(sessionId)}/alerts/evaluate`,
+    {
+      method: "POST",
+      body: JSON.stringify(payload),
+    },
+  );
+}
+
+export function getDraftAlerts(
+  sessionId: string,
+  scope: DraftAlertList["scope"] = "current",
+  limit = 25,
+  offset = 0,
+): Promise<DraftAlertList> {
+  return request(
+    `/api/v1/draft-sessions/${encodeURIComponent(sessionId)}/alerts?scope=${scope}&limit=${limit}&offset=${offset}`,
+  );
+}
+
+export function getDraftAlert(
+  sessionId: string,
+  alertId: string,
+): Promise<AlertDetail> {
+  return request(
+    `/api/v1/draft-sessions/${encodeURIComponent(sessionId)}/alerts/${encodeURIComponent(alertId)}`,
+  );
+}
+
+export function updateDraftAlertStatus(
+  sessionId: string,
+  alertId: string,
+  payload: DraftAlertEventStatusPatch,
+): Promise<AlertDetail> {
+  return request(
+    `/api/v1/draft-sessions/${encodeURIComponent(sessionId)}/alerts/${encodeURIComponent(alertId)}`,
+    {
+      method: "PATCH",
+      body: JSON.stringify(payload),
+    },
+  );
 }
 
 export function getMockSessions(

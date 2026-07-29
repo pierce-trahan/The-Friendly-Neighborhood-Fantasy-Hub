@@ -15,6 +15,7 @@ import {
   type DraftSession,
   type DraftSessionCreate,
   type DraftSessionList,
+  attachDraftAlertConfiguration,
   correctDraftPick,
   createDraftSession,
   getBoards,
@@ -27,6 +28,8 @@ import {
   undoDraftPick,
   updateDraftSession,
 } from "../../api/client";
+import { DraftAlertRail } from "./DraftAlertRail";
+import { DraftDecisionSupportSetup } from "./DraftDecisionSupportSetup";
 
 type BoardSummary = BoardListResponse["items"][number];
 type SessionSummary = DraftSessionList["items"][number];
@@ -80,7 +83,10 @@ function Setup({
 }: {
   board: BoardSummary;
   busy: boolean;
-  onStart: (payload: DraftSessionCreate) => Promise<void>;
+  onStart: (
+    payload: DraftSessionCreate,
+    alertEvidenceSnapshotId: string | null,
+  ) => Promise<void>;
 }) {
   const [name, setName] = useState(`${board.name} Draft`);
   const [draftFormat, setDraftFormat] =
@@ -90,6 +96,9 @@ function Setup({
   const [roundCount, setRoundCount] = useState(24);
   const [userSlot, setUserSlot] = useState(1);
   const [timer, setTimer] = useState(120);
+  const [alertEvidenceSnapshotId, setAlertEvidenceSnapshotId] = useState<
+    string | null
+  >(null);
   const [teamNames, setTeamNames] = useState(() =>
     Array.from({ length: 10 }, (_, index) => `Team ${index + 1}`),
   );
@@ -108,20 +117,23 @@ function Setup({
 
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    await onStart({
-      name,
-      mode: "live",
-      draft_format: draftFormat,
-      third_round_reversal:
-        draftFormat === "snake" && thirdRoundReversal,
-      team_count: teamCount,
-      round_count: roundCount,
-      user_slot: Math.min(userSlot, teamCount),
-      pick_timer_seconds: timer,
-      team_names: teamNames.map(
-        (teamName, index) => teamName.trim() || `Team ${index + 1}`,
-      ),
-    });
+    await onStart(
+      {
+        name,
+        mode: "live",
+        draft_format: draftFormat,
+        third_round_reversal:
+          draftFormat === "snake" && thirdRoundReversal,
+        team_count: teamCount,
+        round_count: roundCount,
+        user_slot: Math.min(userSlot, teamCount),
+        pick_timer_seconds: timer,
+        team_names: teamNames.map(
+          (teamName, index) => teamName.trim() || `Team ${index + 1}`,
+        ),
+      },
+      alertEvidenceSnapshotId,
+    );
   }
 
   return (
@@ -208,6 +220,16 @@ function Setup({
           <small>Rounds two and three both run backward.</small>
           </label>
       </div>
+      <DraftDecisionSupportSetup
+        draftShape={{
+          team_count: teamCount,
+          round_count: roundCount,
+          draft_format: draftFormat,
+          third_round_reversal:
+            draftFormat === "snake" && thirdRoundReversal,
+        }}
+        onSnapshotChange={setAlertEvidenceSnapshotId}
+      />
       <details className="draft-team-name-editor">
         <summary>Customize team names</summary>
         <div className="draft-team-name-grid">
@@ -508,7 +530,10 @@ export function DraftWorkspace() {
     }
   }
 
-  async function startSession(payload: DraftSessionCreate) {
+  async function startSession(
+    payload: DraftSessionCreate,
+    alertEvidenceSnapshotId: string | null,
+  ) {
     if (!boardId) return;
     setBusy(true);
     setError(null);
@@ -519,7 +544,29 @@ export function DraftWorkspace() {
         sessionToSummary(created),
         ...current.filter((item) => item.id !== created.id),
       ]);
-      setNotice("Draft room created. Pick one is ready.");
+      if (alertEvidenceSnapshotId) {
+        try {
+          await attachDraftAlertConfiguration(created.id, {
+            draft_revision: created.revision,
+            evidence_snapshot_id: alertEvidenceSnapshotId,
+            enabled: true,
+            personal_qualifier_mode: "tier_or_favorite",
+            eligible_tier_count: 2,
+            minimum_conservative_gap: 6,
+            snooze_pick_count: 5,
+          });
+          setNotice(
+            "Draft room created. Decision support is attached outside Blind view.",
+          );
+        } catch (caught) {
+          setError(formatError(caught));
+          setNotice(
+            "Draft room created safely, but decision support was not attached.",
+          );
+        }
+      } else {
+        setNotice("Draft room created. Pick one is ready.");
+      }
     } catch (caught) {
       setError(formatError(caught));
     } finally {
@@ -705,7 +752,7 @@ export function DraftWorkspace() {
     <section className="draft-workspace">
       <div className="draft-workspace-heading">
         <div>
-          <p className="eyebrow">Phase 3 · Draft room</p>
+          <p className="eyebrow">Phase 5 · Draft room</p>
           <h2>Run the room without surrendering the board.</h2>
           <p>
             Every click is revision-guarded, saved immediately, and recoverable
@@ -896,7 +943,11 @@ export function DraftWorkspace() {
             </div>
           </div>
 
-          <div className="draft-operating-grid">
+          <div
+            className={`draft-operating-grid ${
+              view === "blind" ? "" : "has-alert-rail"
+            }`}
+          >
             <section className="draft-candidate-panel">
               <div className="draft-candidate-toolbar">
                 <div className="draft-view-tabs">
@@ -957,6 +1008,12 @@ export function DraftWorkspace() {
                 <span className="draft-shortcuts" aria-label="Keyboard shortcuts">
                   <kbd>/</kbd> Search <kbd>↑↓</kbd> Move <kbd>Enter</kbd> Select{" "}
                   <kbd>U</kbd> Undo
+                  {view !== "blind" && (
+                    <>
+                      {" "}
+                      <kbd>A</kbd> Alerts
+                    </>
+                  )}
                 </span>
               </div>
               <div className="draft-candidate-heading">
@@ -1070,6 +1127,8 @@ export function DraftWorkspace() {
                 </div>
               )}
             </section>
+
+            {view !== "blind" && <DraftAlertRail draft={draft} />}
 
             <aside className="draft-room-panel">
               <p className="eyebrow">Room board</p>
