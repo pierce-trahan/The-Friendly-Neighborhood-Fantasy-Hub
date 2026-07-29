@@ -104,6 +104,12 @@ prohibit automatic picks, trades, and objective-value claims. See the
 which records the passing 10-team, 24-round offline rehearsal and full
 specification traceability.
 
+Phase 6 is proposed for product-owner approval. The
+[Post-Draft Report specification](docs/specs/phase-6-post-draft-report.md)
+defines an immutable evidence ledger for completed drafts, deterministic
+starter coverage, bounded decision moments, compatible comparisons, safe HTML
+export, and visible unavailable states where V1 lacks approved evidence.
+
 ## Local Setup
 
 Requirements:
