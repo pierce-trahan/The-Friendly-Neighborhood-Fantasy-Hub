@@ -1379,6 +1379,9 @@ before the next step begins.
 The bounded contract for implementation step 2 is recorded in
 [Phase 6 Report Definitions and Expected-Fixture Contract](phase-6-report-contract.md).
 
+The bounded contract for implementation step 3 is recorded in
+[Phase 6 Deterministic Report Engine Fixtures](phase-6-report-engine-fixtures.md).
+
 ## Deferred Revisit
 
 - overall or letter grades;
