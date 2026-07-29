@@ -4,6 +4,108 @@
  */
 
 export interface paths {
+    "/api/v1/alert-evidence-imports/preview": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Preview Evidence */
+        post: operations["preview_evidence_api_v1_alert_evidence_imports_preview_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/alert-evidence-imports/{preview_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get Evidence Preview */
+        get: operations["get_evidence_preview_api_v1_alert_evidence_imports__preview_id__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/alert-evidence-imports/{preview_id}/commit": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Commit Evidence */
+        post: operations["commit_evidence_api_v1_alert_evidence_imports__preview_id__commit_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/alert-evidence-imports/{preview_id}/rows/{row_id}/decision": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /** Save Evidence Mapping */
+        put: operations["save_evidence_mapping_api_v1_alert_evidence_imports__preview_id__rows__row_id__decision_put"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/alert-evidence-snapshots": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List Evidence Snapshots */
+        get: operations["list_evidence_snapshots_api_v1_alert_evidence_snapshots_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/alert-evidence-snapshots/{snapshot_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get Evidence Snapshot */
+        get: operations["get_evidence_snapshot_api_v1_alert_evidence_snapshots__snapshot_id__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/boards": {
         parameters: {
             query?: never;
@@ -716,6 +818,304 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
+        /** AlertEvidenceCandidateRead */
+        AlertEvidenceCandidateRead: {
+            /** Display Name */
+            display_name: string;
+            /** Id */
+            id: string;
+            /** Position */
+            position: string;
+            /** Team */
+            team: string | null;
+        };
+        /** AlertEvidenceCommitRequest */
+        AlertEvidenceCommitRequest: {
+            /** Content Hash */
+            content_hash: string;
+            /** Permitted Use Confirmed */
+            permitted_use_confirmed: boolean;
+        };
+        /** AlertEvidenceCommitResponse */
+        AlertEvidenceCommitResponse: {
+            /** Idempotent */
+            idempotent: boolean;
+            snapshot: components["schemas"]["AlertEvidenceSnapshotSummaryRead"];
+        };
+        /** AlertEvidenceFormatSummary */
+        AlertEvidenceFormatSummary: {
+            /**
+             * Draft Format
+             * @enum {string}
+             */
+            draft_format: "snake" | "linear";
+            /**
+             * Draft Purpose
+             * @enum {string}
+             */
+            draft_purpose: "startup" | "rookie" | "supplemental";
+            /**
+             * League Type
+             * @enum {string}
+             */
+            league_type: "dynasty" | "keeper" | "redraft";
+            /**
+             * Qb Mode
+             * @enum {string}
+             */
+            qb_mode: "one_qb" | "superflex";
+            /**
+             * Reception Scoring
+             * @enum {string}
+             */
+            reception_scoring: "standard" | "half_ppr" | "ppr";
+            /** Rounds */
+            rounds: number;
+            /** Te Premium */
+            te_premium: boolean;
+            /** Team Count */
+            team_count: number;
+            /** Third Round Reversal */
+            third_round_reversal: boolean;
+        };
+        /** AlertEvidenceMappingDecisionRequest */
+        AlertEvidenceMappingDecisionRequest: {
+            /**
+             * Decision
+             * @enum {string}
+             */
+            decision: "confirm" | "ignore" | "reject" | "clear";
+            /** Player Id */
+            player_id?: string | null;
+        };
+        /** AlertEvidenceMappingRowRead */
+        AlertEvidenceMappingRowRead: {
+            /** Candidates */
+            candidates: components["schemas"]["AlertEvidenceCandidateRead"][];
+            /** Display Name */
+            display_name: string;
+            /** Id */
+            id: string;
+            /** Limitation Codes */
+            limitation_codes: string[];
+            /** Position */
+            position: string;
+            /** Reason Code */
+            reason_code: string;
+            /** Resolved Player Id */
+            resolved_player_id: string | null;
+            /** Row Number */
+            row_number: number;
+            /** Source Player Key */
+            source_player_key: string;
+            /**
+             * Status
+             * @enum {string}
+             */
+            status: "matched" | "review_required" | "unmatched" | "ignored" | "invalid";
+            /** Team */
+            team: string | null;
+        };
+        /** AlertEvidencePreviewMetadata */
+        AlertEvidencePreviewMetadata: {
+            /**
+             * As Of
+             * Format: date-time
+             */
+            as_of: string;
+            /**
+             * Draft Format
+             * @enum {string}
+             */
+            draft_format: "snake" | "linear";
+            /**
+             * Draft Purpose
+             * @enum {string}
+             */
+            draft_purpose: "startup" | "rookie" | "supplemental";
+            /**
+             * League Type
+             * @enum {string}
+             */
+            league_type: "dynasty" | "keeper" | "redraft";
+            /** Permitted Use Confirmed */
+            permitted_use_confirmed: boolean;
+            /** Private Source Reference */
+            private_source_reference?: string | null;
+            /**
+             * Quarterback Mode
+             * @enum {string}
+             */
+            quarterback_mode: "one_qb" | "superflex";
+            /**
+             * Reception Scoring
+             * @enum {string}
+             */
+            reception_scoring: "standard" | "half_ppr" | "ppr";
+            /** Round Count */
+            round_count: number;
+            /** Snapshot Key */
+            snapshot_key?: string | null;
+            /**
+             * Source Kind
+             * @enum {string}
+             */
+            source_kind: "synthetic" | "user_entered" | "public" | "licensed";
+            /** Source Label */
+            source_label: string;
+            /** Source Namespace */
+            source_namespace: string;
+            /** Supported Draft Depth */
+            supported_draft_depth: number;
+            /** Team Count */
+            team_count: number;
+            /** Third Round Reversal */
+            third_round_reversal: boolean;
+            /** Tight End Premium */
+            tight_end_premium: boolean;
+        };
+        /** AlertEvidencePreviewRead */
+        AlertEvidencePreviewRead: {
+            /** Committed Snapshot Id */
+            committed_snapshot_id: string | null;
+            /** Content Hash */
+            content_hash: string;
+            /** Expected Selection Available */
+            expected_selection_available: boolean;
+            format: components["schemas"]["AlertEvidenceFormatSummary"];
+            /** Freshness States */
+            freshness_states: {
+                [key: string]: string;
+            };
+            /** Id */
+            id: string;
+            /** Ignored Player Count */
+            ignored_player_count: number;
+            /** Invalid Player Count */
+            invalid_player_count: number;
+            /** Limitation Codes */
+            limitation_codes: string[];
+            /** Matched Player Count */
+            matched_player_count: number;
+            /** Pick Curve Available */
+            pick_curve_available: boolean;
+            /** Review Required Player Count */
+            review_required_player_count: number;
+            /** Rows */
+            rows: components["schemas"]["AlertEvidenceMappingRowRead"][];
+            /** Schema Version */
+            schema_version: number;
+            source: components["schemas"]["AlertEvidenceSourceSummary"];
+            /**
+             * Status
+             * @enum {string}
+             */
+            status: "preview" | "committed";
+            /** Supported Draft Depth */
+            supported_draft_depth: number;
+            /** Total Pick Value Count */
+            total_pick_value_count: number;
+            /** Total Player Count */
+            total_player_count: number;
+            /** Unmatched Player Count */
+            unmatched_player_count: number;
+            /** Valid Pick Value Count */
+            valid_pick_value_count: number;
+            /** Valid Player Count */
+            valid_player_count: number;
+            /** Warnings */
+            warnings: string[];
+        };
+        /** AlertEvidencePreviewRequest */
+        AlertEvidencePreviewRequest: {
+            metadata: components["schemas"]["AlertEvidencePreviewMetadata"];
+            /** Pick Csv Text */
+            pick_csv_text?: string | null;
+            /** Pick Filename */
+            pick_filename?: string | null;
+            /** Player Csv Text */
+            player_csv_text: string;
+            /**
+             * Player Filename
+             * @default player-signals.csv
+             */
+            player_filename: string;
+        };
+        /** AlertEvidenceSnapshotListResponse */
+        AlertEvidenceSnapshotListResponse: {
+            /** Items */
+            items: components["schemas"]["AlertEvidenceSnapshotSummaryRead"][];
+            /** Limit */
+            limit: number;
+            /** Offset */
+            offset: number;
+            /** Total */
+            total: number;
+        };
+        /** AlertEvidenceSnapshotSummaryRead */
+        AlertEvidenceSnapshotSummaryRead: {
+            /**
+             * Compatibility State
+             * @constant
+             */
+            compatibility_state: "not_evaluated";
+            /** Content Hash */
+            content_hash: string;
+            /** Expected Selection Available */
+            expected_selection_available: boolean;
+            /** Expected Selection Count */
+            expected_selection_count: number;
+            format: components["schemas"]["AlertEvidenceFormatSummary"];
+            /** Freshness States */
+            freshness_states: {
+                [key: string]: string;
+            };
+            /** Id */
+            id: string;
+            /** Imported At */
+            imported_at: string;
+            /** Limitation Codes */
+            limitation_codes: string[];
+            /** Mapped Player Count */
+            mapped_player_count: number;
+            /** Pick Curve Available */
+            pick_curve_available: boolean;
+            /** Pick Value Count */
+            pick_value_count: number;
+            /** Schema Version */
+            schema_version: number;
+            /** Source As Of */
+            source_as_of: string;
+            /**
+             * Source Kind
+             * @enum {string}
+             */
+            source_kind: "synthetic" | "user_entered" | "public" | "licensed";
+            /** Source Label */
+            source_label: string;
+            /** Source Namespace */
+            source_namespace: string;
+            /** Status */
+            status: string;
+            /** Supported Draft Depth */
+            supported_draft_depth: number;
+        };
+        /** AlertEvidenceSourceSummary */
+        AlertEvidenceSourceSummary: {
+            /** As Of */
+            as_of: string;
+            /**
+             * Kind
+             * @enum {string}
+             */
+            kind: "synthetic" | "user_entered" | "public" | "licensed";
+            /** Label */
+            label: string;
+            /** Namespace */
+            namespace: string;
+            /** Permitted Use Confirmed */
+            permitted_use_confirmed: boolean;
+        };
         /** AppConfiguration */
         AppConfiguration: {
             /** Active League Season Id */
@@ -2152,6 +2552,204 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
+    preview_evidence_api_v1_alert_evidence_imports_preview_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AlertEvidencePreviewRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AlertEvidencePreviewRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_evidence_preview_api_v1_alert_evidence_imports__preview_id__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                preview_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AlertEvidencePreviewRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    commit_evidence_api_v1_alert_evidence_imports__preview_id__commit_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                preview_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AlertEvidenceCommitRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AlertEvidenceCommitResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    save_evidence_mapping_api_v1_alert_evidence_imports__preview_id__rows__row_id__decision_put: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                preview_id: string;
+                row_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AlertEvidenceMappingDecisionRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AlertEvidencePreviewRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    list_evidence_snapshots_api_v1_alert_evidence_snapshots_get: {
+        parameters: {
+            query?: {
+                limit?: number;
+                offset?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AlertEvidenceSnapshotListResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_evidence_snapshot_api_v1_alert_evidence_snapshots__snapshot_id__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                snapshot_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AlertEvidenceSnapshotSummaryRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
     list_personal_boards_api_v1_boards_get: {
         parameters: {
             query?: {
