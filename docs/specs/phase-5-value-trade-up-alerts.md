@@ -1,6 +1,6 @@
 # Phase 5 Specification: Value and Trade-Up Alerts
 
-**Status:** Draft for product-gate approval
+**Status:** Approved for bounded implementation
 
 **Date:** 2026-07-28
 
@@ -39,13 +39,13 @@ The feature does not declare an objective steal, expose a market ranking as the
 main draft board, select a player, submit a trade, or hide uncertainty behind a
 single magic score.
 
-## Product Approval Required
+## Product Approval Decision
 
-The following four decisions are proposed, not yet approved.
+The product owner approved the following four decisions on 2026-07-28.
 
 ### Gate 1: Evidence source boundary
 
-**Recommended decision:** V1 accepts versioned, provider-neutral local CSV
+**Approved decision:** V1 accepts versioned, provider-neutral local CSV
 snapshots through preview and explicit commit. Development and public tests use
 only a synthetic fixture. Direct provider synchronization, scraping, and
 bundled proprietary data remain deferred.
@@ -64,7 +64,7 @@ Options considered:
 
 ### Gate 2: Alert trigger philosophy
 
-**Recommended decision:** Use a dual-evidence trigger. A player must have an
+**Approved decision:** Use a dual-evidence trigger. A player must have an
 explicit personal-conviction signal and sufficient independent market evidence
 before a value or return-risk alert may open.
 
@@ -88,7 +88,7 @@ Options considered:
 
 ### Gate 3: Pick-only trade-up boundary
 
-**Recommended decision:** Show a target overall-pick window and, only when a
+**Approved decision:** Show a target overall-pick window and, only when a
 compatible pick-value curve exists, a generic pick-only cost band. Packages may
 contain draft picks only. They are reference ranges, never exact offers or
 claims about assets the user owns.
@@ -107,7 +107,7 @@ Options considered:
 
 ### Gate 4: Presentation and control
 
-**Recommended decision:** Keep all market fields out of Blind view. In decision
+**Approved decision:** Keep all market fields out of Blind view. In decision
 support views, show one compact alert rail with plain-language evidence,
 confidence, freshness, and downside. Raw imported rank or pick-window fields
 appear only in an explicit evidence drawer.
