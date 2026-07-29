@@ -336,6 +336,25 @@ export interface paths {
         patch: operations["update_draft_session_api_v1_draft_sessions__session_id__patch"];
         trace?: never;
     };
+    "/api/v1/draft-sessions/{session_id}/alert-configuration": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get Draft Alert Configuration */
+        get: operations["get_draft_alert_configuration_api_v1_draft_sessions__session_id__alert_configuration_get"];
+        put?: never;
+        /** Attach Draft Alert Configuration */
+        post: operations["attach_draft_alert_configuration_api_v1_draft_sessions__session_id__alert_configuration_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        /** Patch Draft Alert Configuration */
+        patch: operations["patch_draft_alert_configuration_api_v1_draft_sessions__session_id__alert_configuration_patch"];
+        trace?: never;
+    };
     "/api/v1/draft-sessions/{session_id}/candidates": {
         parameters: {
             query?: never;
@@ -1056,9 +1075,9 @@ export interface components {
         AlertEvidenceSnapshotSummaryRead: {
             /**
              * Compatibility State
-             * @constant
+             * @enum {string}
              */
-            compatibility_state: "not_evaluated";
+            compatibility_state: "not_evaluated" | "exact" | "family" | "partial" | "incompatible" | "unknown";
             /** Content Hash */
             content_hash: string;
             /** Expected Selection Available */
@@ -1310,6 +1329,102 @@ export interface components {
             theme: "system" | "light" | "dark";
             /** Timezone */
             timezone: string;
+        };
+        /** DraftAlertConfigurationCreate */
+        DraftAlertConfigurationCreate: {
+            /** Draft Revision */
+            draft_revision: number;
+            /**
+             * Eligible Tier Count
+             * @default 2
+             */
+            eligible_tier_count: number;
+            /**
+             * Enabled
+             * @default true
+             */
+            enabled: boolean;
+            /** Evidence Snapshot Id */
+            evidence_snapshot_id: string;
+            /**
+             * Minimum Conservative Gap
+             * @default 6
+             */
+            minimum_conservative_gap: number;
+            /**
+             * Personal Qualifier Mode
+             * @default tier_or_favorite
+             * @enum {string}
+             */
+            personal_qualifier_mode: "tier_or_favorite" | "tier_only" | "favorite_only";
+            /**
+             * Snooze Pick Count
+             * @default 5
+             */
+            snooze_pick_count: number;
+        };
+        /** DraftAlertConfigurationPatch */
+        DraftAlertConfigurationPatch: {
+            /** Configuration Revision */
+            configuration_revision: number;
+            /** Draft Revision */
+            draft_revision: number;
+            /** Eligible Tier Count */
+            eligible_tier_count?: number | null;
+            /** Enabled */
+            enabled?: boolean | null;
+            /** Evidence Snapshot Id */
+            evidence_snapshot_id?: string | null;
+            /** Minimum Conservative Gap */
+            minimum_conservative_gap?: number | null;
+            /** Personal Qualifier Mode */
+            personal_qualifier_mode?: ("tier_or_favorite" | "tier_only" | "favorite_only") | null;
+            /** Snooze Pick Count */
+            snooze_pick_count?: number | null;
+        };
+        /** DraftAlertConfigurationRead */
+        DraftAlertConfigurationRead: {
+            /** Compatibility Reasons */
+            compatibility_reasons: string[];
+            /** Created At */
+            created_at: string;
+            /** Draft Revision */
+            draft_revision: number;
+            /** Draft Session Id */
+            draft_session_id: string;
+            /** Eligible Tier Count */
+            eligible_tier_count: number;
+            /** Enabled */
+            enabled: boolean;
+            /** Engine Version */
+            engine_version: string;
+            evidence_snapshot: components["schemas"]["AlertEvidenceSnapshotSummaryRead"];
+            /** Evidence Snapshot Id */
+            evidence_snapshot_id: string;
+            /**
+             * Format Compatibility
+             * @enum {string}
+             */
+            format_compatibility: "exact" | "family" | "partial" | "incompatible" | "unknown";
+            /** Freshness Policy Version */
+            freshness_policy_version: string;
+            /** Id */
+            id: string;
+            /** Minimum Conservative Gap */
+            minimum_conservative_gap: number;
+            /**
+             * Personal Qualifier Mode
+             * @enum {string}
+             */
+            personal_qualifier_mode: "tier_or_favorite" | "tier_only" | "favorite_only";
+            /** Revision */
+            revision: number;
+            /** Rule Version */
+            rule_version: string;
+            /** Snooze Pick Count */
+            snooze_pick_count: number;
+            /** Updated At */
+            updated_at: string;
         };
         /** DraftBlindCandidateListResponse */
         DraftBlindCandidateListResponse: {
@@ -3459,6 +3574,107 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["DraftSessionRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_draft_alert_configuration_api_v1_draft_sessions__session_id__alert_configuration_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                session_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DraftAlertConfigurationRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    attach_draft_alert_configuration_api_v1_draft_sessions__session_id__alert_configuration_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                session_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["DraftAlertConfigurationCreate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DraftAlertConfigurationRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    patch_draft_alert_configuration_api_v1_draft_sessions__session_id__alert_configuration_patch: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                session_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["DraftAlertConfigurationPatch"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DraftAlertConfigurationRead"];
                 };
             };
             /** @description Validation Error */
