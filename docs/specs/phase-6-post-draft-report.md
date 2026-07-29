@@ -1,13 +1,16 @@
 # Phase 6 Post-Draft Report Specification
 
-**Status:** Proposed for product-owner approval
+**Status:** Approved for bounded implementation
 
 **Phase:** 6
 
 **Specification date:** 2026-07-29
 
-**Engineering authorization:** None until the four product-gate decisions are
-approved
+**Product-gate approval date:** 2026-07-29
+
+**Engineering authorization:** Proceed one bounded implementation step at a
+time, beginning with the approved report definitions and expected-fixture
+contract
 
 ## Purpose
 
@@ -27,7 +30,7 @@ Engineering begins only after all four decisions are approved.
 
 ### Decision 1: Evidence ledger, not report card
 
-**Proposed decision:** Approve.
+**Approved decision:** Approved on 2026-07-29.
 
 V1 has no overall grade, championship probability, roster-value total, or
 single composite score. Each section reports:
@@ -61,7 +64,7 @@ Rejected alternatives:
 
 ### Decision 2: Completed-only, immutable snapshots
 
-**Proposed decision:** Approve.
+**Approved decision:** Approved on 2026-07-29.
 
 A report may be generated only from a completed live or mock draft. It is an
 immutable snapshot tied to:
@@ -100,7 +103,7 @@ Rejected alternatives:
 
 ### Decision 3: Core report plus optional evidence enrichment
 
-**Proposed decision:** Approve.
+**Approved decision:** Approved on 2026-07-29.
 
 Every completed draft can produce a useful core report from local saved state.
 Optional Phase 5 evidence enriches only the sections its frozen fields support.
@@ -160,7 +163,7 @@ Rejected alternatives:
 
 ### Decision 4: Safe decision moments, compatible comparisons, HTML export
 
-**Proposed decision:** Approve.
+**Approved decision:** Approved on 2026-07-29.
 
 V1 reports:
 
@@ -501,6 +504,11 @@ The section is called `Year-one production context`, not `Projected strength`.
 ### 6. Dynasty market context
 
 Available only from attached compatible Phase 5 market bands.
+
+Coverage thresholds match the production section: below `50%` is unavailable,
+at least `50%` and below `80%` is limited, and at least `80%` is supported.
+Confidence is capped at `medium` because this is categorical single-source
+context rather than a roster-value model.
 
 Outputs:
 
@@ -1367,6 +1375,9 @@ before the next step begins.
 10. Add the desktop Reports workspace.
 11. Run specification audit, fix critical gaps, and complete the offline live
     workflow audit.
+
+The bounded contract for implementation step 2 is recorded in
+[Phase 6 Report Definitions and Expected-Fixture Contract](phase-6-report-contract.md).
 
 ## Deferred Revisit
 

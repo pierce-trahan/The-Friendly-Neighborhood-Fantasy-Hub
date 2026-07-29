@@ -1,0 +1,577 @@
+{
+  "schema_version": 1,
+  "rules_version": "post-draft-report-rules-v1",
+  "explanation_template_version": "post-draft-report-explanations-v1",
+  "availability_states": [
+    "supported",
+    "limited",
+    "unavailable",
+    "not_applicable"
+  ],
+  "confidence_states": [
+    "high",
+    "medium",
+    "low",
+    "unavailable"
+  ],
+  "section_registry": [
+    {
+      "section_key": "draft_summary",
+      "title": "Draft summary",
+      "availability_rule": "always_supported",
+      "confidence_ceiling": "high",
+      "applicable_modes": [
+        "live",
+        "mock"
+      ],
+      "reason_codes": [],
+      "limitation_codes": []
+    },
+    {
+      "section_key": "position_inventory",
+      "title": "Position inventory",
+      "availability_rule": "always_supported",
+      "confidence_ceiling": "high",
+      "applicable_modes": [
+        "live",
+        "mock"
+      ],
+      "reason_codes": [],
+      "limitation_codes": []
+    },
+    {
+      "section_key": "starter_coverage",
+      "title": "Starter coverage",
+      "availability_rule": "normalized_league_shape",
+      "confidence_ceiling": "high",
+      "applicable_modes": [
+        "live",
+        "mock"
+      ],
+      "reason_codes": [
+        "STARTER_ASSIGNMENT_COMPLETE",
+        "STARTER_ASSIGNMENT_PARTIAL",
+        "STARTER_SHAPE_UNAVAILABLE"
+      ],
+      "limitation_codes": [
+        "PLAYER_ELIGIBILITY_INCOMPLETE"
+      ]
+    },
+    {
+      "section_key": "roster_concentration",
+      "title": "Roster-construction concentration",
+      "availability_rule": "normalized_league_shape",
+      "confidence_ceiling": "high",
+      "applicable_modes": [
+        "live",
+        "mock"
+      ],
+      "reason_codes": [
+        "BALANCED_DISTRIBUTION",
+        "CONCENTRATED",
+        "COVERAGE_GAP",
+        "HIGHLY_CONCENTRATED"
+      ],
+      "limitation_codes": [
+        "PLAYER_ELIGIBILITY_INCOMPLETE"
+      ]
+    },
+    {
+      "section_key": "year_one_production_context",
+      "title": "Year-one production context",
+      "availability_rule": "categorical_evidence_coverage",
+      "confidence_ceiling": "medium",
+      "applicable_modes": [
+        "live",
+        "mock"
+      ],
+      "reason_codes": [
+        "PRODUCTION_EVIDENCE_AVAILABLE",
+        "PRODUCTION_EVIDENCE_LIMITED",
+        "PRODUCTION_EVIDENCE_UNAVAILABLE"
+      ],
+      "limitation_codes": [
+        "CATEGORICAL_SINGLE_SOURCE",
+        "NOT_A_PROJECTION"
+      ]
+    },
+    {
+      "section_key": "dynasty_market_context",
+      "title": "Dynasty market context",
+      "availability_rule": "categorical_evidence_coverage",
+      "confidence_ceiling": "medium",
+      "applicable_modes": [
+        "live",
+        "mock"
+      ],
+      "reason_codes": [
+        "MARKET_EVIDENCE_AVAILABLE",
+        "MARKET_EVIDENCE_LIMITED",
+        "MARKET_EVIDENCE_UNAVAILABLE"
+      ],
+      "limitation_codes": [
+        "CATEGORICAL_SINGLE_SOURCE",
+        "NOT_A_ROSTER_VALUE"
+      ]
+    },
+    {
+      "section_key": "age_risk_profile",
+      "title": "Age-risk profile",
+      "availability_rule": "categorical_evidence_coverage",
+      "confidence_ceiling": "medium",
+      "applicable_modes": [
+        "live",
+        "mock"
+      ],
+      "reason_codes": [
+        "AGE_RISK_EVIDENCE_AVAILABLE",
+        "AGE_RISK_EVIDENCE_LIMITED",
+        "AGE_RISK_EVIDENCE_UNAVAILABLE"
+      ],
+      "limitation_codes": [
+        "CATEGORICAL_SINGLE_SOURCE",
+        "NOT_AN_AVERAGE_AGE"
+      ]
+    },
+    {
+      "section_key": "long_term_value",
+      "title": "Long-term dynasty value",
+      "availability_rule": "always_unavailable_v1",
+      "confidence_ceiling": "unavailable",
+      "applicable_modes": [
+        "live",
+        "mock"
+      ],
+      "reason_codes": [
+        "LONG_TERM_VALUE_EVIDENCE_UNAVAILABLE"
+      ],
+      "limitation_codes": [
+        "MARKET_BAND_IS_NOT_LONG_TERM_OUTCOME"
+      ]
+    },
+    {
+      "section_key": "liquidity",
+      "title": "Liquidity",
+      "availability_rule": "always_unavailable_v1",
+      "confidence_ceiling": "unavailable",
+      "applicable_modes": [
+        "live",
+        "mock"
+      ],
+      "reason_codes": [
+        "LIQUIDITY_EVIDENCE_UNAVAILABLE"
+      ],
+      "limitation_codes": [
+        "MARKET_BAND_IS_NOT_LIQUIDITY"
+      ]
+    },
+    {
+      "section_key": "player_fragility",
+      "title": "Player fragility",
+      "availability_rule": "always_unavailable_v1",
+      "confidence_ceiling": "unavailable",
+      "applicable_modes": [
+        "live",
+        "mock"
+      ],
+      "reason_codes": [
+        "PLAYER_FRAGILITY_EVIDENCE_UNAVAILABLE"
+      ],
+      "limitation_codes": [
+        "INJURY_CONTRACT_ROLE_EVIDENCE_REQUIRED"
+      ]
+    },
+    {
+      "section_key": "strategy_story",
+      "title": "Strategy story",
+      "availability_rule": "mock_saved_history",
+      "confidence_ceiling": "high",
+      "applicable_modes": [
+        "live",
+        "mock"
+      ],
+      "reason_codes": [
+        "LIVE_STRATEGY_NOT_APPLICABLE",
+        "MOCK_STRATEGY_HISTORY_AVAILABLE",
+        "MOCK_STRATEGY_HISTORY_LIMITED"
+      ],
+      "limitation_codes": [
+        "SAVED_EVENTS_ONLY"
+      ]
+    },
+    {
+      "section_key": "personal_board_choice_moments",
+      "title": "Personal Board choice moments",
+      "availability_rule": "frozen_board_snapshot",
+      "confidence_ceiling": "high",
+      "applicable_modes": [
+        "live",
+        "mock"
+      ],
+      "reason_codes": [
+        "NO_QUALIFYING_PERSONAL_BOARD_MOMENTS",
+        "PERSONAL_BOARD_MOMENTS_AVAILABLE"
+      ],
+      "limitation_codes": [
+        "PERSONAL_BOARD_OBSERVATION_ONLY"
+      ]
+    },
+    {
+      "section_key": "recorded_alert_moments",
+      "title": "Recorded alert moments",
+      "availability_rule": "saved_alert_history",
+      "confidence_ceiling": "high",
+      "applicable_modes": [
+        "live",
+        "mock"
+      ],
+      "reason_codes": [
+        "ALERTS_CONFIGURED_NO_EVENTS",
+        "ALERTS_DISABLED_AT_COMPLETION",
+        "ALERTS_NOT_CONFIGURED",
+        "ALERT_EVENTS_AVAILABLE",
+        "ALERT_HISTORY_CORRUPT"
+      ],
+      "limitation_codes": [
+        "SAVED_EVENTS_ONLY"
+      ]
+    },
+    {
+      "section_key": "evidence_limits",
+      "title": "Evidence limits",
+      "availability_rule": "always_supported",
+      "confidence_ceiling": "high",
+      "applicable_modes": [
+        "live",
+        "mock"
+      ],
+      "reason_codes": [
+        "REPORT_LIMITS_DISCLOSED"
+      ],
+      "limitation_codes": [
+        "NO_OUTCOME_PROJECTION",
+        "USER_JUDGMENT_AUTHORITATIVE"
+      ]
+    }
+  ],
+  "starter_assignment": {
+    "algorithm": "maximum_bipartite_matching",
+    "objective": "maximize_filled_starter_slots",
+    "slot_order_origin": 0,
+    "tie_break_fields": [
+      "slot_order",
+      "overall_pick",
+      "canonical_player_id"
+    ],
+    "assignment_vector_order": "lexicographically_smallest_filled_edge_tuple_list",
+    "unknown_eligibility": "no_edge_and_limited_when_assignment_remains_usable",
+    "depth_grouping": "frozen_primary_position",
+    "ambiguous_flex_rule": "chosen_player_replaceable_in_another_maximum_assignment",
+    "supported_slot_types": {
+      "QB": [
+        "QB"
+      ],
+      "RB": [
+        "RB"
+      ],
+      "WR": [
+        "WR"
+      ],
+      "TE": [
+        "TE"
+      ],
+      "FLEX": [
+        "RB",
+        "WR",
+        "TE"
+      ],
+      "SUPER_FLEX": [
+        "QB",
+        "RB",
+        "WR",
+        "TE"
+      ]
+    }
+  },
+  "evidence_coverage": {
+    "formula": "floor(covered_players*10000/roster_players)",
+    "limited_minimum_basis_points": 5000,
+    "supported_minimum_basis_points": 8000,
+    "below_limited_availability": "unavailable",
+    "limited_availability": "limited",
+    "supported_availability": "supported",
+    "supported_confidence": "medium",
+    "limited_confidence": "low",
+    "unavailable_confidence": "unavailable",
+    "confidence_ceiling": "medium",
+    "blocking_evidence_states": [
+      "expired",
+      "incompatible",
+      "invalid"
+    ],
+    "applies_to_sections": [
+      "age_risk_profile",
+      "dynasty_market_context",
+      "year_one_production_context"
+    ]
+  },
+  "concentration": {
+    "formula": "floor(position_pick_count*10000/total_user_picks)",
+    "balanced_maximum_basis_points": 4000,
+    "highly_concentrated_above_basis_points": 5500,
+    "balanced_requires_full_distinct_starter_coverage": true,
+    "coverage_gap_can_coexist": true,
+    "share_bands": [
+      "balanced_distribution",
+      "concentrated",
+      "highly_concentrated"
+    ]
+  },
+  "limits": {
+    "maximum_candidates": 500,
+    "maximum_user_roster_picks": 60,
+    "maximum_sections": 100,
+    "maximum_personal_board_moments": 10,
+    "maximum_exported_alert_moments": 20,
+    "minimum_comparison_reports": 2,
+    "maximum_comparison_reports": 4
+  },
+  "explanation_templates": [
+    {
+      "template_key": "starter.coverage_complete",
+      "section_key": "starter_coverage",
+      "template": "All {starter_slots_total} configured starter slots can be covered by the drafted roster.",
+      "required_placeholders": [
+        "starter_slots_total"
+      ]
+    },
+    {
+      "template_key": "starter.coverage_partial",
+      "section_key": "starter_coverage",
+      "template": "{starter_slots_filled} of {starter_slots_total} configured starter slots can be covered; review the unfilled slot labels.",
+      "required_placeholders": [
+        "starter_slots_filled",
+        "starter_slots_total"
+      ]
+    },
+    {
+      "template_key": "starter.coverage_unavailable",
+      "section_key": "starter_coverage",
+      "template": "Starter coverage is unavailable because the saved league starter shape could not be normalized.",
+      "required_placeholders": []
+    },
+    {
+      "template_key": "concentration.balanced",
+      "section_key": "roster_concentration",
+      "template": "No position accounts for more than {balanced_maximum_percent}% of the roster, and every distinct starter position is covered.",
+      "required_placeholders": [
+        "balanced_maximum_percent"
+      ]
+    },
+    {
+      "template_key": "concentration.concentrated",
+      "section_key": "roster_concentration",
+      "template": "{position} accounts for {position_share_percent}% of the roster, above the V1 concentration boundary.",
+      "required_placeholders": [
+        "position",
+        "position_share_percent"
+      ]
+    },
+    {
+      "template_key": "concentration.highly_concentrated",
+      "section_key": "roster_concentration",
+      "template": "{position} accounts for {position_share_percent}% of the roster, above the V1 high-concentration boundary.",
+      "required_placeholders": [
+        "position",
+        "position_share_percent"
+      ]
+    },
+    {
+      "template_key": "concentration.coverage_gap",
+      "section_key": "roster_concentration",
+      "template": "{unfilled_position_count} distinct configured starter position group remains uncovered.",
+      "required_placeholders": [
+        "unfilled_position_count"
+      ]
+    },
+    {
+      "template_key": "production.supported",
+      "section_key": "year_one_production_context",
+      "template": "Saved categorical production evidence covers {covered_players} of {roster_players} rostered players.",
+      "required_placeholders": [
+        "covered_players",
+        "roster_players"
+      ]
+    },
+    {
+      "template_key": "production.limited",
+      "section_key": "year_one_production_context",
+      "template": "Saved categorical production evidence covers {covered_players} of {roster_players} rostered players, so this context is limited.",
+      "required_placeholders": [
+        "covered_players",
+        "roster_players"
+      ]
+    },
+    {
+      "template_key": "production.unavailable",
+      "section_key": "year_one_production_context",
+      "template": "Year-one production context is unavailable because the saved draft lacks enough compatible, usable evidence.",
+      "required_placeholders": []
+    },
+    {
+      "template_key": "market.supported",
+      "section_key": "dynasty_market_context",
+      "template": "Saved categorical market evidence covers {covered_players} of {roster_players} rostered players.",
+      "required_placeholders": [
+        "covered_players",
+        "roster_players"
+      ]
+    },
+    {
+      "template_key": "market.limited",
+      "section_key": "dynasty_market_context",
+      "template": "Saved categorical market evidence covers {covered_players} of {roster_players} rostered players, so this context is limited.",
+      "required_placeholders": [
+        "covered_players",
+        "roster_players"
+      ]
+    },
+    {
+      "template_key": "market.unavailable",
+      "section_key": "dynasty_market_context",
+      "template": "Dynasty market context is unavailable because the saved draft lacks enough compatible, usable evidence.",
+      "required_placeholders": []
+    },
+    {
+      "template_key": "age_risk.supported",
+      "section_key": "age_risk_profile",
+      "template": "Saved categorical age-risk evidence covers {covered_players} of {roster_players} rostered players.",
+      "required_placeholders": [
+        "covered_players",
+        "roster_players"
+      ]
+    },
+    {
+      "template_key": "age_risk.limited",
+      "section_key": "age_risk_profile",
+      "template": "Saved categorical age-risk evidence covers {covered_players} of {roster_players} rostered players, so this profile is limited.",
+      "required_placeholders": [
+        "covered_players",
+        "roster_players"
+      ]
+    },
+    {
+      "template_key": "age_risk.unavailable",
+      "section_key": "age_risk_profile",
+      "template": "Age profile is unavailable because the saved draft does not contain enough approved age-risk evidence.",
+      "required_placeholders": []
+    },
+    {
+      "template_key": "long_term.unavailable",
+      "section_key": "long_term_value",
+      "template": "Long-term dynasty value is unavailable because V1 has no approved outcome evidence for this claim.",
+      "required_placeholders": []
+    },
+    {
+      "template_key": "liquidity.unavailable",
+      "section_key": "liquidity",
+      "template": "Liquidity is unavailable because V1 has no approved market-depth or transaction evidence.",
+      "required_placeholders": []
+    },
+    {
+      "template_key": "fragility.unavailable",
+      "section_key": "player_fragility",
+      "template": "Player fragility is unavailable because V1 has no approved injury, contract, or role evidence.",
+      "required_placeholders": []
+    },
+    {
+      "template_key": "strategy.summary",
+      "section_key": "strategy_story",
+      "template": "The mock began with {initial_strategy} and contains {pivot_count} saved strategy pivot events.",
+      "required_placeholders": [
+        "initial_strategy",
+        "pivot_count"
+      ]
+    },
+    {
+      "template_key": "strategy.limited",
+      "section_key": "strategy_story",
+      "template": "The saved mock strategy story is limited because part of its recorded history is incomplete.",
+      "required_placeholders": []
+    },
+    {
+      "template_key": "strategy.not_applicable",
+      "section_key": "strategy_story",
+      "template": "Strategy story does not apply to this live draft.",
+      "required_placeholders": []
+    },
+    {
+      "template_key": "personal_board.moment",
+      "section_key": "personal_board_choice_moments",
+      "template": "At pick {overall_pick}, you selected {selected_player} while {passed_player} was {rank_delta} places higher on the saved Personal Board.",
+      "required_placeholders": [
+        "overall_pick",
+        "passed_player",
+        "rank_delta",
+        "selected_player"
+      ]
+    },
+    {
+      "template_key": "alerts.summary",
+      "section_key": "recorded_alert_moments",
+      "template": "The saved draft history contains {alert_event_count} recorded alert events.",
+      "required_placeholders": [
+        "alert_event_count"
+      ]
+    },
+    {
+      "template_key": "comparison.compatible",
+      "section_key": "evidence_limits",
+      "template": "{report_count} reports share the required league shape and rules version for descriptive comparison.",
+      "required_placeholders": [
+        "report_count"
+      ]
+    },
+    {
+      "template_key": "comparison.not_comparable",
+      "section_key": "evidence_limits",
+      "template": "This section cannot be compared because one or more selected reports lacks compatible support.",
+      "required_placeholders": []
+    },
+    {
+      "template_key": "report.limits",
+      "section_key": "evidence_limits",
+      "template": "This report describes saved draft evidence, does not project outcomes, and leaves user judgment authoritative.",
+      "required_placeholders": []
+    }
+  ],
+  "forbidden_language": [
+    "draft grade",
+    "a+ draft",
+    "best roster",
+    "worst roster",
+    "winner",
+    "championship team",
+    "contender",
+    "guaranteed",
+    "elite",
+    "mistake",
+    "bad pick",
+    "steal",
+    "bust",
+    "must trade",
+    "should have drafted"
+  ],
+  "privacy_forbidden_fields": [
+    "provider_id",
+    "source_player_key",
+    "private_source_reference",
+    "raw_evidence",
+    "personal_board_notes",
+    "private_strategy_notes",
+    "cpu_seed",
+    "random_audit",
+    "manager_internal_reference",
+    "input_fingerprint"
+  ]
+}

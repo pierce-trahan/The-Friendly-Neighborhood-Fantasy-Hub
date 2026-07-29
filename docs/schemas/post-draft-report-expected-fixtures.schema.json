@@ -1,0 +1,547 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://friendly-neighborhood-fantasy-hub.local/schemas/post-draft-report-expected-fixtures.schema.json",
+  "title": "Friendly Neighborhood Fantasy Hub Post-Draft Report Expected Fixtures",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "fixture_version",
+    "fictional",
+    "content_hash",
+    "starter_assignment_case",
+    "evidence_coverage_cases",
+    "concentration_cases",
+    "mode_cases",
+    "unsupported_section_cases",
+    "explanation_cases"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "fixture_version": {
+      "const": "post-draft-report-fixtures-v1"
+    },
+    "fictional": {
+      "const": true
+    },
+    "content_hash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "starter_assignment_case": {
+      "$ref": "#/$defs/starterAssignmentCase"
+    },
+    "evidence_coverage_cases": {
+      "type": "array",
+      "minItems": 7,
+      "maxItems": 20,
+      "items": {
+        "$ref": "#/$defs/evidenceCoverageCase"
+      }
+    },
+    "concentration_cases": {
+      "type": "array",
+      "minItems": 5,
+      "maxItems": 20,
+      "items": {
+        "$ref": "#/$defs/concentrationCase"
+      }
+    },
+    "mode_cases": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 10,
+      "items": {
+        "$ref": "#/$defs/sectionExpectation"
+      }
+    },
+    "unsupported_section_cases": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 10,
+      "items": {
+        "$ref": "#/$defs/sectionExpectation"
+      }
+    },
+    "explanation_cases": {
+      "type": "array",
+      "minItems": 5,
+      "maxItems": 50,
+      "items": {
+        "$ref": "#/$defs/explanationCase"
+      }
+    }
+  },
+  "$defs": {
+    "position": {
+      "enum": [
+        "QB",
+        "RB",
+        "WR",
+        "TE"
+      ]
+    },
+    "availability": {
+      "enum": [
+        "supported",
+        "limited",
+        "unavailable",
+        "not_applicable"
+      ]
+    },
+    "confidence": {
+      "enum": [
+        "high",
+        "medium",
+        "low",
+        "unavailable"
+      ]
+    },
+    "codeArray": {
+      "type": "array",
+      "maxItems": 20,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 3,
+        "maxLength": 80,
+        "pattern": "^[A-Z][A-Z0-9]*(?:_[A-Z0-9]+)*$"
+      }
+    },
+    "starterSlot": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "slot_order",
+        "slot_key",
+        "slot_type",
+        "eligible_positions"
+      ],
+      "properties": {
+        "slot_order": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 99
+        },
+        "slot_key": {
+          "type": "string",
+          "pattern": "^[A-Z_]+[0-9]+$"
+        },
+        "slot_type": {
+          "enum": [
+            "QB",
+            "RB",
+            "WR",
+            "TE",
+            "FLEX",
+            "SUPER_FLEX"
+          ]
+        },
+        "eligible_positions": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 4,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/position"
+          }
+        }
+      }
+    },
+    "rosterPlayer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "canonical_player_id",
+        "display_name",
+        "overall_pick",
+        "primary_position",
+        "fantasy_positions"
+      ],
+      "properties": {
+        "canonical_player_id": {
+          "type": "string",
+          "pattern": "^fictional-player-[0-9]{2}$"
+        },
+        "display_name": {
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 100
+        },
+        "overall_pick": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 10000
+        },
+        "primary_position": {
+          "$ref": "#/$defs/position"
+        },
+        "fantasy_positions": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 4,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/position"
+          }
+        }
+      }
+    },
+    "assignment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "slot_order",
+        "slot_key",
+        "canonical_player_id"
+      ],
+      "properties": {
+        "slot_order": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 99
+        },
+        "slot_key": {
+          "type": "string",
+          "pattern": "^[A-Z_]+[0-9]+$"
+        },
+        "canonical_player_id": {
+          "type": "string",
+          "pattern": "^fictional-player-[0-9]{2}$"
+        }
+      }
+    },
+    "starterAssignmentCase": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "case_key",
+        "league_shape",
+        "roster",
+        "expected"
+      ],
+      "properties": {
+        "case_key": {
+          "const": "superflex_complete_with_flex_tie"
+        },
+        "league_shape": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "starter_slots"
+          ],
+          "properties": {
+            "starter_slots": {
+              "type": "array",
+              "minItems": 1,
+              "maxItems": 60,
+              "items": {
+                "$ref": "#/$defs/starterSlot"
+              }
+            }
+          }
+        },
+        "roster": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 60,
+          "items": {
+            "$ref": "#/$defs/rosterPlayer"
+          }
+        },
+        "expected": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "availability",
+            "confidence",
+            "starter_slots_total",
+            "starter_slots_filled",
+            "starter_coverage_basis_points",
+            "assignments",
+            "unfilled_slot_keys",
+            "ambiguous_flex_slot_keys",
+            "depth_counts",
+            "limitation_codes"
+          ],
+          "properties": {
+            "availability": {
+              "$ref": "#/$defs/availability"
+            },
+            "confidence": {
+              "$ref": "#/$defs/confidence"
+            },
+            "starter_slots_total": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 60
+            },
+            "starter_slots_filled": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 60
+            },
+            "starter_coverage_basis_points": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 10000
+            },
+            "assignments": {
+              "type": "array",
+              "maxItems": 60,
+              "items": {
+                "$ref": "#/$defs/assignment"
+              }
+            },
+            "unfilled_slot_keys": {
+              "type": "array",
+              "maxItems": 60,
+              "uniqueItems": true,
+              "items": {
+                "type": "string",
+                "pattern": "^[A-Z_]+[0-9]+$"
+              }
+            },
+            "ambiguous_flex_slot_keys": {
+              "type": "array",
+              "maxItems": 60,
+              "uniqueItems": true,
+              "items": {
+                "type": "string",
+                "pattern": "^[A-Z_]+[0-9]+$"
+              }
+            },
+            "depth_counts": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "QB",
+                "RB",
+                "WR",
+                "TE"
+              ],
+              "properties": {
+                "QB": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 60
+                },
+                "RB": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 60
+                },
+                "WR": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 60
+                },
+                "TE": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 60
+                }
+              }
+            },
+            "limitation_codes": {
+              "$ref": "#/$defs/codeArray"
+            }
+          }
+        }
+      }
+    },
+    "evidenceCoverageCase": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "case_key",
+        "covered_players",
+        "roster_players",
+        "evidence_state",
+        "expected_basis_points",
+        "expected_availability",
+        "expected_confidence"
+      ],
+      "properties": {
+        "case_key": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9_]*$"
+        },
+        "covered_players": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "roster_players": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100
+        },
+        "evidence_state": {
+          "enum": [
+            "usable",
+            "expired",
+            "incompatible",
+            "invalid"
+          ]
+        },
+        "expected_basis_points": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 10000
+        },
+        "expected_availability": {
+          "$ref": "#/$defs/availability"
+        },
+        "expected_confidence": {
+          "$ref": "#/$defs/confidence"
+        }
+      }
+    },
+    "concentrationCase": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "case_key",
+        "total_user_picks",
+        "position_pick_counts",
+        "unfilled_distinct_starter_positions",
+        "expected_maximum_share_basis_points",
+        "expected_bands"
+      ],
+      "properties": {
+        "case_key": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9_]*$"
+        },
+        "total_user_picks": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100
+        },
+        "position_pick_counts": {
+          "type": "object",
+          "minProperties": 1,
+          "maxProperties": 4,
+          "additionalProperties": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 100
+          },
+          "propertyNames": {
+            "enum": [
+              "QB",
+              "RB",
+              "WR",
+              "TE"
+            ]
+          }
+        },
+        "unfilled_distinct_starter_positions": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 4
+        },
+        "expected_maximum_share_basis_points": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 10000
+        },
+        "expected_bands": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 2,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "balanced_distribution",
+              "concentrated",
+              "highly_concentrated",
+              "coverage_gap"
+            ]
+          }
+        }
+      }
+    },
+    "sectionExpectation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "case_key",
+        "section_key",
+        "mode",
+        "expected_availability",
+        "expected_confidence",
+        "reason_codes"
+      ],
+      "properties": {
+        "case_key": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9_]*$"
+        },
+        "section_key": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9_]*$"
+        },
+        "mode": {
+          "enum": [
+            "live",
+            "mock"
+          ]
+        },
+        "expected_availability": {
+          "$ref": "#/$defs/availability"
+        },
+        "expected_confidence": {
+          "$ref": "#/$defs/confidence"
+        },
+        "reason_codes": {
+          "$ref": "#/$defs/codeArray"
+        }
+      }
+    },
+    "templateValue": {
+      "type": [
+        "string",
+        "integer"
+      ]
+    },
+    "explanationCase": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "case_key",
+        "template_key",
+        "values",
+        "expected"
+      ],
+      "properties": {
+        "case_key": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9_]*$"
+        },
+        "template_key": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9_.]*$"
+        },
+        "values": {
+          "type": "object",
+          "maxProperties": 20,
+          "additionalProperties": {
+            "$ref": "#/$defs/templateValue"
+          },
+          "propertyNames": {
+            "pattern": "^[a-z][a-z0-9_]*$"
+          }
+        },
+        "expected": {
+          "type": "string",
+          "minLength": 10,
+          "maxLength": 500
+        }
+      }
+    }
+  }
+}
