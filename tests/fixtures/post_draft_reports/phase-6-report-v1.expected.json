@@ -1,0 +1,474 @@
+{
+  "schema_version": 1,
+  "fixture_version": "post-draft-report-fixtures-v1",
+  "fictional": true,
+  "content_hash": "375fa48cd95bb2c325f7ed0c37b6fbcae38606f9dc095d2e16c41ab818423bce",
+  "starter_assignment_case": {
+    "case_key": "superflex_complete_with_flex_tie",
+    "league_shape": {
+      "starter_slots": [
+        {
+          "slot_order": 0,
+          "slot_key": "QB1",
+          "slot_type": "QB",
+          "eligible_positions": [
+            "QB"
+          ]
+        },
+        {
+          "slot_order": 1,
+          "slot_key": "RB1",
+          "slot_type": "RB",
+          "eligible_positions": [
+            "RB"
+          ]
+        },
+        {
+          "slot_order": 2,
+          "slot_key": "RB2",
+          "slot_type": "RB",
+          "eligible_positions": [
+            "RB"
+          ]
+        },
+        {
+          "slot_order": 3,
+          "slot_key": "WR1",
+          "slot_type": "WR",
+          "eligible_positions": [
+            "WR"
+          ]
+        },
+        {
+          "slot_order": 4,
+          "slot_key": "WR2",
+          "slot_type": "WR",
+          "eligible_positions": [
+            "WR"
+          ]
+        },
+        {
+          "slot_order": 5,
+          "slot_key": "TE1",
+          "slot_type": "TE",
+          "eligible_positions": [
+            "TE"
+          ]
+        },
+        {
+          "slot_order": 6,
+          "slot_key": "FLEX1",
+          "slot_type": "FLEX",
+          "eligible_positions": [
+            "RB",
+            "WR",
+            "TE"
+          ]
+        },
+        {
+          "slot_order": 7,
+          "slot_key": "SUPER_FLEX1",
+          "slot_type": "SUPER_FLEX",
+          "eligible_positions": [
+            "QB",
+            "RB",
+            "WR",
+            "TE"
+          ]
+        }
+      ]
+    },
+    "roster": [
+      {
+        "canonical_player_id": "fictional-player-01",
+        "display_name": "Mara Vale",
+        "overall_pick": 5,
+        "primary_position": "QB",
+        "fantasy_positions": [
+          "QB"
+        ]
+      },
+      {
+        "canonical_player_id": "fictional-player-02",
+        "display_name": "Theo Flint",
+        "overall_pick": 16,
+        "primary_position": "RB",
+        "fantasy_positions": [
+          "RB"
+        ]
+      },
+      {
+        "canonical_player_id": "fictional-player-03",
+        "display_name": "Nia Harbor",
+        "overall_pick": 25,
+        "primary_position": "WR",
+        "fantasy_positions": [
+          "WR"
+        ]
+      },
+      {
+        "canonical_player_id": "fictional-player-04",
+        "display_name": "Owen Pike",
+        "overall_pick": 36,
+        "primary_position": "QB",
+        "fantasy_positions": [
+          "QB"
+        ]
+      },
+      {
+        "canonical_player_id": "fictional-player-05",
+        "display_name": "Iris North",
+        "overall_pick": 45,
+        "primary_position": "TE",
+        "fantasy_positions": [
+          "TE"
+        ]
+      },
+      {
+        "canonical_player_id": "fictional-player-06",
+        "display_name": "Cal Rowan",
+        "overall_pick": 56,
+        "primary_position": "RB",
+        "fantasy_positions": [
+          "RB"
+        ]
+      },
+      {
+        "canonical_player_id": "fictional-player-07",
+        "display_name": "Zara Moss",
+        "overall_pick": 65,
+        "primary_position": "WR",
+        "fantasy_positions": [
+          "WR"
+        ]
+      },
+      {
+        "canonical_player_id": "fictional-player-08",
+        "display_name": "Eli Stone",
+        "overall_pick": 76,
+        "primary_position": "WR",
+        "fantasy_positions": [
+          "WR"
+        ]
+      },
+      {
+        "canonical_player_id": "fictional-player-09",
+        "display_name": "June Wilder",
+        "overall_pick": 85,
+        "primary_position": "RB",
+        "fantasy_positions": [
+          "RB"
+        ]
+      },
+      {
+        "canonical_player_id": "fictional-player-10",
+        "display_name": "Rafi Glen",
+        "overall_pick": 96,
+        "primary_position": "TE",
+        "fantasy_positions": [
+          "TE"
+        ]
+      }
+    ],
+    "expected": {
+      "availability": "supported",
+      "confidence": "high",
+      "starter_slots_total": 8,
+      "starter_slots_filled": 8,
+      "starter_coverage_basis_points": 10000,
+      "assignments": [
+        {
+          "slot_order": 0,
+          "slot_key": "QB1",
+          "canonical_player_id": "fictional-player-01"
+        },
+        {
+          "slot_order": 1,
+          "slot_key": "RB1",
+          "canonical_player_id": "fictional-player-02"
+        },
+        {
+          "slot_order": 2,
+          "slot_key": "RB2",
+          "canonical_player_id": "fictional-player-06"
+        },
+        {
+          "slot_order": 3,
+          "slot_key": "WR1",
+          "canonical_player_id": "fictional-player-03"
+        },
+        {
+          "slot_order": 4,
+          "slot_key": "WR2",
+          "canonical_player_id": "fictional-player-07"
+        },
+        {
+          "slot_order": 5,
+          "slot_key": "TE1",
+          "canonical_player_id": "fictional-player-05"
+        },
+        {
+          "slot_order": 6,
+          "slot_key": "FLEX1",
+          "canonical_player_id": "fictional-player-08"
+        },
+        {
+          "slot_order": 7,
+          "slot_key": "SUPER_FLEX1",
+          "canonical_player_id": "fictional-player-04"
+        }
+      ],
+      "unfilled_slot_keys": [],
+      "ambiguous_flex_slot_keys": [
+        "FLEX1",
+        "SUPER_FLEX1"
+      ],
+      "depth_counts": {
+        "QB": 0,
+        "RB": 1,
+        "WR": 0,
+        "TE": 1
+      },
+      "limitation_codes": []
+    }
+  },
+  "evidence_coverage_cases": [
+    {
+      "case_key": "usable_49_percent",
+      "covered_players": 49,
+      "roster_players": 100,
+      "evidence_state": "usable",
+      "expected_basis_points": 4900,
+      "expected_availability": "unavailable",
+      "expected_confidence": "unavailable"
+    },
+    {
+      "case_key": "usable_50_percent",
+      "covered_players": 50,
+      "roster_players": 100,
+      "evidence_state": "usable",
+      "expected_basis_points": 5000,
+      "expected_availability": "limited",
+      "expected_confidence": "low"
+    },
+    {
+      "case_key": "usable_79_percent",
+      "covered_players": 79,
+      "roster_players": 100,
+      "evidence_state": "usable",
+      "expected_basis_points": 7900,
+      "expected_availability": "limited",
+      "expected_confidence": "low"
+    },
+    {
+      "case_key": "usable_80_percent",
+      "covered_players": 80,
+      "roster_players": 100,
+      "evidence_state": "usable",
+      "expected_basis_points": 8000,
+      "expected_availability": "supported",
+      "expected_confidence": "medium"
+    },
+    {
+      "case_key": "expired_full_coverage",
+      "covered_players": 100,
+      "roster_players": 100,
+      "evidence_state": "expired",
+      "expected_basis_points": 10000,
+      "expected_availability": "unavailable",
+      "expected_confidence": "unavailable"
+    },
+    {
+      "case_key": "incompatible_full_coverage",
+      "covered_players": 100,
+      "roster_players": 100,
+      "evidence_state": "incompatible",
+      "expected_basis_points": 10000,
+      "expected_availability": "unavailable",
+      "expected_confidence": "unavailable"
+    },
+    {
+      "case_key": "invalid_full_coverage",
+      "covered_players": 100,
+      "roster_players": 100,
+      "evidence_state": "invalid",
+      "expected_basis_points": 10000,
+      "expected_availability": "unavailable",
+      "expected_confidence": "unavailable"
+    }
+  ],
+  "concentration_cases": [
+    {
+      "case_key": "exactly_40_percent_full_coverage",
+      "total_user_picks": 100,
+      "position_pick_counts": {
+        "QB": 20,
+        "RB": 40,
+        "WR": 30,
+        "TE": 10
+      },
+      "unfilled_distinct_starter_positions": 0,
+      "expected_maximum_share_basis_points": 4000,
+      "expected_bands": [
+        "balanced_distribution"
+      ]
+    },
+    {
+      "case_key": "exactly_41_percent_full_coverage",
+      "total_user_picks": 100,
+      "position_pick_counts": {
+        "QB": 20,
+        "RB": 41,
+        "WR": 29,
+        "TE": 10
+      },
+      "unfilled_distinct_starter_positions": 0,
+      "expected_maximum_share_basis_points": 4100,
+      "expected_bands": [
+        "concentrated"
+      ]
+    },
+    {
+      "case_key": "exactly_55_percent_full_coverage",
+      "total_user_picks": 100,
+      "position_pick_counts": {
+        "QB": 15,
+        "RB": 55,
+        "WR": 20,
+        "TE": 10
+      },
+      "unfilled_distinct_starter_positions": 0,
+      "expected_maximum_share_basis_points": 5500,
+      "expected_bands": [
+        "concentrated"
+      ]
+    },
+    {
+      "case_key": "exactly_56_percent_full_coverage",
+      "total_user_picks": 100,
+      "position_pick_counts": {
+        "QB": 14,
+        "RB": 56,
+        "WR": 20,
+        "TE": 10
+      },
+      "unfilled_distinct_starter_positions": 0,
+      "expected_maximum_share_basis_points": 5600,
+      "expected_bands": [
+        "highly_concentrated"
+      ]
+    },
+    {
+      "case_key": "concentrated_with_coverage_gap",
+      "total_user_picks": 100,
+      "position_pick_counts": {
+        "QB": 20,
+        "RB": 55,
+        "WR": 25,
+        "TE": 0
+      },
+      "unfilled_distinct_starter_positions": 1,
+      "expected_maximum_share_basis_points": 5500,
+      "expected_bands": [
+        "concentrated",
+        "coverage_gap"
+      ]
+    }
+  ],
+  "mode_cases": [
+    {
+      "case_key": "mock_strategy_history_available",
+      "section_key": "strategy_story",
+      "mode": "mock",
+      "expected_availability": "supported",
+      "expected_confidence": "high",
+      "reason_codes": [
+        "MOCK_STRATEGY_HISTORY_AVAILABLE"
+      ]
+    },
+    {
+      "case_key": "live_strategy_not_applicable",
+      "section_key": "strategy_story",
+      "mode": "live",
+      "expected_availability": "not_applicable",
+      "expected_confidence": "unavailable",
+      "reason_codes": [
+        "LIVE_STRATEGY_NOT_APPLICABLE"
+      ]
+    }
+  ],
+  "unsupported_section_cases": [
+    {
+      "case_key": "long_term_unavailable",
+      "section_key": "long_term_value",
+      "mode": "mock",
+      "expected_availability": "unavailable",
+      "expected_confidence": "unavailable",
+      "reason_codes": [
+        "LONG_TERM_VALUE_EVIDENCE_UNAVAILABLE"
+      ]
+    },
+    {
+      "case_key": "liquidity_unavailable",
+      "section_key": "liquidity",
+      "mode": "mock",
+      "expected_availability": "unavailable",
+      "expected_confidence": "unavailable",
+      "reason_codes": [
+        "LIQUIDITY_EVIDENCE_UNAVAILABLE"
+      ]
+    },
+    {
+      "case_key": "player_fragility_unavailable",
+      "section_key": "player_fragility",
+      "mode": "mock",
+      "expected_availability": "unavailable",
+      "expected_confidence": "unavailable",
+      "reason_codes": [
+        "PLAYER_FRAGILITY_EVIDENCE_UNAVAILABLE"
+      ]
+    }
+  ],
+  "explanation_cases": [
+    {
+      "case_key": "starter_complete",
+      "template_key": "starter.coverage_complete",
+      "values": {
+        "starter_slots_total": 8
+      },
+      "expected": "All 8 configured starter slots can be covered by the drafted roster."
+    },
+    {
+      "case_key": "production_limited",
+      "template_key": "production.limited",
+      "values": {
+        "covered_players": 6,
+        "roster_players": 10
+      },
+      "expected": "Saved categorical production evidence covers 6 of 10 rostered players, so this context is limited."
+    },
+    {
+      "case_key": "live_strategy",
+      "template_key": "strategy.not_applicable",
+      "values": {},
+      "expected": "Strategy story does not apply to this live draft."
+    },
+    {
+      "case_key": "personal_board_observation",
+      "template_key": "personal_board.moment",
+      "values": {
+        "overall_pick": 7,
+        "selected_player": "Mara Vale",
+        "passed_player": "Nia Harbor",
+        "rank_delta": 5
+      },
+      "expected": "At pick 7, you selected Mara Vale while Nia Harbor was 5 places higher on the saved Personal Board."
+    },
+    {
+      "case_key": "report_limits",
+      "template_key": "report.limits",
+      "values": {},
+      "expected": "This report describes saved draft evidence, does not project outcomes, and leaves user judgment authoritative."
+    }
+  ]
+}

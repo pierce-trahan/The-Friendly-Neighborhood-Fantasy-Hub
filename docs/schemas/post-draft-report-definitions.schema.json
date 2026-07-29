@@ -1,0 +1,491 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://friendly-neighborhood-fantasy-hub.local/schemas/post-draft-report-definitions.schema.json",
+  "title": "Friendly Neighborhood Fantasy Hub Post-Draft Report Definitions",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "rules_version",
+    "explanation_template_version",
+    "availability_states",
+    "confidence_states",
+    "section_registry",
+    "starter_assignment",
+    "evidence_coverage",
+    "concentration",
+    "limits",
+    "explanation_templates",
+    "forbidden_language",
+    "privacy_forbidden_fields"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "rules_version": {
+      "const": "post-draft-report-rules-v1"
+    },
+    "explanation_template_version": {
+      "const": "post-draft-report-explanations-v1"
+    },
+    "availability_states": {
+      "type": "array",
+      "minItems": 4,
+      "maxItems": 4,
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "supported",
+          "limited",
+          "unavailable",
+          "not_applicable"
+        ]
+      }
+    },
+    "confidence_states": {
+      "type": "array",
+      "minItems": 4,
+      "maxItems": 4,
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "high",
+          "medium",
+          "low",
+          "unavailable"
+        ]
+      }
+    },
+    "section_registry": {
+      "type": "array",
+      "minItems": 14,
+      "maxItems": 14,
+      "items": {
+        "$ref": "#/$defs/sectionDefinition"
+      }
+    },
+    "starter_assignment": {
+      "$ref": "#/$defs/starterAssignment"
+    },
+    "evidence_coverage": {
+      "$ref": "#/$defs/evidenceCoverage"
+    },
+    "concentration": {
+      "$ref": "#/$defs/concentration"
+    },
+    "limits": {
+      "$ref": "#/$defs/limits"
+    },
+    "explanation_templates": {
+      "type": "array",
+      "minItems": 20,
+      "maxItems": 100,
+      "items": {
+        "$ref": "#/$defs/explanationTemplate"
+      }
+    },
+    "forbidden_language": {
+      "type": "array",
+      "minItems": 10,
+      "maxItems": 50,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 3,
+        "maxLength": 80
+      }
+    },
+    "privacy_forbidden_fields": {
+      "type": "array",
+      "minItems": 8,
+      "maxItems": 50,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 2,
+        "maxLength": 80,
+        "pattern": "^[a-z][a-z0-9_]*$"
+      }
+    }
+  },
+  "$defs": {
+    "codeArray": {
+      "type": "array",
+      "maxItems": 20,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 3,
+        "maxLength": 80,
+        "pattern": "^[A-Z][A-Z0-9]*(?:_[A-Z0-9]+)*$"
+      }
+    },
+    "sectionDefinition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "section_key",
+        "title",
+        "availability_rule",
+        "confidence_ceiling",
+        "applicable_modes",
+        "reason_codes",
+        "limitation_codes"
+      ],
+      "properties": {
+        "section_key": {
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 80,
+          "pattern": "^[a-z][a-z0-9_]*$"
+        },
+        "title": {
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 100
+        },
+        "availability_rule": {
+          "enum": [
+            "always_supported",
+            "normalized_league_shape",
+            "categorical_evidence_coverage",
+            "always_unavailable_v1",
+            "mock_saved_history",
+            "frozen_board_snapshot",
+            "saved_alert_history"
+          ]
+        },
+        "confidence_ceiling": {
+          "enum": [
+            "high",
+            "medium",
+            "low",
+            "unavailable"
+          ]
+        },
+        "applicable_modes": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 2,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "live",
+              "mock"
+            ]
+          }
+        },
+        "reason_codes": {
+          "$ref": "#/$defs/codeArray"
+        },
+        "limitation_codes": {
+          "$ref": "#/$defs/codeArray"
+        }
+      }
+    },
+    "starterAssignment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "algorithm",
+        "objective",
+        "slot_order_origin",
+        "tie_break_fields",
+        "assignment_vector_order",
+        "unknown_eligibility",
+        "depth_grouping",
+        "ambiguous_flex_rule",
+        "supported_slot_types"
+      ],
+      "properties": {
+        "algorithm": {
+          "const": "maximum_bipartite_matching"
+        },
+        "objective": {
+          "const": "maximize_filled_starter_slots"
+        },
+        "slot_order_origin": {
+          "const": 0
+        },
+        "tie_break_fields": {
+          "type": "array",
+          "prefixItems": [
+            {
+              "const": "slot_order"
+            },
+            {
+              "const": "overall_pick"
+            },
+            {
+              "const": "canonical_player_id"
+            }
+          ],
+          "minItems": 3,
+          "maxItems": 3
+        },
+        "assignment_vector_order": {
+          "const": "lexicographically_smallest_filled_edge_tuple_list"
+        },
+        "unknown_eligibility": {
+          "const": "no_edge_and_limited_when_assignment_remains_usable"
+        },
+        "depth_grouping": {
+          "const": "frozen_primary_position"
+        },
+        "ambiguous_flex_rule": {
+          "const": "chosen_player_replaceable_in_another_maximum_assignment"
+        },
+        "supported_slot_types": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "QB",
+            "RB",
+            "WR",
+            "TE",
+            "FLEX",
+            "SUPER_FLEX"
+          ],
+          "properties": {
+            "QB": {
+              "$ref": "#/$defs/positionArray"
+            },
+            "RB": {
+              "$ref": "#/$defs/positionArray"
+            },
+            "WR": {
+              "$ref": "#/$defs/positionArray"
+            },
+            "TE": {
+              "$ref": "#/$defs/positionArray"
+            },
+            "FLEX": {
+              "$ref": "#/$defs/positionArray"
+            },
+            "SUPER_FLEX": {
+              "$ref": "#/$defs/positionArray"
+            }
+          }
+        }
+      }
+    },
+    "positionArray": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 4,
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "QB",
+          "RB",
+          "WR",
+          "TE"
+        ]
+      }
+    },
+    "evidenceCoverage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "formula",
+        "limited_minimum_basis_points",
+        "supported_minimum_basis_points",
+        "below_limited_availability",
+        "limited_availability",
+        "supported_availability",
+        "supported_confidence",
+        "limited_confidence",
+        "unavailable_confidence",
+        "confidence_ceiling",
+        "blocking_evidence_states",
+        "applies_to_sections"
+      ],
+      "properties": {
+        "formula": {
+          "const": "floor(covered_players*10000/roster_players)"
+        },
+        "limited_minimum_basis_points": {
+          "const": 5000
+        },
+        "supported_minimum_basis_points": {
+          "const": 8000
+        },
+        "below_limited_availability": {
+          "const": "unavailable"
+        },
+        "limited_availability": {
+          "const": "limited"
+        },
+        "supported_availability": {
+          "const": "supported"
+        },
+        "supported_confidence": {
+          "const": "medium"
+        },
+        "limited_confidence": {
+          "const": "low"
+        },
+        "unavailable_confidence": {
+          "const": "unavailable"
+        },
+        "confidence_ceiling": {
+          "const": "medium"
+        },
+        "blocking_evidence_states": {
+          "type": "array",
+          "prefixItems": [
+            {
+              "const": "expired"
+            },
+            {
+              "const": "incompatible"
+            },
+            {
+              "const": "invalid"
+            }
+          ],
+          "minItems": 3,
+          "maxItems": 3
+        },
+        "applies_to_sections": {
+          "type": "array",
+          "prefixItems": [
+            {
+              "const": "age_risk_profile"
+            },
+            {
+              "const": "dynasty_market_context"
+            },
+            {
+              "const": "year_one_production_context"
+            }
+          ],
+          "minItems": 3,
+          "maxItems": 3
+        }
+      }
+    },
+    "concentration": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "formula",
+        "balanced_maximum_basis_points",
+        "highly_concentrated_above_basis_points",
+        "balanced_requires_full_distinct_starter_coverage",
+        "coverage_gap_can_coexist",
+        "share_bands"
+      ],
+      "properties": {
+        "formula": {
+          "const": "floor(position_pick_count*10000/total_user_picks)"
+        },
+        "balanced_maximum_basis_points": {
+          "const": 4000
+        },
+        "highly_concentrated_above_basis_points": {
+          "const": 5500
+        },
+        "balanced_requires_full_distinct_starter_coverage": {
+          "const": true
+        },
+        "coverage_gap_can_coexist": {
+          "const": true
+        },
+        "share_bands": {
+          "type": "array",
+          "prefixItems": [
+            {
+              "const": "balanced_distribution"
+            },
+            {
+              "const": "concentrated"
+            },
+            {
+              "const": "highly_concentrated"
+            }
+          ],
+          "minItems": 3,
+          "maxItems": 3
+        }
+      }
+    },
+    "limits": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "maximum_candidates",
+        "maximum_user_roster_picks",
+        "maximum_sections",
+        "maximum_personal_board_moments",
+        "maximum_exported_alert_moments",
+        "minimum_comparison_reports",
+        "maximum_comparison_reports"
+      ],
+      "properties": {
+        "maximum_candidates": {
+          "const": 500
+        },
+        "maximum_user_roster_picks": {
+          "const": 60
+        },
+        "maximum_sections": {
+          "const": 100
+        },
+        "maximum_personal_board_moments": {
+          "const": 10
+        },
+        "maximum_exported_alert_moments": {
+          "const": 20
+        },
+        "minimum_comparison_reports": {
+          "const": 2
+        },
+        "maximum_comparison_reports": {
+          "const": 4
+        }
+      }
+    },
+    "explanationTemplate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "template_key",
+        "section_key",
+        "template",
+        "required_placeholders"
+      ],
+      "properties": {
+        "template_key": {
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 100,
+          "pattern": "^[a-z][a-z0-9_.]*$"
+        },
+        "section_key": {
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 80,
+          "pattern": "^[a-z][a-z0-9_]*$"
+        },
+        "template": {
+          "type": "string",
+          "minLength": 10,
+          "maxLength": 500
+        },
+        "required_placeholders": {
+          "type": "array",
+          "maxItems": 20,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 80,
+            "pattern": "^[a-z][a-z0-9_]*$"
+          }
+        }
+      }
+    }
+  }
+}
