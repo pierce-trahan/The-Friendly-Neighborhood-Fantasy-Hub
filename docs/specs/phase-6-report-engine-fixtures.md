@@ -263,3 +263,6 @@ section, and moment persistence model plus migration and round-trip tests.
 
 Completed-draft eligibility, generation APIs, optional evidence enrichment,
 moments, comparisons, export, and desktop work remain out of scope.
+
+The bounded step 4 implementation is recorded in
+[Phase 6 Post-Draft Report Persistence](phase-6-report-persistence.md).

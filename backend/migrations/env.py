@@ -50,6 +50,12 @@ from friendly_hub.domains.players.models import (  # noqa: F401
     PlayerRelevanceRow,
     PlayerRow,
 )
+from friendly_hub.domains.reports.models import (  # noqa: F401
+    PostDraftReportMomentRow,
+    PostDraftReportPlayerRow,
+    PostDraftReportRow,
+    PostDraftReportSectionRow,
+)
 
 config = context.config
 

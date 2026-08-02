@@ -113,7 +113,9 @@ export, and visible unavailable states where V1 lacks approved evidence. The
 freezes the V1 section registry and calculation boundaries before engine or
 persistence work begins. The bounded
 [deterministic report engine](docs/specs/phase-6-report-engine-fixtures.md)
-now reproduces those approved fixtures without persistence or transport code.
+now reproduces those approved fixtures. The bounded
+[report persistence contract](docs/specs/phase-6-report-persistence.md) adds
+immutable, draft-owned storage without generation or transport code.
 
 ## Local Setup
 
