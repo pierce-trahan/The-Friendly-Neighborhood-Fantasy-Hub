@@ -262,5 +262,8 @@ After this module is reviewed, Phase 6 step 5 may add completed-draft
 eligibility, consistent input loading, atomic report generation, fingerprint
 idempotency, and generate/read/list API contracts.
 
+That bounded implementation is recorded in
+[Phase 6 Completed-Draft Report Generation API](phase-6-report-generation-api.md).
+
 Optional Phase 5 enrichment, strategy and decision moments, comparison, HTML
 export, and desktop work remain deferred to their later approved steps.

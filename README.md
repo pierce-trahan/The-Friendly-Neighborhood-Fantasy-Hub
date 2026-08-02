@@ -115,7 +115,11 @@ persistence work begins. The bounded
 [deterministic report engine](docs/specs/phase-6-report-engine-fixtures.md)
 now reproduces those approved fixtures. The bounded
 [report persistence contract](docs/specs/phase-6-report-persistence.md) adds
-immutable, draft-owned storage without generation or transport code.
+immutable, draft-owned storage. The bounded
+[completed-draft generation API](docs/specs/phase-6-report-generation-api.md)
+adds eligibility, atomic core-report creation, fingerprint idempotency, and
+safe read/list transport while later enrichment and moment work remains
+explicitly deferred.
 
 ## Local Setup
 

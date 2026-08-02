@@ -7,6 +7,42 @@ REPORT_ENGINE_VERSION: Final = "post-draft-report-engine-v1"
 REPORT_RULES_VERSION: Final = "post-draft-report-rules-v1"
 EXPLANATION_TEMPLATE_VERSION: Final = "post-draft-report-explanations-v1"
 
+SECTION_KEYS: Final = (
+    "draft_summary",
+    "position_inventory",
+    "starter_coverage",
+    "roster_concentration",
+    "year_one_production_context",
+    "dynasty_market_context",
+    "age_risk_profile",
+    "long_term_value",
+    "liquidity",
+    "player_fragility",
+    "strategy_story",
+    "personal_board_choice_moments",
+    "recorded_alert_moments",
+    "evidence_limits",
+)
+
+SECTION_TITLES = MappingProxyType(
+    {
+        "draft_summary": "Draft summary",
+        "position_inventory": "Position inventory",
+        "starter_coverage": "Starter coverage",
+        "roster_concentration": "Roster-construction concentration",
+        "year_one_production_context": "Year-one production context",
+        "dynasty_market_context": "Dynasty market context",
+        "age_risk_profile": "Age-risk profile",
+        "long_term_value": "Long-term dynasty value",
+        "liquidity": "Liquidity",
+        "player_fragility": "Player fragility",
+        "strategy_story": "Strategy story",
+        "personal_board_choice_moments": "Personal Board choice moments",
+        "recorded_alert_moments": "Recorded alert moments",
+        "evidence_limits": "Evidence limits",
+    }
+)
+
 LIMITED_COVERAGE_MINIMUM_BASIS_POINTS: Final = 5_000
 SUPPORTED_COVERAGE_MINIMUM_BASIS_POINTS: Final = 8_000
 BALANCED_MAXIMUM_BASIS_POINTS: Final = 4_000
