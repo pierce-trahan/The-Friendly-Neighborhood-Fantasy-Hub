@@ -6207,6 +6207,531 @@
         "title": "PlayerRead",
         "type": "object"
       },
+      "PostDraftReportGenerateRequest": {
+        "additionalProperties": false,
+        "properties": {
+          "draft_revision": {
+            "minimum": 0.0,
+            "title": "Draft Revision",
+            "type": "integer"
+          },
+          "expected_completed_at": {
+            "format": "date-time",
+            "title": "Expected Completed At",
+            "type": "string"
+          }
+        },
+        "required": [
+          "draft_revision",
+          "expected_completed_at"
+        ],
+        "title": "PostDraftReportGenerateRequest",
+        "type": "object"
+      },
+      "PostDraftReportGenerateResponse": {
+        "properties": {
+          "idempotent": {
+            "title": "Idempotent",
+            "type": "boolean"
+          },
+          "report": {
+            "$ref": "#/components/schemas/PostDraftReportRead"
+          }
+        },
+        "required": [
+          "idempotent",
+          "report"
+        ],
+        "title": "PostDraftReportGenerateResponse",
+        "type": "object"
+      },
+      "PostDraftReportListResponse": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/PostDraftReportSummaryRead"
+            },
+            "title": "Items",
+            "type": "array"
+          },
+          "limit": {
+            "title": "Limit",
+            "type": "integer"
+          },
+          "offset": {
+            "title": "Offset",
+            "type": "integer"
+          },
+          "total": {
+            "title": "Total",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "items",
+          "total",
+          "limit",
+          "offset"
+        ],
+        "title": "PostDraftReportListResponse",
+        "type": "object"
+      },
+      "PostDraftReportMomentRead": {
+        "properties": {
+          "limitation_codes": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Limitation Codes",
+            "type": "array"
+          },
+          "moment_key": {
+            "title": "Moment Key",
+            "type": "string"
+          },
+          "moment_kind": {
+            "enum": [
+              "personal_board_choice",
+              "strategy_pivot",
+              "strategy_guidance",
+              "alert_event"
+            ],
+            "title": "Moment Kind",
+            "type": "string"
+          },
+          "overall_pick": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Overall Pick"
+          },
+          "primary_player_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Primary Player Id"
+          },
+          "reason_codes": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Reason Codes",
+            "type": "array"
+          },
+          "safe_summary": {
+            "additionalProperties": true,
+            "title": "Safe Summary",
+            "type": "object"
+          },
+          "secondary_player_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Secondary Player Id"
+          }
+        },
+        "required": [
+          "moment_key",
+          "moment_kind",
+          "overall_pick",
+          "primary_player_id",
+          "secondary_player_id",
+          "safe_summary",
+          "reason_codes",
+          "limitation_codes"
+        ],
+        "title": "PostDraftReportMomentRead",
+        "type": "object"
+      },
+      "PostDraftReportPlayerRead": {
+        "properties": {
+          "display_name": {
+            "title": "Display Name",
+            "type": "string"
+          },
+          "fantasy_positions": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Fantasy Positions",
+            "type": "array"
+          },
+          "overall_pick": {
+            "title": "Overall Pick",
+            "type": "integer"
+          },
+          "player_id": {
+            "title": "Player Id",
+            "type": "string"
+          },
+          "primary_position": {
+            "title": "Primary Position",
+            "type": "string"
+          },
+          "round_number": {
+            "title": "Round Number",
+            "type": "integer"
+          },
+          "saved_favorite": {
+            "title": "Saved Favorite",
+            "type": "boolean"
+          },
+          "saved_personal_rank": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Saved Personal Rank"
+          },
+          "saved_tier_order": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Saved Tier Order"
+          },
+          "starter_assignment": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Starter Assignment"
+          }
+        },
+        "required": [
+          "player_id",
+          "display_name",
+          "overall_pick",
+          "round_number",
+          "primary_position",
+          "fantasy_positions",
+          "starter_assignment",
+          "saved_personal_rank",
+          "saved_tier_order",
+          "saved_favorite"
+        ],
+        "title": "PostDraftReportPlayerRead",
+        "type": "object"
+      },
+      "PostDraftReportRead": {
+        "properties": {
+          "available_actions": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Available Actions",
+            "type": "array"
+          },
+          "comparison_eligible": {
+            "title": "Comparison Eligible",
+            "type": "boolean"
+          },
+          "completed_at": {
+            "title": "Completed At",
+            "type": "string"
+          },
+          "draft_mode": {
+            "enum": [
+              "live",
+              "mock"
+            ],
+            "title": "Draft Mode",
+            "type": "string"
+          },
+          "draft_name": {
+            "title": "Draft Name",
+            "type": "string"
+          },
+          "draft_revision": {
+            "title": "Draft Revision",
+            "type": "integer"
+          },
+          "draft_session_id": {
+            "title": "Draft Session Id",
+            "type": "string"
+          },
+          "explanation_template_version": {
+            "title": "Explanation Template Version",
+            "type": "string"
+          },
+          "export_available": {
+            "title": "Export Available",
+            "type": "boolean"
+          },
+          "generated_at": {
+            "title": "Generated At",
+            "type": "string"
+          },
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "league_shape_fingerprint": {
+            "title": "League Shape Fingerprint",
+            "type": "string"
+          },
+          "limitations": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Limitations",
+            "type": "array"
+          },
+          "moments": {
+            "items": {
+              "$ref": "#/components/schemas/PostDraftReportMomentRead"
+            },
+            "title": "Moments",
+            "type": "array"
+          },
+          "report_engine_version": {
+            "title": "Report Engine Version",
+            "type": "string"
+          },
+          "report_rules_version": {
+            "title": "Report Rules Version",
+            "type": "string"
+          },
+          "roster": {
+            "items": {
+              "$ref": "#/components/schemas/PostDraftReportPlayerRead"
+            },
+            "title": "Roster",
+            "type": "array"
+          },
+          "section_summary": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "title": "Section Summary",
+            "type": "object"
+          },
+          "sections": {
+            "items": {
+              "$ref": "#/components/schemas/PostDraftReportSectionRead"
+            },
+            "title": "Sections",
+            "type": "array"
+          },
+          "summary": {
+            "additionalProperties": true,
+            "title": "Summary",
+            "type": "object"
+          }
+        },
+        "required": [
+          "id",
+          "draft_session_id",
+          "draft_name",
+          "draft_mode",
+          "draft_revision",
+          "completed_at",
+          "generated_at",
+          "report_engine_version",
+          "report_rules_version",
+          "explanation_template_version",
+          "league_shape_fingerprint",
+          "summary",
+          "section_summary",
+          "sections",
+          "roster",
+          "moments",
+          "limitations",
+          "comparison_eligible",
+          "export_available",
+          "available_actions"
+        ],
+        "title": "PostDraftReportRead",
+        "type": "object"
+      },
+      "PostDraftReportSectionRead": {
+        "properties": {
+          "availability": {
+            "enum": [
+              "supported",
+              "limited",
+              "unavailable",
+              "not_applicable"
+            ],
+            "title": "Availability",
+            "type": "string"
+          },
+          "confidence": {
+            "enum": [
+              "high",
+              "medium",
+              "low",
+              "unavailable"
+            ],
+            "title": "Confidence",
+            "type": "string"
+          },
+          "explanation": {
+            "title": "Explanation",
+            "type": "string"
+          },
+          "explanation_template_key": {
+            "title": "Explanation Template Key",
+            "type": "string"
+          },
+          "limitation_codes": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Limitation Codes",
+            "type": "array"
+          },
+          "metrics": {
+            "additionalProperties": true,
+            "title": "Metrics",
+            "type": "object"
+          },
+          "reason_codes": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Reason Codes",
+            "type": "array"
+          },
+          "safe_provenance": {
+            "additionalProperties": true,
+            "title": "Safe Provenance",
+            "type": "object"
+          },
+          "section_key": {
+            "title": "Section Key",
+            "type": "string"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          }
+        },
+        "required": [
+          "section_key",
+          "title",
+          "availability",
+          "confidence",
+          "metrics",
+          "reason_codes",
+          "limitation_codes",
+          "explanation_template_key",
+          "explanation",
+          "safe_provenance"
+        ],
+        "title": "PostDraftReportSectionRead",
+        "type": "object"
+      },
+      "PostDraftReportSummaryRead": {
+        "properties": {
+          "completed_at": {
+            "title": "Completed At",
+            "type": "string"
+          },
+          "draft_mode": {
+            "enum": [
+              "live",
+              "mock"
+            ],
+            "title": "Draft Mode",
+            "type": "string"
+          },
+          "draft_name": {
+            "title": "Draft Name",
+            "type": "string"
+          },
+          "draft_revision": {
+            "title": "Draft Revision",
+            "type": "integer"
+          },
+          "draft_session_id": {
+            "title": "Draft Session Id",
+            "type": "string"
+          },
+          "explanation_template_version": {
+            "title": "Explanation Template Version",
+            "type": "string"
+          },
+          "generated_at": {
+            "title": "Generated At",
+            "type": "string"
+          },
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "league_shape_fingerprint": {
+            "title": "League Shape Fingerprint",
+            "type": "string"
+          },
+          "limitations": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Limitations",
+            "type": "array"
+          },
+          "report_engine_version": {
+            "title": "Report Engine Version",
+            "type": "string"
+          },
+          "report_rules_version": {
+            "title": "Report Rules Version",
+            "type": "string"
+          },
+          "section_summary": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "title": "Section Summary",
+            "type": "object"
+          }
+        },
+        "required": [
+          "id",
+          "draft_session_id",
+          "draft_name",
+          "draft_mode",
+          "draft_revision",
+          "completed_at",
+          "generated_at",
+          "report_engine_version",
+          "report_rules_version",
+          "explanation_template_version",
+          "league_shape_fingerprint",
+          "section_summary",
+          "limitations"
+        ],
+        "title": "PostDraftReportSummaryRead",
+        "type": "object"
+      },
       "SafetyConfiguration": {
         "additionalProperties": false,
         "properties": {
@@ -8289,6 +8814,121 @@
         ]
       }
     },
+    "/api/v1/draft-sessions/{session_id}/post-draft-reports": {
+      "get": {
+        "operationId": "get_post_draft_reports_for_draft_api_v1_draft_sessions__session_id__post_draft_reports_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "session_id",
+            "required": true,
+            "schema": {
+              "title": "Session Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 20,
+              "maximum": 100,
+              "minimum": 1,
+              "title": "Limit",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "offset",
+            "required": false,
+            "schema": {
+              "default": 0,
+              "minimum": 0,
+              "title": "Offset",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PostDraftReportListResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Get Post Draft Reports For Draft",
+        "tags": [
+          "post-draft reports"
+        ]
+      },
+      "post": {
+        "operationId": "create_post_draft_report_api_v1_draft_sessions__session_id__post_draft_reports_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "session_id",
+            "required": true,
+            "schema": {
+              "title": "Session Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PostDraftReportGenerateRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PostDraftReportGenerateResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Create Post Draft Report",
+        "tags": [
+          "post-draft reports"
+        ]
+      }
+    },
     "/api/v1/draft-sessions/{session_id}/reset": {
       "post": {
         "operationId": "reset_draft_session_api_v1_draft_sessions__session_id__reset_post",
@@ -9527,6 +10167,48 @@
         "summary": "Update Canonical Player",
         "tags": [
           "players"
+        ]
+      }
+    },
+    "/api/v1/post-draft-reports/{report_id}": {
+      "get": {
+        "operationId": "get_post_draft_report_api_v1_post_draft_reports__report_id__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "report_id",
+            "required": true,
+            "schema": {
+              "title": "Report Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PostDraftReportRead"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Get Post Draft Report",
+        "tags": [
+          "post-draft reports"
         ]
       }
     }

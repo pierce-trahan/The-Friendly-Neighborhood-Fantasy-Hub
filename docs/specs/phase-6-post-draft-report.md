@@ -1385,6 +1385,9 @@ The bounded contract for implementation step 3 is recorded in
 The bounded contract for implementation step 4 is recorded in
 [Phase 6 Post-Draft Report Persistence](phase-6-report-persistence.md).
 
+The bounded contract for implementation step 5 is recorded in
+[Phase 6 Completed-Draft Report Generation API](phase-6-report-generation-api.md).
+
 ## Deferred Revisit
 
 - overall or letter grades;

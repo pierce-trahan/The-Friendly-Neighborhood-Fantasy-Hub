@@ -1,0 +1,113 @@
+from __future__ import annotations
+
+from datetime import UTC, datetime
+from typing import Any, Literal
+
+from pydantic import BaseModel, ConfigDict, Field, field_validator
+
+
+class PostDraftReportGenerateRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    draft_revision: int = Field(ge=0)
+    expected_completed_at: datetime
+
+    @field_validator("expected_completed_at")
+    @classmethod
+    def require_utc_timestamp(cls, value: datetime) -> datetime:
+        if value.tzinfo is None or value.utcoffset() is None:
+            raise ValueError("expected_completed_at must include a UTC offset")
+        return value.astimezone(UTC)
+
+
+class PostDraftReportSectionRead(BaseModel):
+    section_key: str
+    title: str
+    availability: Literal["supported", "limited", "unavailable", "not_applicable"]
+    confidence: Literal["high", "medium", "low", "unavailable"]
+    metrics: dict[str, Any]
+    reason_codes: list[str]
+    limitation_codes: list[str]
+    explanation_template_key: str
+    explanation: str
+    safe_provenance: dict[str, Any]
+
+
+class PostDraftReportPlayerRead(BaseModel):
+    player_id: str
+    display_name: str
+    overall_pick: int
+    round_number: int
+    primary_position: str
+    fantasy_positions: list[str]
+    starter_assignment: str | None
+    saved_personal_rank: int | None
+    saved_tier_order: int | None
+    saved_favorite: bool
+
+
+class PostDraftReportMomentRead(BaseModel):
+    moment_key: str
+    moment_kind: Literal[
+        "personal_board_choice",
+        "strategy_pivot",
+        "strategy_guidance",
+        "alert_event",
+    ]
+    overall_pick: int | None
+    primary_player_id: str | None
+    secondary_player_id: str | None
+    safe_summary: dict[str, Any]
+    reason_codes: list[str]
+    limitation_codes: list[str]
+
+
+class PostDraftReportRead(BaseModel):
+    id: str
+    draft_session_id: str
+    draft_name: str
+    draft_mode: Literal["live", "mock"]
+    draft_revision: int
+    completed_at: str
+    generated_at: str
+    report_engine_version: str
+    report_rules_version: str
+    explanation_template_version: str
+    league_shape_fingerprint: str
+    summary: dict[str, Any]
+    section_summary: dict[str, str]
+    sections: list[PostDraftReportSectionRead]
+    roster: list[PostDraftReportPlayerRead]
+    moments: list[PostDraftReportMomentRead]
+    limitations: list[str]
+    comparison_eligible: bool
+    export_available: bool
+    available_actions: list[str]
+
+
+class PostDraftReportGenerateResponse(BaseModel):
+    idempotent: bool
+    report: PostDraftReportRead
+
+
+class PostDraftReportSummaryRead(BaseModel):
+    id: str
+    draft_session_id: str
+    draft_name: str
+    draft_mode: Literal["live", "mock"]
+    draft_revision: int
+    completed_at: str
+    generated_at: str
+    report_engine_version: str
+    report_rules_version: str
+    explanation_template_version: str
+    league_shape_fingerprint: str
+    section_summary: dict[str, str]
+    limitations: list[str]
+
+
+class PostDraftReportListResponse(BaseModel):
+    items: list[PostDraftReportSummaryRead]
+    total: int
+    limit: int
+    offset: int

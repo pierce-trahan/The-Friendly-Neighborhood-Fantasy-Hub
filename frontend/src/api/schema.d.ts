@@ -475,6 +475,24 @@ export interface paths {
         patch: operations["update_draft_pick_api_v1_draft_sessions__session_id__picks__overall_pick__patch"];
         trace?: never;
     };
+    "/api/v1/draft-sessions/{session_id}/post-draft-reports": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get Post Draft Reports For Draft */
+        get: operations["get_post_draft_reports_for_draft_api_v1_draft_sessions__session_id__post_draft_reports_get"];
+        put?: never;
+        /** Create Post Draft Report */
+        post: operations["create_post_draft_report_api_v1_draft_sessions__session_id__post_draft_reports_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/draft-sessions/{session_id}/reset": {
         parameters: {
             query?: never;
@@ -883,6 +901,23 @@ export interface paths {
         head?: never;
         /** Update Canonical Player */
         patch: operations["update_canonical_player_api_v1_players__player_id__patch"];
+        trace?: never;
+    };
+    "/api/v1/post-draft-reports/{report_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get Post Draft Report */
+        get: operations["get_post_draft_report_api_v1_post_draft_reports__report_id__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
         trace?: never;
     };
 }
@@ -2961,6 +2996,197 @@ export interface components {
             /** Updated At */
             updated_at: string;
         };
+        /** PostDraftReportGenerateRequest */
+        PostDraftReportGenerateRequest: {
+            /** Draft Revision */
+            draft_revision: number;
+            /**
+             * Expected Completed At
+             * Format: date-time
+             */
+            expected_completed_at: string;
+        };
+        /** PostDraftReportGenerateResponse */
+        PostDraftReportGenerateResponse: {
+            /** Idempotent */
+            idempotent: boolean;
+            report: components["schemas"]["PostDraftReportRead"];
+        };
+        /** PostDraftReportListResponse */
+        PostDraftReportListResponse: {
+            /** Items */
+            items: components["schemas"]["PostDraftReportSummaryRead"][];
+            /** Limit */
+            limit: number;
+            /** Offset */
+            offset: number;
+            /** Total */
+            total: number;
+        };
+        /** PostDraftReportMomentRead */
+        PostDraftReportMomentRead: {
+            /** Limitation Codes */
+            limitation_codes: string[];
+            /** Moment Key */
+            moment_key: string;
+            /**
+             * Moment Kind
+             * @enum {string}
+             */
+            moment_kind: "personal_board_choice" | "strategy_pivot" | "strategy_guidance" | "alert_event";
+            /** Overall Pick */
+            overall_pick: number | null;
+            /** Primary Player Id */
+            primary_player_id: string | null;
+            /** Reason Codes */
+            reason_codes: string[];
+            /** Safe Summary */
+            safe_summary: {
+                [key: string]: unknown;
+            };
+            /** Secondary Player Id */
+            secondary_player_id: string | null;
+        };
+        /** PostDraftReportPlayerRead */
+        PostDraftReportPlayerRead: {
+            /** Display Name */
+            display_name: string;
+            /** Fantasy Positions */
+            fantasy_positions: string[];
+            /** Overall Pick */
+            overall_pick: number;
+            /** Player Id */
+            player_id: string;
+            /** Primary Position */
+            primary_position: string;
+            /** Round Number */
+            round_number: number;
+            /** Saved Favorite */
+            saved_favorite: boolean;
+            /** Saved Personal Rank */
+            saved_personal_rank: number | null;
+            /** Saved Tier Order */
+            saved_tier_order: number | null;
+            /** Starter Assignment */
+            starter_assignment: string | null;
+        };
+        /** PostDraftReportRead */
+        PostDraftReportRead: {
+            /** Available Actions */
+            available_actions: string[];
+            /** Comparison Eligible */
+            comparison_eligible: boolean;
+            /** Completed At */
+            completed_at: string;
+            /**
+             * Draft Mode
+             * @enum {string}
+             */
+            draft_mode: "live" | "mock";
+            /** Draft Name */
+            draft_name: string;
+            /** Draft Revision */
+            draft_revision: number;
+            /** Draft Session Id */
+            draft_session_id: string;
+            /** Explanation Template Version */
+            explanation_template_version: string;
+            /** Export Available */
+            export_available: boolean;
+            /** Generated At */
+            generated_at: string;
+            /** Id */
+            id: string;
+            /** League Shape Fingerprint */
+            league_shape_fingerprint: string;
+            /** Limitations */
+            limitations: string[];
+            /** Moments */
+            moments: components["schemas"]["PostDraftReportMomentRead"][];
+            /** Report Engine Version */
+            report_engine_version: string;
+            /** Report Rules Version */
+            report_rules_version: string;
+            /** Roster */
+            roster: components["schemas"]["PostDraftReportPlayerRead"][];
+            /** Section Summary */
+            section_summary: {
+                [key: string]: string;
+            };
+            /** Sections */
+            sections: components["schemas"]["PostDraftReportSectionRead"][];
+            /** Summary */
+            summary: {
+                [key: string]: unknown;
+            };
+        };
+        /** PostDraftReportSectionRead */
+        PostDraftReportSectionRead: {
+            /**
+             * Availability
+             * @enum {string}
+             */
+            availability: "supported" | "limited" | "unavailable" | "not_applicable";
+            /**
+             * Confidence
+             * @enum {string}
+             */
+            confidence: "high" | "medium" | "low" | "unavailable";
+            /** Explanation */
+            explanation: string;
+            /** Explanation Template Key */
+            explanation_template_key: string;
+            /** Limitation Codes */
+            limitation_codes: string[];
+            /** Metrics */
+            metrics: {
+                [key: string]: unknown;
+            };
+            /** Reason Codes */
+            reason_codes: string[];
+            /** Safe Provenance */
+            safe_provenance: {
+                [key: string]: unknown;
+            };
+            /** Section Key */
+            section_key: string;
+            /** Title */
+            title: string;
+        };
+        /** PostDraftReportSummaryRead */
+        PostDraftReportSummaryRead: {
+            /** Completed At */
+            completed_at: string;
+            /**
+             * Draft Mode
+             * @enum {string}
+             */
+            draft_mode: "live" | "mock";
+            /** Draft Name */
+            draft_name: string;
+            /** Draft Revision */
+            draft_revision: number;
+            /** Draft Session Id */
+            draft_session_id: string;
+            /** Explanation Template Version */
+            explanation_template_version: string;
+            /** Generated At */
+            generated_at: string;
+            /** Id */
+            id: string;
+            /** League Shape Fingerprint */
+            league_shape_fingerprint: string;
+            /** Limitations */
+            limitations: string[];
+            /** Report Engine Version */
+            report_engine_version: string;
+            /** Report Rules Version */
+            report_rules_version: string;
+            /** Section Summary */
+            section_summary: {
+                [key: string]: string;
+            };
+        };
         /** SafetyConfiguration */
         SafetyConfiguration: {
             /** Confirm Delete */
@@ -4289,6 +4515,75 @@ export interface operations {
             };
         };
     };
+    get_post_draft_reports_for_draft_api_v1_draft_sessions__session_id__post_draft_reports_get: {
+        parameters: {
+            query?: {
+                limit?: number;
+                offset?: number;
+            };
+            header?: never;
+            path: {
+                session_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PostDraftReportListResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    create_post_draft_report_api_v1_draft_sessions__session_id__post_draft_reports_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                session_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PostDraftReportGenerateRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PostDraftReportGenerateResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
     reset_draft_session_api_v1_draft_sessions__session_id__reset_post: {
         parameters: {
             query?: never;
@@ -5081,6 +5376,37 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["PlayerRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_post_draft_report_api_v1_post_draft_reports__report_id__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                report_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PostDraftReportRead"];
                 };
             };
             /** @description Validation Error */
