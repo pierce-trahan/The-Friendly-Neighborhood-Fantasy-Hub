@@ -138,6 +138,7 @@ The full repository verifier remains the publication gate.
 
 ## Next Implementation Boundary
 
-After this module is reviewed, Phase 6 step 9 may add only standalone safe HTML
-export for one immutable report. It must add no JavaScript, external asset,
-remote request, sharing workflow, comparison persistence, or desktop work.
+Phase 6 step 9 implements this boundary in the
+[standalone safe HTML export contract](phase-6-report-html-export.md). The next
+boundary is the desktop Reports workspace without new calculations,
+persistence, grading, projection, or cloud behavior.

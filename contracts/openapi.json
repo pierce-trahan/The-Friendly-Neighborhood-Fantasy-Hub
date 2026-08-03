@@ -10549,6 +10549,41 @@
           "post-draft reports"
         ]
       }
+    },
+    "/api/v1/post-draft-reports/{report_id}/export.html": {
+      "get": {
+        "operationId": "download_post_draft_report_html_api_v1_post_draft_reports__report_id__export_html_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "report_id",
+            "required": true,
+            "schema": {
+              "title": "Report Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Download Post Draft Report Html",
+        "tags": [
+          "post-draft reports"
+        ]
+      }
     }
   }
 }

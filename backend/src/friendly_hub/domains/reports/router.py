@@ -13,6 +13,7 @@ from friendly_hub.domains.reports.schemas import (
     PostDraftReportRead,
 )
 from friendly_hub.domains.reports.service import (
+    export_report_html,
     generate_report,
     list_reports_for_draft,
     preview_report_comparison,
@@ -62,6 +63,30 @@ def get_post_draft_report(
     session: SessionDependency,
 ) -> PostDraftReportRead:
     return read_report(session, report_id)
+
+
+@router.get(
+    "/post-draft-reports/{report_id}/export.html",
+    response_class=Response,
+)
+def download_post_draft_report_html(
+    report_id: str,
+    session: SessionDependency,
+) -> Response:
+    result = export_report_html(session, report_id)
+    return Response(
+        content=result.html,
+        media_type="text/html",
+        headers={
+            "Content-Disposition": f'attachment; filename="{result.filename}"',
+            "Content-Security-Policy": (
+                "default-src 'none'; style-src 'unsafe-inline'; img-src 'none'; "
+                "script-src 'none'; connect-src 'none'; frame-src 'none'; "
+                "form-action 'none'"
+            ),
+            "X-Content-Type-Options": "nosniff",
+        },
+    )
 
 
 @router.post(

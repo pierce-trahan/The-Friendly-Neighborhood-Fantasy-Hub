@@ -6,6 +6,7 @@ from collections import Counter
 from dataclasses import dataclass
 from datetime import UTC, datetime
 from math import ceil
+from time import perf_counter
 from typing import Any
 from uuid import uuid4
 
@@ -57,6 +58,7 @@ from friendly_hub.domains.reports.evidence import (
     load_evidence_context,
     no_evidence_fingerprint_document,
 )
+from friendly_hub.domains.reports.export import ReportHtmlExport, render_report_html
 from friendly_hub.domains.reports.history import (
     DecisionHistoryContext,
     MomentCandidate,
@@ -1396,8 +1398,8 @@ def read_report(session: Session, report_id: str) -> PostDraftReportRead:
         moments=moments,
         limitations=[str(item) for item in _json_list(report.limitation_codes_json)],
         comparison_eligible=True,
-        export_available=False,
-        available_actions=["compare"],
+        export_available=True,
+        available_actions=["compare", "export_html"],
     )
 
 
@@ -1647,3 +1649,26 @@ def preview_report_comparison(
         explanation_template_key="comparison.compatible",
         explanation=explanation,
     )
+
+
+def export_report_html(session: Session, report_id: str) -> ReportHtmlExport:
+    started = perf_counter()
+    report = read_report(session, report_id)
+    try:
+        result = render_report_html(report)
+    except (TypeError, ValueError) as exc:
+        raise _error(
+            "REPORT_EXPORT_FAILED",
+            "The saved report could not be rendered as a safe standalone document.",
+            "The saved report remains unchanged. Open it in the app or restore a local backup.",
+            500,
+        ) from exc
+    duration_ms = round((perf_counter() - started) * 1_000, 2)
+    logger.info(
+        "post-draft report exported report_id=%s draft_id=%s bytes=%d duration_ms=%.2f",
+        report.id,
+        report.draft_session_id,
+        result.byte_count,
+        duration_ms,
+    )
+    return result
