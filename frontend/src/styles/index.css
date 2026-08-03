@@ -5239,7 +5239,12 @@ kbd {
 @media (max-width: 1280px) {
   .mock-control-strip {
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .mock-control-strip > div,
+  .mock-control-strip .mock-strip-identity {
+    min-width: 0;
   }
 
   .mock-control-strip .mock-run-actions {

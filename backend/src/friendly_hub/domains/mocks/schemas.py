@@ -236,6 +236,24 @@ class MockConfigurationRead(BaseModel):
     learning_withdrawn_at: str | None
     created_at: str
     updated_at: str
+    market_baseline: MockMarketBaselineRead
+
+
+class MockMarketBaselineRead(BaseModel):
+    label: str
+    evidence_kind: Literal["expert_consensus", "personal_board_fallback"]
+    source_name: str | None
+    source_url: str | None
+    rank_type: str
+    format: str
+    source_as_of: str | None
+    freshness: Literal["fresh", "stale", "unavailable"]
+    player_count: int
+    matched_candidate_count: int
+    candidate_count: int
+    coverage_percent: int = Field(ge=0, le=100)
+    confidence: Literal["unavailable", "low", "medium", "high"]
+    limitations: list[str]
 
 
 class MockCpuPickCreate(BaseModel):

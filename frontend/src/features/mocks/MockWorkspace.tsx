@@ -52,6 +52,23 @@ function sentence(value: string) {
     .replace(/^\w/, (letter) => letter.toUpperCase());
 }
 
+function evidenceLimitLabel(value: string) {
+  const labels: Record<string, string> = {
+    ECR_NOT_ADP: "Expert consensus ranking — not average draft position",
+    TWO_QB_PROXY_FOR_SUPERFLEX: "2QB ranking used as a Superflex proxy",
+    TE_PREMIUM_NOT_EXPLICIT:
+      "Tight-end premium is not included in this baseline",
+    NO_AVAILABILITY_DISTRIBUTION:
+      "No pick-by-pick availability distribution yet",
+    UNMATCHED_CANDIDATES_USE_FALLBACK:
+      "Unmatched deep players use a position-aware fallback",
+    MARKET_BASELINE_UNAVAILABLE: "Bundled market baseline unavailable",
+    MARKET_BASELINE_INVALID: "Bundled market baseline could not be validated",
+    NOT_MARKET_EVIDENCE: "Personal Board fallback is not market evidence",
+  };
+  return labels[value] ?? sentence(value);
+}
+
 function formatError(error: unknown): UiError {
   if (error instanceof ApiError) {
     return { message: error.message, action: error.action };
@@ -828,6 +845,17 @@ export function MockWorkspace() {
               </small>
             </div>
             <div>
+              <span>CPU baseline</span>
+              <strong>{mock.mock.market_baseline.label}</strong>
+              <small>
+                {mock.mock.market_baseline.source_name
+                  ? `${mock.mock.market_baseline.source_name} · ${
+                      mock.mock.market_baseline.source_as_of ?? "date unavailable"
+                    } · ${mock.mock.market_baseline.coverage_percent}% matched`
+                  : "Market evidence unavailable"}
+              </small>
+            </div>
+            <div>
               <span>Strategy</span>
               <strong>{sentence(mock.mock.current_strategy_key)}</strong>
               <small>
@@ -1156,15 +1184,17 @@ export function MockWorkspace() {
               <div className="mock-limitations">
                 <strong>Evidence limits</strong>
                 {(mock.mock.strategy_limitations.length > 0 ||
+                  mock.mock.market_baseline.limitations.length > 0 ||
                   mock.current_checkpoint.limitation_codes.length > 0) ? (
                   <ul>
                     {[
                       ...new Set([
                         ...mock.mock.strategy_limitations,
+                        ...mock.mock.market_baseline.limitations,
                         ...mock.current_checkpoint.limitation_codes,
                       ]),
                     ].map((limitation) => (
-                      <li key={limitation}>{sentence(limitation)}</li>
+                      <li key={limitation}>{evidenceLimitLabel(limitation)}</li>
                     ))}
                   </ul>
                 ) : (

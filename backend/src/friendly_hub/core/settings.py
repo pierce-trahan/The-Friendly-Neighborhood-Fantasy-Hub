@@ -15,6 +15,7 @@ class RuntimeSettings:
     sample_fixture_path: Path
     player_fixture_path: Path
     bundled_player_snapshot_path: Path | None
+    bundled_market_snapshot_path: Path | None = None
 
     @classmethod
     def from_environment(cls) -> RuntimeSettings:
@@ -56,6 +57,15 @@ class RuntimeSettings:
             / "player_universe"
             / "nflverse-players-2026.json"
         )
+        market_snapshot_override = os.environ.get("FRIENDLY_HUB_MARKET_SNAPSHOT")
+        bundled_market_snapshot_path = (
+            Path(market_snapshot_override).expanduser().resolve()
+            if market_snapshot_override
+            else project_root
+            / "data"
+            / "market_baseline"
+            / "dynasty-superflex-ecr-2026-07-31.json"
+        )
 
         return cls(
             project_root=project_root,
@@ -66,6 +76,7 @@ class RuntimeSettings:
             sample_fixture_path=sample_fixture_path,
             player_fixture_path=player_fixture_path,
             bundled_player_snapshot_path=bundled_player_snapshot_path,
+            bundled_market_snapshot_path=bundled_market_snapshot_path,
         )
 
     def ensure_directories(self) -> None:

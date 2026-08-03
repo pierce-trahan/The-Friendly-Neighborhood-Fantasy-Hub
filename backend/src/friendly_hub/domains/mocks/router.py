@@ -1,6 +1,6 @@
 from typing import Annotated
 
-from fastapi import APIRouter, Depends, Path, Query
+from fastapi import APIRouter, Depends, Path, Query, Request
 from sqlalchemy.orm import Session
 
 from friendly_hub.db.engine import get_session
@@ -44,8 +44,14 @@ def create_board_mock_session(
     board_id: str,
     payload: MockSessionCreate,
     session: SessionDependency,
+    request: Request,
 ) -> MockSessionRead:
-    return create_mock_session(session, board_id, payload)
+    return create_mock_session(
+        session,
+        board_id,
+        payload,
+        request.app.state.runtime.bundled_market_snapshot_path,
+    )
 
 
 @router.get(

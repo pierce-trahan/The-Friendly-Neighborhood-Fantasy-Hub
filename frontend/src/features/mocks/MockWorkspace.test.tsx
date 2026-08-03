@@ -99,7 +99,7 @@ function makeMock(
     },
     mock: {
       content_fingerprint: "fingerprint-1",
-      cpu_engine_version: "practice-board-v1",
+      cpu_engine_version: "market-board-v1",
       created_at: "2026-07-28T10:00:00Z",
       current_strategy_key: "balanced",
       include_in_learning: false,
@@ -114,6 +114,23 @@ function makeMock(
       strategy_definition_version: "strategy-v1",
       strategy_limitations: ["LEAGUE_SHAPE_UNAVAILABLE"],
       updated_at: "2026-07-28T10:00:00Z",
+      market_baseline: {
+        label: "Dynasty Superflex expert consensus",
+        evidence_kind: "expert_consensus",
+        source_name: "DynastyProcess",
+        source_url:
+          "https://github.com/dynastyprocess/data/blob/master/files/values.csv",
+        rank_type: "dynasty_2qb_ecr",
+        format: "dynasty_superflex_proxy",
+        source_as_of: "2026-07-31",
+        freshness: "fresh",
+        player_count: 621,
+        matched_candidate_count: 3,
+        candidate_count: 3,
+        coverage_percent: 100,
+        confidence: "medium",
+        limitations: ["ECR_NOT_ADP", "TE_PREMIUM_NOT_EXPLICIT"],
+      },
     },
     current_checkpoint: {
       id: "guide-1",
@@ -177,7 +194,7 @@ function makeMock(
             profile_source: "fallback",
             profile_archetype_key: "balanced",
             profile_confidence: "not_applicable",
-            engine_version: "practice-board-v1",
+            engine_version: "market-board-v1",
             rng_version: "sha256-counter-v1",
             total_score: 900,
             component_scores: {
@@ -188,7 +205,7 @@ function makeMock(
               duplication_penalty: 0,
               random_variation: 0,
             },
-            reason_codes: ["BOARD_ORDER", "STARTER_NEED"],
+            reason_codes: ["MARKET_ECR_BASELINE", "STARTER_NEED"],
             limitation_codes: [],
             decision_status: "active",
             manually_corrected: false,
@@ -600,6 +617,15 @@ describe("MockWorkspace", () => {
     ).toBeInTheDocument();
     expect(screen.getByText("League shape unavailable")).toBeInTheDocument();
     expect(screen.getByText("Player timeline unavailable")).toBeInTheDocument();
+    expect(
+      screen.getByText("Dynasty Superflex expert consensus"),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText("Expert consensus ranking — not average draft position"),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText("Tight-end premium is not included in this baseline"),
+    ).toBeInTheDocument();
 
     const toggle = screen.getByRole("checkbox", {
       name: /Include in local learning/,

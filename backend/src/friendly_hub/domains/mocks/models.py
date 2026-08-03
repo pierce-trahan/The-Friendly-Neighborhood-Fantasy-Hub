@@ -51,6 +51,7 @@ class MockConfigurationRow(Base):
     )
     league_shape_json: Mapped[str] = mapped_column(Text, nullable=False)
     league_shape_source_timestamp: Mapped[str | None] = mapped_column(String(32))
+    market_baseline_json: Mapped[str | None] = mapped_column(Text)
     content_fingerprint: Mapped[str] = mapped_column(String(64), nullable=False)
     randomness: Mapped[int] = mapped_column(Integer, nullable=False)
     current_strategy_key: Mapped[str] = mapped_column(String(32), nullable=False)

@@ -1,6 +1,9 @@
 import pytest
 
-from friendly_hub.domains.mocks.definitions import MAX_SEED
+from friendly_hub.domains.mocks.definitions import (
+    MAX_SEED,
+    PRACTICE_BOARD_ENGINE_VERSION,
+)
 from friendly_hub.domains.mocks.engine import (
     CandidateInput,
     CandidateScoreInput,
@@ -64,6 +67,7 @@ def test_sha256_counter_draw_matches_cross_language_fixture() -> None:
         purpose="candidate-random-variation",
         draw_index=0,
         stable_key="player-a",
+        engine_version=PRACTICE_BOARD_ENGINE_VERSION,
     )
 
     assert fingerprint == "634ac8517d1e6ac51fa266f544835766ff78aa1b49b6029ad95814964617b7d9"

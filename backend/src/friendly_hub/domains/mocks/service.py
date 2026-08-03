@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 import json
+from datetime import UTC, date, datetime
+from pathlib import Path
 from typing import Any, Literal
 from uuid import uuid4
 
@@ -24,9 +26,11 @@ from friendly_hub.domains.drafts.service import (
 from friendly_hub.domains.leagues.models import LeagueProfileRow
 from friendly_hub.domains.leagues.schemas import LeagueProfileDocument
 from friendly_hub.domains.mocks.definitions import (
-    CPU_ENGINE_VERSION,
+    MARKET_BOARD_ENGINE_VERSION,
+    PRACTICE_BOARD_ENGINE_VERSION,
     RNG_VERSION,
     STRATEGY_DEFINITION_VERSION,
+    SUPPORTED_CPU_ENGINE_VERSIONS,
 )
 from friendly_hub.domains.mocks.engine import (
     CandidateInput,
@@ -41,6 +45,7 @@ from friendly_hub.domains.mocks.engine import (
     score_candidates,
     select_candidate,
 )
+from friendly_hub.domains.mocks.market import load_market_snapshot
 from friendly_hub.domains.mocks.models import (
     MockConfigurationRow,
     MockCpuProfileRow,
@@ -54,6 +59,7 @@ from friendly_hub.domains.mocks.schemas import (
     MockCpuProfileRead,
     MockDecisionAlternativeRead,
     MockGuidanceRead,
+    MockMarketBaselineRead,
     MockPickDecisionAudit,
     MockPickDecisionSummary,
     MockScoreComponentsRead,
@@ -222,9 +228,13 @@ def _validate_strategy_compatibility(
         )
 
 
+_POSITION_FALLBACK_ORDER = {"QB": 0, "WR": 1, "RB": 2, "TE": 3}
+
+
 def _ordered_candidate_rows(
     session: Session,
     draft_session_id: str,
+    cpu_engine_version: str = PRACTICE_BOARD_ENGINE_VERSION,
 ) -> list[DraftCandidateRow]:
     rows = list(
         session.scalars(
@@ -233,6 +243,21 @@ def _ordered_candidate_rows(
             )
         )
     )
+    if cpu_engine_version == MARKET_BOARD_ENGINE_VERSION:
+        return sorted(
+            rows,
+            key=lambda row: (
+                row.market_rank is None,
+                row.market_rank if row.market_rank is not None else 0,
+                row.manual_rank is None,
+                row.manual_rank if row.manual_rank is not None else 0,
+                _POSITION_FALLBACK_ORDER.get(row.primary_position, 9),
+                not row.is_rookie,
+                -(row.rookie_class or 0),
+                row.search_name,
+                row.player_id,
+            ),
+        )
     return sorted(
         rows,
         key=lambda row: (
@@ -247,8 +272,13 @@ def _ordered_candidate_rows(
 def _candidate_snapshot(
     session: Session,
     draft_session_id: str,
+    cpu_engine_version: str,
 ) -> list[dict[str, object]]:
-    ordered = _ordered_candidate_rows(session, draft_session_id)
+    ordered = _ordered_candidate_rows(
+        session,
+        draft_session_id,
+        cpu_engine_version,
+    )
     return [
         {
             "practice_index": index,
@@ -260,10 +290,126 @@ def _candidate_snapshot(
             "rookie_class": row.rookie_class,
             "snapshot_source": row.snapshot_source,
             "manual_rank": row.manual_rank,
+            "market_rank": row.market_rank,
             "tier_order": row.tier_order,
         }
         for index, row in enumerate(ordered)
     ]
+
+
+def _practice_board_baseline(
+    candidate_count: int,
+    limitation: str,
+) -> dict[str, object]:
+    return {
+        "label": "Personal Board practice fallback",
+        "evidence_kind": "personal_board_fallback",
+        "source_name": None,
+        "source_url": None,
+        "rank_type": "personal_board_order",
+        "format": "practice_only",
+        "source_as_of": None,
+        "player_count": 0,
+        "matched_candidate_count": 0,
+        "candidate_count": candidate_count,
+        "coverage_percent": 0,
+        "confidence": "unavailable",
+        "limitations": [limitation, "NOT_MARKET_EVIDENCE"],
+    }
+
+
+def _apply_market_baseline(
+    session: Session,
+    draft_session_id: str,
+    market_snapshot_path: Path | None,
+) -> tuple[dict[str, object], str]:
+    rows = list(
+        session.scalars(
+            select(DraftCandidateRow).where(
+                DraftCandidateRow.session_id == draft_session_id
+            )
+        )
+    )
+    try:
+        snapshot = load_market_snapshot(market_snapshot_path)
+    except RuntimeError:
+        return (
+            _practice_board_baseline(len(rows), "MARKET_BASELINE_INVALID"),
+            PRACTICE_BOARD_ENGINE_VERSION,
+        )
+    if snapshot is None:
+        return (
+            _practice_board_baseline(len(rows), "MARKET_BASELINE_UNAVAILABLE"),
+            PRACTICE_BOARD_ENGINE_VERSION,
+        )
+
+    by_identity = {
+        (entry.search_name, entry.position): entry for entry in snapshot.entries
+    }
+    matched_count = 0
+    for row in rows:
+        entry = by_identity.get((row.search_name, row.primary_position))
+        row.market_rank = entry.market_rank if entry is not None else None
+        if entry is not None:
+            matched_count += 1
+    if matched_count < 2:
+        for row in rows:
+            row.market_rank = None
+        return (
+            _practice_board_baseline(len(rows), "MARKET_BASELINE_COVERAGE_INSUFFICIENT"),
+            PRACTICE_BOARD_ENGINE_VERSION,
+        )
+
+    limitations = list(snapshot.limitations)
+    if matched_count < len(rows):
+        limitations.append("UNMATCHED_CANDIDATES_USE_FALLBACK")
+    return (
+        {
+            "label": snapshot.label,
+            "evidence_kind": snapshot.evidence_kind,
+            "source_name": snapshot.source_name,
+            "source_url": snapshot.source_url,
+            "rank_type": snapshot.rank_type,
+            "format": snapshot.format,
+            "source_as_of": snapshot.source_as_of,
+            "player_count": snapshot.player_count,
+            "matched_candidate_count": matched_count,
+            "candidate_count": len(rows),
+            "coverage_percent": round(matched_count * 100 / len(rows)),
+            "confidence": "medium",
+            "limitations": sorted(set(limitations)),
+        },
+        MARKET_BOARD_ENGINE_VERSION,
+    )
+
+
+def _copy_market_baseline(
+    session: Session,
+    draft_session_id: str,
+    source_configuration: MockConfigurationRow,
+) -> tuple[dict[str, object], str]:
+    source_rows = list(
+        session.scalars(
+            select(DraftCandidateRow).where(
+                DraftCandidateRow.session_id == source_configuration.draft_session_id
+            )
+        )
+    )
+    ranks = {row.player_id: row.market_rank for row in source_rows}
+    for row in session.scalars(
+        select(DraftCandidateRow).where(
+            DraftCandidateRow.session_id == draft_session_id
+        )
+    ):
+        row.market_rank = ranks.get(row.player_id)
+    if source_configuration.market_baseline_json:
+        baseline = json.loads(source_configuration.market_baseline_json)
+    else:
+        baseline = _practice_board_baseline(
+            len(source_rows),
+            "LEGACY_PRACTICE_BOARD_ENGINE",
+        )
+    return baseline, source_configuration.cpu_engine_version
 
 
 def _draft_order_snapshot(
@@ -290,13 +436,19 @@ def _draft_order_snapshot(
 
 def _profile_snapshot(
     payload: MockSessionCreate,
+    cpu_engine_version: str,
 ) -> list[dict[str, object]]:
     return [
         {
             "draft_slot": slot,
             "source": "fallback",
             "archetype_key": payload.fallback_archetypes.get(
-                slot, fallback_archetype_for_slot(payload.seed, slot)
+                slot,
+                fallback_archetype_for_slot(
+                    payload.seed,
+                    slot,
+                    cpu_engine_version,
+                ),
             ),
             "confidence": "not_applicable",
             "draft_sample_count": 0,
@@ -355,16 +507,8 @@ def _add_mock_rows(
     payload: MockSessionCreate,
     *,
     copy_from_configuration: MockConfigurationRow | None = None,
+    market_snapshot_path: Path | None = None,
 ) -> MockConfigurationRow:
-    candidate_snapshot = _candidate_snapshot(session, draft_row.id)
-    if len(candidate_snapshot) < 2:
-        raise _error(
-            "MOCK.CANDIDATES_INSUFFICIENT",
-            "A mock draft needs at least two frozen candidates.",
-            "Add or import more relevant players, then create the mock again.",
-            409,
-        )
-
     if copy_from_configuration is None:
         league_row = (
             session.get(LeagueProfileRow, payload.league_profile_id)
@@ -375,9 +519,13 @@ def _add_mock_rows(
             league_row,
             team_count=payload.team_count,
         )
-        profile_snapshot = _profile_snapshot(payload)
+        market_baseline, cpu_engine_version = _apply_market_baseline(
+            session,
+            draft_row.id,
+            market_snapshot_path,
+        )
+        profile_snapshot = _profile_snapshot(payload, cpu_engine_version)
         rng_version = RNG_VERSION
-        cpu_engine_version = CPU_ENGINE_VERSION
         strategy_definition_version = STRATEGY_DEFINITION_VERSION
     else:
         league_shape = json.loads(copy_from_configuration.league_shape_json)
@@ -389,9 +537,25 @@ def _add_mock_rows(
             copy_from_configuration,
         )
         rng_version = copy_from_configuration.rng_version
-        cpu_engine_version = copy_from_configuration.cpu_engine_version
+        market_baseline, cpu_engine_version = _copy_market_baseline(
+            session,
+            draft_row.id,
+            copy_from_configuration,
+        )
         strategy_definition_version = (
             copy_from_configuration.strategy_definition_version
+        )
+    candidate_snapshot = _candidate_snapshot(
+        session,
+        draft_row.id,
+        cpu_engine_version,
+    )
+    if len(candidate_snapshot) < 2:
+        raise _error(
+            "MOCK.CANDIDATES_INSUFFICIENT",
+            "A mock draft needs at least two frozen candidates.",
+            "Add or import more relevant players, then create the mock again.",
+            409,
         )
     _validate_strategy_compatibility(payload.strategy_key, league_shape)
     fingerprint = content_fingerprint(
@@ -400,6 +564,7 @@ def _add_mock_rows(
             "draft_order": _draft_order_snapshot(session, draft_row.id),
             "league_shape": league_shape,
             "profiles": _profile_fingerprint_snapshot(profile_snapshot),
+            "market_baseline": market_baseline,
         }
     )
     now = utc_now_text()
@@ -412,6 +577,7 @@ def _add_mock_rows(
         strategy_definition_version=strategy_definition_version,
         league_shape_json=_json(league_shape),
         league_shape_source_timestamp=league_shape_source_timestamp,
+        market_baseline_json=_json(market_baseline),
         content_fingerprint=fingerprint,
         randomness=payload.randomness,
         current_strategy_key=payload.strategy_key,
@@ -502,6 +668,7 @@ def create_mock_session(
     session: Session,
     board_id: str,
     payload: MockSessionCreate,
+    market_snapshot_path: Path | None = None,
 ) -> MockSessionRead:
     draft_payload = DraftSessionCreate(
         name=payload.name,
@@ -517,7 +684,12 @@ def create_mock_session(
     )
     try:
         draft_row = create_session_in_transaction(session, board_id, draft_payload)
-        _add_mock_rows(session, draft_row, payload)
+        _add_mock_rows(
+            session,
+            draft_row,
+            payload,
+            market_snapshot_path=market_snapshot_path,
+        )
         session.commit()
     except Exception:
         session.rollback()
@@ -632,8 +804,15 @@ def _score_components_read(candidate: ScoredCandidate) -> MockScoreComponentsRea
     )
 
 
-def _decision_reason_codes(candidate: ScoredCandidate) -> list[str]:
-    reasons = ["PRACTICE_BOARD_BASELINE"]
+def _decision_reason_codes(
+    candidate: ScoredCandidate,
+    engine_version: str,
+) -> list[str]:
+    reasons = [
+        "MARKET_ECR_BASELINE"
+        if engine_version == MARKET_BOARD_ENGINE_VERSION
+        else "PRACTICE_BOARD_BASELINE"
+    ]
     if candidate.components.starter_need > 0:
         reasons.append("STARTER_COVERAGE")
     if candidate.components.depth_need > 0:
@@ -650,12 +829,18 @@ def _decision_reason_codes(candidate: ScoredCandidate) -> list[str]:
 def _decision_limitations(
     profile: MockCpuProfileRow,
     league_shape: dict[str, Any],
+    market_baseline: dict[str, Any],
 ) -> list[str]:
     limitations = {
         value
         for value in league_shape.get("limitations", [])
         if isinstance(value, str)
     }
+    limitations.update(
+        value
+        for value in market_baseline.get("limitations", [])
+        if isinstance(value, str)
+    )
     if profile.source == "fallback":
         limitations.add("FALLBACK_PROFILE_NO_HISTORY")
     elif profile.confidence == "low":
@@ -734,7 +919,9 @@ def _build_cpu_decision_row(
             }
         ),
         alternatives_json=_json(alternatives),
-        reason_codes_json=_json(_decision_reason_codes(chosen)),
+        reason_codes_json=_json(
+            _decision_reason_codes(chosen, configuration.cpu_engine_version)
+        ),
         limitation_codes_json=_json(limitation_codes),
         created_at=now,
     )
@@ -761,7 +948,7 @@ def advance_cpu_pick(
             409,
         )
     if (
-        configuration.cpu_engine_version != CPU_ENGINE_VERSION
+        configuration.cpu_engine_version not in SUPPORTED_CPU_ENGINE_VERSIONS
         or configuration.rng_version != RNG_VERSION
     ):
         raise _error(
@@ -827,7 +1014,11 @@ def advance_cpu_pick(
             409,
         ) from exc
 
-    candidate_rows = _ordered_candidate_rows(session, session_id)
+    candidate_rows = _ordered_candidate_rows(
+        session,
+        session_id,
+        configuration.cpu_engine_version,
+    )
     picks = list(
         session.scalars(
             select(DraftPickRow)
@@ -895,10 +1086,14 @@ def advance_cpu_pick(
         overall_pick=current.overall_pick,
         selecting_slot=current.selecting_slot,
         randomness=applied_randomness,
+        engine_version=configuration.cpu_engine_version,
     )
     chosen = select_candidate(scored)
     now = utc_now_text()
-    limitations = _decision_limitations(profile, league_shape)
+    market_baseline: dict[str, Any] = json.loads(
+        configuration.market_baseline_json or "{}"
+    )
+    limitations = _decision_limitations(profile, league_shape, market_baseline)
     try:
         mutation = record_pick_in_transaction(
             session,
@@ -1152,6 +1347,30 @@ def _reset_replay_status(
     return "exact_replay"
 
 
+def _market_baseline_read(
+    configuration: MockConfigurationRow,
+    candidate_count: int,
+) -> MockMarketBaselineRead:
+    if configuration.market_baseline_json:
+        raw: dict[str, Any] = json.loads(configuration.market_baseline_json)
+    else:
+        raw = _practice_board_baseline(
+            candidate_count,
+            "LEGACY_PRACTICE_BOARD_ENGINE",
+        )
+    source_as_of = raw.get("source_as_of")
+    freshness: Literal["fresh", "stale", "unavailable"] = "unavailable"
+    if isinstance(source_as_of, str) and source_as_of:
+        try:
+            source_date = date.fromisoformat(source_as_of[:10])
+        except ValueError:
+            freshness = "unavailable"
+        else:
+            age_days = (datetime.now(UTC).date() - source_date).days
+            freshness = "fresh" if age_days <= 14 else "stale"
+    return MockMarketBaselineRead.model_validate(raw | {"freshness": freshness})
+
+
 def read_mock_session(session: Session, session_id: str) -> MockSessionRead:
     draft_row = session.get(DraftSessionRow, session_id)
     configuration = session.scalar(
@@ -1265,6 +1484,10 @@ def read_mock_session(session: Session, session_id: str) -> MockSessionRead:
             learning_withdrawn_at=configuration.learning_withdrawn_at,
             created_at=configuration.created_at,
             updated_at=configuration.updated_at,
+            market_baseline=_market_baseline_read(
+                configuration,
+                draft.candidate_total,
+            ),
         ),
         current_strategy_revision=MockStrategyRevisionRead(
             sequence_number=strategy_revision.sequence_number,
