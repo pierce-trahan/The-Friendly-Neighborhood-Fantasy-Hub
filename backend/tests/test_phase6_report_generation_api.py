@@ -1,7 +1,9 @@
 from __future__ import annotations
 
 from dataclasses import replace
+from time import perf_counter
 
+import pytest
 from fastapi.testclient import TestClient
 from sqlalchemy import func, select
 
@@ -18,12 +20,14 @@ from friendly_hub.domains.mocks.models import (
     MockStrategyRevisionRow,
 )
 from friendly_hub.domains.reports import service as report_service
+from friendly_hub.domains.reports.export import render_report_html
 from friendly_hub.domains.reports.models import (
     PostDraftReportMomentRow,
     PostDraftReportPlayerRow,
     PostDraftReportRow,
     PostDraftReportSectionRow,
 )
+from friendly_hub.domains.reports.schemas import PostDraftReportRead
 from friendly_hub.main import create_app
 
 TRUSTED_HEADERS = {"X-Friendly-Hub-Request": "1"}
@@ -88,11 +92,12 @@ def _start_live(
     league_profile_id: str | None,
     *,
     round_count: int = 2,
+    name: str = "Completed Report Draft",
 ) -> dict[str, object]:
     response = client.post(
         f"/api/v1/boards/{board_id}/draft-sessions",
         json={
-            "name": "Completed Report Draft",
+            "name": name,
             "mode": "live",
             "league_profile_id": league_profile_id,
             "draft_format": "snake",
@@ -264,8 +269,8 @@ def test_completed_live_report_is_atomic_idempotent_private_and_restart_safe(
             assert "EVIDENCE_SNAPSHOT_NOT_ATTACHED" in section["limitation_codes"]
         assert report["moments"] == []
         assert report["comparison_eligible"] is True
-        assert report["export_available"] is False
-        assert report["available_actions"] == ["compare"]
+        assert report["export_available"] is True
+        assert report["available_actions"] == ["compare", "export_html"]
         assert len(report["roster"]) == 2
         assert "PRIVATE REPORT TEST NOTE" not in generated.text
         assert "input_fingerprint" not in generated.text
@@ -796,3 +801,108 @@ def test_compatible_report_preview_is_descriptive_ordered_and_read_only(
         )
         assert incompatible.status_code == 409
         assert incompatible.json()["error"]["code"] == "REPORT_COMPARISON_INCOMPATIBLE"
+
+
+def test_standalone_html_export_is_escaped_offline_bounded_and_read_only(
+    runtime_settings: RuntimeSettings,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    with TestClient(create_app(runtime_settings), headers=TRUSTED_HEADERS) as client:
+        board, players, league = _seed_context(client)
+        draft = _start_live(
+            client,
+            board["id"],
+            league["id"],
+            name='<Final & Draft> "Night"',
+        )
+        session_factory = client.app.state.session_factory
+        with session_factory() as session:
+            candidate = session.scalar(
+                select(DraftCandidateRow)
+                .where(
+                    DraftCandidateRow.session_id == draft["id"],
+                    DraftCandidateRow.player_id == players[0]["id"],
+                )
+            )
+            assert candidate is not None
+            candidate.display_name = "<script>Fictional & Player</script>"
+            session.commit()
+        completed = _complete_draft(client, draft, players)
+        generated = _generate(client, completed)
+        assert generated.status_code == 201, generated.text
+        report = generated.json()["report"]
+        source_before = _source_state(client, completed["id"])
+        with session_factory() as session:
+            counts_before = tuple(
+                int(session.scalar(select(func.count()).select_from(model)) or 0)
+                for model in (
+                    PostDraftReportRow,
+                    PostDraftReportPlayerRow,
+                    PostDraftReportSectionRow,
+                    PostDraftReportMomentRow,
+                )
+            )
+
+        started = perf_counter()
+        exported = client.get(f"/api/v1/post-draft-reports/{report['id']}/export.html")
+        duration = perf_counter() - started
+        assert exported.status_code == 200, exported.text
+        assert exported.headers["content-type"] == "text/html; charset=utf-8"
+        completed_date = str(completed["completed_at"])[:10]
+        assert exported.headers["content-disposition"] == (
+            f'attachment; filename="friendly-hub-final-draft-night-{completed_date}.html"'
+        )
+        assert "default-src 'none'" in exported.headers["content-security-policy"]
+        assert exported.headers["x-content-type-options"] == "nosniff"
+        assert duration < 1.0
+        assert len(exported.content) < 2 * 1024 * 1024
+        html = exported.text
+        folded = html.casefold()
+        assert '&lt;final &amp; draft&gt; &quot;night&quot;' in folded
+        assert "&lt;script&gt;fictional &amp; player&lt;/script&gt;" in folded
+        assert "<script" not in folded
+        assert "<img" not in folded
+        assert "http://" not in folded
+        assert "https://" not in folded
+        assert "href=" not in folded
+        assert "src=" not in folded
+        assert "private report test note" not in folded
+        assert "provider" not in folded
+        offsets = [html.index(f'data-section="{key}"') for key in SECTION_KEYS]
+        assert offsets == sorted(offsets)
+
+        with session_factory() as session:
+            counts_after = tuple(
+                int(session.scalar(select(func.count()).select_from(model)) or 0)
+                for model in (
+                    PostDraftReportRow,
+                    PostDraftReportPlayerRow,
+                    PostDraftReportSectionRow,
+                    PostDraftReportMomentRow,
+                )
+            )
+        assert counts_after == counts_before
+        assert _source_state(client, completed["id"]) == source_before
+
+        parsed = PostDraftReportRead.model_validate(report)
+        unsupported = parsed.sections[0].model_copy(
+            update={"metrics": {"unsupported_float": 1.25}}
+        )
+        invalid_report = parsed.model_copy(
+            update={"sections": [unsupported, *parsed.sections[1:]]}
+        )
+        with pytest.raises(ValueError, match="not supported"):
+            render_report_html(invalid_report)
+
+        def fail_closed(_report: PostDraftReportRead):
+            raise ValueError("invalid safe value")
+
+        monkeypatch.setattr(report_service, "render_report_html", fail_closed)
+        failed = client.get(f"/api/v1/post-draft-reports/{report['id']}/export.html")
+        assert failed.status_code == 500
+        assert failed.json()["error"]["code"] == "REPORT_EXPORT_FAILED"
+        assert _source_state(client, completed["id"]) == source_before
+
+        missing = client.get("/api/v1/post-draft-reports/missing-report/export.html")
+        assert missing.status_code == 404
+        assert missing.json()["error"]["code"] == "REPORT_NOT_FOUND"

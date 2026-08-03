@@ -127,7 +127,9 @@ now adds replay of Phase 4 mock history, frozen Personal Board observations,
 and saved Phase 5 alert events. The bounded
 [compatible comparison preview](docs/specs/phase-6-report-comparison.md)
 aligns two through four saved reports without a winner or composite score,
-while export and desktop work remain explicitly deferred.
+and the bounded [standalone HTML export](docs/specs/phase-6-report-html-export.md)
+creates a print-friendly offline artifact without scripts or remote assets.
+The desktop Reports workspace remains explicitly deferred.
 
 ## Local Setup
 
