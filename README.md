@@ -124,8 +124,10 @@ now adds completion-time freshness, compatibility, and coverage-aware context
 for production, dynasty market, and age-risk sections. The bounded
 [saved strategy and decision-moment contract](docs/specs/phase-6-strategy-decision-moments.md)
 now adds replay of Phase 4 mock history, frozen Personal Board observations,
-and saved Phase 5 alert events while comparison, export, and desktop work
-remain explicitly deferred.
+and saved Phase 5 alert events. The bounded
+[compatible comparison preview](docs/specs/phase-6-report-comparison.md)
+aligns two through four saved reports without a winner or composite score,
+while export and desktop work remain explicitly deferred.
 
 ## Local Setup
 
