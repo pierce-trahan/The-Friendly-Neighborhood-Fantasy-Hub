@@ -311,31 +311,32 @@ Exit criteria:
 
 ### Phase 6 — Post-Draft Report
 
-**Status:** Approved for bounded implementation as of 2026-07-29. See the
+**Status:** Complete as of 2026-08-03. See the
 [Phase 6 Post-Draft Report specification](docs/specs/phase-6-post-draft-report.md)
 and the
-[report definitions and expected-fixture contract](docs/specs/phase-6-report-contract.md).
+[Phase 6 live workflow and specification audit](docs/audits/phase-6-live-workflow-audit.md).
 
 **Goal:** Turn each completed mock or live draft into a learning artifact.
 
 Deliverables:
 
-- position and starter coverage;
-- year-one strength;
-- long-term dynasty value;
-- age profile;
-- liquidity;
-- fragility and concentration risk;
+- position inventory and deterministic starter coverage;
+- optional year-one production, dynasty-market, and age-risk context when
+  approved evidence supports it;
+- visible unavailable states for long-term value, liquidity, and player
+  fragility where V1 has no approved evidence;
+- descriptive roster concentration observations without a quality verdict;
 - strategy adherence and pivots;
 - important passed-player and trade-up moments; and
 - report export.
 
 Exit criteria:
 
-- every score includes a plain-language explanation;
-- the report distinguishes observation from recommendation;
-- the user can compare multiple mock outcomes; and
-- report generation works fully offline from saved draft data.
+- every section includes a plain-language explanation and evidence limits;
+- the report preserves observation without inventing a recommendation or grade;
+- the user can compare two to four compatible saved outcomes; and
+- report generation, read, comparison, and standalone export work fully
+  offline from saved draft data.
 
 ### Phase 7 — Draft-Night Hardening
 

@@ -1,6 +1,6 @@
 # Phase 6 Post-Draft Report Specification
 
-**Status:** Approved for bounded implementation
+**Status:** Implemented and audited
 
 **Phase:** 6
 
@@ -8,9 +8,7 @@
 
 **Product-gate approval date:** 2026-07-29
 
-**Engineering authorization:** Proceed one bounded implementation step at a
-time, beginning with the approved report definitions and expected-fixture
-contract
+**Completion audit:** [Phase 6 Live Workflow and Specification Audit](../audits/phase-6-live-workflow-audit.md)
 
 ## Purpose
 
