@@ -1199,6 +1199,7 @@ def build_history_sections(
     *,
     draft_mode: str,
     final_position_counts: dict[str, int],
+    strategy_definition_version: str | None,
 ) -> tuple[HistorySectionResult, HistorySectionResult, HistorySectionResult]:
     if draft_mode == "live":
         strategy_state = strategy_section_state(draft_mode="live")
@@ -1223,6 +1224,7 @@ def build_history_sections(
         metrics = {
             **context.strategy.metrics,
             "final_position_counts": dict(sorted(final_position_counts.items())),
+            "strategy_definition_version": strategy_definition_version,
         }
         if context.strategy.state == "valid":
             template_key = "strategy.summary"

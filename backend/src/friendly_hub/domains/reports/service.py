@@ -26,6 +26,11 @@ from friendly_hub.domains.drafts.models import (
 from friendly_hub.domains.leagues.models import LeagueProfileRow
 from friendly_hub.domains.leagues.schemas import LeagueProfileDocument
 from friendly_hub.domains.mocks.models import MockConfigurationRow
+from friendly_hub.domains.reports.comparison import (
+    ComparisonSectionSource,
+    build_comparison_sections,
+    comparison_limitations,
+)
 from friendly_hub.domains.reports.definitions import (
     BALANCED_MAXIMUM_BASIS_POINTS,
     EXPLANATION_TEMPLATE_VERSION,
@@ -66,6 +71,11 @@ from friendly_hub.domains.reports.models import (
     PostDraftReportSectionRow,
 )
 from friendly_hub.domains.reports.schemas import (
+    PostDraftReportComparisonIdentityRead,
+    PostDraftReportComparisonRead,
+    PostDraftReportComparisonRequest,
+    PostDraftReportComparisonSectionRead,
+    PostDraftReportComparisonValueRead,
     PostDraftReportGenerateRequest,
     PostDraftReportGenerateResponse,
     PostDraftReportListResponse,
@@ -965,6 +975,11 @@ def _build_sections(
         snapshot.decision_history,
         draft_mode=draft.mode,
         final_position_counts=dict(position_counts),
+        strategy_definition_version=(
+            str(snapshot.mock_context["strategy_definition_version"])
+            if snapshot.mock_context is not None
+            else None
+        ),
     ):
         sections.append(
             _section(
@@ -1382,7 +1397,7 @@ def read_report(session: Session, report_id: str) -> PostDraftReportRead:
         limitations=[str(item) for item in _json_list(report.limitation_codes_json)],
         comparison_eligible=True,
         export_available=False,
-        available_actions=[],
+        available_actions=["compare"],
     )
 
 
@@ -1438,4 +1453,197 @@ def list_reports_for_draft(
         total=int(total or 0),
         limit=limit,
         offset=offset,
+    )
+
+
+def _comparison_corrupt() -> HubError:
+    return _error(
+        "REPORT_COMPARISON_CORRUPT",
+        "One or more saved reports cannot be read safely for comparison.",
+        "The reports remain unchanged. Restore a local backup or choose another set.",
+        500,
+    )
+
+
+def _comparison_identity(
+    report: PostDraftReportRow,
+    metrics: dict[str, dict[str, Any]],
+) -> PostDraftReportComparisonIdentityRead:
+    summary = metrics.get("draft_summary")
+    strategy = metrics.get("strategy_story")
+    if summary is None or strategy is None:
+        raise _comparison_corrupt()
+    draft_name = summary.get("draft_name")
+    draft_format = summary.get("draft_format")
+    team_count = summary.get("team_count")
+    round_count = summary.get("round_count")
+    if (
+        not isinstance(draft_name, str)
+        or not draft_name
+        or not isinstance(draft_format, str)
+        or not draft_format
+        or not isinstance(team_count, int)
+        or isinstance(team_count, bool)
+        or team_count < 2
+        or not isinstance(round_count, int)
+        or isinstance(round_count, bool)
+        or round_count < 1
+    ):
+        raise _comparison_corrupt()
+    initial_strategy = strategy.get("initial_strategy")
+    final_strategy = strategy.get("final_strategy")
+    strategy_version = strategy.get("strategy_definition_version")
+    for value in (initial_strategy, final_strategy, strategy_version):
+        if value is not None and (not isinstance(value, str) or not value):
+            raise _comparison_corrupt()
+    return PostDraftReportComparisonIdentityRead(
+        report_id=report.id,
+        draft_session_id=report.draft_session_id,
+        draft_name=draft_name,
+        draft_mode=report.draft_mode,  # type: ignore[arg-type]
+        completed_at=report.completed_at,
+        draft_format=draft_format,
+        team_count=team_count,
+        round_count=round_count,
+        initial_strategy=initial_strategy,
+        final_strategy=final_strategy,
+        strategy_definition_version=strategy_version,
+        report_engine_version=report.report_engine_version,
+        report_rules_version=report.report_rules_version,
+        explanation_template_version=report.explanation_template_version,
+        league_shape_fingerprint=report.league_shape_fingerprint,
+    )
+
+
+def preview_report_comparison(
+    session: Session,
+    payload: PostDraftReportComparisonRequest,
+) -> PostDraftReportComparisonRead:
+    report_ids = payload.report_ids
+    rows = tuple(
+        session.scalars(
+            select(PostDraftReportRow).where(PostDraftReportRow.id.in_(report_ids))
+        )
+    )
+    report_by_id = {row.id: row for row in rows}
+    missing = [report_id for report_id in report_ids if report_id not in report_by_id]
+    if missing:
+        raise _error(
+            "REPORT_COMPARISON_REPORT_NOT_FOUND",
+            "At least one selected saved report could not be found.",
+            "The reports remain unchanged. Refresh the saved report list and retry.",
+            404,
+        )
+    ordered_reports = tuple(report_by_id[report_id] for report_id in report_ids)
+    league_fingerprints = {report.league_shape_fingerprint for report in ordered_reports}
+    rules_versions = {report.report_rules_version for report in ordered_reports}
+    incompatibilities: list[str] = []
+    if len(league_fingerprints) != 1:
+        incompatibilities.append("LEAGUE_SHAPE_MISMATCH")
+    if len(rules_versions) != 1:
+        incompatibilities.append("REPORT_RULES_VERSION_MISMATCH")
+    if incompatibilities:
+        logger.info(
+            "post-draft report comparison rejected report_count=%d reasons=%s",
+            len(report_ids),
+            ",".join(incompatibilities),
+        )
+        raise _error(
+            "REPORT_COMPARISON_INCOMPATIBLE",
+            "The selected reports do not share the required league shape and rules version.",
+            "The reports remain unchanged. Choose two to four compatible saved reports.",
+            409,
+        )
+
+    section_rows = tuple(
+        session.scalars(
+            select(PostDraftReportSectionRow).where(
+                PostDraftReportSectionRow.report_id.in_(report_ids)
+            )
+        )
+    )
+    rows_by_report: dict[str, dict[str, PostDraftReportSectionRow]] = {
+        report_id: {} for report_id in report_ids
+    }
+    for row in section_rows:
+        rows_by_report[row.report_id][row.section_key] = row
+    if any(set(rows_by_report[report_id]) != set(SECTION_KEYS) for report_id in report_ids):
+        raise _comparison_corrupt()
+
+    metrics_by_report: dict[str, dict[str, dict[str, Any]]] = {}
+    try:
+        for report_id in report_ids:
+            metrics_by_report[report_id] = {
+                section_key: _json_object(
+                    rows_by_report[report_id][section_key].metrics_json
+                )
+                for section_key in SECTION_KEYS
+            }
+        comparison_sources = {
+            section_key: tuple(
+                ComparisonSectionSource(
+                    report_id=report_id,
+                    draft_mode=report_by_id[report_id].draft_mode,
+                    availability=rows_by_report[report_id][section_key].availability,
+                    confidence=rows_by_report[report_id][section_key].confidence,
+                    metrics=metrics_by_report[report_id][section_key],
+                )
+                for report_id in report_ids
+            )
+            for section_key in SECTION_KEYS
+        }
+        section_results = build_comparison_sections(
+            comparison_sources,
+            report_count=len(report_ids),
+        )
+    except (KeyError, TypeError, ValueError) as exc:
+        raise _comparison_corrupt() from exc
+
+    try:
+        reports = [
+            _comparison_identity(report, metrics_by_report[report.id])
+            for report in ordered_reports
+        ]
+        sections = [
+            PostDraftReportComparisonSectionRead(
+                section_key=result.section_key,
+                title=result.title,
+                comparison_state=result.comparison_state,
+                values=[
+                    PostDraftReportComparisonValueRead(
+                        report_id=value.report_id,
+                        availability=value.availability,  # type: ignore[arg-type]
+                        confidence=value.confidence,  # type: ignore[arg-type]
+                        metrics=value.metrics,
+                        delta_from_first=value.delta_from_first,
+                    )
+                    for value in result.values
+                ],
+                reason_codes=list(result.reason_codes),
+                limitation_codes=list(result.limitation_codes),
+                explanation_template_key=result.explanation_template_key,
+                explanation=result.explanation,
+            )
+            for result in section_results
+        ]
+        explanation = render_explanation(
+            template_key="comparison.compatible",
+            values={"report_count": len(report_ids)},
+        )
+    except (TypeError, ValidationError, ValueError) as exc:
+        raise _comparison_corrupt() from exc
+    logger.info(
+        "post-draft report comparison previewed report_count=%d compatible=true",
+        len(report_ids),
+    )
+    return PostDraftReportComparisonRead(
+        report_count=len(report_ids),
+        baseline_report_id=report_ids[0],
+        league_shape_fingerprint=ordered_reports[0].league_shape_fingerprint,
+        report_rules_version=ordered_reports[0].report_rules_version,
+        reports=reports,
+        sections=sections,
+        limitations=list(comparison_limitations()),
+        explanation_template_key="comparison.compatible",
+        explanation=explanation,
     )

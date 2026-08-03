@@ -265,6 +265,7 @@ def test_completed_live_report_is_atomic_idempotent_private_and_restart_safe(
         assert report["moments"] == []
         assert report["comparison_eligible"] is True
         assert report["export_available"] is False
+        assert report["available_actions"] == ["compare"]
         assert len(report["roster"]) == 2
         assert "PRIVATE REPORT TEST NOTE" not in generated.text
         assert "input_fingerprint" not in generated.text
@@ -691,3 +692,107 @@ def test_late_section_failure_rolls_back_every_new_report_row(
                 PostDraftReportMomentRow,
             ):
                 assert session.scalar(select(func.count()).select_from(model)) == 0
+
+
+def test_compatible_report_preview_is_descriptive_ordered_and_read_only(
+    runtime_settings: RuntimeSettings,
+) -> None:
+    with TestClient(create_app(runtime_settings), headers=TRUSTED_HEADERS) as client:
+        board, players, league = _seed_context(client)
+        first_draft = _complete_draft(
+            client,
+            _start_live(client, board["id"], league["id"]),
+            players,
+        )
+        second_order = [players[1], players[0], players[3], players[2], *players[4:]]
+        second_draft = _complete_draft(
+            client,
+            _start_live(client, board["id"], league["id"]),
+            second_order,
+        )
+        first_report = _generate(client, first_draft).json()["report"]
+        second_report = _generate(client, second_draft).json()["report"]
+        session_factory = client.app.state.session_factory
+        with session_factory() as session:
+            counts_before = tuple(
+                int(session.scalar(select(func.count()).select_from(model)) or 0)
+                for model in (
+                    PostDraftReportRow,
+                    PostDraftReportPlayerRow,
+                    PostDraftReportSectionRow,
+                    PostDraftReportMomentRow,
+                )
+            )
+
+        response = client.post(
+            "/api/v1/post-draft-report-comparisons/preview",
+            json={"report_ids": [first_report["id"], second_report["id"]]},
+        )
+        assert response.status_code == 200, response.text
+        comparison = response.json()
+        assert comparison["baseline_report_id"] == first_report["id"]
+        assert [report["report_id"] for report in comparison["reports"]] == [
+            first_report["id"],
+            second_report["id"],
+        ]
+        assert [section["section_key"] for section in comparison["sections"]] == SECTION_KEYS
+        inventory = next(
+            section
+            for section in comparison["sections"]
+            if section["section_key"] == "position_inventory"
+        )
+        assert inventory["comparison_state"] == "comparable"
+        second_delta = inventory["values"][1]["delta_from_first"]["position_counts"]
+        assert any(delta != 0 for delta in second_delta.values())
+        strategy = next(
+            section
+            for section in comparison["sections"]
+            if section["section_key"] == "strategy_story"
+        )
+        assert strategy["comparison_state"] == "not_comparable"
+        unsupported = next(
+            section
+            for section in comparison["sections"]
+            if section["section_key"] == "long_term_value"
+        )
+        assert all(value["delta_from_first"] == {} for value in unsupported["values"])
+        serialized = response.text.casefold()
+        assert "private report test note" not in serialized
+        assert "best roster" not in serialized
+        assert "draft grade" not in serialized
+
+        with session_factory() as session:
+            counts_after = tuple(
+                int(session.scalar(select(func.count()).select_from(model)) or 0)
+                for model in (
+                    PostDraftReportRow,
+                    PostDraftReportPlayerRow,
+                    PostDraftReportSectionRow,
+                    PostDraftReportMomentRow,
+                )
+            )
+        assert counts_after == counts_before
+
+        duplicate = client.post(
+            "/api/v1/post-draft-report-comparisons/preview",
+            json={"report_ids": [first_report["id"], first_report["id"]]},
+        )
+        assert duplicate.status_code == 422
+        missing = client.post(
+            "/api/v1/post-draft-report-comparisons/preview",
+            json={"report_ids": [first_report["id"], "missing-report"]},
+        )
+        assert missing.status_code == 404
+
+        incompatible_draft = _complete_draft(
+            client,
+            _start_live(client, board["id"], league["id"], round_count=1),
+            players,
+        )
+        incompatible_report = _generate(client, incompatible_draft).json()["report"]
+        incompatible = client.post(
+            "/api/v1/post-draft-report-comparisons/preview",
+            json={"report_ids": [first_report["id"], incompatible_report["id"]]},
+        )
+        assert incompatible.status_code == 409
+        assert incompatible.json()["error"]["code"] == "REPORT_COMPARISON_INCOMPATIBLE"

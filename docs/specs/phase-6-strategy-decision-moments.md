@@ -258,6 +258,7 @@ privacy, and whitespace gates remain required before publication.
 
 ## Next Implementation Boundary
 
-After this module is reviewed, Phase 6 step 8 may add only compatible report
-comparison preview for two through four reports. It must declare no winner,
-rank, grade, or composite score and must not add export or desktop work.
+Phase 6 step 8 implements this boundary in the
+[compatible report comparison contract](phase-6-report-comparison.md). The next
+boundary is standalone safe HTML export without scripts, external assets,
+remote requests, comparison persistence, or desktop work.

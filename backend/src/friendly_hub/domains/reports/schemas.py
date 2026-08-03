@@ -111,3 +111,72 @@ class PostDraftReportListResponse(BaseModel):
     total: int
     limit: int
     offset: int
+
+
+class PostDraftReportComparisonRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    report_ids: list[str] = Field(min_length=2, max_length=4)
+
+    @field_validator("report_ids")
+    @classmethod
+    def require_unique_nonempty_ids(cls, value: list[str]) -> list[str]:
+        if any(
+            not report_id
+            or report_id != report_id.strip()
+            or len(report_id) > 36
+            for report_id in value
+        ):
+            raise ValueError("report_ids must contain bounded canonical ids")
+        if len(value) != len(set(value)):
+            raise ValueError("report_ids must be unique")
+        return value
+
+
+class PostDraftReportComparisonIdentityRead(BaseModel):
+    report_id: str
+    draft_session_id: str
+    draft_name: str
+    draft_mode: Literal["live", "mock"]
+    completed_at: str
+    draft_format: str
+    team_count: int
+    round_count: int
+    initial_strategy: str | None
+    final_strategy: str | None
+    strategy_definition_version: str | None
+    report_engine_version: str
+    report_rules_version: str
+    explanation_template_version: str
+    league_shape_fingerprint: str
+
+
+class PostDraftReportComparisonValueRead(BaseModel):
+    report_id: str
+    availability: Literal["supported", "limited", "unavailable", "not_applicable"]
+    confidence: Literal["high", "medium", "low", "unavailable"]
+    metrics: dict[str, Any]
+    delta_from_first: dict[str, Any]
+
+
+class PostDraftReportComparisonSectionRead(BaseModel):
+    section_key: str
+    title: str
+    comparison_state: Literal["comparable", "not_comparable"]
+    values: list[PostDraftReportComparisonValueRead]
+    reason_codes: list[str]
+    limitation_codes: list[str]
+    explanation_template_key: str
+    explanation: str
+
+
+class PostDraftReportComparisonRead(BaseModel):
+    report_count: int
+    baseline_report_id: str
+    league_shape_fingerprint: str
+    report_rules_version: str
+    reports: list[PostDraftReportComparisonIdentityRead]
+    sections: list[PostDraftReportComparisonSectionRead]
+    limitations: list[str]
+    explanation_template_key: str
+    explanation: str

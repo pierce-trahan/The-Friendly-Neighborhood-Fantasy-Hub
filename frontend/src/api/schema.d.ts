@@ -903,6 +903,23 @@ export interface paths {
         patch: operations["update_canonical_player_api_v1_players__player_id__patch"];
         trace?: never;
     };
+    "/api/v1/post-draft-report-comparisons/preview": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Compare Post Draft Reports */
+        post: operations["compare_post_draft_reports_api_v1_post_draft_report_comparisons_preview_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/post-draft-reports/{report_id}": {
         parameters: {
             query?: never;
@@ -2995,6 +3012,113 @@ export interface components {
             team: string | null;
             /** Updated At */
             updated_at: string;
+        };
+        /** PostDraftReportComparisonIdentityRead */
+        PostDraftReportComparisonIdentityRead: {
+            /** Completed At */
+            completed_at: string;
+            /** Draft Format */
+            draft_format: string;
+            /**
+             * Draft Mode
+             * @enum {string}
+             */
+            draft_mode: "live" | "mock";
+            /** Draft Name */
+            draft_name: string;
+            /** Draft Session Id */
+            draft_session_id: string;
+            /** Explanation Template Version */
+            explanation_template_version: string;
+            /** Final Strategy */
+            final_strategy: string | null;
+            /** Initial Strategy */
+            initial_strategy: string | null;
+            /** League Shape Fingerprint */
+            league_shape_fingerprint: string;
+            /** Report Engine Version */
+            report_engine_version: string;
+            /** Report Id */
+            report_id: string;
+            /** Report Rules Version */
+            report_rules_version: string;
+            /** Round Count */
+            round_count: number;
+            /** Strategy Definition Version */
+            strategy_definition_version: string | null;
+            /** Team Count */
+            team_count: number;
+        };
+        /** PostDraftReportComparisonRead */
+        PostDraftReportComparisonRead: {
+            /** Baseline Report Id */
+            baseline_report_id: string;
+            /** Explanation */
+            explanation: string;
+            /** Explanation Template Key */
+            explanation_template_key: string;
+            /** League Shape Fingerprint */
+            league_shape_fingerprint: string;
+            /** Limitations */
+            limitations: string[];
+            /** Report Count */
+            report_count: number;
+            /** Report Rules Version */
+            report_rules_version: string;
+            /** Reports */
+            reports: components["schemas"]["PostDraftReportComparisonIdentityRead"][];
+            /** Sections */
+            sections: components["schemas"]["PostDraftReportComparisonSectionRead"][];
+        };
+        /** PostDraftReportComparisonRequest */
+        PostDraftReportComparisonRequest: {
+            /** Report Ids */
+            report_ids: string[];
+        };
+        /** PostDraftReportComparisonSectionRead */
+        PostDraftReportComparisonSectionRead: {
+            /**
+             * Comparison State
+             * @enum {string}
+             */
+            comparison_state: "comparable" | "not_comparable";
+            /** Explanation */
+            explanation: string;
+            /** Explanation Template Key */
+            explanation_template_key: string;
+            /** Limitation Codes */
+            limitation_codes: string[];
+            /** Reason Codes */
+            reason_codes: string[];
+            /** Section Key */
+            section_key: string;
+            /** Title */
+            title: string;
+            /** Values */
+            values: components["schemas"]["PostDraftReportComparisonValueRead"][];
+        };
+        /** PostDraftReportComparisonValueRead */
+        PostDraftReportComparisonValueRead: {
+            /**
+             * Availability
+             * @enum {string}
+             */
+            availability: "supported" | "limited" | "unavailable" | "not_applicable";
+            /**
+             * Confidence
+             * @enum {string}
+             */
+            confidence: "high" | "medium" | "low" | "unavailable";
+            /** Delta From First */
+            delta_from_first: {
+                [key: string]: unknown;
+            };
+            /** Metrics */
+            metrics: {
+                [key: string]: unknown;
+            };
+            /** Report Id */
+            report_id: string;
         };
         /** PostDraftReportGenerateRequest */
         PostDraftReportGenerateRequest: {
@@ -5376,6 +5500,39 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["PlayerRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    compare_post_draft_reports_api_v1_post_draft_report_comparisons_preview_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PostDraftReportComparisonRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PostDraftReportComparisonRead"];
                 };
             };
             /** @description Validation Error */

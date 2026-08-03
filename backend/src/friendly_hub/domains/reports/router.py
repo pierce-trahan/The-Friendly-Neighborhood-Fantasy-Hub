@@ -5,6 +5,8 @@ from sqlalchemy.orm import Session
 
 from friendly_hub.db.engine import get_session
 from friendly_hub.domains.reports.schemas import (
+    PostDraftReportComparisonRead,
+    PostDraftReportComparisonRequest,
     PostDraftReportGenerateRequest,
     PostDraftReportGenerateResponse,
     PostDraftReportListResponse,
@@ -13,6 +15,7 @@ from friendly_hub.domains.reports.schemas import (
 from friendly_hub.domains.reports.service import (
     generate_report,
     list_reports_for_draft,
+    preview_report_comparison,
     read_report,
 )
 
@@ -59,3 +62,14 @@ def get_post_draft_report(
     session: SessionDependency,
 ) -> PostDraftReportRead:
     return read_report(session, report_id)
+
+
+@router.post(
+    "/post-draft-report-comparisons/preview",
+    response_model=PostDraftReportComparisonRead,
+)
+def compare_post_draft_reports(
+    payload: PostDraftReportComparisonRequest,
+    session: SessionDependency,
+) -> PostDraftReportComparisonRead:
+    return preview_report_comparison(session, payload)

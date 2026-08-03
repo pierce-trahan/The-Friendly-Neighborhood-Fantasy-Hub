@@ -6207,6 +6207,303 @@
         "title": "PlayerRead",
         "type": "object"
       },
+      "PostDraftReportComparisonIdentityRead": {
+        "properties": {
+          "completed_at": {
+            "title": "Completed At",
+            "type": "string"
+          },
+          "draft_format": {
+            "title": "Draft Format",
+            "type": "string"
+          },
+          "draft_mode": {
+            "enum": [
+              "live",
+              "mock"
+            ],
+            "title": "Draft Mode",
+            "type": "string"
+          },
+          "draft_name": {
+            "title": "Draft Name",
+            "type": "string"
+          },
+          "draft_session_id": {
+            "title": "Draft Session Id",
+            "type": "string"
+          },
+          "explanation_template_version": {
+            "title": "Explanation Template Version",
+            "type": "string"
+          },
+          "final_strategy": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Final Strategy"
+          },
+          "initial_strategy": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Initial Strategy"
+          },
+          "league_shape_fingerprint": {
+            "title": "League Shape Fingerprint",
+            "type": "string"
+          },
+          "report_engine_version": {
+            "title": "Report Engine Version",
+            "type": "string"
+          },
+          "report_id": {
+            "title": "Report Id",
+            "type": "string"
+          },
+          "report_rules_version": {
+            "title": "Report Rules Version",
+            "type": "string"
+          },
+          "round_count": {
+            "title": "Round Count",
+            "type": "integer"
+          },
+          "strategy_definition_version": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Strategy Definition Version"
+          },
+          "team_count": {
+            "title": "Team Count",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "report_id",
+          "draft_session_id",
+          "draft_name",
+          "draft_mode",
+          "completed_at",
+          "draft_format",
+          "team_count",
+          "round_count",
+          "initial_strategy",
+          "final_strategy",
+          "strategy_definition_version",
+          "report_engine_version",
+          "report_rules_version",
+          "explanation_template_version",
+          "league_shape_fingerprint"
+        ],
+        "title": "PostDraftReportComparisonIdentityRead",
+        "type": "object"
+      },
+      "PostDraftReportComparisonRead": {
+        "properties": {
+          "baseline_report_id": {
+            "title": "Baseline Report Id",
+            "type": "string"
+          },
+          "explanation": {
+            "title": "Explanation",
+            "type": "string"
+          },
+          "explanation_template_key": {
+            "title": "Explanation Template Key",
+            "type": "string"
+          },
+          "league_shape_fingerprint": {
+            "title": "League Shape Fingerprint",
+            "type": "string"
+          },
+          "limitations": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Limitations",
+            "type": "array"
+          },
+          "report_count": {
+            "title": "Report Count",
+            "type": "integer"
+          },
+          "report_rules_version": {
+            "title": "Report Rules Version",
+            "type": "string"
+          },
+          "reports": {
+            "items": {
+              "$ref": "#/components/schemas/PostDraftReportComparisonIdentityRead"
+            },
+            "title": "Reports",
+            "type": "array"
+          },
+          "sections": {
+            "items": {
+              "$ref": "#/components/schemas/PostDraftReportComparisonSectionRead"
+            },
+            "title": "Sections",
+            "type": "array"
+          }
+        },
+        "required": [
+          "report_count",
+          "baseline_report_id",
+          "league_shape_fingerprint",
+          "report_rules_version",
+          "reports",
+          "sections",
+          "limitations",
+          "explanation_template_key",
+          "explanation"
+        ],
+        "title": "PostDraftReportComparisonRead",
+        "type": "object"
+      },
+      "PostDraftReportComparisonRequest": {
+        "additionalProperties": false,
+        "properties": {
+          "report_ids": {
+            "items": {
+              "type": "string"
+            },
+            "maxItems": 4,
+            "minItems": 2,
+            "title": "Report Ids",
+            "type": "array"
+          }
+        },
+        "required": [
+          "report_ids"
+        ],
+        "title": "PostDraftReportComparisonRequest",
+        "type": "object"
+      },
+      "PostDraftReportComparisonSectionRead": {
+        "properties": {
+          "comparison_state": {
+            "enum": [
+              "comparable",
+              "not_comparable"
+            ],
+            "title": "Comparison State",
+            "type": "string"
+          },
+          "explanation": {
+            "title": "Explanation",
+            "type": "string"
+          },
+          "explanation_template_key": {
+            "title": "Explanation Template Key",
+            "type": "string"
+          },
+          "limitation_codes": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Limitation Codes",
+            "type": "array"
+          },
+          "reason_codes": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Reason Codes",
+            "type": "array"
+          },
+          "section_key": {
+            "title": "Section Key",
+            "type": "string"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "values": {
+            "items": {
+              "$ref": "#/components/schemas/PostDraftReportComparisonValueRead"
+            },
+            "title": "Values",
+            "type": "array"
+          }
+        },
+        "required": [
+          "section_key",
+          "title",
+          "comparison_state",
+          "values",
+          "reason_codes",
+          "limitation_codes",
+          "explanation_template_key",
+          "explanation"
+        ],
+        "title": "PostDraftReportComparisonSectionRead",
+        "type": "object"
+      },
+      "PostDraftReportComparisonValueRead": {
+        "properties": {
+          "availability": {
+            "enum": [
+              "supported",
+              "limited",
+              "unavailable",
+              "not_applicable"
+            ],
+            "title": "Availability",
+            "type": "string"
+          },
+          "confidence": {
+            "enum": [
+              "high",
+              "medium",
+              "low",
+              "unavailable"
+            ],
+            "title": "Confidence",
+            "type": "string"
+          },
+          "delta_from_first": {
+            "additionalProperties": true,
+            "title": "Delta From First",
+            "type": "object"
+          },
+          "metrics": {
+            "additionalProperties": true,
+            "title": "Metrics",
+            "type": "object"
+          },
+          "report_id": {
+            "title": "Report Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "report_id",
+          "availability",
+          "confidence",
+          "metrics",
+          "delta_from_first"
+        ],
+        "title": "PostDraftReportComparisonValueRead",
+        "type": "object"
+      },
       "PostDraftReportGenerateRequest": {
         "additionalProperties": false,
         "properties": {
@@ -10167,6 +10464,47 @@
         "summary": "Update Canonical Player",
         "tags": [
           "players"
+        ]
+      }
+    },
+    "/api/v1/post-draft-report-comparisons/preview": {
+      "post": {
+        "operationId": "compare_post_draft_reports_api_v1_post_draft_report_comparisons_preview_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PostDraftReportComparisonRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PostDraftReportComparisonRead"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Compare Post Draft Reports",
+        "tags": [
+          "post-draft reports"
         ]
       }
     },
