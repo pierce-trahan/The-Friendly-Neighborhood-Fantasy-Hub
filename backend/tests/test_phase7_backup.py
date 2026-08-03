@@ -3,10 +3,12 @@ from __future__ import annotations
 import hashlib
 import json
 import sqlite3
+from typing import Any
 from zipfile import ZipFile
 
 from fastapi.testclient import TestClient
 
+from friendly_hub import launcher
 from friendly_hub.core.settings import RuntimeSettings
 from friendly_hub.db.backup import create_verified_backup
 from friendly_hub.main import create_app
@@ -78,3 +80,44 @@ def test_backup_retention_removes_only_expired_backup_archives(
     managed = list((runtime_settings.data_dir / "backups").glob("friendly-hub-backup-v1-*.zip"))
     assert len(managed) == 2
     assert unrelated.read_text(encoding="utf-8") == "not a managed backup"
+
+
+def test_launcher_creates_backup_and_binds_only_to_loopback(
+    runtime_settings: RuntimeSettings,
+    monkeypatch: Any,
+) -> None:
+    with TestClient(create_app(runtime_settings)):
+        pass
+
+    thread_started = False
+    uvicorn_call: dict[str, Any] = {}
+
+    class FakeThread:
+        def __init__(self, *, target: Any, daemon: bool) -> None:
+            assert callable(target)
+            assert daemon is True
+
+        def start(self) -> None:
+            nonlocal thread_started
+            thread_started = True
+
+    def fake_uvicorn_run(application: Any, **options: Any) -> None:
+        uvicorn_call["application"] = application
+        uvicorn_call.update(options)
+
+    monkeypatch.setattr(
+        launcher.RuntimeSettings,
+        "from_environment",
+        classmethod(lambda cls: runtime_settings),
+    )
+    monkeypatch.setattr(launcher.threading, "Thread", FakeThread)
+    monkeypatch.setattr(launcher.uvicorn, "run", fake_uvicorn_run)
+
+    launcher.main()
+
+    assert thread_started is True
+    assert uvicorn_call["host"] == "127.0.0.1"
+    assert uvicorn_call["port"] == 8765
+    assert uvicorn_call["log_level"] == "warning"
+    assert uvicorn_call["application"].title == "Friendly Neighborhood Fantasy Hub"
+    assert len(list((runtime_settings.data_dir / "backups").glob("*.zip"))) == 1

@@ -52,6 +52,13 @@ See [PROJECT_ROADMAP.md](PROJECT_ROADMAP.md) for the complete product roadmap an
 
 ## Project Status
 
+**V1.0.0 is complete and ready to try.** Phase 7 draft-night hardening adds the
+refreshed Entropy slot-1 release profile, verified pre-launch SQLite backups,
+the V1 Overview call sheet, recovery instructions, and final offline release
+rehearsal. See the [V1 release notes](docs/releases/v1.0.0.md),
+[draft-night guide](docs/guides/v1-draft-night.md), and
+[Phase 7 release audit](docs/audits/phase-7-v1-release-audit.md).
+
 Phase 0 is complete: the repository contains a production-shaped local launch
 proof with configuration persistence, a sanitized offline Entropy profile, and
 a React status screen.
@@ -135,8 +142,8 @@ comparison, and local export. The final specification and offline workflow
 audit is recorded in the
 [Phase 6 live workflow and specification audit](docs/audits/phase-6-live-workflow-audit.md),
 including the passing 720-pick offline workflow, restart/idempotency checks,
-privacy scans, and performance evidence. Phase 7 is the next roadmap boundary
-and focuses on draft-night hardening rather than feature expansion.
+privacy scans, and performance evidence. Phase 7 is complete and V1 remains
+inside the approved draft-focused boundary.
 
 ## Local Setup
 
