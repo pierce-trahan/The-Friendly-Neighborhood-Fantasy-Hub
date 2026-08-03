@@ -4504,6 +4504,18 @@ a:focus-visible {
   background: #281412;
 }
 
+.player-source-notice {
+  border: 1px solid #3d4d52;
+  border-left: 3px solid var(--accent);
+  color: var(--text-muted);
+  background: #11191b;
+}
+
+.player-source-notice strong,
+.player-source-notice a {
+  color: var(--text);
+}
+
 select,
 .player-filters input,
 .player-filters select,

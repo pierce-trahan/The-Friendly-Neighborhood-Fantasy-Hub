@@ -14,6 +14,7 @@ class RuntimeSettings:
     frontend_dist: Path
     sample_fixture_path: Path
     player_fixture_path: Path
+    bundled_player_snapshot_path: Path | None
 
     @classmethod
     def from_environment(cls) -> RuntimeSettings:
@@ -46,6 +47,15 @@ class RuntimeSettings:
             / "players"
             / "phase-1-players.sanitized.json"
         )
+        bundled_snapshot_override = os.environ.get("FRIENDLY_HUB_PLAYER_SNAPSHOT")
+        bundled_player_snapshot_path = (
+            Path(bundled_snapshot_override).expanduser().resolve()
+            if bundled_snapshot_override
+            else project_root
+            / "data"
+            / "player_universe"
+            / "nflverse-players-2026.json"
+        )
 
         return cls(
             project_root=project_root,
@@ -55,6 +65,7 @@ class RuntimeSettings:
             frontend_dist=project_root / "frontend" / "dist",
             sample_fixture_path=sample_fixture_path,
             player_fixture_path=player_fixture_path,
+            bundled_player_snapshot_path=bundled_player_snapshot_path,
         )
 
     def ensure_directories(self) -> None:

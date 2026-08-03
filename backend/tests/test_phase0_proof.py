@@ -12,7 +12,7 @@ def test_health_and_default_configuration(runtime_settings: RuntimeSettings) -> 
         health = client.get("/api/v1/health")
         assert health.status_code == 200
         assert health.json()["status"] == "ok"
-        assert health.json()["app_version"] == "1.0.0"
+        assert health.json()["app_version"] == "1.0.1"
 
         configuration = client.get("/api/v1/config")
         assert configuration.status_code == 200

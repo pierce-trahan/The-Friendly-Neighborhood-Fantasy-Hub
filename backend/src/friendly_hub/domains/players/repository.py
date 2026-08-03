@@ -3,7 +3,7 @@ from __future__ import annotations
 import json
 from uuid import uuid4
 
-from sqlalchemy import delete, func, or_, select
+from sqlalchemy import case, delete, func, or_, select
 from sqlalchemy.orm import Session
 
 from friendly_hub.core.time import utc_now_text
@@ -87,7 +87,19 @@ def list_players(
     rows = session.scalars(
         select(PlayerRow)
         .where(*filters)
-        .order_by(PlayerRow.primary_position, PlayerRow.search_name, PlayerRow.id)
+        .order_by(
+            case(
+                (PlayerRow.primary_position == "QB", 0),
+                (PlayerRow.primary_position == "RB", 1),
+                (PlayerRow.primary_position == "WR", 2),
+                (PlayerRow.primary_position == "TE", 3),
+                (PlayerRow.primary_position == "K", 4),
+                (PlayerRow.primary_position == "DEF", 5),
+                else_=6,
+            ),
+            PlayerRow.search_name,
+            PlayerRow.id,
+        )
         .limit(limit)
         .offset(offset)
     ).all()

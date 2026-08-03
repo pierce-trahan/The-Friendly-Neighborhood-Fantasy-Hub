@@ -1,6 +1,6 @@
 {
   "name": "friendly-neighborhood-fantasy-hub-frontend",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "private": true,
   "type": "module",
   "scripts": {
@@ -27,7 +27,7 @@
     "vitest": "^4.1.10"
   },
   "overrides": {
-    "brace-expansion": "5.0.8",
+    "brace-expansion": "5.0.9",
     "@redocly/openapi-core": {
       "js-yaml": "4.3.0"
     }

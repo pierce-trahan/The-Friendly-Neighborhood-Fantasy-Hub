@@ -67,7 +67,7 @@ def _parse_bool(value: object, default: bool = False) -> bool:
     return str(value).strip().casefold() in {"1", "true", "yes", "y"}
 
 
-def _candidate_from_source(
+def candidate_from_source(
     payload: dict[str, object],
     *,
     default_provider: str | None,
@@ -193,7 +193,7 @@ def _create_preview(
     seen_name_positions: set[tuple[str, str]] = set()
     for row_number, payload in enumerate(payloads, start=1):
         try:
-            candidate = _candidate_from_source(payload, default_provider=source)
+            candidate = candidate_from_source(payload, default_provider=source)
             if not candidate.include:
                 add_import_row(
                     session,

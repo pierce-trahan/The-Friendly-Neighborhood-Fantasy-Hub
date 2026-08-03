@@ -545,7 +545,10 @@ function AddPlayerDialog({
         ) : players.total === 0 ? (
           <div className="picker-empty-state">
             <strong>No canonical players are available yet.</strong>
-            <span>Import players in the Player Universe first.</span>
+            <span>
+              The bundled player database should already be available. Open
+              Player Universe to verify or correct it.
+            </span>
           </div>
         ) : availablePlayers.length === 0 ? (
           <div className="picker-empty-state">

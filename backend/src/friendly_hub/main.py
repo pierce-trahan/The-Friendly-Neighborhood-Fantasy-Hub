@@ -17,6 +17,7 @@ from friendly_hub.db.engine import create_database_engine, create_session_factor
 from friendly_hub.db.migrate import run_migrations
 from friendly_hub.domains.alerts.service import AlertEvidencePreviewStore
 from friendly_hub.domains.configuration.service import ensure_default_configuration
+from friendly_hub.domains.players.bundled import seed_bundled_player_universe
 
 
 def create_app(runtime: RuntimeSettings | None = None) -> FastAPI:
@@ -35,6 +36,10 @@ def create_app(runtime: RuntimeSettings | None = None) -> FastAPI:
         application.state.alert_evidence_preview_store = AlertEvidencePreviewStore()
         with session_factory() as session:
             ensure_default_configuration(session)
+            seed_bundled_player_universe(
+                session,
+                runtime_settings.bundled_player_snapshot_path,
+            )
         yield
         engine.dispose()
 

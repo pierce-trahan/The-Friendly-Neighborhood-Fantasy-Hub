@@ -26,6 +26,7 @@ def runtime_settings(tmp_path: Path) -> RuntimeSettings:
         / "fixtures"
         / "players"
         / "phase-1-players.sanitized.json",
+        bundled_player_snapshot_path=None,
     )
 
 
