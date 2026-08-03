@@ -44,7 +44,6 @@ from friendly_hub.domains.reports.engine import (
     evaluate_concentration,
     evaluate_starter_coverage,
     render_explanation,
-    strategy_section_state,
     unsupported_section_state,
 )
 from friendly_hub.domains.reports.evidence import (
@@ -52,6 +51,13 @@ from friendly_hub.domains.reports.evidence import (
     build_evidence_sections,
     load_evidence_context,
     no_evidence_fingerprint_document,
+)
+from friendly_hub.domains.reports.history import (
+    DecisionHistoryContext,
+    MomentCandidate,
+    MomentPick,
+    build_history_sections,
+    load_decision_history,
 )
 from friendly_hub.domains.reports.models import (
     PostDraftReportMomentRow,
@@ -87,12 +93,6 @@ _CORE_EXPLANATIONS = {
     ),
     "position.inventory.observed": (
         "Position counts and investment windows come directly from the saved completed picks."
-    ),
-    "personal_board.deferred": (
-        "Personal Board choice moments are reserved for the approved decision-moment step."
-    ),
-    "alerts.deferred": (
-        "Recorded alert moments are reserved for the approved decision-moment step."
     ),
 }
 
@@ -159,6 +159,7 @@ class _GenerationSnapshot:
     league_shape_fingerprint: str
     mock_context: dict[str, Any] | None
     evidence_context: EvidenceContext | None
+    decision_history: DecisionHistoryContext
 
 
 @dataclass(frozen=True)
@@ -504,11 +505,12 @@ def _load_generation_snapshot(
         )
 
     mock_context: dict[str, Any] | None = None
+    mock_configuration: MockConfigurationRow | None = None
     if draft.mode == "mock":
-        mock = session.scalar(
+        mock_configuration = session.scalar(
             select(MockConfigurationRow).where(MockConfigurationRow.draft_session_id == draft.id)
         )
-        if mock is None:
+        if mock_configuration is None:
             raise _error(
                 "REPORT_DRAFT_INCOMPLETE",
                 "The completed mock is missing its saved mock configuration.",
@@ -516,7 +518,7 @@ def _load_generation_snapshot(
                 409,
             )
         try:
-            raw_shape = json.loads(mock.league_shape_json)
+            raw_shape = json.loads(mock_configuration.league_shape_json)
         except json.JSONDecodeError as exc:
             raise _error(
                 "REPORT_LEAGUE_SHAPE_UNAVAILABLE",
@@ -539,10 +541,8 @@ def _load_generation_snapshot(
             "third_round_reversal": draft.third_round_reversal,
         }
         mock_context = {
-            "configuration_fingerprint": mock.content_fingerprint,
-            "strategy_definition_version": mock.strategy_definition_version,
-            "strategy_history": None,
-            "guidance_history": None,
+            "configuration_fingerprint": mock_configuration.content_fingerprint,
+            "strategy_definition_version": mock_configuration.strategy_definition_version,
         }
     else:
         if draft.league_profile_id is None:
@@ -591,6 +591,31 @@ def _load_generation_snapshot(
         roster=roster,
         completed_at=completed_at,
     )
+    decision_history = load_decision_history(
+        session,
+        draft=draft,
+        mock_configuration=mock_configuration,
+        candidates=tuple(
+            MomentCandidate(
+                player_id=candidate.player_id,
+                display_name=candidate.display_name,
+                primary_position=candidate.primary_position,
+                manual_rank=candidate.manual_rank,
+                tier_order=candidate.tier_order,
+                favorite=candidate.favorite,
+            )
+            for candidate in candidates
+        ),
+        picks=tuple(
+            MomentPick(
+                overall_pick=pick.overall_pick,
+                selecting_slot=pick.selecting_slot,
+                player_id=pick.player_id,  # type: ignore[arg-type]
+            )
+            for pick in picks
+        ),
+        completed_at=completed_at,
+    )
     return _GenerationSnapshot(
         draft=draft,
         picks=picks,
@@ -603,6 +628,7 @@ def _load_generation_snapshot(
         league_shape_fingerprint=league_shape_fingerprint,
         mock_context=mock_context,
         evidence_context=evidence_context,
+        decision_history=decision_history,
     )
 
 
@@ -663,7 +689,7 @@ def _canonical_input(snapshot: _GenerationSnapshot) -> dict[str, Any]:
             if snapshot.evidence_context is not None
             else no_evidence_fingerprint_document()
         ),
-        "decision_moment_context": None,
+        "decision_moment_context": snapshot.decision_history.fingerprint_document(),
         "versions": {
             "report_engine": REPORT_ENGINE_VERSION,
             "report_rules": REPORT_RULES_VERSION,
@@ -821,7 +847,9 @@ def _build_sections(
                 "starter_slots": len(snapshot.starter_slots),
                 "bench_slots": snapshot.league_shape.get("bench_slots"),
                 "mock_context_available": snapshot.mock_context is not None,
-                "alert_context_available": False,
+                "alert_context_available": (
+                    snapshot.decision_history.alerts.state != "not_configured"
+                ),
                 "evidence_context_available": snapshot.evidence_context is not None,
             },
             explanation_template_key="draft.summary.observed",
@@ -933,45 +961,23 @@ def _build_sections(
             )
         )
 
-    strategy_state = strategy_section_state(
-        draft_mode=draft.mode,  # type: ignore[arg-type]
-        history_state="incomplete" if draft.mode == "mock" else "valid",
-    )
-    strategy_template = "strategy.not_applicable" if draft.mode == "live" else "strategy.limited"
-    sections.extend(
-        [
+    for result in build_history_sections(
+        snapshot.decision_history,
+        draft_mode=draft.mode,
+        final_position_counts=dict(position_counts),
+    ):
+        sections.append(
             _section(
-                "strategy_story",
-                availability=strategy_state.availability,
-                confidence=strategy_state.confidence,
-                metrics={"saved_history_loaded": False},
-                reason_codes=strategy_state.reason_codes,
-                limitation_codes=("SAVED_EVENTS_ONLY", "PHASE6_STEP7_STRATEGY_STORY_DEFERRED"),
-                explanation_template_key=strategy_template,
-                explanation=render_explanation(template_key=strategy_template, values={}),
-            ),
-            _section(
-                "personal_board_choice_moments",
-                availability="unavailable",
-                confidence="unavailable",
-                metrics={"moment_count": 0},
-                reason_codes=("PHASE6_STEP7_PERSONAL_BOARD_MOMENTS_DEFERRED",),
-                limitation_codes=("PERSONAL_BOARD_OBSERVATION_ONLY",),
-                explanation_template_key="personal_board.deferred",
-                explanation=_CORE_EXPLANATIONS["personal_board.deferred"],
-            ),
-            _section(
-                "recorded_alert_moments",
-                availability="unavailable",
-                confidence="unavailable",
-                metrics={"event_count": 0},
-                reason_codes=("PHASE6_STEP7_RECORDED_ALERT_MOMENTS_DEFERRED",),
-                limitation_codes=("SAVED_EVENTS_ONLY",),
-                explanation_template_key="alerts.deferred",
-                explanation=_CORE_EXPLANATIONS["alerts.deferred"],
-            ),
-        ]
-    )
+                result.section_key,
+                availability=result.availability,
+                confidence=result.confidence,
+                metrics=result.metrics,
+                reason_codes=result.reason_codes,
+                limitation_codes=result.limitation_codes,
+                explanation_template_key=result.explanation_template_key,
+                explanation=result.explanation,
+            )
+        )
 
     limited_or_unavailable = [
         section.section_key
@@ -1094,6 +1100,21 @@ def _persist_report(
                 explanation_template_key=section.explanation_template_key,
                 explanation=section.explanation,
                 safe_provenance_json=canonical_json(section.safe_provenance),
+            )
+        )
+    for moment in snapshot.decision_history.moments():
+        session.add(
+            PostDraftReportMomentRow(
+                id=str(uuid4()),
+                report_id=report_id,
+                moment_key=moment.moment_key,
+                moment_kind=moment.moment_kind,
+                overall_pick=moment.overall_pick,
+                primary_player_id=moment.primary_player_id,
+                secondary_player_id=moment.secondary_player_id,
+                safe_summary_json=canonical_json(moment.safe_summary),
+                reason_codes_json=canonical_json(list(moment.reason_codes)),
+                limitation_codes_json=canonical_json(list(moment.limitation_codes)),
             )
         )
     session.flush()
@@ -1289,11 +1310,6 @@ def read_report(session: Session, report_id: str) -> PostDraftReportRead:
         session.scalars(
             select(PostDraftReportMomentRow)
             .where(PostDraftReportMomentRow.report_id == report.id)
-            .order_by(
-                PostDraftReportMomentRow.overall_pick,
-                PostDraftReportMomentRow.moment_kind,
-                PostDraftReportMomentRow.moment_key,
-            )
         )
     )
     moments = [
@@ -1309,6 +1325,24 @@ def read_report(session: Session, report_id: str) -> PostDraftReportRead:
         )
         for row in moment_rows
     ]
+    moment_kind_order = {
+        "strategy_pivot": 0,
+        "strategy_guidance": 1,
+        "personal_board_choice": 2,
+        "alert_event": 3,
+    }
+    moments.sort(
+        key=lambda moment: (
+            moment_kind_order.get(moment.moment_kind, 99),
+            (
+                moment.safe_summary.get("display_order")
+                if isinstance(moment.safe_summary.get("display_order"), int)
+                else 999
+            ),
+            moment.overall_pick or 0,
+            moment.moment_key,
+        )
+    )
     summary_section = next(
         (section for section in sections if section.section_key == "draft_summary"),
         None,

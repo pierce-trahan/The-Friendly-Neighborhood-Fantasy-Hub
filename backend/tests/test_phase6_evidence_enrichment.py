@@ -5,15 +5,19 @@ import io
 import json
 from datetime import UTC, datetime, timedelta
 from pathlib import Path
+from uuid import uuid4
 
 from fastapi.testclient import TestClient
 from sqlalchemy import select
 
 from friendly_hub.core.settings import RuntimeSettings
+from friendly_hub.core.time import utc_now_text
 from friendly_hub.domains.alerts.models import (
     AlertEvidenceSnapshotRow,
     AlertPlayerSignalRow,
     DraftAlertConfigurationRow,
+    DraftAlertEventRow,
+    DraftAlertTradeReferenceRow,
 )
 from friendly_hub.domains.reports.engine import RosterPlayer
 from friendly_hub.domains.reports.evidence import (
@@ -266,6 +270,142 @@ def _evidence_source_state(client: TestClient, snapshot_id: str) -> tuple[object
         )
 
 
+def _saved_alert_evidence(configuration_revision: int, draft_revision: int) -> dict[str, object]:
+    return {
+        "source_label": "Neighborhood Synthetic Evidence",
+        "source_as_of": "2026-08-01T00:00:00Z",
+        "format_compatibility": "exact",
+        "expected_selection": {"low": 1, "high": 2},
+        "market_gap": {"low": 0, "high": 1},
+        "return_risk": "uncertain",
+        "current_overall_pick": 1,
+        "next_user_pick": 4,
+        "personal_reason": {
+            "manual_rank": 1,
+            "tier_order": None,
+            "favorite": True,
+            "qualifier_mode": "tier_or_favorite",
+            "qualified": True,
+        },
+        "components": {
+            "personal_conviction": {
+                "state": "available",
+                "band": "favorite",
+                "reasons": [],
+            },
+            "dynasty_market": {
+                "state": "available",
+                "band": "strong",
+                "reasons": [],
+            },
+            "win_now_production": {
+                "state": "available",
+                "band": "high",
+                "reasons": [],
+            },
+            "age_risk": {
+                "state": "available",
+                "band": "middle",
+                "reasons": [],
+            },
+            "strategy_fit": {
+                "state": "unavailable",
+                "band": None,
+                "reasons": ["STRATEGY_FIT_UNAVAILABLE"],
+            },
+        },
+        "target_pick_window": {"low": 1, "high": 2},
+        "cost_availability": "available",
+        "confidence_reasons": ["FRESH_EVIDENCE"],
+        "limitation_codes": ["PICK_ONLY_REFERENCE"],
+        "engine_version": "alert-engine-v1",
+        "rule_version": "alert-rules-v1",
+        "freshness_policy_version": "alert-freshness-v1",
+        "configuration_revision": configuration_revision,
+        "draft_revision": draft_revision,
+        "private_source_reference": "PRIVATE ALERT SOURCE REFERENCE",
+    }
+
+
+def _insert_saved_alert(
+    client: TestClient,
+    *,
+    draft_id: str,
+    snapshot_id: str,
+    player_id: str,
+    corrupt: bool = False,
+) -> str:
+    event_id = str(uuid4())
+    now = utc_now_text()
+    session_factory = client.app.state.session_factory
+    with session_factory() as session:
+        configuration = session.scalar(
+            select(DraftAlertConfigurationRow).where(
+                DraftAlertConfigurationRow.draft_session_id == draft_id
+            )
+        )
+        assert configuration is not None
+        evidence = _saved_alert_evidence(configuration.revision, 0)
+        session.add(
+            DraftAlertEventRow(
+                id=event_id,
+                configuration_id=configuration.id,
+                player_id=player_id,
+                deterministic_event_key=f"saved-report-event-{event_id}",
+                alert_kind="trade_up_window",
+                status="open",
+                confidence="medium",
+                freshness="fresh",
+                first_confirmed_draft_revision=0,
+                last_confirmed_draft_revision=0,
+                original_evidence_json=json.dumps(
+                    {**evidence, "private_original_context": "PRIVATE ORIGINAL"}
+                ),
+                current_evidence_json=("{" if corrupt else json.dumps(evidence)),
+                explanation_template_keys_json=json.dumps(["TRADE_UP_WINDOW_V1"]),
+                limitation_codes_json=json.dumps(["PICK_ONLY_REFERENCE"]),
+                snooze_boundary=None,
+                dismissed_at=None,
+                superseded_at=None,
+                created_at=now,
+                updated_at=now,
+            )
+        )
+        session.add(
+            DraftAlertTradeReferenceRow(
+                id=str(uuid4()),
+                event_id=event_id,
+                target_overall_pick_low=1,
+                target_overall_pick_high=2,
+                target_round_pick_labels_json=json.dumps(
+                    ["Round 1, pick 1", "Round 1, pick 2"]
+                ),
+                cost_range_json=json.dumps(
+                    {
+                        "incremental_cost": {"low": 10, "high": 20},
+                        "pick_only_references": [
+                            {
+                                "label": "Year 1, round 2",
+                                "season_offset": 1,
+                                "round": 2,
+                                "value": {"low": 15, "high": 25},
+                                "private_asset_key": "PRIVATE ASSET KEY",
+                            }
+                        ],
+                        "cost_availability": "available",
+                        "private_curve": "PRIVATE CURVE",
+                    }
+                ),
+                pick_curve_snapshot_id=snapshot_id,
+                explanation_template_key="PICK_ONLY_COST_REFERENCE_V1",
+                limitation_codes_json=json.dumps(["PICK_ONLY_REFERENCE"]),
+                created_at=now,
+            )
+        )
+        session.commit()
+    return event_id
+
+
 def test_attached_evidence_enriches_report_without_mutating_or_leaking_sources(
     runtime_settings: RuntimeSettings,
 ) -> None:
@@ -286,6 +426,7 @@ def test_attached_evidence_enriches_report_without_mutating_or_leaking_sources(
         production = _section(report, "year_one_production_context")
         market = _section(report, "dynasty_market_context")
         age_risk = _section(report, "age_risk_profile")
+        alert_history = _section(report, "recorded_alert_moments")
 
         assert production["availability"] == "limited"
         assert production["confidence"] == "low"
@@ -294,6 +435,8 @@ def test_attached_evidence_enriches_report_without_mutating_or_leaking_sources(
         assert market["confidence"] == "medium"
         assert age_risk["availability"] == "supported"
         assert age_risk["confidence"] == "medium"
+        assert alert_history["availability"] == "supported"
+        assert alert_history["metrics"]["history_state"] == "configured_no_events"
         assert market["safe_provenance"]["source_label"] == (
             "Neighborhood Synthetic Evidence"
         )
@@ -333,6 +476,268 @@ def test_attached_evidence_enriches_report_without_mutating_or_leaking_sources(
         assert repeated.status_code == 200
         assert repeated.json()["idempotent"] is True
         assert repeated.json()["report"] == report
+
+
+def test_saved_alert_and_pick_only_reference_are_projected_without_private_fields(
+    runtime_settings: RuntimeSettings,
+) -> None:
+    with TestClient(create_app(runtime_settings), headers=TRUSTED_HEADERS) as client:
+        draft, players = _seed_draft(client)
+        snapshot_id = _attach_evidence(
+            client,
+            draft,
+            players,
+            evidence_as_of=datetime.now(UTC) - timedelta(days=1),
+            production_coverage=3,
+        )
+        event_id = _insert_saved_alert(
+            client,
+            draft_id=str(draft["id"]),
+            snapshot_id=snapshot_id,
+            player_id=str(players[0]["id"]),
+        )
+        completed = _complete(client, draft, players)
+        session_factory = client.app.state.session_factory
+        with session_factory() as session:
+            event = session.get(DraftAlertEventRow, event_id)
+            assert event is not None
+            after_completion = utc_now_text()
+            event.status = "dismissed"
+            event.dismissed_at = after_completion
+            event.updated_at = after_completion
+            session.add(
+                DraftAlertTradeReferenceRow(
+                    id=str(uuid4()),
+                    event_id=event_id,
+                    target_overall_pick_low=2,
+                    target_overall_pick_high=3,
+                    target_round_pick_labels_json=json.dumps(
+                        ["Round 1, pick 2", "Round 2, pick 1"]
+                    ),
+                    cost_range_json=json.dumps(
+                        {
+                            "incremental_cost": {"low": 11, "high": 21},
+                            "pick_only_references": [
+                                {
+                                    "label": "Year 1, round 2",
+                                    "season_offset": 1,
+                                    "round": 2,
+                                    "value": {"low": 16, "high": 26},
+                                }
+                            ],
+                            "cost_availability": "available",
+                        }
+                    ),
+                    pick_curve_snapshot_id=snapshot_id,
+                    explanation_template_key="PICK_ONLY_COST_REFERENCE_V1",
+                    limitation_codes_json=json.dumps(["PICK_ONLY_REFERENCE"]),
+                    created_at=after_completion,
+                )
+            )
+            session.commit()
+            source_before = (
+                event.status,
+                event.current_evidence_json,
+                tuple(
+                    session.execute(
+                        select(
+                            DraftAlertTradeReferenceRow.id,
+                            DraftAlertTradeReferenceRow.cost_range_json,
+                        ).where(DraftAlertTradeReferenceRow.event_id == event_id)
+                    )
+                ),
+            )
+
+        generated = _generate(client, completed)
+        assert generated.status_code == 201, generated.text
+        report = generated.json()["report"]
+        section = _section(report, "recorded_alert_moments")
+        assert section["availability"] == "supported"
+        assert section["confidence"] == "high"
+        assert section["metrics"]["history_state"] == "available"
+        assert section["metrics"]["event_count"] == 1
+        alert_moments = [
+            moment
+            for moment in report["moments"]
+            if moment["moment_kind"] == "alert_event"
+        ]
+        assert len(alert_moments) == 1
+        moment = alert_moments[0]
+        assert moment["safe_summary"]["kind"] == "trade_up_window"
+        assert moment["safe_summary"]["status"] == "dismissed"
+        assert moment["safe_summary"]["drafted_outcome"] == {
+            "state": "drafted_by_user",
+            "overall_pick": 1,
+        }
+        trade = moment["safe_summary"]["trade_reference"]
+        assert trade["target_pick_window"] == {"low": 2, "high": 3}
+        assert trade["incremental_cost"] == {"low": 11, "high": 21}
+        assert trade["pick_only_references"] == [
+            {
+                "label": "Year 1, round 2",
+                "season_offset": 1,
+                "round": 2,
+                "value": {"low": 16, "high": 26},
+            }
+        ]
+        assert "NO_TRADE_EXECUTION_CLAIM" in moment["limitation_codes"]
+        forbidden = (
+            "PRIVATE ALERT SOURCE REFERENCE",
+            "PRIVATE ORIGINAL",
+            "PRIVATE ASSET KEY",
+            "PRIVATE CURVE",
+            "private_source_reference",
+            "pick_curve_snapshot_id",
+            "ownership",
+        )
+        assert all(marker not in generated.text for marker in forbidden)
+
+        with session_factory() as session:
+            event = session.get(DraftAlertEventRow, event_id)
+            assert event is not None
+            source_after = (
+                event.status,
+                event.current_evidence_json,
+                tuple(
+                    session.execute(
+                        select(
+                            DraftAlertTradeReferenceRow.id,
+                            DraftAlertTradeReferenceRow.cost_range_json,
+                        ).where(DraftAlertTradeReferenceRow.event_id == event_id)
+                    )
+                ),
+            )
+        assert source_after == source_before
+
+
+def test_disabled_and_corrupt_alert_histories_remain_distinct(
+    runtime_settings: RuntimeSettings,
+) -> None:
+    with TestClient(create_app(runtime_settings), headers=TRUSTED_HEADERS) as client:
+        disabled_draft, disabled_players = _seed_draft(client)
+        disabled_snapshot = _attach_evidence(
+            client,
+            disabled_draft,
+            disabled_players,
+            evidence_as_of=datetime.now(UTC) - timedelta(days=1),
+        )
+        assert disabled_snapshot
+        session_factory = client.app.state.session_factory
+        with session_factory() as session:
+            configuration = session.scalar(
+                select(DraftAlertConfigurationRow).where(
+                    DraftAlertConfigurationRow.draft_session_id == disabled_draft["id"]
+                )
+            )
+            assert configuration is not None
+            configuration.enabled = False
+            configuration.updated_at = utc_now_text()
+            session.commit()
+        disabled_completed = _complete(client, disabled_draft, disabled_players)
+        disabled_report = _generate(client, disabled_completed)
+        assert disabled_report.status_code == 201, disabled_report.text
+        disabled_section = _section(
+            disabled_report.json()["report"], "recorded_alert_moments"
+        )
+        assert disabled_section["availability"] == "supported"
+        assert disabled_section["metrics"]["history_state"] == (
+            "disabled_at_completion"
+        )
+        assert disabled_section["metrics"]["event_count"] == 0
+
+    with TestClient(create_app(runtime_settings), headers=TRUSTED_HEADERS) as client:
+        corrupt_draft, corrupt_players = _seed_draft(client)
+        corrupt_snapshot = _attach_evidence(
+            client,
+            corrupt_draft,
+            corrupt_players,
+            evidence_as_of=datetime.now(UTC) - timedelta(days=1),
+        )
+        _insert_saved_alert(
+            client,
+            draft_id=str(corrupt_draft["id"]),
+            snapshot_id=corrupt_snapshot,
+            player_id=str(corrupt_players[0]["id"]),
+            corrupt=True,
+        )
+        corrupt_completed = _complete(client, corrupt_draft, corrupt_players)
+        corrupt_report = _generate(client, corrupt_completed)
+        assert corrupt_report.status_code == 201, corrupt_report.text
+        report = corrupt_report.json()["report"]
+        corrupt_section = _section(report, "recorded_alert_moments")
+        assert corrupt_section["availability"] == "unavailable"
+        assert corrupt_section["confidence"] == "unavailable"
+        assert corrupt_section["metrics"]["history_state"] == (
+            "unavailable_due_to_corruption"
+        )
+        assert not any(
+            moment["moment_kind"] == "alert_event" for moment in report["moments"]
+        )
+
+
+def test_saved_alert_detail_is_deterministically_ordered_and_capped_at_twenty(
+    runtime_settings: RuntimeSettings,
+) -> None:
+    with TestClient(create_app(runtime_settings), headers=TRUSTED_HEADERS) as client:
+        draft, players = _seed_draft(client)
+        snapshot_id = _attach_evidence(
+            client,
+            draft,
+            players,
+            evidence_as_of=datetime.now(UTC) - timedelta(days=1),
+        )
+        assert snapshot_id
+        session_factory = client.app.state.session_factory
+        event_ids = [f"00000000-0000-0000-0000-{number:012d}" for number in range(21)]
+        with session_factory() as session:
+            configuration = session.scalar(
+                select(DraftAlertConfigurationRow).where(
+                    DraftAlertConfigurationRow.draft_session_id == draft["id"]
+                )
+            )
+            assert configuration is not None
+            evidence = _saved_alert_evidence(configuration.revision, 0)
+            now = utc_now_text()
+            for event_id in reversed(event_ids):
+                session.add(
+                    DraftAlertEventRow(
+                        id=event_id,
+                        configuration_id=configuration.id,
+                        player_id=str(players[0]["id"]),
+                        deterministic_event_key=f"saved-cap-event-{event_id}",
+                        alert_kind="value_watch",
+                        status="open",
+                        confidence="medium",
+                        freshness="fresh",
+                        first_confirmed_draft_revision=0,
+                        last_confirmed_draft_revision=0,
+                        original_evidence_json=json.dumps(evidence),
+                        current_evidence_json=json.dumps(evidence),
+                        explanation_template_keys_json=json.dumps(["VALUE_WATCH_V1"]),
+                        limitation_codes_json=json.dumps([]),
+                        snooze_boundary=None,
+                        dismissed_at=None,
+                        superseded_at=None,
+                        created_at=now,
+                        updated_at=now,
+                    )
+                )
+            session.commit()
+
+        completed = _complete(client, draft, players)
+        generated = _generate(client, completed)
+        assert generated.status_code == 201, generated.text
+        report = generated.json()["report"]
+        section = _section(report, "recorded_alert_moments")
+        assert section["metrics"]["event_count"] == 21
+        assert section["metrics"]["included_event_count"] == 20
+        assert section["metrics"]["truncated"] is True
+        moment_keys = [
+            moment["moment_key"]
+            for moment in report["moments"]
+            if moment["moment_kind"] == "alert_event"
+        ]
+        assert moment_keys == [f"alert:{event_id}" for event_id in event_ids[:20]]
 
 
 def test_elapsed_evidence_is_unavailable_at_the_completion_boundary(

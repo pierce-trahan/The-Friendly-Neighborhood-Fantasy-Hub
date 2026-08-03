@@ -13,6 +13,10 @@ from friendly_hub.domains.drafts.models import (
     DraftSessionRow,
     DraftTeamRow,
 )
+from friendly_hub.domains.mocks.models import (
+    MockGuidanceEventRow,
+    MockStrategyRevisionRow,
+)
 from friendly_hub.domains.reports import service as report_service
 from friendly_hub.domains.reports.models import (
     PostDraftReportMomentRow,
@@ -193,6 +197,13 @@ def _generation_payload(draft: dict[str, object]) -> dict[str, object]:
     }
 
 
+def _generate(client: TestClient, draft: dict[str, object]):
+    return client.post(
+        f"/api/v1/draft-sessions/{draft['id']}/post-draft-reports",
+        json=_generation_payload(draft),
+    )
+
+
 def test_completed_live_report_is_atomic_idempotent_private_and_restart_safe(
     runtime_settings: RuntimeSettings,
 ) -> None:
@@ -239,6 +250,8 @@ def test_completed_live_report_is_atomic_idempotent_private_and_restart_safe(
         assert report["section_summary"]["draft_summary"] == "supported"
         assert report["section_summary"]["long_term_value"] == "unavailable"
         assert report["section_summary"]["strategy_story"] == "not_applicable"
+        assert report["section_summary"]["personal_board_choice_moments"] == "supported"
+        assert report["section_summary"]["recorded_alert_moments"] == "supported"
         for key in (
             "year_one_production_context",
             "dynasty_market_context",
@@ -257,6 +270,7 @@ def test_completed_live_report_is_atomic_idempotent_private_and_restart_safe(
         assert "input_fingerprint" not in generated.text
         assert "provider_id" not in generated.text
         assert "PHASE6_STEP6_EVIDENCE_ENRICHMENT_DEFERRED" not in generated.text
+        assert "PHASE6_STEP7" not in generated.text
 
         assert _source_state(client, completed["id"]) == source_before
         session_factory = client.app.state.session_factory
@@ -338,7 +352,7 @@ def test_paused_and_missing_league_shape_reject_without_report_rows(
             assert session.scalar(select(func.count()).select_from(PostDraftReportRow)) == 0
 
 
-def test_completed_mock_generates_core_report_with_deferred_story(
+def test_completed_mock_replays_saved_strategy_history(
     runtime_settings: RuntimeSettings,
 ) -> None:
     with TestClient(create_app(runtime_settings), headers=TRUSTED_HEADERS) as client:
@@ -401,8 +415,243 @@ def test_completed_mock_generates_core_report_with_deferred_story(
             for section in report["sections"]
             if section["section_key"] == "strategy_story"
         )
-        assert strategy["availability"] == "limited"
-        assert "PHASE6_STEP7_STRATEGY_STORY_DEFERRED" in strategy["limitation_codes"]
+        assert strategy["availability"] == "supported", strategy["limitation_codes"]
+        assert strategy["confidence"] == "high"
+        assert strategy["metrics"]["saved_history_loaded"] is True
+        assert strategy["metrics"]["guidance_event_count"] >= 1
+        assert any(moment["moment_kind"] == "strategy_guidance" for moment in report["moments"])
+        assert "PHASE6_STEP7_STRATEGY_STORY_DEFERRED" not in generated.text
+
+
+def test_mock_strategy_pivot_and_guidance_are_safe_saved_observations(
+    runtime_settings: RuntimeSettings,
+) -> None:
+    with TestClient(create_app(runtime_settings), headers=TRUSTED_HEADERS) as client:
+        board, players, league = _seed_context(client)
+        created = client.post(
+            f"/api/v1/boards/{board['id']}/mock-sessions",
+            json={
+                "name": "Strategy Pivot Report Mock",
+                "league_profile_id": league["id"],
+                "draft_format": "snake",
+                "third_round_reversal": False,
+                "team_count": 2,
+                "round_count": 2,
+                "user_slot": 1,
+                "team_names": ["Your Team", "Fictional CPU"],
+                "seed": "4243",
+                "randomness": 0,
+                "strategy_key": "balanced",
+                "fallback_archetypes": {"2": "balanced"},
+            },
+        )
+        assert created.status_code == 201, created.text
+        mock = created.json()
+        picked = client.post(
+            f"/api/v1/draft-sessions/{mock['draft']['id']}/picks",
+            json={
+                "revision": mock["draft"]["revision"],
+                "expected_overall_pick": 1,
+                "player_id": players[0]["id"],
+            },
+        )
+        assert picked.status_code == 200, picked.text
+        refreshed = client.get(f"/api/v1/mock-sessions/{mock['draft']['id']}")
+        assert refreshed.status_code == 200
+        mock = refreshed.json()
+        pivoted = client.patch(
+            f"/api/v1/mock-sessions/{mock['draft']['id']}/strategy",
+            json={
+                "mock_revision": mock["mock"]["revision"],
+                "expected_current_overall_pick": 2,
+                "strategy_key": "hero_rb",
+                "private_user_note": "PRIVATE PIVOT REPORT NOTE",
+            },
+        )
+        assert pivoted.status_code == 200, pivoted.text
+        mock = pivoted.json()
+
+        for expected_pick in (2, 3):
+            current = mock["draft"]["current_pick"]
+            assert current["overall_pick"] == expected_pick
+            cpu = client.post(
+                f"/api/v1/mock-sessions/{mock['draft']['id']}/cpu-pick",
+                json={
+                    "draft_revision": mock["draft"]["revision"],
+                    "mock_revision": mock["mock"]["revision"],
+                    "expected_overall_pick": current["overall_pick"],
+                    "expected_selecting_slot": current["selecting_slot"],
+                },
+            )
+            assert cpu.status_code == 200, cpu.text
+            mock = cpu.json()
+
+        drafted_ids = {pick["player_id"] for pick in mock["draft"]["picks"]}
+        final_player = next(player for player in players if player["id"] not in drafted_ids)
+        completed_response = client.post(
+            f"/api/v1/draft-sessions/{mock['draft']['id']}/picks",
+            json={
+                "revision": mock["draft"]["revision"],
+                "expected_overall_pick": 4,
+                "player_id": final_player["id"],
+            },
+        )
+        assert completed_response.status_code == 200, completed_response.text
+        completed = completed_response.json()
+        assert completed["status"] == "completed"
+
+        session_factory = client.app.state.session_factory
+        with session_factory() as session:
+            source_before = (
+                tuple(
+                    session.execute(
+                        select(
+                            MockStrategyRevisionRow.id,
+                            MockStrategyRevisionRow.sequence_number,
+                            MockStrategyRevisionRow.private_user_note,
+                        ).order_by(MockStrategyRevisionRow.sequence_number)
+                    )
+                ),
+                tuple(
+                    session.execute(
+                        select(
+                            MockGuidanceEventRow.id,
+                            MockGuidanceEventRow.state,
+                            MockGuidanceEventRow.status,
+                        ).order_by(MockGuidanceEventRow.id)
+                    )
+                ),
+            )
+        generated = _generate(client, completed)
+        assert generated.status_code == 201, generated.text
+        report = generated.json()["report"]
+        strategy = next(
+            section
+            for section in report["sections"]
+            if section["section_key"] == "strategy_story"
+        )
+        assert strategy["availability"] == "supported", strategy["limitation_codes"]
+        assert strategy["metrics"]["initial_strategy"] == "balanced"
+        assert strategy["metrics"]["final_strategy"] == "hero_rb"
+        assert strategy["metrics"]["pivot_count"] == 1
+        assert strategy["metrics"]["guidance_event_count"] >= 2
+        pivot_moments = [
+            moment for moment in report["moments"] if moment["moment_kind"] == "strategy_pivot"
+        ]
+        guidance_moments = [
+            moment
+            for moment in report["moments"]
+            if moment["moment_kind"] == "strategy_guidance"
+        ]
+        assert len(pivot_moments) == 1
+        assert guidance_moments
+        assert pivot_moments[0]["safe_summary"]["previous_strategy"] == "balanced"
+        assert pivot_moments[0]["safe_summary"]["next_strategy"] == "hero_rb"
+        assert "PRIVATE PIVOT REPORT NOTE" not in generated.text
+        assert "random_audit" not in generated.text
+        assert "seed" not in generated.text
+
+        with session_factory() as session:
+            source_after = (
+                tuple(
+                    session.execute(
+                        select(
+                            MockStrategyRevisionRow.id,
+                            MockStrategyRevisionRow.sequence_number,
+                            MockStrategyRevisionRow.private_user_note,
+                        ).order_by(MockStrategyRevisionRow.sequence_number)
+                    )
+                ),
+                tuple(
+                    session.execute(
+                        select(
+                            MockGuidanceEventRow.id,
+                            MockGuidanceEventRow.state,
+                            MockGuidanceEventRow.status,
+                        ).order_by(MockGuidanceEventRow.id)
+                    )
+                ),
+            )
+        assert source_after == source_before
+
+
+def test_live_report_reconstructs_and_deduplicates_frozen_board_choice(
+    runtime_settings: RuntimeSettings,
+) -> None:
+    with TestClient(create_app(runtime_settings), headers=TRUSTED_HEADERS) as client:
+        board, players, league = _seed_context(client)
+        draft = _start_live(
+            client,
+            board["id"],
+            league["id"],
+            round_count=3,
+        )
+        session_factory = client.app.state.session_factory
+        rank_by_player = {
+            player["id"]: rank for rank, player in enumerate(players[:6], start=1)
+        }
+        with session_factory() as session:
+            candidates = tuple(
+                session.scalars(
+                    select(DraftCandidateRow).where(
+                        DraftCandidateRow.session_id == draft["id"]
+                    )
+                )
+            )
+            for candidate in candidates:
+                if candidate.player_id in rank_by_player:
+                    candidate.manual_rank = rank_by_player[candidate.player_id]
+                    candidate.tier_order = 1 if candidate.player_id == players[0]["id"] else 2
+                    candidate.favorite = candidate.player_id == players[0]["id"]
+            session.commit()
+
+        current = draft
+        pick_order = [players[index] for index in (5, 1, 2, 4, 3, 0)]
+        for player in pick_order:
+            current_pick = current["current_pick"]
+            picked = client.post(
+                f"/api/v1/draft-sessions/{draft['id']}/picks",
+                json={
+                    "revision": current["revision"],
+                    "expected_overall_pick": current_pick["overall_pick"],
+                    "player_id": player["id"],
+                },
+            )
+            assert picked.status_code == 200, picked.text
+            current = picked.json()
+        assert current["status"] == "completed"
+        source_before = _source_state(client, draft["id"])
+
+        generated = _generate(client, current)
+        assert generated.status_code == 201, generated.text
+        report = generated.json()["report"]
+        section = next(
+            item
+            for item in report["sections"]
+            if item["section_key"] == "personal_board_choice_moments"
+        )
+        assert section["availability"] == "supported"
+        assert section["confidence"] == "high"
+        assert section["metrics"]["moment_count"] == 1
+        moments = [
+            moment
+            for moment in report["moments"]
+            if moment["moment_kind"] == "personal_board_choice"
+        ]
+        assert len(moments) == 1
+        summary = moments[0]["safe_summary"]
+        assert summary["first_user_pick"] == 1
+        assert summary["last_available_user_pick"] == 5
+        assert summary["rank_delta"] == 5
+        assert summary["passed_player"]["saved_favorite"] is True
+        assert summary["passed_player_draft_outcome"] == {
+            "state": "drafted_by_other_slot",
+            "overall_pick": 6,
+        }
+        assert "PRIVATE REPORT TEST NOTE" not in generated.text
+        assert "board_note" not in generated.text
+        assert "mistake" not in generated.text.casefold()
+        assert _source_state(client, draft["id"]) == source_before
 
 
 def test_late_section_failure_rolls_back_every_new_report_row(

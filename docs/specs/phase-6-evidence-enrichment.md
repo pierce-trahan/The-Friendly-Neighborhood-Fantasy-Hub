@@ -175,6 +175,7 @@ remain required before publication.
 
 ## Next Implementation Boundary
 
-After this module is reviewed, Phase 6 step 7 may add only saved mock-strategy
-story and bounded Personal Board or recorded-alert moments. It must not add
-comparison, export, desktop work, grades, projections, or automated advice.
+Phase 6 step 7 implements this boundary in the
+[saved strategy and decision-moment contract](phase-6-strategy-decision-moments.md).
+The next boundary is compatible comparison preview, without export, desktop
+work, grades, projections, or automated advice.

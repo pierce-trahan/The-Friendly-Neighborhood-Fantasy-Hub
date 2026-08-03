@@ -1391,6 +1391,9 @@ The bounded contract for implementation step 5 is recorded in
 The bounded contract for implementation step 6 is recorded in
 [Phase 6 Attached-Evidence Report Enrichment](phase-6-evidence-enrichment.md).
 
+The bounded contract for implementation step 7 is recorded in
+[Phase 6 Saved Strategy and Decision Moments](phase-6-strategy-decision-moments.md).
+
 ## Deferred Revisit
 
 - overall or letter grades;
