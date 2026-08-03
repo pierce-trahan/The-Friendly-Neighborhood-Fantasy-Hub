@@ -24,7 +24,7 @@ creates and verifies a private backup if a local database already exists. The
 10 newest backups are retained by default.
 
 The green `Local database connected` status means the service, migrations, and
-local database opened successfully. The Overview shows `v1.0.0` for the release
+local database opened successfully. The Overview shows `v1.0.1` for the release
 build.
 
 ## Before the Draft

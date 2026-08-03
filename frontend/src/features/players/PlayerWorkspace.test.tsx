@@ -106,7 +106,21 @@ describe("PlayerWorkspace", () => {
     vi.unstubAllGlobals();
   });
 
-  it("moves from an empty universe into the safe fixture preview", async () => {
+  async function uploadCsv() {
+    const input = screen.getByLabelText("Choose player CSV");
+    Object.defineProperty(input, "files", {
+      configurable: true,
+      value: [
+        {
+          name: "players.csv",
+          text: async () => "name,position,team,status\nMarcus Hale,QB,CHI,active\n",
+        },
+      ],
+    });
+    fireEvent.change(input);
+  }
+
+  it("keeps optional CSV import available without asking for sample data", async () => {
     const fetchMock = vi
       .fn()
       .mockResolvedValueOnce(response(emptyPlayers))
@@ -118,7 +132,7 @@ describe("PlayerWorkspace", () => {
     expect(
       await screen.findByRole("heading", { name: "No players match this view." }),
     ).toBeInTheDocument();
-    fireEvent.click(screen.getByRole("button", { name: "Load safe sample" }));
+    await uploadCsv();
 
     expect(
       await screen.findByRole("heading", {
@@ -126,9 +140,10 @@ describe("PlayerWorkspace", () => {
       }),
     ).toBeInTheDocument();
     expect(fetchMock).toHaveBeenLastCalledWith(
-      "/api/v1/player-imports/fixture/preview",
+      "/api/v1/player-imports/csv/preview",
       expect.objectContaining({ method: "POST" }),
     );
+    expect(screen.queryByText("Load safe sample")).not.toBeInTheDocument();
   });
 
   it("labels suggested matches as unconfirmed and locks commit", async () => {
@@ -142,7 +157,7 @@ describe("PlayerWorkspace", () => {
 
     render(<PlayerWorkspace />);
     await screen.findByText("0 players");
-    fireEvent.click(screen.getByRole("button", { name: "Load safe sample" }));
+    await uploadCsv();
     await screen.findByText("Review before commit");
     fireEvent.click(screen.getByRole("button", { name: /Needs Review/ }));
 
@@ -174,7 +189,7 @@ describe("PlayerWorkspace", () => {
 
     render(<PlayerWorkspace />);
     await screen.findByText("0 players");
-    fireEvent.click(screen.getByRole("button", { name: "Load safe sample" }));
+    await uploadCsv();
     await screen.findByText("Review before commit");
     fireEvent.click(screen.getByRole("button", { name: /Needs Review/ }));
     fireEvent.click(await screen.findByRole("button", { name: "Ignore row" }));
@@ -217,10 +232,10 @@ describe("PlayerWorkspace", () => {
 
     render(<PlayerWorkspace />);
     await screen.findByText("0 players");
-    fireEvent.click(screen.getByRole("button", { name: "Load safe sample" }));
+    await uploadCsv();
     fireEvent.click(await screen.findByRole("button", { name: "Commit import" }));
 
-    expect(await screen.findByText("1 players")).toBeInTheDocument();
+    expect(await screen.findByText("1 player")).toBeInTheDocument();
     expect(
       screen.getByRole("rowheader", { name: /Marcus Hale/ }),
     ).toBeInTheDocument();

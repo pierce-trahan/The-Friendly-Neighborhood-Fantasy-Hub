@@ -52,12 +52,13 @@ See [PROJECT_ROADMAP.md](PROJECT_ROADMAP.md) for the complete product roadmap an
 
 ## Project Status
 
-**V1.0.0 is complete and ready to try.** Phase 7 draft-night hardening adds the
-refreshed Entropy slot-1 release profile, verified pre-launch SQLite backups,
-the V1 Overview call sheet, recovery instructions, and final offline release
-rehearsal. See the [V1 release notes](docs/releases/v1.0.0.md),
+**V1.0.1 is complete and ready to try.** The corrective player-data release
+now seeds 1,148 current fantasy-relevant nflverse player records into the local
+database automatically, including the 2026 rookie class. No sample load,
+manual player creation, or launch-time internet connection is required. See
+the [V1.0.1 release notes](docs/releases/v1.0.1.md),
 [draft-night guide](docs/guides/v1-draft-night.md), and
-[Phase 7 release audit](docs/audits/phase-7-v1-release-audit.md).
+[V1.0.1 player-universe audit](docs/audits/v1.0.1-player-universe-audit.md).
 
 Phase 0 is complete: the repository contains a production-shaped local launch
 proof with configuration persistence, a sanitized offline Entropy profile, and

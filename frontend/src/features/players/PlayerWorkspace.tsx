@@ -22,7 +22,6 @@ import {
   getPlayerExportUrl,
   getPlayers,
   previewPlayerCsv,
-  previewPlayerFixture,
   updatePlayer,
 } from "../../api/client";
 
@@ -330,22 +329,6 @@ export function PlayerWorkspace() {
     setNotice(null);
   }
 
-  async function beginSafeSample() {
-    clearMessages();
-    setBusyAction("fixture");
-    try {
-      const preview = await previewPlayerFixture();
-      setSession(preview);
-      setOutcomeFilter("all");
-      setView("preview");
-      setNotice("Safe sample preview created. No canonical players changed yet.");
-    } catch (caught) {
-      setError(formatError(caught));
-    } finally {
-      setBusyAction(null);
-    }
-  }
-
   async function beginCsv(event: ChangeEvent<HTMLInputElement>) {
     const file = event.target.files?.[0];
     event.target.value = "";
@@ -512,18 +495,28 @@ export function PlayerWorkspace() {
         )}
       </div>
 
+      <div className="notice player-source-notice">
+        <strong>Player database included</strong>
+        <span>
+          1,148 current fantasy-relevant players are bundled from the nflverse
+          players snapshot updated August 2, 2026. It loads locally and does
+          not require an internet connection or a manual import. Data is
+          transformed under{" "}
+          <a
+            href="https://github.com/nflverse/nflverse-data/blob/main/LICENSE.md"
+            target="_blank"
+            rel="noreferrer"
+          >
+            CC BY 4.0
+          </a>
+          .
+        </span>
+      </div>
+
       {view === "universe" && (
         <>
           <div className="player-actions">
             <div>
-              <button
-                className="primary-button"
-                type="button"
-                onClick={beginSafeSample}
-                disabled={busyAction !== null}
-              >
-                {busyAction === "fixture" ? "Preparing…" : "Load safe sample"}
-              </button>
               <button
                 className="secondary-button"
                 type="button"
@@ -629,7 +622,9 @@ export function PlayerWorkspace() {
             <div>
               <p className="eyebrow">Canonical records</p>
               <h3>
-                {loading ? "Loading players…" : `${players?.total ?? 0} players`}
+                {loading
+                  ? "Loading players…"
+                  : `${players?.total ?? 0} player${players?.total === 1 ? "" : "s"}`}
               </h3>
             </div>
             <p>SQLite is authoritative · source IDs remain private</p>
@@ -640,16 +635,17 @@ export function PlayerWorkspace() {
               <span aria-hidden="true">FN</span>
               <h3>No players match this view.</h3>
               <p>
-                Load the fictional safe sample, import a CSV, or reset the
-                filters. Nothing is sent to a cloud service.
+                Reset the filters to return to the bundled player database. If
+                every filter is already clear, restart the Hub—the included
+                database should seed automatically on launch.
               </p>
               <button
                 className="primary-button"
                 type="button"
-                onClick={beginSafeSample}
-                disabled={busyAction !== null}
+                onClick={resetFilters}
+                disabled={loading}
               >
-                Load safe player sample
+                Reset filters
               </button>
             </div>
           ) : (

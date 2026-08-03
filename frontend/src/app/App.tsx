@@ -321,8 +321,8 @@ export function App() {
           <ol className="release-path">
             <li>
               <strong>Set the board.</strong>
-              Import players, order your Personal Board, then use its Export CSV
-              link as the portable backup.
+              Review the included player database, order your Personal Board,
+              then use its Export CSV link as the portable backup.
             </li>
             <li>
               <strong>Rehearse the slot.</strong>
