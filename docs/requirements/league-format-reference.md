@@ -48,19 +48,25 @@ profiles are compatibility references, not equal-priority launch targets.
 - Four points per passing touchdown
 - One point per 25 passing yards
 - One point per 10 rushing or receiving yards
+- Tight ends receive an additional 0.5 points per reception
 - Tight ends receive an additional 0.5 points for each receiving first down
 - Field goals score 0.1 points per yard
 - Standard turnover and team-defense scoring otherwise applies
 
-The tight-end first-down bonus must be modeled as a distinct scoring rule. It
-must not be mislabeled or calculated as ordinary tight-end premium PPR.
+The tight-end reception and first-down bonuses must be modeled as two distinct
+scoring rules. Neither may be dropped or double counted.
 
 ### Draft behavior
 
 - The 2026 startup is a 10-team, 24-round snake draft
 - Pick timer is 120 seconds
 - Third-round reversal is enabled
+- The user's assigned 2026 startup slot is 1
 - The long-term league configuration also supports three-round rookie drafts
+
+These public Sleeper settings and the privacy-safe slot order were refreshed on
+2026-08-03 at 13:39:45 UTC. Provider account and roster identifiers remain
+excluded from the repository fixture.
 
 The application must therefore support more than one draft attached to a
 league and must distinguish startup, rookie, and other supplemental drafts.

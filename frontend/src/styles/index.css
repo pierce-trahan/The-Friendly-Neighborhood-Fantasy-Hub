@@ -171,6 +171,60 @@ h2 {
   grid-column: 1 / -1;
 }
 
+.release-card {
+  grid-column: 1 / -1;
+}
+
+.source-timestamp,
+.release-safety-note {
+  margin: 18px 0 0;
+  font-family: Consolas, "Courier New", monospace;
+  font-size: 0.72rem;
+}
+
+.release-path {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin: 22px 0 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: release-step;
+}
+
+.release-path li {
+  position: relative;
+  min-height: 96px;
+  border: 1px solid var(--line);
+  padding: 16px 16px 16px 54px;
+  color: var(--muted);
+  background: rgba(7, 18, 13, 0.58);
+  counter-increment: release-step;
+}
+
+.release-path li::before {
+  position: absolute;
+  top: 15px;
+  left: 16px;
+  color: var(--accent);
+  content: counter(release-step, decimal-leading-zero);
+  font-family: Consolas, "Courier New", monospace;
+  font-weight: 800;
+}
+
+.release-path strong {
+  display: block;
+  margin-bottom: 5px;
+  color: #edf3ee;
+}
+
+.release-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 18px;
+}
+
 .league-facts {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -4834,6 +4888,16 @@ kbd {
   .hero,
   .app-shell-workspace .hero {
     grid-template-columns: 1fr;
+  }
+
+  .dashboard-grid,
+  .release-path {
+    grid-template-columns: 1fr;
+  }
+
+  .release-card,
+  .settings-card {
+    grid-column: auto;
   }
 }
 

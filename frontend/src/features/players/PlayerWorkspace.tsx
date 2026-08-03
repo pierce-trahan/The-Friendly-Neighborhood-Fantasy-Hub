@@ -461,7 +461,7 @@ export function PlayerWorkspace() {
     <section className="player-workspace" aria-labelledby="players-title">
       <div className="workspace-heading">
         <div>
-          <p className="eyebrow">Phase 1 · Identity layer</p>
+          <p className="eyebrow">V1 · Player identity</p>
           <h2 id="players-title">Player Universe</h2>
           <p>
             One canonical player card powers every future board, comparison, and

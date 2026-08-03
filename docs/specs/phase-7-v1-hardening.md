@@ -1,8 +1,8 @@
 # Phase 7 V1 Draft-Night Hardening Specification
 
-**Status:** Frozen for implementation  
-**Release target:** V1.0.0  
-**Frozen:** 2026-08-03  
+**Status:** Frozen for implementation
+**Release target:** V1.0.0
+**Frozen:** 2026-08-03
 **Roadmap boundary:** Phase 7 — Draft-Night Hardening
 
 ## Purpose

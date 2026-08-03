@@ -49,3 +49,4 @@ class LeagueProfileSummary(BaseModel):
     team_count: int
     sanitized: bool
     imported_at: str
+    source_as_of: str | None

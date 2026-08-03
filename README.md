@@ -154,18 +154,26 @@ From PowerShell in the repository:
 
 After setup, `Launch Friendly Hub.cmd` provides the same local launch path by
 double-click. The launcher starts the private local service and opens
-`http://127.0.0.1:8765` in the normal browser.
+`http://127.0.0.1:8765` in the normal browser. Before each routine launch it
+creates and verifies a private SQLite backup when production data already
+exists.
+
+For the non-technical draft-night call sheet, offline fallback, and recovery
+sequence, see the [V1 Draft-Night Guide](docs/guides/v1-draft-night.md).
 
 Development and verification commands:
 
 ```powershell
 .\scripts\dev.ps1
 .\scripts\verify.ps1
+.\scripts\backup.ps1
 ```
 
 Production data is stored outside the repository under
 `%LOCALAPPDATA%\FriendlyNeighborhoodFantasyHub\`. Automated tests use temporary
-directories and never touch that production location.
+directories and never touch that production location. Verified private backups
+are retained under the production data directory's `backups` folder; CSV and
+HTML exports remain separate portable user artifacts.
 
 ## Accepted Technical Direction
 

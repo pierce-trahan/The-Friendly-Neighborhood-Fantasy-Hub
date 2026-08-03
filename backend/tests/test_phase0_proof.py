@@ -12,6 +12,7 @@ def test_health_and_default_configuration(runtime_settings: RuntimeSettings) -> 
         health = client.get("/api/v1/health")
         assert health.status_code == 200
         assert health.json()["status"] == "ok"
+        assert health.json()["app_version"] == "1.0.0"
 
         configuration = client.get("/api/v1/config")
         assert configuration.status_code == 200
@@ -38,6 +39,7 @@ def test_entropy_fixture_loads_without_network(runtime_settings: RuntimeSettings
         assert imported.json()["name"] == "Entropy"
         assert imported.json()["team_count"] == 10
         assert imported.json()["sanitized"] is True
+        assert imported.json()["source_as_of"] == "2026-08-03T13:39:45Z"
 
         profiles = client.get("/api/v1/league-profiles")
         assert profiles.status_code == 200

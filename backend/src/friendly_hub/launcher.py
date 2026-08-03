@@ -8,6 +8,10 @@ import webbrowser
 
 import uvicorn
 
+from friendly_hub.core.settings import RuntimeSettings
+from friendly_hub.db.backup import create_verified_backup
+from friendly_hub.main import create_app
+
 
 def _open_browser_when_ready() -> None:
     health_url = "http://127.0.0.1:8765/api/v1/health"
@@ -22,10 +26,14 @@ def _open_browser_when_ready() -> None:
 
 
 def main() -> None:
+    settings = RuntimeSettings.from_environment()
+    backup = create_verified_backup(settings)
+    if backup is not None:
+        print(f"Safety backup verified: {backup.path}")
     browser_thread = threading.Thread(target=_open_browser_when_ready, daemon=True)
     browser_thread.start()
     uvicorn.run(
-        "friendly_hub.main:app",
+        create_app(settings),
         host="127.0.0.1",
         port=8765,
         log_level="warning",

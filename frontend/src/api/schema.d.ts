@@ -2410,6 +2410,8 @@ export interface components {
             sanitized: boolean;
             /** Season */
             season: number;
+            /** Source As Of */
+            source_as_of: string | null;
             /** Team Count */
             team_count: number;
         };

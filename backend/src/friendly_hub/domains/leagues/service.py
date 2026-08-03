@@ -58,4 +58,5 @@ def load_sanitized_sample(session: Session, fixture_path: Path) -> LeagueProfile
         team_count=document.league.team_count,
         sanitized=document.provenance.sanitized,
         imported_at=row.imported_at,
+        source_as_of=document.provenance.source_as_of,
     )

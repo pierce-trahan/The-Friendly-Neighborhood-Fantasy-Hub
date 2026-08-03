@@ -144,6 +144,19 @@
         "translation_status": "complete"
       },
       {
+        "provider_key": "bonus_rec_te",
+        "normalized_stat": "reception",
+        "rule_kind": "bonus",
+        "points": 0.5,
+        "unit": "reception",
+        "position_scope": [
+          "TE"
+        ],
+        "parameters": {},
+        "source_value": 0.5,
+        "translation_status": "complete"
+      },
+      {
         "provider_key": "rec_yd",
         "normalized_stat": "receiving_yard",
         "rule_kind": "multiplier",
@@ -202,7 +215,20 @@
       "team_count": 10,
       "rounds": 24,
       "pick_timer_seconds": 120,
-      "reversal_round": 3
+      "reversal_round": 3,
+      "user_slot": 1,
+      "draft_order": [
+        "Your Team",
+        "CPU 2",
+        "CPU 3",
+        "CPU 4",
+        "CPU 5",
+        "CPU 6",
+        "CPU 7",
+        "CPU 8",
+        "CPU 9",
+        "CPU 10"
+      ]
     },
     {
       "draft_id": "draft_rookie_template_sanitized",
@@ -218,8 +244,8 @@
   "unmapped_provider_settings": {},
   "provenance": {
     "provider": "sleeper",
-    "imported_at": "2026-07-24T00:00:00Z",
-    "source_as_of": "2026-07-24T00:00:00Z",
+    "imported_at": "2026-08-03T13:39:45Z",
+    "source_as_of": "2026-08-03T13:39:45Z",
     "sanitized": true
   }
 }

@@ -817,7 +817,7 @@ export function BoardWorkspace() {
     <section className="board-workspace" aria-labelledby="board-workspace-title">
       <div className="workspace-heading board-workspace-heading">
         <div>
-          <p className="eyebrow">Phase 2 · Personal conviction</p>
+          <p className="eyebrow">V1 · Personal conviction</p>
           <h2 id="board-workspace-title">Personal Boards</h2>
           <p>
             Your order is the depth chart. Tiers, notes, and future Gut ELO
