@@ -118,8 +118,11 @@ now reproduces those approved fixtures. The bounded
 immutable, draft-owned storage. The bounded
 [completed-draft generation API](docs/specs/phase-6-report-generation-api.md)
 adds eligibility, atomic core-report creation, fingerprint idempotency, and
-safe read/list transport while later enrichment and moment work remains
-explicitly deferred.
+safe read/list transport. The bounded
+[attached-evidence enrichment](docs/specs/phase-6-evidence-enrichment.md)
+now adds completion-time freshness, compatibility, and coverage-aware context
+for production, dynasty market, and age-risk sections while strategy and
+moment work remains explicitly deferred.
 
 ## Local Setup
 
