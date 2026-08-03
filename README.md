@@ -52,6 +52,13 @@ See [PROJECT_ROADMAP.md](PROJECT_ROADMAP.md) for the complete product roadmap an
 
 ## Project Status
 
+**V1.0.0 is complete and ready to try.** Phase 7 draft-night hardening adds the
+refreshed Entropy slot-1 release profile, verified pre-launch SQLite backups,
+the V1 Overview call sheet, recovery instructions, and final offline release
+rehearsal. See the [V1 release notes](docs/releases/v1.0.0.md),
+[draft-night guide](docs/guides/v1-draft-night.md), and
+[Phase 7 release audit](docs/audits/phase-7-v1-release-audit.md).
+
 Phase 0 is complete: the repository contains a production-shaped local launch
 proof with configuration persistence, a sanitized offline Entropy profile, and
 a React status screen.
@@ -135,8 +142,8 @@ comparison, and local export. The final specification and offline workflow
 audit is recorded in the
 [Phase 6 live workflow and specification audit](docs/audits/phase-6-live-workflow-audit.md),
 including the passing 720-pick offline workflow, restart/idempotency checks,
-privacy scans, and performance evidence. Phase 7 is the next roadmap boundary
-and focuses on draft-night hardening rather than feature expansion.
+privacy scans, and performance evidence. Phase 7 is complete and V1 remains
+inside the approved draft-focused boundary.
 
 ## Local Setup
 
@@ -154,18 +161,26 @@ From PowerShell in the repository:
 
 After setup, `Launch Friendly Hub.cmd` provides the same local launch path by
 double-click. The launcher starts the private local service and opens
-`http://127.0.0.1:8765` in the normal browser.
+`http://127.0.0.1:8765` in the normal browser. Before each routine launch it
+creates and verifies a private SQLite backup when production data already
+exists.
+
+For the non-technical draft-night call sheet, offline fallback, and recovery
+sequence, see the [V1 Draft-Night Guide](docs/guides/v1-draft-night.md).
 
 Development and verification commands:
 
 ```powershell
 .\scripts\dev.ps1
 .\scripts\verify.ps1
+.\scripts\backup.ps1
 ```
 
 Production data is stored outside the repository under
 `%LOCALAPPDATA%\FriendlyNeighborhoodFantasyHub\`. Automated tests use temporary
-directories and never touch that production location.
+directories and never touch that production location. Verified private backups
+are retained under the production data directory's `backups` folder; CSV and
+HTML exports remain separate portable user artifacts.
 
 ## Accepted Technical Direction
 

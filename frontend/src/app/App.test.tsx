@@ -31,7 +31,7 @@ describe("App", () => {
           ok: true,
           json: async () => ({
             status: "ok",
-            app_version: "0.1.0",
+            app_version: "1.0.0",
             database_schema_version: "20260724_0001",
           }),
         })
@@ -50,7 +50,7 @@ describe("App", () => {
     vi.unstubAllGlobals();
   });
 
-  it("shows the local launch proof when the backend is healthy", async () => {
+  it("shows the V1 local launch when the backend is healthy", async () => {
     render(<App />);
 
     expect(
@@ -66,5 +66,7 @@ describe("App", () => {
     expect(screen.getByRole("button", { name: "Draft room" })).toBeEnabled();
     expect(screen.getByRole("button", { name: "Mock lab" })).toBeEnabled();
     expect(screen.getByRole("button", { name: "Reports" })).toBeEnabled();
+    expect(screen.getByText("V1 is built to survive the room.")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Rehearse a mock" })).toBeEnabled();
   });
 });

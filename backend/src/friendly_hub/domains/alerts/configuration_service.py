@@ -200,15 +200,28 @@ def _draft_profile_facts(
 
     rules = document.scoring.get("rules")
     if isinstance(rules, list):
-        reception_rules = [
+        base_reception_rules = [
             item
             for item in rules
             if isinstance(item, dict)
             and item.get("normalized_stat") == "reception"
             and isinstance(item.get("points"), (int, float))
+            and not isinstance(item.get("points"), bool)
+            and item.get("rule_kind") != "bonus"
+            and not item.get("position_scope")
         ]
-        if len(reception_rules) == 1:
-            points = float(reception_rules[0]["points"])
+        provider_reception_rules = [
+            item for item in base_reception_rules if item.get("provider_key") == "rec"
+        ]
+        reception_rule = (
+            provider_reception_rules[0]
+            if len(provider_reception_rules) == 1
+            else base_reception_rules[0]
+            if len(base_reception_rules) == 1
+            else None
+        )
+        if reception_rule is not None:
+            points = float(reception_rule["points"])
             scoring_by_points = {
                 0.0: "standard",
                 0.5: "half_ppr",

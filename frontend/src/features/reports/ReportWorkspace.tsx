@@ -214,7 +214,7 @@ export function ReportWorkspace() {
     <section className="reports-workspace" aria-labelledby="reports-heading">
       <header className="workspace-heading reports-heading">
         <div>
-          <p className="eyebrow">Phase 6 · local review room</p>
+          <p className="eyebrow">V1 · Local review room</p>
           <h2 id="reports-heading">Reports</h2>
           <p>
             Review the evidence your draft actually saved. Reports describe

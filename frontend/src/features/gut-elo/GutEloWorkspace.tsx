@@ -600,7 +600,7 @@ export function GutEloWorkspace() {
     <section className="gut-workspace" aria-labelledby="gut-workspace-title">
       <div className="workspace-heading gut-workspace-heading">
         <div>
-          <p className="eyebrow">Phase 2 / Instinct lab</p>
+          <p className="eyebrow">V1 · Instinct lab</p>
           <h2 id="gut-workspace-title">Gut ELO</h2>
           <p>
             Make quick head-to-head calls, surface your conviction, and compare

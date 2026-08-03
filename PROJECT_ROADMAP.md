@@ -342,25 +342,31 @@ Exit criteria:
 
 **Goal:** Stabilize rather than expand.
 
+**Frozen V1 contract:**
+[Phase 7 V1 Draft-Night Hardening Specification](docs/specs/phase-7-v1-hardening.md)
+
 Checklist:
 
-- freeze non-critical features;
-- test with the actual league settings and pick order;
-- rehearse a full-speed mock;
-- verify autosave, recovery, undo, and export;
-- refresh and timestamp source data;
-- prepare a no-network fallback;
-- verify readable display at the intended screen size;
-- remove or hide unfinished controls; and
-- package simple launch and recovery instructions.
+- [x] freeze non-critical features;
+- [x] test with the actual league settings and pick order;
+- [x] rehearse a full-speed mock;
+- [x] verify autosave, recovery, undo, and export;
+- [x] refresh and timestamp source data;
+- [x] prepare a no-network fallback;
+- [x] verify readable display at the intended screen size;
+- [x] remove or hide unfinished controls; and
+- [x] package simple launch and recovery instructions.
 
 Release gate:
 
-- no known data-loss bug;
-- no blocker in the core pick workflow;
-- the app can complete a full mock without external services;
-- all critical controls are understandable without developer help; and
-- a backup board and draft-state export are available.
+- [x] no known data-loss bug;
+- [x] no blocker in the core pick workflow;
+- [x] the app can complete a full mock without external services;
+- [x] all critical controls are understandable without developer help; and
+- [x] a backup board and draft-state export are available.
+
+Completion evidence:
+[Phase 7 V1 Release Audit](docs/audits/phase-7-v1-release-audit.md)
 
 ---
 

@@ -717,7 +717,7 @@ export function MockWorkspace() {
     <section className="draft-workspace mock-workspace">
       <div className="draft-workspace-heading">
         <div>
-          <p className="eyebrow">Phase 4 · Mock strategy lab</p>
+          <p className="eyebrow">V1 · Mock strategy lab</p>
           <h2>Rehearse the room. Keep every final call.</h2>
           <p>
             CPU teams can advance only in this practice workspace. Your picks

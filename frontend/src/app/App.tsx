@@ -38,6 +38,20 @@ function formatError(error: unknown): { message: string; action?: string } {
   };
 }
 
+function formatSnapshot(value: string | null | undefined): string {
+  if (!value) return "Timestamp unavailable";
+  const parsed = new Date(value);
+  if (Number.isNaN(parsed.valueOf())) return value;
+  return parsed.toLocaleString(undefined, {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+    hour: "numeric",
+    minute: "2-digit",
+    timeZoneName: "short",
+  });
+}
+
 export function App() {
   const [section, setSection] = useState<AppSection>("overview");
   const [loadState, setLoadState] = useState<LoadState>("loading");
@@ -141,7 +155,7 @@ export function App() {
     >
       <header className="hero">
         <div>
-          <p className="eyebrow">Local Draft Lab · Phase 6</p>
+          <p className="eyebrow">Local Draft Lab · V1.0</p>
           <h1>Friendly Neighborhood Fantasy Hub</h1>
           <p className="hero-copy">
             Your private draft room foundation is running locally. Judgment stays
@@ -267,10 +281,15 @@ export function App() {
                 disabled={saving}
               >
                 {saving ? "Loading…" : "Load Entropy sample"}
-              </button>
-            </>
-          )}
-        </article>
+                </button>
+              </>
+            )}
+            {activeProfile && (
+              <p className="source-timestamp">
+                Source snapshot: {formatSnapshot(activeProfile.source_as_of)}
+              </p>
+            )}
+          </article>
 
         <article className="card">
           <p className="eyebrow">System check</p>
@@ -286,9 +305,59 @@ export function App() {
             </div>
             <div>
               <dt>Network requirement</dt>
-              <dd>None for this proof</dd>
+              <dd>None for core draft night</dd>
             </div>
           </dl>
+        </article>
+
+        <article className="card release-card">
+          <div className="card-heading">
+            <div>
+              <p className="eyebrow">Draft-night call sheet</p>
+              <h2>V1 is built to survive the room.</h2>
+            </div>
+            <span className="tag">Autosaved locally</span>
+          </div>
+          <ol className="release-path">
+            <li>
+              <strong>Set the board.</strong>
+              Import players, order your Personal Board, then use its Export CSV
+              link as the portable backup.
+            </li>
+            <li>
+              <strong>Rehearse the slot.</strong>
+              Run a 10-team, 24-round, third-round-reversal mock from slot 1.
+            </li>
+            <li>
+              <strong>Run and recover.</strong>
+              Every accepted pick saves immediately. Reopen the same session after
+              a restart; use Undo latest for a correction.
+            </li>
+            <li>
+              <strong>Leave with the scorebook.</strong>
+              Export the Draft room CSV, then generate the completed report.
+            </li>
+          </ol>
+          <p className="release-safety-note">
+            Before each launch, the Hub verifies a private database backup under
+            %LOCALAPPDATA%\FriendlyNeighborhoodFantasyHub\backups.
+          </p>
+          <div className="release-actions">
+            <button
+              className="secondary-button"
+              type="button"
+              onClick={() => setSection("boards")}
+            >
+              Open Boards
+            </button>
+            <button
+              className="primary-button"
+              type="button"
+              onClick={() => setSection("mocks")}
+            >
+              Rehearse a mock
+            </button>
+          </div>
         </article>
 
         <article className="card settings-card">

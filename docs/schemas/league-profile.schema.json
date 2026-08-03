@@ -413,6 +413,21 @@
             "null"
           ],
           "minimum": 2
+        },
+        "user_slot": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 64
+        },
+        "draft_order": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 64,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
         }
       }
     }

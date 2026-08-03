@@ -752,7 +752,7 @@ export function DraftWorkspace() {
     <section className="draft-workspace">
       <div className="draft-workspace-heading">
         <div>
-          <p className="eyebrow">Phase 5 · Draft room</p>
+          <p className="eyebrow">V1 · Live draft room</p>
           <h2>Run the room without surrendering the board.</h2>
           <p>
             Every click is revision-guarded, saved immediately, and recoverable
