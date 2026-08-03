@@ -129,7 +129,10 @@ and saved Phase 5 alert events. The bounded
 aligns two through four saved reports without a winner or composite score,
 and the bounded [standalone HTML export](docs/specs/phase-6-report-html-export.md)
 creates a print-friendly offline artifact without scripts or remote assets.
-The desktop Reports workspace remains explicitly deferred.
+The [desktop Reports workspace](docs/specs/phase-6-desktop-reports-workspace.md)
+now connects explicit generation, saved history, section detail, compatible
+comparison, and local export. The final specification and offline workflow
+audit remains before Phase 6 is complete.
 
 ## Local Setup
 

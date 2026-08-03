@@ -16,6 +16,7 @@ import { DraftWorkspace } from "../features/drafts/DraftWorkspace";
 import { GutEloWorkspace } from "../features/gut-elo/GutEloWorkspace";
 import { MockWorkspace } from "../features/mocks/MockWorkspace";
 import { PlayerWorkspace } from "../features/players/PlayerWorkspace";
+import { ReportWorkspace } from "../features/reports/ReportWorkspace";
 
 type LoadState = "loading" | "ready" | "error";
 type AppSection =
@@ -24,7 +25,8 @@ type AppSection =
   | "boards"
   | "gut-elo"
   | "drafts"
-  | "mocks";
+  | "mocks"
+  | "reports";
 
 function formatError(error: unknown): { message: string; action?: string } {
   if (error instanceof ApiError) {
@@ -139,7 +141,7 @@ export function App() {
     >
       <header className="hero">
         <div>
-          <p className="eyebrow">Local Draft Lab · Phase 5</p>
+          <p className="eyebrow">Local Draft Lab · Phase 6</p>
           <h1>Friendly Neighborhood Fantasy Hub</h1>
           <p className="hero-copy">
             Your private draft room foundation is running locally. Judgment stays
@@ -195,6 +197,13 @@ export function App() {
         >
           Mock lab
         </button>
+        <button
+          type="button"
+          aria-current={section === "reports" ? "page" : undefined}
+          onClick={() => setSection("reports")}
+        >
+          Reports
+        </button>
       </nav>
 
       {section === "overview" && error && (
@@ -214,6 +223,7 @@ export function App() {
       {section === "gut-elo" && <GutEloWorkspace />}
       {section === "drafts" && <DraftWorkspace />}
       {section === "mocks" && <MockWorkspace />}
+      {section === "reports" && <ReportWorkspace />}
       {section === "overview" && (
         <section className="dashboard-grid">
         <article className="card league-card">

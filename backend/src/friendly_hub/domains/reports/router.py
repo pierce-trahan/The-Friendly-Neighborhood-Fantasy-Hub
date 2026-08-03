@@ -1,4 +1,5 @@
-from typing import Annotated
+from datetime import date
+from typing import Annotated, Literal
 
 from fastapi import APIRouter, Depends, Query, Response
 from sqlalchemy.orm import Session
@@ -15,6 +16,7 @@ from friendly_hub.domains.reports.schemas import (
 from friendly_hub.domains.reports.service import (
     export_report_html,
     generate_report,
+    list_reports_for_board,
     list_reports_for_draft,
     preview_report_comparison,
     read_report,
@@ -52,6 +54,41 @@ def get_post_draft_reports_for_draft(
     offset: int = Query(default=0, ge=0),
 ) -> PostDraftReportListResponse:
     return list_reports_for_draft(session, session_id, limit=limit, offset=offset)
+
+
+@router.get(
+    "/boards/{board_id}/post-draft-reports",
+    response_model=PostDraftReportListResponse,
+)
+def get_post_draft_reports_for_board(
+    board_id: str,
+    session: SessionDependency,
+    mode: Literal["live", "mock"] | None = None,
+    completed_from: date | None = None,
+    completed_to: date | None = None,
+    strategy_key: str | None = Query(default=None, min_length=1, max_length=80),
+    report_version: str | None = Query(default=None, min_length=1, max_length=64),
+    league_shape_fingerprint: str | None = Query(
+        default=None,
+        min_length=64,
+        max_length=64,
+        pattern=r"^[0-9a-f]{64}$",
+    ),
+    limit: int = Query(default=100, ge=1, le=100),
+    offset: int = Query(default=0, ge=0),
+) -> PostDraftReportListResponse:
+    return list_reports_for_board(
+        session,
+        board_id,
+        mode=mode,
+        completed_from=completed_from,
+        completed_to=completed_to,
+        strategy_key=strategy_key,
+        report_version=report_version,
+        league_shape_fingerprint=league_shape_fingerprint,
+        limit=limit,
+        offset=offset,
+    )
 
 
 @router.get(

@@ -102,6 +102,12 @@ class PostDraftReportSummaryRead(BaseModel):
     report_rules_version: str
     explanation_template_version: str
     league_shape_fingerprint: str
+    draft_format: Literal["snake", "linear"]
+    team_count: int = Field(ge=2, le=32)
+    round_count: int = Field(ge=1, le=60)
+    initial_strategy: str | None
+    final_strategy: str | None
+    strategy_definition_version: str | None
     section_summary: dict[str, str]
     limitations: list[str]
 

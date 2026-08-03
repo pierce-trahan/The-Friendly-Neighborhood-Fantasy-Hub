@@ -1400,6 +1400,9 @@ The bounded contract for implementation step 8 is recorded in
 The bounded contract for implementation step 9 is recorded in
 [Phase 6 Standalone Safe HTML Report Export](phase-6-report-html-export.md).
 
+The bounded contract for implementation step 10 is recorded in
+[Phase 6 Desktop Reports Workspace](phase-6-desktop-reports-workspace.md).
+
 ## Deferred Revisit
 
 - overall or letter grades;

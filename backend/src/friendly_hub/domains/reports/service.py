@@ -4,19 +4,20 @@ import json
 import logging
 from collections import Counter
 from dataclasses import dataclass
-from datetime import UTC, datetime
+from datetime import UTC, date, datetime
 from math import ceil
 from time import perf_counter
 from typing import Any
 from uuid import uuid4
 
 from pydantic import ValidationError
-from sqlalchemy import func, select
+from sqlalchemy import func, or_, select
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
 from friendly_hub.core.errors import HubError
 from friendly_hub.core.time import utc_now_text
+from friendly_hub.domains.boards.models import PersonalBoardRow
 from friendly_hub.domains.drafts.models import (
     DraftCandidateRow,
     DraftPickRevisionRow,
@@ -1229,8 +1230,44 @@ def _json_list(value: str) -> list[Any]:
 
 def _summary_read(
     report: PostDraftReportRow,
-    draft_name: str,
+    summary: dict[str, Any],
+    strategy: dict[str, Any],
 ) -> PostDraftReportSummaryRead:
+    draft_name = summary.get("draft_name")
+    draft_format = summary.get("draft_format")
+    team_count = summary.get("team_count")
+    round_count = summary.get("round_count")
+    if (
+        not isinstance(draft_name, str)
+        or not draft_name
+        or not isinstance(draft_format, str)
+        or not draft_format
+        or not isinstance(team_count, int)
+        or isinstance(team_count, bool)
+        or team_count < 2
+        or not isinstance(round_count, int)
+        or isinstance(round_count, bool)
+        or round_count < 1
+    ):
+        raise _error(
+            "REPORT_GENERATION_FAILED",
+            "A saved report list entry is missing its frozen draft identity.",
+            _ACTION_RESTORE_REPORT,
+            500,
+        )
+    initial_strategy = strategy.get("initial_strategy")
+    final_strategy = strategy.get("final_strategy")
+    strategy_version = strategy.get("strategy_definition_version")
+    if any(
+        value is not None and not isinstance(value, str)
+        for value in (initial_strategy, final_strategy, strategy_version)
+    ):
+        raise _error(
+            "REPORT_GENERATION_FAILED",
+            "A saved report list entry has invalid strategy identity.",
+            _ACTION_RESTORE_REPORT,
+            500,
+        )
     return PostDraftReportSummaryRead(
         id=report.id,
         draft_session_id=report.draft_session_id,
@@ -1243,9 +1280,53 @@ def _summary_read(
         report_rules_version=report.report_rules_version,
         explanation_template_version=report.explanation_template_version,
         league_shape_fingerprint=report.league_shape_fingerprint,
+        draft_format=draft_format,
+        team_count=team_count,
+        round_count=round_count,
+        initial_strategy=initial_strategy,
+        final_strategy=final_strategy,
+        strategy_definition_version=strategy_version,
         section_summary=_json_object(report.section_summary_json),  # type: ignore[arg-type]
         limitations=[str(item) for item in _json_list(report.limitation_codes_json)],
     )
+
+
+def _summary_documents(
+    session: Session,
+    rows: tuple[PostDraftReportRow, ...],
+) -> dict[str, tuple[dict[str, Any], dict[str, Any]]]:
+    if not rows:
+        return {}
+    sections = tuple(
+        session.scalars(
+            select(PostDraftReportSectionRow).where(
+                PostDraftReportSectionRow.report_id.in_([row.id for row in rows]),
+                PostDraftReportSectionRow.section_key.in_(
+                    ["draft_summary", "strategy_story"]
+                ),
+            )
+        )
+    )
+    documents: dict[str, dict[str, dict[str, Any]]] = {}
+    for section in sections:
+        documents.setdefault(section.report_id, {})[section.section_key] = _json_object(
+            section.metrics_json
+        )
+    if any(
+        "draft_summary" not in documents.get(row.id, {})
+        or "strategy_story" not in documents.get(row.id, {})
+        for row in rows
+    ):
+        raise _error(
+            "REPORT_GENERATION_FAILED",
+            "A saved report list entry is missing its frozen draft identity.",
+            _ACTION_RESTORE_REPORT,
+            500,
+        )
+    return {
+        report_id: (sections_by_key["draft_summary"], sections_by_key["strategy_story"])
+        for report_id, sections_by_key in documents.items()
+    }
 
 
 def read_report(session: Session, report_id: str) -> PostDraftReportRead:
@@ -1429,29 +1510,94 @@ def list_reports_for_draft(
             .offset(offset)
         )
     )
-    summary_names: dict[str, str] = {}
-    if rows:
-        summary_rows = tuple(
-            session.scalars(
-                select(PostDraftReportSectionRow).where(
-                    PostDraftReportSectionRow.report_id.in_([row.id for row in rows]),
-                    PostDraftReportSectionRow.section_key == "draft_summary",
-                )
-            )
-        )
-        for summary_row in summary_rows:
-            name = _json_object(summary_row.metrics_json).get("draft_name")
-            if isinstance(name, str) and name:
-                summary_names[summary_row.report_id] = name
-        if any(row.id not in summary_names for row in rows):
-            raise _error(
-                "REPORT_GENERATION_FAILED",
-                "A saved report list entry is missing its frozen draft identity.",
-                _ACTION_RESTORE_REPORT,
-                500,
-            )
+    documents = _summary_documents(session, rows)
     return PostDraftReportListResponse(
-        items=[_summary_read(row, summary_names[row.id]) for row in rows],
+        items=[_summary_read(row, *documents[row.id]) for row in rows],
+        total=int(total or 0),
+        limit=limit,
+        offset=offset,
+    )
+
+
+def list_reports_for_board(
+    session: Session,
+    board_id: str,
+    *,
+    mode: str | None,
+    completed_from: date | None,
+    completed_to: date | None,
+    strategy_key: str | None,
+    report_version: str | None,
+    league_shape_fingerprint: str | None,
+    limit: int,
+    offset: int,
+) -> PostDraftReportListResponse:
+    if session.get(PersonalBoardRow, board_id) is None:
+        raise _error(
+            "BOARD.NOT_FOUND",
+            "That Personal Board could not be found.",
+            "Choose an available board and try again.",
+            404,
+        )
+    statement = select(PostDraftReportRow).join(
+        DraftSessionRow,
+        DraftSessionRow.id == PostDraftReportRow.draft_session_id,
+    )
+    statement = statement.where(DraftSessionRow.board_id == board_id)
+    if mode is not None:
+        statement = statement.where(PostDraftReportRow.draft_mode == mode)
+    if completed_from is not None:
+        statement = statement.where(
+            PostDraftReportRow.completed_at >= f"{completed_from.isoformat()}T00:00:00"
+        )
+    if completed_to is not None:
+        statement = statement.where(
+            PostDraftReportRow.completed_at
+            <= f"{completed_to.isoformat()}T23:59:59.999999Z"
+        )
+    if report_version is not None:
+        statement = statement.where(
+            PostDraftReportRow.report_engine_version == report_version
+        )
+    if league_shape_fingerprint is not None:
+        statement = statement.where(
+            PostDraftReportRow.league_shape_fingerprint
+            == league_shape_fingerprint
+        )
+    if strategy_key is not None:
+        strategy_reports = select(PostDraftReportSectionRow.report_id).where(
+            PostDraftReportSectionRow.section_key == "strategy_story",
+            or_(
+                func.json_extract(
+                    PostDraftReportSectionRow.metrics_json,
+                    "$.initial_strategy",
+                )
+                == strategy_key,
+                func.json_extract(
+                    PostDraftReportSectionRow.metrics_json,
+                    "$.final_strategy",
+                )
+                == strategy_key,
+            ),
+        )
+        statement = statement.where(PostDraftReportRow.id.in_(strategy_reports))
+    total = session.scalar(
+        select(func.count()).select_from(statement.order_by(None).subquery())
+    )
+    rows = tuple(
+        session.scalars(
+            statement.order_by(
+                PostDraftReportRow.completed_at.desc(),
+                PostDraftReportRow.generated_at.desc(),
+                PostDraftReportRow.id,
+            )
+            .limit(limit)
+            .offset(offset)
+        )
+    )
+    documents = _summary_documents(session, rows)
+    return PostDraftReportListResponse(
+        items=[_summary_read(row, *documents[row.id]) for row in rows],
         total=int(total or 0),
         limit=limit,
         offset=offset,

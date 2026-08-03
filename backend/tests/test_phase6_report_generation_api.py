@@ -309,7 +309,32 @@ def test_completed_live_report_is_atomic_idempotent_private_and_restart_safe(
         assert listed.status_code == 200
         assert listed.json()["total"] == 1
         assert listed.json()["items"][0]["id"] == report_id
+        assert listed.json()["items"][0]["draft_format"] == "snake"
+        assert listed.json()["items"][0]["initial_strategy"] is None
         assert "input_fingerprint" not in listed.text
+
+        board_listed = client.get(
+            f"/api/v1/boards/{board['id']}/post-draft-reports",
+            params={
+                "mode": "live",
+                "completed_from": str(completed["completed_at"])[:10],
+                "completed_to": str(completed["completed_at"])[:10],
+                "report_version": report["report_engine_version"],
+                "league_shape_fingerprint": report["league_shape_fingerprint"],
+            },
+        )
+        assert board_listed.status_code == 200, board_listed.text
+        assert board_listed.json()["total"] == 1
+        assert board_listed.json()["items"][0]["id"] == report_id
+        assert client.get(
+            f"/api/v1/boards/{board['id']}/post-draft-reports",
+            params={"mode": "mock"},
+        ).json()["total"] == 0
+        missing_board = client.get(
+            "/api/v1/boards/missing-board/post-draft-reports"
+        )
+        assert missing_board.status_code == 404
+        assert missing_board.json()["error"]["code"] == "BOARD.NOT_FOUND"
 
     with TestClient(create_app(runtime_settings), headers=TRUSTED_HEADERS) as client:
         restored = client.get(f"/api/v1/post-draft-reports/{report_id}")
@@ -556,6 +581,19 @@ def test_mock_strategy_pivot_and_guidance_are_safe_saved_observations(
         assert "PRIVATE PIVOT REPORT NOTE" not in generated.text
         assert "random_audit" not in generated.text
         assert "seed" not in generated.text
+        strategy_filtered = client.get(
+            f"/api/v1/boards/{board['id']}/post-draft-reports",
+            params={"mode": "mock", "strategy_key": "hero_rb"},
+        )
+        assert strategy_filtered.status_code == 200, strategy_filtered.text
+        assert strategy_filtered.json()["total"] == 1
+        summary = strategy_filtered.json()["items"][0]
+        assert summary["initial_strategy"] == "balanced"
+        assert summary["final_strategy"] == "hero_rb"
+        assert client.get(
+            f"/api/v1/boards/{board['id']}/post-draft-reports",
+            params={"strategy_key": "wr_heavy"},
+        ).json()["total"] == 0
 
         with session_factory() as session:
             source_after = (
