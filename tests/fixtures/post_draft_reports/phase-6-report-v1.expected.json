@@ -2,7 +2,7 @@
   "schema_version": 1,
   "fixture_version": "post-draft-report-fixtures-v1",
   "fictional": true,
-  "content_hash": "375fa48cd95bb2c325f7ed0c37b6fbcae38606f9dc095d2e16c41ab818423bce",
+  "content_hash": "2917b5d5b73594b212b20285a253368d00e3778d6164fbe66421a2ddf8d5406f",
   "starter_assignment_case": {
     "case_key": "superflex_complete_with_flex_tie",
     "league_shape": {
@@ -463,6 +463,14 @@
         "rank_delta": 5
       },
       "expected": "At pick 7, you selected Mara Vale while Nia Harbor was 5 places higher on the saved Personal Board."
+    },
+    {
+      "case_key": "personal_board_summary",
+      "template_key": "personal_board.summary",
+      "values": {
+        "moment_count": 0
+      },
+      "expected": "The frozen Personal Board reconstruction contains 0 qualifying choice moments."
     },
     {
       "case_key": "report_limits",

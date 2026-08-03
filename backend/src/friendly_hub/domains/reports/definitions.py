@@ -172,6 +172,10 @@ EXPLANATION_TEMPLATES = MappingProxyType(
             "The saved mock strategy story is limited because part of its "
             "recorded history is incomplete."
         ),
+        "strategy.unavailable": (
+            "Strategy story is unavailable because the saved mock history "
+            "could not be read safely."
+        ),
         "strategy.not_applicable": (
             "Strategy story does not apply to this live draft."
         ),
@@ -180,9 +184,21 @@ EXPLANATION_TEMPLATES = MappingProxyType(
             "{passed_player} was {rank_delta} places higher on the saved Personal "
             "Board."
         ),
+        "personal_board.summary": (
+            "The frozen Personal Board reconstruction contains {moment_count} "
+            "qualifying choice moments."
+        ),
+        "personal_board.unavailable": (
+            "Personal Board choice moments are unavailable because the frozen "
+            "rank history could not be read safely."
+        ),
         "alerts.summary": (
             "The saved draft history contains {alert_event_count} recorded alert "
             "events."
+        ),
+        "alerts.unavailable": (
+            "Recorded alert moments are unavailable because the saved event "
+            "history could not be read safely."
         ),
         "comparison.compatible": (
             "{report_count} reports share the required league shape and rules "

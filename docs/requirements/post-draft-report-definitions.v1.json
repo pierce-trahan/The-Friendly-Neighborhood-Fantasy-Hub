@@ -500,6 +500,12 @@
       "required_placeholders": []
     },
     {
+      "template_key": "strategy.unavailable",
+      "section_key": "strategy_story",
+      "template": "Strategy story is unavailable because the saved mock history could not be read safely.",
+      "required_placeholders": []
+    },
+    {
       "template_key": "strategy.not_applicable",
       "section_key": "strategy_story",
       "template": "Strategy story does not apply to this live draft.",
@@ -517,12 +523,32 @@
       ]
     },
     {
+      "template_key": "personal_board.summary",
+      "section_key": "personal_board_choice_moments",
+      "template": "The frozen Personal Board reconstruction contains {moment_count} qualifying choice moments.",
+      "required_placeholders": [
+        "moment_count"
+      ]
+    },
+    {
+      "template_key": "personal_board.unavailable",
+      "section_key": "personal_board_choice_moments",
+      "template": "Personal Board choice moments are unavailable because the frozen rank history could not be read safely.",
+      "required_placeholders": []
+    },
+    {
       "template_key": "alerts.summary",
       "section_key": "recorded_alert_moments",
       "template": "The saved draft history contains {alert_event_count} recorded alert events.",
       "required_placeholders": [
         "alert_event_count"
       ]
+    },
+    {
+      "template_key": "alerts.unavailable",
+      "section_key": "recorded_alert_moments",
+      "template": "Recorded alert moments are unavailable because the saved event history could not be read safely.",
+      "required_placeholders": []
     },
     {
       "template_key": "comparison.compatible",

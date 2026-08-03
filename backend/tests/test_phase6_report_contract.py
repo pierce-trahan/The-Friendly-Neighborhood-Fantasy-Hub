@@ -28,7 +28,7 @@ EXPECTED_SECTION_KEYS = {
     "year_one_production_context",
 }
 EXPECTED_FIXTURE_HASH = (
-    "375fa48cd95bb2c325f7ed0c37b6fbcae38606f9dc095d2e16c41ab818423bce"
+    "2917b5d5b73594b212b20285a253368d00e3778d6164fbe66421a2ddf8d5406f"
 )
 FORBIDDEN_PUBLIC_MARKERS = (
     "espn",

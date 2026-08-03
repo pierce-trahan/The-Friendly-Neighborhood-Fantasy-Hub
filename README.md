@@ -121,8 +121,11 @@ adds eligibility, atomic core-report creation, fingerprint idempotency, and
 safe read/list transport. The bounded
 [attached-evidence enrichment](docs/specs/phase-6-evidence-enrichment.md)
 now adds completion-time freshness, compatibility, and coverage-aware context
-for production, dynasty market, and age-risk sections while strategy and
-moment work remains explicitly deferred.
+for production, dynasty market, and age-risk sections. The bounded
+[saved strategy and decision-moment contract](docs/specs/phase-6-strategy-decision-moments.md)
+now adds replay of Phase 4 mock history, frozen Personal Board observations,
+and saved Phase 5 alert events while comparison, export, and desktop work
+remain explicitly deferred.
 
 ## Local Setup
 
