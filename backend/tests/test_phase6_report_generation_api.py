@@ -239,6 +239,16 @@ def test_completed_live_report_is_atomic_idempotent_private_and_restart_safe(
         assert report["section_summary"]["draft_summary"] == "supported"
         assert report["section_summary"]["long_term_value"] == "unavailable"
         assert report["section_summary"]["strategy_story"] == "not_applicable"
+        for key in (
+            "year_one_production_context",
+            "dynasty_market_context",
+            "age_risk_profile",
+        ):
+            section = next(
+                item for item in report["sections"] if item["section_key"] == key
+            )
+            assert section["availability"] == "unavailable"
+            assert "EVIDENCE_SNAPSHOT_NOT_ATTACHED" in section["limitation_codes"]
         assert report["moments"] == []
         assert report["comparison_eligible"] is True
         assert report["export_available"] is False
@@ -246,6 +256,7 @@ def test_completed_live_report_is_atomic_idempotent_private_and_restart_safe(
         assert "PRIVATE REPORT TEST NOTE" not in generated.text
         assert "input_fingerprint" not in generated.text
         assert "provider_id" not in generated.text
+        assert "PHASE6_STEP6_EVIDENCE_ENRICHMENT_DEFERRED" not in generated.text
 
         assert _source_state(client, completed["id"]) == source_before
         session_factory = client.app.state.session_factory

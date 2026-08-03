@@ -47,6 +47,12 @@ from friendly_hub.domains.reports.engine import (
     strategy_section_state,
     unsupported_section_state,
 )
+from friendly_hub.domains.reports.evidence import (
+    EvidenceContext,
+    build_evidence_sections,
+    load_evidence_context,
+    no_evidence_fingerprint_document,
+)
 from friendly_hub.domains.reports.models import (
     PostDraftReportMomentRow,
     PostDraftReportPlayerRow,
@@ -152,6 +158,7 @@ class _GenerationSnapshot:
     league_shape: dict[str, Any]
     league_shape_fingerprint: str
     mock_context: dict[str, Any] | None
+    evidence_context: EvidenceContext | None
 
 
 @dataclass(frozen=True)
@@ -578,6 +585,12 @@ def _load_generation_snapshot(
         )
         for pick, candidate in zip(user_picks, roster_candidates, strict=True)
     )
+    evidence_context = load_evidence_context(
+        session,
+        draft=draft,
+        roster=roster,
+        completed_at=completed_at,
+    )
     return _GenerationSnapshot(
         draft=draft,
         picks=picks,
@@ -589,6 +602,7 @@ def _load_generation_snapshot(
         league_shape=league_shape,
         league_shape_fingerprint=league_shape_fingerprint,
         mock_context=mock_context,
+        evidence_context=evidence_context,
     )
 
 
@@ -644,7 +658,11 @@ def _canonical_input(snapshot: _GenerationSnapshot) -> dict[str, Any]:
         ],
         "normalized_league_shape": snapshot.league_shape,
         "mock_context": snapshot.mock_context,
-        "alert_context": None,
+        "alert_context": (
+            snapshot.evidence_context.fingerprint_document()
+            if snapshot.evidence_context is not None
+            else no_evidence_fingerprint_document()
+        ),
         "decision_moment_context": None,
         "versions": {
             "report_engine": REPORT_ENGINE_VERSION,
@@ -804,7 +822,7 @@ def _build_sections(
                 "bench_slots": snapshot.league_shape.get("bench_slots"),
                 "mock_context_available": snapshot.mock_context is not None,
                 "alert_context_available": False,
-                "evidence_context_available": False,
+                "evidence_context_available": snapshot.evidence_context is not None,
             },
             explanation_template_key="draft.summary.observed",
             explanation=_CORE_EXPLANATIONS["draft.summary.observed"],
@@ -881,53 +899,18 @@ def _build_sections(
         ),
     ]
 
-    optional_sections = (
-        (
-            "year_one_production_context",
-            "PRODUCTION_EVIDENCE_UNAVAILABLE",
-            (
-                "CATEGORICAL_SINGLE_SOURCE",
-                "NOT_A_PROJECTION",
-                "PHASE6_STEP6_EVIDENCE_ENRICHMENT_DEFERRED",
-            ),
-            "production.unavailable",
-        ),
-        (
-            "dynasty_market_context",
-            "MARKET_EVIDENCE_UNAVAILABLE",
-            (
-                "CATEGORICAL_SINGLE_SOURCE",
-                "NOT_A_ROSTER_VALUE",
-                "PHASE6_STEP6_EVIDENCE_ENRICHMENT_DEFERRED",
-            ),
-            "market.unavailable",
-        ),
-        (
-            "age_risk_profile",
-            "AGE_RISK_EVIDENCE_UNAVAILABLE",
-            (
-                "CATEGORICAL_SINGLE_SOURCE",
-                "NOT_AN_AVERAGE_AGE",
-                "PHASE6_STEP6_EVIDENCE_ENRICHMENT_DEFERRED",
-            ),
-            "age_risk.unavailable",
-        ),
-    )
-    for key, reason, limits, template_key in optional_sections:
+    for result in build_evidence_sections(snapshot.evidence_context, snapshot.roster):
         sections.append(
             _section(
-                key,
-                availability="unavailable",
-                confidence="unavailable",
-                metrics={
-                    "roster_players": roster_count,
-                    "covered_players": 0,
-                    "coverage_basis_points": 0,
-                },
-                reason_codes=(reason,),
-                limitation_codes=limits,
-                explanation_template_key=template_key,
-                explanation=render_explanation(template_key=template_key, values={}),
+                result.section_key,
+                availability=result.availability,
+                confidence=result.confidence,
+                metrics=result.metrics,
+                reason_codes=result.reason_codes,
+                limitation_codes=result.limitation_codes,
+                explanation_template_key=result.explanation_template_key,
+                explanation=result.explanation,
+                safe_provenance=result.safe_provenance,
             )
         )
 
@@ -1083,7 +1066,18 @@ def _persist_report(
                 saved_personal_rank=candidate.manual_rank,
                 saved_tier_order=candidate.tier_order,
                 saved_favorite=candidate.favorite,
-                safe_evidence_json=canonical_json({"display_name": candidate.display_name}),
+                safe_evidence_json=canonical_json(
+                    {
+                        "display_name": candidate.display_name,
+                        "categorical_evidence": (
+                            snapshot.evidence_context.safe_player_evidence(
+                                candidate.player_id
+                            )
+                            if snapshot.evidence_context is not None
+                            else {}
+                        ),
+                    }
+                ),
             )
         )
     for section in sections:

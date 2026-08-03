@@ -8,6 +8,8 @@
 
 **Persistence contract:** [Phase 6 Post-Draft Report Persistence](phase-6-report-persistence.md)
 
+**Step 6 successor:** [Phase 6 Attached-Evidence Report Enrichment](phase-6-evidence-enrichment.md)
+
 ## Outcome
 
 This contract implements Phase 6 step 5: completed-draft eligibility,
@@ -268,8 +270,7 @@ frontend, build, and dependency gates remain required before publication.
 
 ## Next Implementation Boundary
 
-After this module is reviewed, Phase 6 step 6 may load only the compatible,
-attached Phase 5 categorical evidence required for year-one production,
-dynasty market, and age-risk sections. It must evaluate freshness at the saved
-draft completion time and must not add strategy, decision moments, comparison,
-export, or desktop work.
+Phase 6 step 6 now implements this boundary in the
+[attached-evidence enrichment contract](phase-6-evidence-enrichment.md).
+The next boundary is step 7: saved mock-strategy story and bounded Personal
+Board or recorded-alert moments, without comparison, export, or desktop work.
