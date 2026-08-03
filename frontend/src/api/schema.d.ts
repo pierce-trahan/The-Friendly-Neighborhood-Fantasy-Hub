@@ -2443,6 +2443,7 @@ export interface components {
             learning_opted_in_at: string | null;
             /** Learning Withdrawn At */
             learning_withdrawn_at: string | null;
+            market_baseline: components["schemas"]["MockMarketBaselineRead"];
             /** Randomness */
             randomness: number;
             /**
@@ -2658,6 +2659,46 @@ export interface components {
             include_in_learning: boolean;
             /** Mock Revision */
             mock_revision: number;
+        };
+        /** MockMarketBaselineRead */
+        MockMarketBaselineRead: {
+            /** Candidate Count */
+            candidate_count: number;
+            /**
+             * Confidence
+             * @enum {string}
+             */
+            confidence: "unavailable" | "low" | "medium" | "high";
+            /** Coverage Percent */
+            coverage_percent: number;
+            /**
+             * Evidence Kind
+             * @enum {string}
+             */
+            evidence_kind: "expert_consensus" | "personal_board_fallback";
+            /** Format */
+            format: string;
+            /**
+             * Freshness
+             * @enum {string}
+             */
+            freshness: "fresh" | "stale" | "unavailable";
+            /** Label */
+            label: string;
+            /** Limitations */
+            limitations: string[];
+            /** Matched Candidate Count */
+            matched_candidate_count: number;
+            /** Player Count */
+            player_count: number;
+            /** Rank Type */
+            rank_type: string;
+            /** Source As Of */
+            source_as_of: string | null;
+            /** Source Name */
+            source_name: string | null;
+            /** Source Url */
+            source_url: string | null;
         };
         /** MockPickDecisionAudit */
         MockPickDecisionAudit: {

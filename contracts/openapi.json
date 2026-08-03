@@ -4376,6 +4376,9 @@
             ],
             "title": "Learning Withdrawn At"
           },
+          "market_baseline": {
+            "$ref": "#/components/schemas/MockMarketBaselineRead"
+          },
           "randomness": {
             "title": "Randomness",
             "type": "integer"
@@ -4443,7 +4446,8 @@
           "learning_opted_in_at",
           "learning_withdrawn_at",
           "created_at",
-          "updated_at"
+          "updated_at",
+          "market_baseline"
         ],
         "title": "MockConfigurationRead",
         "type": "object"
@@ -4974,6 +4978,125 @@
           "include_in_learning"
         ],
         "title": "MockLearningPatch",
+        "type": "object"
+      },
+      "MockMarketBaselineRead": {
+        "properties": {
+          "candidate_count": {
+            "title": "Candidate Count",
+            "type": "integer"
+          },
+          "confidence": {
+            "enum": [
+              "unavailable",
+              "low",
+              "medium",
+              "high"
+            ],
+            "title": "Confidence",
+            "type": "string"
+          },
+          "coverage_percent": {
+            "maximum": 100.0,
+            "minimum": 0.0,
+            "title": "Coverage Percent",
+            "type": "integer"
+          },
+          "evidence_kind": {
+            "enum": [
+              "expert_consensus",
+              "personal_board_fallback"
+            ],
+            "title": "Evidence Kind",
+            "type": "string"
+          },
+          "format": {
+            "title": "Format",
+            "type": "string"
+          },
+          "freshness": {
+            "enum": [
+              "fresh",
+              "stale",
+              "unavailable"
+            ],
+            "title": "Freshness",
+            "type": "string"
+          },
+          "label": {
+            "title": "Label",
+            "type": "string"
+          },
+          "limitations": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Limitations",
+            "type": "array"
+          },
+          "matched_candidate_count": {
+            "title": "Matched Candidate Count",
+            "type": "integer"
+          },
+          "player_count": {
+            "title": "Player Count",
+            "type": "integer"
+          },
+          "rank_type": {
+            "title": "Rank Type",
+            "type": "string"
+          },
+          "source_as_of": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Source As Of"
+          },
+          "source_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Source Name"
+          },
+          "source_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Source Url"
+          }
+        },
+        "required": [
+          "label",
+          "evidence_kind",
+          "source_name",
+          "source_url",
+          "rank_type",
+          "format",
+          "source_as_of",
+          "freshness",
+          "player_count",
+          "matched_candidate_count",
+          "candidate_count",
+          "coverage_percent",
+          "confidence",
+          "limitations"
+        ],
+        "title": "MockMarketBaselineRead",
         "type": "object"
       },
       "MockPickDecisionAudit": {
@@ -7163,7 +7286,7 @@
   },
   "info": {
     "title": "Friendly Neighborhood Fantasy Hub",
-    "version": "1.0.1"
+    "version": "1.0.2"
   },
   "openapi": "3.1.0",
   "paths": {

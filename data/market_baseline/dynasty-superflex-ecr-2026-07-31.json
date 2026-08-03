@@ -1,0 +1,5000 @@
+{
+  "schema_version": 1,
+  "source": {
+    "name": "DynastyProcess",
+    "dataset": "values.csv",
+    "url": "https://github.com/dynastyprocess/data/blob/master/files/values.csv",
+    "license": "GPL-3.0",
+    "license_url": "https://github.com/dynastyprocess/data/blob/master/LICENSE",
+    "underlying_signal": "FantasyPros expert consensus rankings",
+    "source_asset_updated_at": "2026-07-31",
+    "source_sha256": "4609e4e89cfd03fdda7d97f7275001d122bf33096decd713ecccff7b5c3246d4",
+    "transformed": true,
+    "changes": "Filtered to QB, RB, WR, and TE rows with ecr_2qb; conservatively matched normalized player name and position to the bundled nflverse universe; removed pick assets and unmatched identities; converted floating ECR order to a stable integer market rank."
+  },
+  "baseline": {
+    "key": "dynasty_superflex_ecr",
+    "label": "Dynasty Superflex expert consensus",
+    "evidence_kind": "expert_consensus",
+    "rank_type": "dynasty_2qb_ecr",
+    "format": "dynasty_superflex_proxy",
+    "player_count": 621,
+    "unmatched_source_player_count": 20,
+    "limitations": [
+      "ECR_NOT_ADP",
+      "TWO_QB_PROXY_FOR_SUPERFLEX",
+      "TE_PREMIUM_NOT_EXPLICIT",
+      "NO_AVAILABILITY_DISTRIBUTION"
+    ]
+  },
+  "entries": [
+    {
+      "market_rank": 1,
+      "consensus_rank": 1.2,
+      "player_name": "Josh Allen",
+      "search_name": "josh allen",
+      "position": "QB",
+      "nflverse_id": "00-0034857"
+    },
+    {
+      "market_rank": 2,
+      "consensus_rank": 6.0,
+      "player_name": "Ja'Marr Chase",
+      "search_name": "ja marr chase",
+      "position": "WR",
+      "nflverse_id": "00-0036900"
+    },
+    {
+      "market_rank": 3,
+      "consensus_rank": 6.6,
+      "player_name": "Lamar Jackson",
+      "search_name": "lamar jackson",
+      "position": "QB",
+      "nflverse_id": "00-0034796"
+    },
+    {
+      "market_rank": 4,
+      "consensus_rank": 9.2,
+      "player_name": "Jaxon Smith-Njigba",
+      "search_name": "jaxon smith njigba",
+      "position": "WR",
+      "nflverse_id": "00-0038543"
+    },
+    {
+      "market_rank": 5,
+      "consensus_rank": 9.3,
+      "player_name": "Patrick Mahomes",
+      "search_name": "patrick mahomes",
+      "position": "QB",
+      "nflverse_id": "00-0033873"
+    },
+    {
+      "market_rank": 6,
+      "consensus_rank": 10.4,
+      "player_name": "Joe Burrow",
+      "search_name": "joe burrow",
+      "position": "QB",
+      "nflverse_id": "00-0036442"
+    },
+    {
+      "market_rank": 7,
+      "consensus_rank": 10.5,
+      "player_name": "Bijan Robinson",
+      "search_name": "bijan robinson",
+      "position": "RB",
+      "nflverse_id": "00-0038542"
+    },
+    {
+      "market_rank": 8,
+      "consensus_rank": 11.3,
+      "player_name": "Justin Jefferson",
+      "search_name": "justin jefferson",
+      "position": "WR",
+      "nflverse_id": "00-0036322"
+    },
+    {
+      "market_rank": 9,
+      "consensus_rank": 12.0,
+      "player_name": "Caleb Williams",
+      "search_name": "caleb williams",
+      "position": "QB",
+      "nflverse_id": "00-0039918"
+    },
+    {
+      "market_rank": 10,
+      "consensus_rank": 12.6,
+      "player_name": "Jalen Hurts",
+      "search_name": "jalen hurts",
+      "position": "QB",
+      "nflverse_id": "00-0036389"
+    },
+    {
+      "market_rank": 11,
+      "consensus_rank": 13.2,
+      "player_name": "Amon-Ra St. Brown",
+      "search_name": "amon ra st brown",
+      "position": "WR",
+      "nflverse_id": "00-0036963"
+    },
+    {
+      "market_rank": 12,
+      "consensus_rank": 13.3,
+      "player_name": "Puka Nacua",
+      "search_name": "puka nacua",
+      "position": "WR",
+      "nflverse_id": "00-0039075"
+    },
+    {
+      "market_rank": 13,
+      "consensus_rank": 14.0,
+      "player_name": "CeeDee Lamb",
+      "search_name": "ceedee lamb",
+      "position": "WR",
+      "nflverse_id": "00-0036358"
+    },
+    {
+      "market_rank": 14,
+      "consensus_rank": 14.0,
+      "player_name": "Jayden Daniels",
+      "search_name": "jayden daniels",
+      "position": "QB",
+      "nflverse_id": "00-0039910"
+    },
+    {
+      "market_rank": 15,
+      "consensus_rank": 14.3,
+      "player_name": "Justin Herbert",
+      "search_name": "justin herbert",
+      "position": "QB",
+      "nflverse_id": "00-0036355"
+    },
+    {
+      "market_rank": 16,
+      "consensus_rank": 14.7,
+      "player_name": "Jahmyr Gibbs",
+      "search_name": "jahmyr gibbs",
+      "position": "RB",
+      "nflverse_id": "00-0039139"
+    },
+    {
+      "market_rank": 17,
+      "consensus_rank": 19.6,
+      "player_name": "Ashton Jeanty",
+      "search_name": "ashton jeanty",
+      "position": "RB",
+      "nflverse_id": "00-0040122"
+    },
+    {
+      "market_rank": 18,
+      "consensus_rank": 21.0,
+      "player_name": "Drake Maye",
+      "search_name": "drake maye",
+      "position": "QB",
+      "nflverse_id": "00-0039851"
+    },
+    {
+      "market_rank": 19,
+      "consensus_rank": 22.5,
+      "player_name": "Malik Nabers",
+      "search_name": "malik nabers",
+      "position": "WR",
+      "nflverse_id": "00-0039337"
+    },
+    {
+      "market_rank": 20,
+      "consensus_rank": 22.9,
+      "player_name": "Trevor Lawrence",
+      "search_name": "trevor lawrence",
+      "position": "QB",
+      "nflverse_id": "00-0036971"
+    },
+    {
+      "market_rank": 21,
+      "consensus_rank": 23.8,
+      "player_name": "Jeremiyah Love",
+      "search_name": "jeremiyah love",
+      "position": "RB",
+      "nflverse_id": "00-0041027"
+    },
+    {
+      "market_rank": 22,
+      "consensus_rank": 24.7,
+      "player_name": "Jaxson Dart",
+      "search_name": "jaxson dart",
+      "position": "QB",
+      "nflverse_id": "00-0040691"
+    },
+    {
+      "market_rank": 23,
+      "consensus_rank": 25.9,
+      "player_name": "Drake London",
+      "search_name": "drake london",
+      "position": "WR",
+      "nflverse_id": "00-0037238"
+    },
+    {
+      "market_rank": 24,
+      "consensus_rank": 26.7,
+      "player_name": "Brock Purdy",
+      "search_name": "brock purdy",
+      "position": "QB",
+      "nflverse_id": "00-0037834"
+    },
+    {
+      "market_rank": 25,
+      "consensus_rank": 27.2,
+      "player_name": "Jordan Love",
+      "search_name": "jordan love",
+      "position": "QB",
+      "nflverse_id": "00-0036264"
+    },
+    {
+      "market_rank": 26,
+      "consensus_rank": 27.2,
+      "player_name": "Omarion Hampton",
+      "search_name": "omarion hampton",
+      "position": "RB",
+      "nflverse_id": "00-0040666"
+    },
+    {
+      "market_rank": 27,
+      "consensus_rank": 27.6,
+      "player_name": "Bo Nix",
+      "search_name": "bo nix",
+      "position": "QB",
+      "nflverse_id": "00-0039732"
+    },
+    {
+      "market_rank": 28,
+      "consensus_rank": 30.4,
+      "player_name": "Tetairoa McMillan",
+      "search_name": "tetairoa mcmillan",
+      "position": "WR",
+      "nflverse_id": "00-0040124"
+    },
+    {
+      "market_rank": 29,
+      "consensus_rank": 31.9,
+      "player_name": "James Cook",
+      "search_name": "james cook",
+      "position": "RB",
+      "nflverse_id": "00-0037248"
+    },
+    {
+      "market_rank": 30,
+      "consensus_rank": 33.1,
+      "player_name": "Garrett Wilson",
+      "search_name": "garrett wilson",
+      "position": "WR",
+      "nflverse_id": "00-0037740"
+    },
+    {
+      "market_rank": 31,
+      "consensus_rank": 33.2,
+      "player_name": "Dak Prescott",
+      "search_name": "dak prescott",
+      "position": "QB",
+      "nflverse_id": "00-0033077"
+    },
+    {
+      "market_rank": 32,
+      "consensus_rank": 33.9,
+      "player_name": "De'Von Achane",
+      "search_name": "de von achane",
+      "position": "RB",
+      "nflverse_id": "00-0039040"
+    },
+    {
+      "market_rank": 33,
+      "consensus_rank": 34.0,
+      "player_name": "Breece Hall",
+      "search_name": "breece hall",
+      "position": "RB",
+      "nflverse_id": "00-0038120"
+    },
+    {
+      "market_rank": 34,
+      "consensus_rank": 34.7,
+      "player_name": "Brock Bowers",
+      "search_name": "brock bowers",
+      "position": "TE",
+      "nflverse_id": "00-0039338"
+    },
+    {
+      "market_rank": 35,
+      "consensus_rank": 35.0,
+      "player_name": "Emeka Egbuka",
+      "search_name": "emeka egbuka",
+      "position": "WR",
+      "nflverse_id": "00-0040129"
+    },
+    {
+      "market_rank": 36,
+      "consensus_rank": 35.4,
+      "player_name": "Jonathan Taylor",
+      "search_name": "jonathan taylor",
+      "position": "RB",
+      "nflverse_id": "00-0036223"
+    },
+    {
+      "market_rank": 37,
+      "consensus_rank": 36.1,
+      "player_name": "George Pickens",
+      "search_name": "george pickens",
+      "position": "WR",
+      "nflverse_id": "00-0037247"
+    },
+    {
+      "market_rank": 38,
+      "consensus_rank": 36.2,
+      "player_name": "Chris Olave",
+      "search_name": "chris olave",
+      "position": "WR",
+      "nflverse_id": "00-0037239"
+    },
+    {
+      "market_rank": 39,
+      "consensus_rank": 36.3,
+      "player_name": "Nico Collins",
+      "search_name": "nico collins",
+      "position": "WR",
+      "nflverse_id": "00-0036554"
+    },
+    {
+      "market_rank": 40,
+      "consensus_rank": 37.4,
+      "player_name": "Trey McBride",
+      "search_name": "trey mcbride",
+      "position": "TE",
+      "nflverse_id": "00-0037744"
+    },
+    {
+      "market_rank": 41,
+      "consensus_rank": 38.7,
+      "player_name": "A.J. Brown",
+      "search_name": "a j brown",
+      "position": "WR",
+      "nflverse_id": "00-0035676"
+    },
+    {
+      "market_rank": 42,
+      "consensus_rank": 39.6,
+      "player_name": "Carnell Tate",
+      "search_name": "carnell tate",
+      "position": "WR",
+      "nflverse_id": "00-0041438"
+    },
+    {
+      "market_rank": 43,
+      "consensus_rank": 40.0,
+      "player_name": "Kenneth Walker III",
+      "search_name": "kenneth walker iii",
+      "position": "RB",
+      "nflverse_id": "00-0038134"
+    },
+    {
+      "market_rank": 44,
+      "consensus_rank": 40.5,
+      "player_name": "C.J. Stroud",
+      "search_name": "c j stroud",
+      "position": "QB",
+      "nflverse_id": "00-0039163"
+    },
+    {
+      "market_rank": 45,
+      "consensus_rank": 42.7,
+      "player_name": "Marvin Harrison Jr.",
+      "search_name": "marvin harrison jr",
+      "position": "WR",
+      "nflverse_id": "00-0039849"
+    },
+    {
+      "market_rank": 46,
+      "consensus_rank": 43.9,
+      "player_name": "Ladd McConkey",
+      "search_name": "ladd mcconkey",
+      "position": "WR",
+      "nflverse_id": "00-0039915"
+    },
+    {
+      "market_rank": 47,
+      "consensus_rank": 44.3,
+      "player_name": "DeVonta Smith",
+      "search_name": "devonta smith",
+      "position": "WR",
+      "nflverse_id": "00-0036912"
+    },
+    {
+      "market_rank": 48,
+      "consensus_rank": 47.4,
+      "player_name": "Jaylen Waddle",
+      "search_name": "jaylen waddle",
+      "position": "WR",
+      "nflverse_id": "00-0036613"
+    },
+    {
+      "market_rank": 49,
+      "consensus_rank": 47.4,
+      "player_name": "Luther Burden III",
+      "search_name": "luther burden iii",
+      "position": "WR",
+      "nflverse_id": "00-0040735"
+    },
+    {
+      "market_rank": 50,
+      "consensus_rank": 47.6,
+      "player_name": "Colston Loveland",
+      "search_name": "colston loveland",
+      "position": "TE",
+      "nflverse_id": "00-0040126"
+    },
+    {
+      "market_rank": 51,
+      "consensus_rank": 48.6,
+      "player_name": "Zay Flowers",
+      "search_name": "zay flowers",
+      "position": "WR",
+      "nflverse_id": "00-0039064"
+    },
+    {
+      "market_rank": 52,
+      "consensus_rank": 48.7,
+      "player_name": "Christian McCaffrey",
+      "search_name": "christian mccaffrey",
+      "position": "RB",
+      "nflverse_id": "00-0033280"
+    },
+    {
+      "market_rank": 53,
+      "consensus_rank": 50.1,
+      "player_name": "Rome Odunze",
+      "search_name": "rome odunze",
+      "position": "WR",
+      "nflverse_id": "00-0039919"
+    },
+    {
+      "market_rank": 54,
+      "consensus_rank": 50.4,
+      "player_name": "Jordyn Tyson",
+      "search_name": "jordyn tyson",
+      "position": "WR",
+      "nflverse_id": "00-0041029"
+    },
+    {
+      "market_rank": 55,
+      "consensus_rank": 50.5,
+      "player_name": "Jared Goff",
+      "search_name": "jared goff",
+      "position": "QB",
+      "nflverse_id": "00-0033106"
+    },
+    {
+      "market_rank": 56,
+      "consensus_rank": 52.3,
+      "player_name": "Chase Brown",
+      "search_name": "chase brown",
+      "position": "RB",
+      "nflverse_id": "00-0038597"
+    },
+    {
+      "market_rank": 57,
+      "consensus_rank": 52.7,
+      "player_name": "Sam LaPorta",
+      "search_name": "sam laporta",
+      "position": "TE",
+      "nflverse_id": "00-0039065"
+    },
+    {
+      "market_rank": 58,
+      "consensus_rank": 53.0,
+      "player_name": "Kyler Murray",
+      "search_name": "kyler murray",
+      "position": "QB",
+      "nflverse_id": "00-0035228"
+    },
+    {
+      "market_rank": 59,
+      "consensus_rank": 53.5,
+      "player_name": "Makai Lemon",
+      "search_name": "makai lemon",
+      "position": "WR",
+      "nflverse_id": "00-0040867"
+    },
+    {
+      "market_rank": 60,
+      "consensus_rank": 55.6,
+      "player_name": "Fernando Mendoza",
+      "search_name": "fernando mendoza",
+      "position": "QB",
+      "nflverse_id": "00-0041562"
+    },
+    {
+      "market_rank": 61,
+      "consensus_rank": 55.9,
+      "player_name": "Tee Higgins",
+      "search_name": "tee higgins",
+      "position": "WR",
+      "nflverse_id": "00-0036410"
+    },
+    {
+      "market_rank": 62,
+      "consensus_rank": 56.6,
+      "player_name": "Tyler Warren",
+      "search_name": "tyler warren",
+      "position": "TE",
+      "nflverse_id": "00-0040128"
+    },
+    {
+      "market_rank": 63,
+      "consensus_rank": 56.8,
+      "player_name": "Rashee Rice",
+      "search_name": "rashee rice",
+      "position": "WR",
+      "nflverse_id": "00-0039067"
+    },
+    {
+      "market_rank": 64,
+      "consensus_rank": 60.0,
+      "player_name": "Baker Mayfield",
+      "search_name": "baker mayfield",
+      "position": "QB",
+      "nflverse_id": "00-0034855"
+    },
+    {
+      "market_rank": 65,
+      "consensus_rank": 60.2,
+      "player_name": "TreVeyon Henderson",
+      "search_name": "treveyon henderson",
+      "position": "RB",
+      "nflverse_id": "00-0040734"
+    },
+    {
+      "market_rank": 66,
+      "consensus_rank": 61.5,
+      "player_name": "Cam Ward",
+      "search_name": "cam ward",
+      "position": "QB",
+      "nflverse_id": "00-0040676"
+    },
+    {
+      "market_rank": 67,
+      "consensus_rank": 61.5,
+      "player_name": "Quinshon Judkins",
+      "search_name": "quinshon judkins",
+      "position": "RB",
+      "nflverse_id": "00-0040784"
+    },
+    {
+      "market_rank": 68,
+      "consensus_rank": 63.3,
+      "player_name": "Travis Etienne",
+      "search_name": "travis etienne",
+      "position": "RB",
+      "nflverse_id": "00-0036973"
+    },
+    {
+      "market_rank": 69,
+      "consensus_rank": 63.7,
+      "player_name": "Saquon Barkley",
+      "search_name": "saquon barkley",
+      "position": "RB",
+      "nflverse_id": "00-0034844"
+    },
+    {
+      "market_rank": 70,
+      "consensus_rank": 64.7,
+      "player_name": "Tucker Kraft",
+      "search_name": "tucker kraft",
+      "position": "TE",
+      "nflverse_id": "00-0038996"
+    },
+    {
+      "market_rank": 71,
+      "consensus_rank": 66.8,
+      "player_name": "Jameson Williams",
+      "search_name": "jameson williams",
+      "position": "WR",
+      "nflverse_id": "00-0037240"
+    },
+    {
+      "market_rank": 72,
+      "consensus_rank": 67.3,
+      "player_name": "Harold Fannin Jr.",
+      "search_name": "harold fannin jr",
+      "position": "TE",
+      "nflverse_id": "00-0040663"
+    },
+    {
+      "market_rank": 73,
+      "consensus_rank": 69.6,
+      "player_name": "Brian Thomas Jr.",
+      "search_name": "brian thomas jr",
+      "position": "WR",
+      "nflverse_id": "00-0039893"
+    },
+    {
+      "market_rank": 74,
+      "consensus_rank": 70.5,
+      "player_name": "Kyren Williams",
+      "search_name": "kyren williams",
+      "position": "RB",
+      "nflverse_id": "00-0037840"
+    },
+    {
+      "market_rank": 75,
+      "consensus_rank": 70.7,
+      "player_name": "Tyler Shough",
+      "search_name": "tyler shough",
+      "position": "QB",
+      "nflverse_id": "00-0040743"
+    },
+    {
+      "market_rank": 76,
+      "consensus_rank": 74.9,
+      "player_name": "Kyle Pitts",
+      "search_name": "kyle pitts",
+      "position": "TE",
+      "nflverse_id": "00-0036970"
+    },
+    {
+      "market_rank": 77,
+      "consensus_rank": 77.7,
+      "player_name": "Cam Skattebo",
+      "search_name": "cam skattebo",
+      "position": "RB",
+      "nflverse_id": "00-0040715"
+    },
+    {
+      "market_rank": 78,
+      "consensus_rank": 78.2,
+      "player_name": "Christian Watson",
+      "search_name": "christian watson",
+      "position": "WR",
+      "nflverse_id": "00-0038124"
+    },
+    {
+      "market_rank": 79,
+      "consensus_rank": 79.6,
+      "player_name": "Bucky Irving",
+      "search_name": "bucky irving",
+      "position": "RB",
+      "nflverse_id": "00-0039361"
+    },
+    {
+      "market_rank": 80,
+      "consensus_rank": 80.3,
+      "player_name": "KC Concepcion",
+      "search_name": "kc concepcion",
+      "position": "WR",
+      "nflverse_id": "00-0041547"
+    },
+    {
+      "market_rank": 81,
+      "consensus_rank": 81.2,
+      "player_name": "Javonte Williams",
+      "search_name": "javonte williams",
+      "position": "RB",
+      "nflverse_id": "00-0036997"
+    },
+    {
+      "market_rank": 82,
+      "consensus_rank": 82.2,
+      "player_name": "Jadarian Price",
+      "search_name": "jadarian price",
+      "position": "RB",
+      "nflverse_id": "00-0041512"
+    },
+    {
+      "market_rank": 83,
+      "consensus_rank": 82.8,
+      "player_name": "Sam Darnold",
+      "search_name": "sam darnold",
+      "position": "QB",
+      "nflverse_id": "00-0034869"
+    },
+    {
+      "market_rank": 84,
+      "consensus_rank": 83.3,
+      "player_name": "Dalton Kincaid",
+      "search_name": "dalton kincaid",
+      "position": "TE",
+      "nflverse_id": "00-0038933"
+    },
+    {
+      "market_rank": 85,
+      "consensus_rank": 85.6,
+      "player_name": "Terry McLaurin",
+      "search_name": "terry mclaurin",
+      "position": "WR",
+      "nflverse_id": "00-0035659"
+    },
+    {
+      "market_rank": 86,
+      "consensus_rank": 86.0,
+      "player_name": "Malik Willis",
+      "search_name": "malik willis",
+      "position": "QB",
+      "nflverse_id": "00-0038128"
+    },
+    {
+      "market_rank": 87,
+      "consensus_rank": 86.8,
+      "player_name": "Alec Pierce",
+      "search_name": "alec pierce",
+      "position": "WR",
+      "nflverse_id": "00-0037664"
+    },
+    {
+      "market_rank": 88,
+      "consensus_rank": 87.3,
+      "player_name": "Kenyon Sadiq",
+      "search_name": "kenyon sadiq",
+      "position": "TE",
+      "nflverse_id": "00-0041032"
+    },
+    {
+      "market_rank": 89,
+      "consensus_rank": 88.3,
+      "player_name": "DJ Moore",
+      "search_name": "dj moore",
+      "position": "WR",
+      "nflverse_id": "00-0034827"
+    },
+    {
+      "market_rank": 90,
+      "consensus_rank": 92.6,
+      "player_name": "Derrick Henry",
+      "search_name": "derrick henry",
+      "position": "RB",
+      "nflverse_id": "00-0032764"
+    },
+    {
+      "market_rank": 91,
+      "consensus_rank": 92.6,
+      "player_name": "Matthew Stafford",
+      "search_name": "matthew stafford",
+      "position": "QB",
+      "nflverse_id": "00-0026498"
+    },
+    {
+      "market_rank": 92,
+      "consensus_rank": 94.3,
+      "player_name": "Jordan Addison",
+      "search_name": "jordan addison",
+      "position": "WR",
+      "nflverse_id": "00-0038994"
+    },
+    {
+      "market_rank": 93,
+      "consensus_rank": 94.7,
+      "player_name": "Bhayshul Tuten",
+      "search_name": "bhayshul tuten",
+      "position": "RB",
+      "nflverse_id": "00-0040719"
+    },
+    {
+      "market_rank": 94,
+      "consensus_rank": 94.7,
+      "player_name": "Josh Jacobs",
+      "search_name": "josh jacobs",
+      "position": "RB",
+      "nflverse_id": "00-0035700"
+    },
+    {
+      "market_rank": 95,
+      "consensus_rank": 96.2,
+      "player_name": "Daniel Jones",
+      "search_name": "daniel jones",
+      "position": "QB",
+      "nflverse_id": "00-0035710"
+    },
+    {
+      "market_rank": 96,
+      "consensus_rank": 96.3,
+      "player_name": "Bryce Young",
+      "search_name": "bryce young",
+      "position": "QB",
+      "nflverse_id": "00-0039150"
+    },
+    {
+      "market_rank": 97,
+      "consensus_rank": 96.3,
+      "player_name": "DK Metcalf",
+      "search_name": "dk metcalf",
+      "position": "WR",
+      "nflverse_id": "00-0035640"
+    },
+    {
+      "market_rank": 98,
+      "consensus_rank": 97.2,
+      "player_name": "Omar Cooper Jr.",
+      "search_name": "omar cooper jr",
+      "position": "WR",
+      "nflverse_id": "00-0041511"
+    },
+    {
+      "market_rank": 99,
+      "consensus_rank": 98.2,
+      "player_name": "Eli Stowers",
+      "search_name": "eli stowers",
+      "position": "TE",
+      "nflverse_id": "00-0041483"
+    },
+    {
+      "market_rank": 100,
+      "consensus_rank": 100.8,
+      "player_name": "Anthony Richardson",
+      "search_name": "anthony richardson",
+      "position": "QB",
+      "nflverse_id": "00-0039164"
+    },
+    {
+      "market_rank": 101,
+      "consensus_rank": 102.7,
+      "player_name": "Tua Tagovailoa",
+      "search_name": "tua tagovailoa",
+      "position": "QB",
+      "nflverse_id": "00-0036212"
+    },
+    {
+      "market_rank": 102,
+      "consensus_rank": 103.0,
+      "player_name": "Parker Washington",
+      "search_name": "parker washington",
+      "position": "WR",
+      "nflverse_id": "00-0038606"
+    },
+    {
+      "market_rank": 103,
+      "consensus_rank": 103.2,
+      "player_name": "D'Andre Swift",
+      "search_name": "d andre swift",
+      "position": "RB",
+      "nflverse_id": "00-0036275"
+    },
+    {
+      "market_rank": 104,
+      "consensus_rank": 103.7,
+      "player_name": "Michael Wilson",
+      "search_name": "michael wilson",
+      "position": "WR",
+      "nflverse_id": "00-0038559"
+    },
+    {
+      "market_rank": 105,
+      "consensus_rank": 105.8,
+      "player_name": "Wan'Dale Robinson",
+      "search_name": "wan dale robinson",
+      "position": "WR",
+      "nflverse_id": "00-0038117"
+    },
+    {
+      "market_rank": 106,
+      "consensus_rank": 106.9,
+      "player_name": "Ty Simpson",
+      "search_name": "ty simpson",
+      "position": "QB",
+      "nflverse_id": "00-0041568"
+    },
+    {
+      "market_rank": 107,
+      "consensus_rank": 108.1,
+      "player_name": "Oronde Gadsden II",
+      "search_name": "oronde gadsden ii",
+      "position": "TE",
+      "nflverse_id": "00-0040189"
+    },
+    {
+      "market_rank": 108,
+      "consensus_rank": 108.8,
+      "player_name": "Davante Adams",
+      "search_name": "davante adams",
+      "position": "WR",
+      "nflverse_id": "00-0031381"
+    },
+    {
+      "market_rank": 109,
+      "consensus_rank": 108.8,
+      "player_name": "Jayden Higgins",
+      "search_name": "jayden higgins",
+      "position": "WR",
+      "nflverse_id": "00-0040130"
+    },
+    {
+      "market_rank": 110,
+      "consensus_rank": 109.0,
+      "player_name": "Ricky Pearsall",
+      "search_name": "ricky pearsall",
+      "position": "WR",
+      "nflverse_id": "00-0039916"
+    },
+    {
+      "market_rank": 111,
+      "consensus_rank": 109.3,
+      "player_name": "David Montgomery",
+      "search_name": "david montgomery",
+      "position": "RB",
+      "nflverse_id": "00-0035685"
+    },
+    {
+      "market_rank": 112,
+      "consensus_rank": 109.3,
+      "player_name": "Josh Downs",
+      "search_name": "josh downs",
+      "position": "WR",
+      "nflverse_id": "00-0038997"
+    },
+    {
+      "market_rank": 113,
+      "consensus_rank": 110.8,
+      "player_name": "Mike Evans",
+      "search_name": "mike evans",
+      "position": "WR",
+      "nflverse_id": "00-0031408"
+    },
+    {
+      "market_rank": 114,
+      "consensus_rank": 110.9,
+      "player_name": "Michael Pittman",
+      "search_name": "michael pittman",
+      "position": "WR",
+      "nflverse_id": "00-0036252"
+    },
+    {
+      "market_rank": 115,
+      "consensus_rank": 111.1,
+      "player_name": "Isaiah Likely",
+      "search_name": "isaiah likely",
+      "position": "TE",
+      "nflverse_id": "00-0037838"
+    },
+    {
+      "market_rank": 116,
+      "consensus_rank": 113.2,
+      "player_name": "Denzel Boston",
+      "search_name": "denzel boston",
+      "position": "WR",
+      "nflverse_id": "00-0041037"
+    },
+    {
+      "market_rank": 117,
+      "consensus_rank": 114.3,
+      "player_name": "Courtland Sutton",
+      "search_name": "courtland sutton",
+      "position": "WR",
+      "nflverse_id": "00-0034348"
+    },
+    {
+      "market_rank": 118,
+      "consensus_rank": 116.3,
+      "player_name": "Jake Ferguson",
+      "search_name": "jake ferguson",
+      "position": "TE",
+      "nflverse_id": "00-0038041"
+    },
+    {
+      "market_rank": 119,
+      "consensus_rank": 116.3,
+      "player_name": "Xavier Worthy",
+      "search_name": "xavier worthy",
+      "position": "WR",
+      "nflverse_id": "00-0039894"
+    },
+    {
+      "market_rank": 120,
+      "consensus_rank": 116.8,
+      "player_name": "RJ Harvey",
+      "search_name": "rj harvey",
+      "position": "RB",
+      "nflverse_id": "00-0040730"
+    },
+    {
+      "market_rank": 121,
+      "consensus_rank": 117.6,
+      "player_name": "George Kittle",
+      "search_name": "george kittle",
+      "position": "TE",
+      "nflverse_id": "00-0033288"
+    },
+    {
+      "market_rank": 122,
+      "consensus_rank": 119.7,
+      "player_name": "Jayden Reed",
+      "search_name": "jayden reed",
+      "position": "WR",
+      "nflverse_id": "00-0039146"
+    },
+    {
+      "market_rank": 123,
+      "consensus_rank": 120.8,
+      "player_name": "Matthew Golden",
+      "search_name": "matthew golden",
+      "position": "WR",
+      "nflverse_id": "00-0040667"
+    },
+    {
+      "market_rank": 124,
+      "consensus_rank": 120.9,
+      "player_name": "Quentin Johnston",
+      "search_name": "quentin johnston",
+      "position": "WR",
+      "nflverse_id": "00-0038544"
+    },
+    {
+      "market_rank": 125,
+      "consensus_rank": 123.3,
+      "player_name": "Chris Godwin Jr.",
+      "search_name": "chris godwin jr",
+      "position": "WR",
+      "nflverse_id": "00-0033921"
+    },
+    {
+      "market_rank": 126,
+      "consensus_rank": 123.4,
+      "player_name": "Michael Penix Jr.",
+      "search_name": "michael penix jr",
+      "position": "QB",
+      "nflverse_id": "00-0039917"
+    },
+    {
+      "market_rank": 127,
+      "consensus_rank": 124.3,
+      "player_name": "Brandon Aiyuk",
+      "search_name": "brandon aiyuk",
+      "position": "WR",
+      "nflverse_id": "00-0036261"
+    },
+    {
+      "market_rank": 128,
+      "consensus_rank": 124.8,
+      "player_name": "Brenton Strange",
+      "search_name": "brenton strange",
+      "position": "TE",
+      "nflverse_id": "00-0038935"
+    },
+    {
+      "market_rank": 129,
+      "consensus_rank": 124.8,
+      "player_name": "Jakobi Meyers",
+      "search_name": "jakobi meyers",
+      "position": "WR",
+      "nflverse_id": "00-0034960"
+    },
+    {
+      "market_rank": 130,
+      "consensus_rank": 126.5,
+      "player_name": "Jaylen Warren",
+      "search_name": "jaylen warren",
+      "position": "RB",
+      "nflverse_id": "00-0037228"
+    },
+    {
+      "market_rank": 131,
+      "consensus_rank": 131.6,
+      "player_name": "Antonio Williams",
+      "search_name": "antonio williams",
+      "position": "WR",
+      "nflverse_id": "00-0041040"
+    },
+    {
+      "market_rank": 132,
+      "consensus_rank": 132.1,
+      "player_name": "Blake Corum",
+      "search_name": "blake corum",
+      "position": "RB",
+      "nflverse_id": "00-0039738"
+    },
+    {
+      "market_rank": 133,
+      "consensus_rank": 132.3,
+      "player_name": "Kyle Monangai",
+      "search_name": "kyle monangai",
+      "position": "RB",
+      "nflverse_id": "00-0040236"
+    },
+    {
+      "market_rank": 134,
+      "consensus_rank": 133.6,
+      "player_name": "Zach Charbonnet",
+      "search_name": "zach charbonnet",
+      "position": "RB",
+      "nflverse_id": "00-0039165"
+    },
+    {
+      "market_rank": 135,
+      "consensus_rank": 136.9,
+      "player_name": "Jalen Coker",
+      "search_name": "jalen coker",
+      "position": "WR",
+      "nflverse_id": "00-0039491"
+    },
+    {
+      "market_rank": 136,
+      "consensus_rank": 137.3,
+      "player_name": "Chuba Hubbard",
+      "search_name": "chuba hubbard",
+      "position": "RB",
+      "nflverse_id": "00-0036555"
+    },
+    {
+      "market_rank": 137,
+      "consensus_rank": 137.6,
+      "player_name": "Romeo Doubs",
+      "search_name": "romeo doubs",
+      "position": "WR",
+      "nflverse_id": "00-0037816"
+    },
+    {
+      "market_rank": 138,
+      "consensus_rank": 139.7,
+      "player_name": "Khalil Shakir",
+      "search_name": "khalil shakir",
+      "position": "WR",
+      "nflverse_id": "00-0037261"
+    },
+    {
+      "market_rank": 139,
+      "consensus_rank": 139.7,
+      "player_name": "Rhamondre Stevenson",
+      "search_name": "rhamondre stevenson",
+      "position": "RB",
+      "nflverse_id": "00-0036875"
+    },
+    {
+      "market_rank": 140,
+      "consensus_rank": 140.1,
+      "player_name": "Jonathon Brooks",
+      "search_name": "jonathon brooks",
+      "position": "RB",
+      "nflverse_id": "00-0039344"
+    },
+    {
+      "market_rank": 141,
+      "consensus_rank": 140.9,
+      "player_name": "Chris Bell",
+      "search_name": "chris bell",
+      "position": "WR",
+      "nflverse_id": "00-0041525"
+    },
+    {
+      "market_rank": 142,
+      "consensus_rank": 142.2,
+      "player_name": "Chig Okonkwo",
+      "search_name": "chig okonkwo",
+      "position": "TE",
+      "nflverse_id": "00-0037809"
+    },
+    {
+      "market_rank": 143,
+      "consensus_rank": 142.3,
+      "player_name": "J.J. McCarthy",
+      "search_name": "j j mccarthy",
+      "position": "QB",
+      "nflverse_id": "00-0039923"
+    },
+    {
+      "market_rank": 144,
+      "consensus_rank": 146.6,
+      "player_name": "Tyreek Hill",
+      "search_name": "tyreek hill",
+      "position": "WR",
+      "nflverse_id": "00-0033040"
+    },
+    {
+      "market_rank": 145,
+      "consensus_rank": 146.9,
+      "player_name": "Mark Andrews",
+      "search_name": "mark andrews",
+      "position": "TE",
+      "nflverse_id": "00-0034753"
+    },
+    {
+      "market_rank": 146,
+      "consensus_rank": 147.5,
+      "player_name": "Rico Dowdle",
+      "search_name": "rico dowdle",
+      "position": "RB",
+      "nflverse_id": "00-0036139"
+    },
+    {
+      "market_rank": 147,
+      "consensus_rank": 149.3,
+      "player_name": "Jonah Coleman",
+      "search_name": "jonah coleman",
+      "position": "RB",
+      "nflverse_id": "00-0041496"
+    },
+    {
+      "market_rank": 148,
+      "consensus_rank": 149.8,
+      "player_name": "Dallas Goedert",
+      "search_name": "dallas goedert",
+      "position": "TE",
+      "nflverse_id": "00-0034351"
+    },
+    {
+      "market_rank": 149,
+      "consensus_rank": 150.9,
+      "player_name": "Tony Pollard",
+      "search_name": "tony pollard",
+      "position": "RB",
+      "nflverse_id": "00-0035261"
+    },
+    {
+      "market_rank": 150,
+      "consensus_rank": 153.5,
+      "player_name": "Germie Bernard",
+      "search_name": "germie bernard",
+      "position": "WR",
+      "nflverse_id": "00-0041489"
+    },
+    {
+      "market_rank": 151,
+      "consensus_rank": 155.3,
+      "player_name": "De'Zhaun Stribling",
+      "search_name": "de zhaun stribling",
+      "position": "WR",
+      "nflverse_id": "00-0041035"
+    },
+    {
+      "market_rank": 152,
+      "consensus_rank": 155.9,
+      "player_name": "Shedeur Sanders",
+      "search_name": "shedeur sanders",
+      "position": "QB",
+      "nflverse_id": "00-0040668"
+    },
+    {
+      "market_rank": 153,
+      "consensus_rank": 156.6,
+      "player_name": "AJ Barner",
+      "search_name": "aj barner",
+      "position": "TE",
+      "nflverse_id": "00-0039793"
+    },
+    {
+      "market_rank": 154,
+      "consensus_rank": 156.7,
+      "player_name": "Jalen McMillan",
+      "search_name": "jalen mcmillan",
+      "position": "WR",
+      "nflverse_id": "00-0039855"
+    },
+    {
+      "market_rank": 155,
+      "consensus_rank": 157.4,
+      "player_name": "Rashid Shaheed",
+      "search_name": "rashid shaheed",
+      "position": "WR",
+      "nflverse_id": "00-0037545"
+    },
+    {
+      "market_rank": 156,
+      "consensus_rank": 157.4,
+      "player_name": "Tre Harris",
+      "search_name": "tre harris",
+      "position": "WR",
+      "nflverse_id": "00-0040727"
+    },
+    {
+      "market_rank": 157,
+      "consensus_rank": 157.5,
+      "player_name": "Kenny Gainwell",
+      "search_name": "kenny gainwell",
+      "position": "RB",
+      "nflverse_id": "00-0036919"
+    },
+    {
+      "market_rank": 158,
+      "consensus_rank": 159.6,
+      "player_name": "Geno Smith",
+      "search_name": "geno smith",
+      "position": "QB",
+      "nflverse_id": "00-0030565"
+    },
+    {
+      "market_rank": 159,
+      "consensus_rank": 160.0,
+      "player_name": "J.K. Dobbins",
+      "search_name": "j k dobbins",
+      "position": "RB",
+      "nflverse_id": "00-0036158"
+    },
+    {
+      "market_rank": 160,
+      "consensus_rank": 162.9,
+      "player_name": "Jaylin Noel",
+      "search_name": "jaylin noel",
+      "position": "WR",
+      "nflverse_id": "00-0040138"
+    },
+    {
+      "market_rank": 161,
+      "consensus_rank": 163.9,
+      "player_name": "Travis Kelce",
+      "search_name": "travis kelce",
+      "position": "TE",
+      "nflverse_id": "00-0030506"
+    },
+    {
+      "market_rank": 162,
+      "consensus_rank": 164.2,
+      "player_name": "Jacory Croskey-Merritt",
+      "search_name": "jacory croskey merritt",
+      "position": "RB",
+      "nflverse_id": "00-0040242"
+    },
+    {
+      "market_rank": 163,
+      "consensus_rank": 164.4,
+      "player_name": "Terrance Ferguson",
+      "search_name": "terrance ferguson",
+      "position": "TE",
+      "nflverse_id": "00-0040737"
+    },
+    {
+      "market_rank": 164,
+      "consensus_rank": 164.6,
+      "player_name": "Jauan Jennings",
+      "search_name": "jauan jennings",
+      "position": "WR",
+      "nflverse_id": "00-0036259"
+    },
+    {
+      "market_rank": 165,
+      "consensus_rank": 164.7,
+      "player_name": "Jacoby Brissett",
+      "search_name": "jacoby brissett",
+      "position": "QB",
+      "nflverse_id": "00-0033119"
+    },
+    {
+      "market_rank": 166,
+      "consensus_rank": 166.6,
+      "player_name": "Aaron Rodgers",
+      "search_name": "aaron rodgers",
+      "position": "QB",
+      "nflverse_id": "00-0023459"
+    },
+    {
+      "market_rank": 167,
+      "consensus_rank": 167.8,
+      "player_name": "Juwan Johnson",
+      "search_name": "juwan johnson",
+      "position": "TE",
+      "nflverse_id": "00-0036040"
+    },
+    {
+      "market_rank": 168,
+      "consensus_rank": 167.9,
+      "player_name": "Ted Hurst III",
+      "search_name": "ted hurst iii",
+      "position": "WR",
+      "nflverse_id": "00-0041048"
+    },
+    {
+      "market_rank": 169,
+      "consensus_rank": 168.7,
+      "player_name": "Rachaad White",
+      "search_name": "rachaad white",
+      "position": "RB",
+      "nflverse_id": "00-0037256"
+    },
+    {
+      "market_rank": 170,
+      "consensus_rank": 171.7,
+      "player_name": "Elijah Sarratt",
+      "search_name": "elijah sarratt",
+      "position": "WR",
+      "nflverse_id": "00-0040876"
+    },
+    {
+      "market_rank": 171,
+      "consensus_rank": 171.8,
+      "player_name": "T.J. Hockenson",
+      "search_name": "t j hockenson",
+      "position": "TE",
+      "nflverse_id": "00-0035229"
+    },
+    {
+      "market_rank": 172,
+      "consensus_rank": 172.1,
+      "player_name": "Tyler Allgeier",
+      "search_name": "tyler allgeier",
+      "position": "RB",
+      "nflverse_id": "00-0037263"
+    },
+    {
+      "market_rank": 173,
+      "consensus_rank": 173.2,
+      "player_name": "Woody Marks",
+      "search_name": "woody marks",
+      "position": "RB",
+      "nflverse_id": "00-0040583"
+    },
+    {
+      "market_rank": 174,
+      "consensus_rank": 173.6,
+      "player_name": "Stefon Diggs",
+      "search_name": "stefon diggs",
+      "position": "WR",
+      "nflverse_id": "00-0031588"
+    },
+    {
+      "market_rank": 175,
+      "consensus_rank": 174.9,
+      "player_name": "Mac Jones",
+      "search_name": "mac jones",
+      "position": "QB",
+      "nflverse_id": "00-0036972"
+    },
+    {
+      "market_rank": 176,
+      "consensus_rank": 175.2,
+      "player_name": "Carson Beck",
+      "search_name": "carson beck",
+      "position": "QB",
+      "nflverse_id": "00-0041561"
+    },
+    {
+      "market_rank": 177,
+      "consensus_rank": 175.2,
+      "player_name": "Nicholas Singleton",
+      "search_name": "nicholas singleton",
+      "position": "RB",
+      "nflverse_id": "00-0040886"
+    },
+    {
+      "market_rank": 178,
+      "consensus_rank": 176.0,
+      "player_name": "Tyrone Tracy Jr.",
+      "search_name": "tyrone tracy jr",
+      "position": "RB",
+      "nflverse_id": "00-0039384"
+    },
+    {
+      "market_rank": 179,
+      "consensus_rank": 180.8,
+      "player_name": "Jordan Mason",
+      "search_name": "jordan mason",
+      "position": "RB",
+      "nflverse_id": "00-0037525"
+    },
+    {
+      "market_rank": 180,
+      "consensus_rank": 183.3,
+      "player_name": "Adonai Mitchell",
+      "search_name": "adonai mitchell",
+      "position": "WR",
+      "nflverse_id": "00-0039890"
+    },
+    {
+      "market_rank": 181,
+      "consensus_rank": 183.8,
+      "player_name": "Jerry Jeudy",
+      "search_name": "jerry jeudy",
+      "position": "WR",
+      "nflverse_id": "00-0036407"
+    },
+    {
+      "market_rank": 182,
+      "consensus_rank": 185.1,
+      "player_name": "Dylan Sampson",
+      "search_name": "dylan sampson",
+      "position": "RB",
+      "nflverse_id": "00-0040162"
+    },
+    {
+      "market_rank": 183,
+      "consensus_rank": 185.2,
+      "player_name": "Emmett Johnson",
+      "search_name": "emmett johnson",
+      "position": "RB",
+      "nflverse_id": "00-0041013"
+    },
+    {
+      "market_rank": 184,
+      "consensus_rank": 186.1,
+      "player_name": "Gunnar Helm",
+      "search_name": "gunnar helm",
+      "position": "TE",
+      "nflverse_id": "00-0040584"
+    },
+    {
+      "market_rank": 185,
+      "consensus_rank": 187.1,
+      "player_name": "Kayshon Boutte",
+      "search_name": "kayshon boutte",
+      "position": "WR",
+      "nflverse_id": "00-0038608"
+    },
+    {
+      "market_rank": 186,
+      "consensus_rank": 187.2,
+      "player_name": "Hunter Henry",
+      "search_name": "hunter henry",
+      "position": "TE",
+      "nflverse_id": "00-0033090"
+    },
+    {
+      "market_rank": 187,
+      "consensus_rank": 187.2,
+      "player_name": "Oscar Delp",
+      "search_name": "oscar delp",
+      "position": "TE",
+      "nflverse_id": "00-0041041"
+    },
+    {
+      "market_rank": 188,
+      "consensus_rank": 187.8,
+      "player_name": "Chris Rodriguez Jr.",
+      "search_name": "chris rodriguez jr",
+      "position": "RB",
+      "nflverse_id": "00-0038611"
+    },
+    {
+      "market_rank": 189,
+      "consensus_rank": 188.5,
+      "player_name": "Eli Raridon",
+      "search_name": "eli raridon",
+      "position": "TE",
+      "nflverse_id": "00-0041395"
+    },
+    {
+      "market_rank": 190,
+      "consensus_rank": 188.8,
+      "player_name": "Zachariah Branch",
+      "search_name": "zachariah branch",
+      "position": "WR",
+      "nflverse_id": "00-0041044"
+    },
+    {
+      "market_rank": 191,
+      "consensus_rank": 189.4,
+      "player_name": "Pat Bryant",
+      "search_name": "pat bryant",
+      "position": "WR",
+      "nflverse_id": "00-0040134"
+    },
+    {
+      "market_rank": 192,
+      "consensus_rank": 189.8,
+      "player_name": "Deshaun Watson",
+      "search_name": "deshaun watson",
+      "position": "QB",
+      "nflverse_id": "00-0033537"
+    },
+    {
+      "market_rank": 193,
+      "consensus_rank": 189.9,
+      "player_name": "Skyler Bell",
+      "search_name": "skyler bell",
+      "position": "WR",
+      "nflverse_id": "00-0041443"
+    },
+    {
+      "market_rank": 194,
+      "consensus_rank": 190.4,
+      "player_name": "Malachi Fields",
+      "search_name": "malachi fields",
+      "position": "WR",
+      "nflverse_id": "00-0041042"
+    },
+    {
+      "market_rank": 195,
+      "consensus_rank": 190.4,
+      "player_name": "Troy Franklin",
+      "search_name": "troy franklin",
+      "position": "WR",
+      "nflverse_id": "00-0039868"
+    },
+    {
+      "market_rank": 196,
+      "consensus_rank": 192.2,
+      "player_name": "Isaac TeSlaa",
+      "search_name": "isaac teslaa",
+      "position": "WR",
+      "nflverse_id": "00-0040669"
+    },
+    {
+      "market_rank": 197,
+      "consensus_rank": 192.7,
+      "player_name": "Max Klare",
+      "search_name": "max klare",
+      "position": "TE",
+      "nflverse_id": "00-0041510"
+    },
+    {
+      "market_rank": 198,
+      "consensus_rank": 192.9,
+      "player_name": "Chris Brazzell II",
+      "search_name": "chris brazzell ii",
+      "position": "WR",
+      "nflverse_id": "00-0041047"
+    },
+    {
+      "market_rank": 199,
+      "consensus_rank": 194.7,
+      "player_name": "Aaron Jones",
+      "search_name": "aaron jones",
+      "position": "RB",
+      "nflverse_id": "00-0033293"
+    },
+    {
+      "market_rank": 200,
+      "consensus_rank": 198.4,
+      "player_name": "Kaytron Allen",
+      "search_name": "kaytron allen",
+      "position": "RB",
+      "nflverse_id": "00-0041096"
+    },
+    {
+      "market_rank": 201,
+      "consensus_rank": 200.0,
+      "player_name": "Dalton Schultz",
+      "search_name": "dalton schultz",
+      "position": "TE",
+      "nflverse_id": "00-0034383"
+    },
+    {
+      "market_rank": 202,
+      "consensus_rank": 200.6,
+      "player_name": "Ja'Kobi Lane",
+      "search_name": "ja kobi lane",
+      "position": "WR",
+      "nflverse_id": "00-0040870"
+    },
+    {
+      "market_rank": 203,
+      "consensus_rank": 200.8,
+      "player_name": "Jalen Nailor",
+      "search_name": "jalen nailor",
+      "position": "WR",
+      "nflverse_id": "00-0037291"
+    },
+    {
+      "market_rank": 204,
+      "consensus_rank": 200.8,
+      "player_name": "Justin Fields",
+      "search_name": "justin fields",
+      "position": "QB",
+      "nflverse_id": "00-0036945"
+    },
+    {
+      "market_rank": 205,
+      "consensus_rank": 201.9,
+      "player_name": "Deebo Samuel Sr.",
+      "search_name": "deebo samuel sr",
+      "position": "WR",
+      "nflverse_id": "00-0035719"
+    },
+    {
+      "market_rank": 206,
+      "consensus_rank": 201.9,
+      "player_name": "Jack Bech",
+      "search_name": "jack bech",
+      "position": "WR",
+      "nflverse_id": "00-0040729"
+    },
+    {
+      "market_rank": 207,
+      "consensus_rank": 202.9,
+      "player_name": "Tyjae Spears",
+      "search_name": "tyjae spears",
+      "position": "RB",
+      "nflverse_id": "00-0039032"
+    },
+    {
+      "market_rank": 208,
+      "consensus_rank": 204.7,
+      "player_name": "Keaton Mitchell",
+      "search_name": "keaton mitchell",
+      "position": "RB",
+      "nflverse_id": "00-0038454"
+    },
+    {
+      "market_rank": 209,
+      "consensus_rank": 205.8,
+      "player_name": "Mike Washington Jr.",
+      "search_name": "mike washington jr",
+      "position": "RB",
+      "nflverse_id": "00-0040878"
+    },
+    {
+      "market_rank": 210,
+      "consensus_rank": 205.9,
+      "player_name": "Mason Taylor",
+      "search_name": "mason taylor",
+      "position": "TE",
+      "nflverse_id": "00-0040736"
+    },
+    {
+      "market_rank": 211,
+      "consensus_rank": 206.2,
+      "player_name": "Greg Dulcich",
+      "search_name": "greg dulcich",
+      "position": "TE",
+      "nflverse_id": "00-0037252"
+    },
+    {
+      "market_rank": 212,
+      "consensus_rank": 206.5,
+      "player_name": "Tank Bigsby",
+      "search_name": "tank bigsby",
+      "position": "RB",
+      "nflverse_id": "00-0038555"
+    },
+    {
+      "market_rank": 213,
+      "consensus_rank": 207.8,
+      "player_name": "Tank Dell",
+      "search_name": "tank dell",
+      "position": "WR",
+      "nflverse_id": "00-0038977"
+    },
+    {
+      "market_rank": 214,
+      "consensus_rank": 207.9,
+      "player_name": "Elic Ayomanor",
+      "search_name": "elic ayomanor",
+      "position": "WR",
+      "nflverse_id": "00-0040170"
+    },
+    {
+      "market_rank": 215,
+      "consensus_rank": 208.8,
+      "player_name": "Pat Freiermuth",
+      "search_name": "pat freiermuth",
+      "position": "TE",
+      "nflverse_id": "00-0036894"
+    },
+    {
+      "market_rank": 216,
+      "consensus_rank": 209.4,
+      "player_name": "Cade Otton",
+      "search_name": "cade otton",
+      "position": "TE",
+      "nflverse_id": "00-0038129"
+    },
+    {
+      "market_rank": 217,
+      "consensus_rank": 209.4,
+      "player_name": "Tory Horton",
+      "search_name": "tory horton",
+      "position": "WR",
+      "nflverse_id": "00-0040648"
+    },
+    {
+      "market_rank": 218,
+      "consensus_rank": 210.4,
+      "player_name": "Chimere Dike",
+      "search_name": "chimere dike",
+      "position": "WR",
+      "nflverse_id": "00-0040705"
+    },
+    {
+      "market_rank": 219,
+      "consensus_rank": 210.8,
+      "player_name": "David Njoku",
+      "search_name": "david njoku",
+      "position": "TE",
+      "nflverse_id": "00-0033885"
+    },
+    {
+      "market_rank": 220,
+      "consensus_rank": 212.4,
+      "player_name": "Braelon Allen",
+      "search_name": "braelon allen",
+      "position": "RB",
+      "nflverse_id": "00-0039794"
+    },
+    {
+      "market_rank": 221,
+      "consensus_rank": 212.6,
+      "player_name": "Dontayvion Wicks",
+      "search_name": "dontayvion wicks",
+      "position": "WR",
+      "nflverse_id": "00-0038393"
+    },
+    {
+      "market_rank": 222,
+      "consensus_rank": 213.4,
+      "player_name": "Isiah Pacheco",
+      "search_name": "isiah pacheco",
+      "position": "RB",
+      "nflverse_id": "00-0037197"
+    },
+    {
+      "market_rank": 223,
+      "consensus_rank": 214.0,
+      "player_name": "Kirk Cousins",
+      "search_name": "kirk cousins",
+      "position": "QB",
+      "nflverse_id": "00-0029604"
+    },
+    {
+      "market_rank": 224,
+      "consensus_rank": 217.1,
+      "player_name": "Brian Robinson",
+      "search_name": "brian robinson",
+      "position": "RB",
+      "nflverse_id": "00-0037746"
+    },
+    {
+      "market_rank": 225,
+      "consensus_rank": 218.6,
+      "player_name": "Bryce Lance",
+      "search_name": "bryce lance",
+      "position": "WR",
+      "nflverse_id": "00-0041067"
+    },
+    {
+      "market_rank": 226,
+      "consensus_rank": 219.6,
+      "player_name": "Elijah Arroyo",
+      "search_name": "elijah arroyo",
+      "position": "TE",
+      "nflverse_id": "00-0040739"
+    },
+    {
+      "market_rank": 227,
+      "consensus_rank": 221.1,
+      "player_name": "Kyle Williams",
+      "search_name": "kyle williams",
+      "position": "WR",
+      "nflverse_id": "00-0040131"
+    },
+    {
+      "market_rank": 228,
+      "consensus_rank": 221.7,
+      "player_name": "Ryan Flournoy",
+      "search_name": "ryan flournoy",
+      "position": "WR",
+      "nflverse_id": "00-0039410"
+    },
+    {
+      "market_rank": 229,
+      "consensus_rank": 222.8,
+      "player_name": "Kaleb Johnson",
+      "search_name": "kaleb johnson",
+      "position": "RB",
+      "nflverse_id": "00-0040142"
+    },
+    {
+      "market_rank": 230,
+      "consensus_rank": 223.0,
+      "player_name": "Justin Joly",
+      "search_name": "justin joly",
+      "position": "TE",
+      "nflverse_id": "00-0041077"
+    },
+    {
+      "market_rank": 231,
+      "consensus_rank": 223.6,
+      "player_name": "Alvin Kamara",
+      "search_name": "alvin kamara",
+      "position": "RB",
+      "nflverse_id": "00-0033906"
+    },
+    {
+      "market_rank": 232,
+      "consensus_rank": 223.8,
+      "player_name": "Demond Claiborne",
+      "search_name": "demond claiborne",
+      "position": "RB",
+      "nflverse_id": "00-0041104"
+    },
+    {
+      "market_rank": 233,
+      "consensus_rank": 224.8,
+      "player_name": "Calvin Ridley",
+      "search_name": "calvin ridley",
+      "position": "WR",
+      "nflverse_id": "00-0034837"
+    },
+    {
+      "market_rank": 234,
+      "consensus_rank": 225.0,
+      "player_name": "Cade Klubnik",
+      "search_name": "cade klubnik",
+      "position": "QB",
+      "nflverse_id": "00-0041056"
+    },
+    {
+      "market_rank": 235,
+      "consensus_rank": 225.0,
+      "player_name": "Drew Allar",
+      "search_name": "drew allar",
+      "position": "QB",
+      "nflverse_id": "00-0041565"
+    },
+    {
+      "market_rank": 236,
+      "consensus_rank": 225.2,
+      "player_name": "Keon Coleman",
+      "search_name": "keon coleman",
+      "position": "WR",
+      "nflverse_id": "00-0039901"
+    },
+    {
+      "market_rank": 237,
+      "consensus_rank": 225.9,
+      "player_name": "Darnell Mooney",
+      "search_name": "darnell mooney",
+      "position": "WR",
+      "nflverse_id": "00-0036309"
+    },
+    {
+      "market_rank": 238,
+      "consensus_rank": 226.7,
+      "player_name": "Malik Washington",
+      "search_name": "malik washington",
+      "position": "WR",
+      "nflverse_id": "00-0039880"
+    },
+    {
+      "market_rank": 239,
+      "consensus_rank": 227.1,
+      "player_name": "Kimani Vidal",
+      "search_name": "kimani vidal",
+      "position": "RB",
+      "nflverse_id": "00-0039391"
+    },
+    {
+      "market_rank": 240,
+      "consensus_rank": 230.6,
+      "player_name": "Tre Tucker",
+      "search_name": "tre tucker",
+      "position": "WR",
+      "nflverse_id": "00-0038563"
+    },
+    {
+      "market_rank": 241,
+      "consensus_rank": 233.0,
+      "player_name": "Michael Mayer",
+      "search_name": "michael mayer",
+      "position": "TE",
+      "nflverse_id": "00-0039066"
+    },
+    {
+      "market_rank": 242,
+      "consensus_rank": 233.1,
+      "player_name": "Kaelon Black",
+      "search_name": "kaelon black",
+      "position": "RB",
+      "nflverse_id": "00-0041052"
+    },
+    {
+      "market_rank": 243,
+      "consensus_rank": 233.1,
+      "player_name": "Theo Johnson",
+      "search_name": "theo johnson",
+      "position": "TE",
+      "nflverse_id": "00-0039847"
+    },
+    {
+      "market_rank": 244,
+      "consensus_rank": 234.1,
+      "player_name": "Rashod Bateman",
+      "search_name": "rashod bateman",
+      "position": "WR",
+      "nflverse_id": "00-0036550"
+    },
+    {
+      "market_rank": 245,
+      "consensus_rank": 235.8,
+      "player_name": "Kevin Coleman Jr.",
+      "search_name": "kevin coleman jr",
+      "position": "WR",
+      "nflverse_id": "00-0041529"
+    },
+    {
+      "market_rank": 246,
+      "consensus_rank": 237.3,
+      "player_name": "Marvin Mims Jr.",
+      "search_name": "marvin mims jr",
+      "position": "WR",
+      "nflverse_id": "00-0038976"
+    },
+    {
+      "market_rank": 247,
+      "consensus_rank": 239.2,
+      "player_name": "Brenen Thompson",
+      "search_name": "brenen thompson",
+      "position": "WR",
+      "nflverse_id": "00-0041550"
+    },
+    {
+      "market_rank": 248,
+      "consensus_rank": 239.4,
+      "player_name": "Ollie Gordon II",
+      "search_name": "ollie gordon ii",
+      "position": "RB",
+      "nflverse_id": "00-0040198"
+    },
+    {
+      "market_rank": 249,
+      "consensus_rank": 240.6,
+      "player_name": "Ray Davis",
+      "search_name": "ray davis",
+      "position": "RB",
+      "nflverse_id": "00-0039875"
+    },
+    {
+      "market_rank": 250,
+      "consensus_rank": 243.1,
+      "player_name": "MarShawn Lloyd",
+      "search_name": "marshawn lloyd",
+      "position": "RB",
+      "nflverse_id": "00-0039811"
+    },
+    {
+      "market_rank": 251,
+      "consensus_rank": 243.2,
+      "player_name": "Quinn Ewers",
+      "search_name": "quinn ewers",
+      "position": "QB",
+      "nflverse_id": "00-0040234"
+    },
+    {
+      "market_rank": 252,
+      "consensus_rank": 244.4,
+      "player_name": "Emanuel Wilson",
+      "search_name": "emanuel wilson",
+      "position": "RB",
+      "nflverse_id": "00-0038797"
+    },
+    {
+      "market_rank": 253,
+      "consensus_rank": 244.5,
+      "player_name": "Trey Benson",
+      "search_name": "trey benson",
+      "position": "RB",
+      "nflverse_id": "00-0039921"
+    },
+    {
+      "market_rank": 254,
+      "consensus_rank": 245.1,
+      "player_name": "Sean Tucker",
+      "search_name": "sean tucker",
+      "position": "RB",
+      "nflverse_id": "00-0038951"
+    },
+    {
+      "market_rank": 255,
+      "consensus_rank": 247.0,
+      "player_name": "Tyson Bagent",
+      "search_name": "tyson bagent",
+      "position": "QB",
+      "nflverse_id": "00-0038416"
+    },
+    {
+      "market_rank": 256,
+      "consensus_rank": 249.0,
+      "player_name": "Taylen Green",
+      "search_name": "taylen green",
+      "position": "QB",
+      "nflverse_id": "00-0041092"
+    },
+    {
+      "market_rank": 257,
+      "consensus_rank": 250.0,
+      "player_name": "Garrett Nussmeier",
+      "search_name": "garrett nussmeier",
+      "position": "QB",
+      "nflverse_id": "00-0040906"
+    },
+    {
+      "market_rank": 258,
+      "consensus_rank": 251.4,
+      "player_name": "Tez Johnson",
+      "search_name": "tez johnson",
+      "position": "WR",
+      "nflverse_id": "00-0040237"
+    },
+    {
+      "market_rank": 259,
+      "consensus_rank": 251.4,
+      "player_name": "Xavier Legette",
+      "search_name": "xavier legette",
+      "position": "WR",
+      "nflverse_id": "00-0039342"
+    },
+    {
+      "market_rank": 260,
+      "consensus_rank": 251.6,
+      "player_name": "Jaylen Wright",
+      "search_name": "jaylen wright",
+      "position": "RB",
+      "nflverse_id": "00-0039874"
+    },
+    {
+      "market_rank": 261,
+      "consensus_rank": 251.7,
+      "player_name": "James Conner",
+      "search_name": "james conner",
+      "position": "RB",
+      "nflverse_id": "00-0033553"
+    },
+    {
+      "market_rank": 262,
+      "consensus_rank": 253.8,
+      "player_name": "DeMario Douglas",
+      "search_name": "demario douglas",
+      "position": "WR",
+      "nflverse_id": "00-0038621"
+    },
+    {
+      "market_rank": 263,
+      "consensus_rank": 254.4,
+      "player_name": "Christian Kirk",
+      "search_name": "christian kirk",
+      "position": "WR",
+      "nflverse_id": "00-0034775"
+    },
+    {
+      "market_rank": 264,
+      "consensus_rank": 254.9,
+      "player_name": "Caleb Douglas",
+      "search_name": "caleb douglas",
+      "position": "WR",
+      "nflverse_id": "00-0041523"
+    },
+    {
+      "market_rank": 265,
+      "consensus_rank": 255.5,
+      "player_name": "Jaydon Blue",
+      "search_name": "jaydon blue",
+      "position": "RB",
+      "nflverse_id": "00-0040586"
+    },
+    {
+      "market_rank": 266,
+      "consensus_rank": 257.3,
+      "player_name": "Adam Randall",
+      "search_name": "adam randall",
+      "position": "RB",
+      "nflverse_id": "00-0040888"
+    },
+    {
+      "market_rank": 267,
+      "consensus_rank": 259.2,
+      "player_name": "Cole Kmet",
+      "search_name": "cole kmet",
+      "position": "TE",
+      "nflverse_id": "00-0036290"
+    },
+    {
+      "market_rank": 268,
+      "consensus_rank": 259.6,
+      "player_name": "Devin Neal",
+      "search_name": "devin neal",
+      "position": "RB",
+      "nflverse_id": "00-0040202"
+    },
+    {
+      "market_rank": 269,
+      "consensus_rank": 259.9,
+      "player_name": "Darnell Washington",
+      "search_name": "darnell washington",
+      "position": "TE",
+      "nflverse_id": "00-0038558"
+    },
+    {
+      "market_rank": 270,
+      "consensus_rank": 260.6,
+      "player_name": "Jordan James",
+      "search_name": "jordan james",
+      "position": "RB",
+      "nflverse_id": "00-0040177"
+    },
+    {
+      "market_rank": 271,
+      "consensus_rank": 260.8,
+      "player_name": "Jalen Royals",
+      "search_name": "jalen royals",
+      "position": "WR",
+      "nflverse_id": "00-0040646"
+    },
+    {
+      "market_rank": 272,
+      "consensus_rank": 261.0,
+      "player_name": "Jake Tonges",
+      "search_name": "jake tonges",
+      "position": "TE",
+      "nflverse_id": "00-0037112"
+    },
+    {
+      "market_rank": 273,
+      "consensus_rank": 262.1,
+      "player_name": "Cedric Tillman",
+      "search_name": "cedric tillman",
+      "position": "WR",
+      "nflverse_id": "00-0038979"
+    },
+    {
+      "market_rank": 274,
+      "consensus_rank": 262.9,
+      "player_name": "Tyquan Thornton",
+      "search_name": "tyquan thornton",
+      "position": "WR",
+      "nflverse_id": "00-0038104"
+    },
+    {
+      "market_rank": 275,
+      "consensus_rank": 263.7,
+      "player_name": "Cole Payton",
+      "search_name": "cole payton",
+      "position": "QB",
+      "nflverse_id": "00-0040891"
+    },
+    {
+      "market_rank": 276,
+      "consensus_rank": 263.8,
+      "player_name": "Colby Parkinson",
+      "search_name": "colby parkinson",
+      "position": "TE",
+      "nflverse_id": "00-0036244"
+    },
+    {
+      "market_rank": 277,
+      "consensus_rank": 263.8,
+      "player_name": "Mike Gesicki",
+      "search_name": "mike gesicki",
+      "position": "TE",
+      "nflverse_id": "00-0034829"
+    },
+    {
+      "market_rank": 278,
+      "consensus_rank": 264.5,
+      "player_name": "Cooper Kupp",
+      "search_name": "cooper kupp",
+      "position": "WR",
+      "nflverse_id": "00-0033908"
+    },
+    {
+      "market_rank": 279,
+      "consensus_rank": 265.0,
+      "player_name": "Najee Harris",
+      "search_name": "najee harris",
+      "position": "RB",
+      "nflverse_id": "00-0036893"
+    },
+    {
+      "market_rank": 280,
+      "consensus_rank": 265.2,
+      "player_name": "Eli Heidenreich",
+      "search_name": "eli heidenreich",
+      "position": "RB",
+      "nflverse_id": "00-0041490"
+    },
+    {
+      "market_rank": 281,
+      "consensus_rank": 267.6,
+      "player_name": "Seth McGowan",
+      "search_name": "seth mcgowan",
+      "position": "RB",
+      "nflverse_id": "00-0041125"
+    },
+    {
+      "market_rank": 282,
+      "consensus_rank": 267.9,
+      "player_name": "Ben Sinnott",
+      "search_name": "ben sinnott",
+      "position": "TE",
+      "nflverse_id": "00-0039912"
+    },
+    {
+      "market_rank": 283,
+      "consensus_rank": 268.6,
+      "player_name": "Isaiah Davis",
+      "search_name": "isaiah davis",
+      "position": "RB",
+      "nflverse_id": "00-0039798"
+    },
+    {
+      "market_rank": 284,
+      "consensus_rank": 270.6,
+      "player_name": "DJ Giddens",
+      "search_name": "dj giddens",
+      "position": "RB",
+      "nflverse_id": "00-0040179"
+    },
+    {
+      "market_rank": 285,
+      "consensus_rank": 271.0,
+      "player_name": "Will Howard",
+      "search_name": "will howard",
+      "position": "QB",
+      "nflverse_id": "00-0040203"
+    },
+    {
+      "market_rank": 286,
+      "consensus_rank": 271.5,
+      "player_name": "Devaughn Vele",
+      "search_name": "devaughn vele",
+      "position": "WR",
+      "nflverse_id": "00-0039424"
+    },
+    {
+      "market_rank": 287,
+      "consensus_rank": 271.9,
+      "player_name": "Evan Engram",
+      "search_name": "evan engram",
+      "position": "TE",
+      "nflverse_id": "00-0033881"
+    },
+    {
+      "market_rank": 288,
+      "consensus_rank": 273.3,
+      "player_name": "Isaiah Bond",
+      "search_name": "isaiah bond",
+      "position": "WR",
+      "nflverse_id": "00-0040782"
+    },
+    {
+      "market_rank": 289,
+      "consensus_rank": 273.6,
+      "player_name": "Sam Roush",
+      "search_name": "sam roush",
+      "position": "TE",
+      "nflverse_id": "00-0041558"
+    },
+    {
+      "market_rank": 290,
+      "consensus_rank": 274.4,
+      "player_name": "Ja'Tavion Sanders",
+      "search_name": "ja tavion sanders",
+      "position": "TE",
+      "nflverse_id": "00-0039356"
+    },
+    {
+      "market_rank": 291,
+      "consensus_rank": 275.1,
+      "player_name": "Konata Mumpfield",
+      "search_name": "konata mumpfield",
+      "position": "WR",
+      "nflverse_id": "00-0040590"
+    },
+    {
+      "market_rank": 292,
+      "consensus_rank": 275.2,
+      "player_name": "Jarquez Hunter",
+      "search_name": "jarquez hunter",
+      "position": "RB",
+      "nflverse_id": "00-0040692"
+    },
+    {
+      "market_rank": 293,
+      "consensus_rank": 275.8,
+      "player_name": "Chris Brooks",
+      "search_name": "chris brooks",
+      "position": "RB",
+      "nflverse_id": "00-0038685"
+    },
+    {
+      "market_rank": 294,
+      "consensus_rank": 277.3,
+      "player_name": "Jalen Milroe",
+      "search_name": "jalen milroe",
+      "position": "QB",
+      "nflverse_id": "00-0040673"
+    },
+    {
+      "market_rank": 295,
+      "consensus_rank": 278.0,
+      "player_name": "Jameis Winston",
+      "search_name": "jameis winston",
+      "position": "QB",
+      "nflverse_id": "00-0031503"
+    },
+    {
+      "market_rank": 296,
+      "consensus_rank": 278.0,
+      "player_name": "Marcus Mariota",
+      "search_name": "marcus mariota",
+      "position": "QB",
+      "nflverse_id": "00-0032268"
+    },
+    {
+      "market_rank": 297,
+      "consensus_rank": 279.0,
+      "player_name": "Joe Milton III",
+      "search_name": "joe milton iii",
+      "position": "QB",
+      "nflverse_id": "00-0039398"
+    },
+    {
+      "market_rank": 298,
+      "consensus_rank": 279.2,
+      "player_name": "Andrei Iosivas",
+      "search_name": "andrei iosivas",
+      "position": "WR",
+      "nflverse_id": "00-0038619"
+    },
+    {
+      "market_rank": 299,
+      "consensus_rank": 279.2,
+      "player_name": "Deion Burks",
+      "search_name": "deion burks",
+      "position": "WR",
+      "nflverse_id": "00-0041132"
+    },
+    {
+      "market_rank": 300,
+      "consensus_rank": 279.6,
+      "player_name": "Tanner Koziol",
+      "search_name": "tanner koziol",
+      "position": "TE",
+      "nflverse_id": "00-0041084"
+    },
+    {
+      "market_rank": 301,
+      "consensus_rank": 279.8,
+      "player_name": "Brashard Smith",
+      "search_name": "brashard smith",
+      "position": "RB",
+      "nflverse_id": "00-0040078"
+    },
+    {
+      "market_rank": 302,
+      "consensus_rank": 279.9,
+      "player_name": "Marlin Klein",
+      "search_name": "marlin klein",
+      "position": "TE",
+      "nflverse_id": "00-0041472"
+    },
+    {
+      "market_rank": 303,
+      "consensus_rank": 280.8,
+      "player_name": "Trevor Etienne",
+      "search_name": "trevor etienne",
+      "position": "RB",
+      "nflverse_id": "00-0040644"
+    },
+    {
+      "market_rank": 304,
+      "consensus_rank": 281.0,
+      "player_name": "Tahj Brooks",
+      "search_name": "tahj brooks",
+      "position": "RB",
+      "nflverse_id": "00-0040208"
+    },
+    {
+      "market_rank": 305,
+      "consensus_rank": 282.1,
+      "player_name": "Keenan Allen",
+      "search_name": "keenan allen",
+      "position": "WR",
+      "nflverse_id": "00-0030279"
+    },
+    {
+      "market_rank": 306,
+      "consensus_rank": 282.2,
+      "player_name": "Calvin Austin III",
+      "search_name": "calvin austin iii",
+      "position": "WR",
+      "nflverse_id": "00-0037837"
+    },
+    {
+      "market_rank": 307,
+      "consensus_rank": 283.0,
+      "player_name": "Devin Singletary",
+      "search_name": "devin singletary",
+      "position": "RB",
+      "nflverse_id": "00-0035250"
+    },
+    {
+      "market_rank": 308,
+      "consensus_rank": 283.3,
+      "player_name": "Kendre Miller",
+      "search_name": "kendre miller",
+      "position": "RB",
+      "nflverse_id": "00-0038551"
+    },
+    {
+      "market_rank": 309,
+      "consensus_rank": 283.5,
+      "player_name": "Darius Slayton",
+      "search_name": "darius slayton",
+      "position": "WR",
+      "nflverse_id": "00-0035535"
+    },
+    {
+      "market_rank": 310,
+      "consensus_rank": 284.0,
+      "player_name": "Aaron Anderson",
+      "search_name": "aaron anderson",
+      "position": "WR",
+      "nflverse_id": "00-0041491"
+    },
+    {
+      "market_rank": 311,
+      "consensus_rank": 284.2,
+      "player_name": "Malik Benson",
+      "search_name": "malik benson",
+      "position": "WR",
+      "nflverse_id": "00-0040894"
+    },
+    {
+      "market_rank": 312,
+      "consensus_rank": 286.2,
+      "player_name": "Charlie Kolar",
+      "search_name": "charlie kolar",
+      "position": "TE",
+      "nflverse_id": "00-0038046"
+    },
+    {
+      "market_rank": 313,
+      "consensus_rank": 287.3,
+      "player_name": "Jalen Tolbert",
+      "search_name": "jalen tolbert",
+      "position": "WR",
+      "nflverse_id": "00-0037666"
+    },
+    {
+      "market_rank": 314,
+      "consensus_rank": 287.4,
+      "player_name": "Jam Miller",
+      "search_name": "jam miller",
+      "position": "RB",
+      "nflverse_id": "00-0041129"
+    },
+    {
+      "market_rank": 315,
+      "consensus_rank": 287.4,
+      "player_name": "Will Shipley",
+      "search_name": "will shipley",
+      "position": "RB",
+      "nflverse_id": "00-0039746"
+    },
+    {
+      "market_rank": 316,
+      "consensus_rank": 288.9,
+      "player_name": "LeQuint Allen Jr.",
+      "search_name": "lequint allen jr",
+      "position": "RB",
+      "nflverse_id": "00-0040238"
+    },
+    {
+      "market_rank": 317,
+      "consensus_rank": 289.4,
+      "player_name": "Jaylin Lane",
+      "search_name": "jaylin lane",
+      "position": "WR",
+      "nflverse_id": "00-0040164"
+    },
+    {
+      "market_rank": 318,
+      "consensus_rank": 289.6,
+      "player_name": "Savion Williams",
+      "search_name": "savion williams",
+      "position": "WR",
+      "nflverse_id": "00-0040009"
+    },
+    {
+      "market_rank": 319,
+      "consensus_rank": 290.4,
+      "player_name": "Isaac Guerendo",
+      "search_name": "isaac guerendo",
+      "position": "RB",
+      "nflverse_id": "00-0039363"
+    },
+    {
+      "market_rank": 320,
+      "consensus_rank": 291.0,
+      "player_name": "Jerome Ford",
+      "search_name": "jerome ford",
+      "position": "RB",
+      "nflverse_id": "00-0037267"
+    },
+    {
+      "market_rank": 321,
+      "consensus_rank": 291.0,
+      "player_name": "Jonnu Smith",
+      "search_name": "jonnu smith",
+      "position": "TE",
+      "nflverse_id": "00-0033858"
+    },
+    {
+      "market_rank": 322,
+      "consensus_rank": 291.3,
+      "player_name": "Tutu Atwell",
+      "search_name": "tutu atwell",
+      "position": "WR",
+      "nflverse_id": "00-0036849"
+    },
+    {
+      "market_rank": 323,
+      "consensus_rank": 291.8,
+      "player_name": "CJ Daniels",
+      "search_name": "cj daniels",
+      "position": "WR",
+      "nflverse_id": "00-0041399"
+    },
+    {
+      "market_rank": 324,
+      "consensus_rank": 292.5,
+      "player_name": "George Holani",
+      "search_name": "george holani",
+      "position": "RB",
+      "nflverse_id": "00-0039299"
+    },
+    {
+      "market_rank": 325,
+      "consensus_rank": 293.0,
+      "player_name": "Justice Hill",
+      "search_name": "justice hill",
+      "position": "RB",
+      "nflverse_id": "00-0034975"
+    },
+    {
+      "market_rank": 326,
+      "consensus_rank": 293.1,
+      "player_name": "Jack Endries",
+      "search_name": "jack endries",
+      "position": "TE",
+      "nflverse_id": "00-0041116"
+    },
+    {
+      "market_rank": 327,
+      "consensus_rank": 293.3,
+      "player_name": "Cyrus Allen",
+      "search_name": "cyrus allen",
+      "position": "WR",
+      "nflverse_id": "00-0040890"
+    },
+    {
+      "market_rank": 328,
+      "consensus_rank": 293.8,
+      "player_name": "Ja'Lynn Polk",
+      "search_name": "ja lynn polk",
+      "position": "WR",
+      "nflverse_id": "00-0039907"
+    },
+    {
+      "market_rank": 329,
+      "consensus_rank": 293.8,
+      "player_name": "Joe Mixon",
+      "search_name": "joe mixon",
+      "position": "RB",
+      "nflverse_id": "00-0033897"
+    },
+    {
+      "market_rank": 330,
+      "consensus_rank": 293.9,
+      "player_name": "Luke McCaffrey",
+      "search_name": "luke mccaffrey",
+      "position": "WR",
+      "nflverse_id": "00-0039355"
+    },
+    {
+      "market_rank": 331,
+      "consensus_rank": 295.0,
+      "player_name": "Jahan Dotson",
+      "search_name": "jahan dotson",
+      "position": "WR",
+      "nflverse_id": "00-0037741"
+    },
+    {
+      "market_rank": 332,
+      "consensus_rank": 296.8,
+      "player_name": "Dont'e Thornton Jr.",
+      "search_name": "dont e thornton jr",
+      "position": "WR",
+      "nflverse_id": "00-0040581"
+    },
+    {
+      "market_rank": 333,
+      "consensus_rank": 298.6,
+      "player_name": "J'Mari Taylor",
+      "search_name": "j mari taylor",
+      "position": "RB",
+      "nflverse_id": "00-0041217"
+    },
+    {
+      "market_rank": 334,
+      "consensus_rank": 300.0,
+      "player_name": "Dawson Knox",
+      "search_name": "dawson knox",
+      "position": "TE",
+      "nflverse_id": "00-0035689"
+    },
+    {
+      "market_rank": 335,
+      "consensus_rank": 300.7,
+      "player_name": "Darren Waller",
+      "search_name": "darren waller",
+      "position": "TE",
+      "nflverse_id": "00-0031610"
+    },
+    {
+      "market_rank": 336,
+      "consensus_rank": 301.0,
+      "player_name": "Zavion Thomas",
+      "search_name": "zavion thomas",
+      "position": "WR",
+      "nflverse_id": "00-0041051"
+    },
+    {
+      "market_rank": 337,
+      "consensus_rank": 301.2,
+      "player_name": "Samaje Perine",
+      "search_name": "samaje perine",
+      "position": "RB",
+      "nflverse_id": "00-0033526"
+    },
+    {
+      "market_rank": 338,
+      "consensus_rank": 301.3,
+      "player_name": "Audric Estimé",
+      "search_name": "audric estime",
+      "position": "RB",
+      "nflverse_id": "00-0039373"
+    },
+    {
+      "market_rank": 339,
+      "consensus_rank": 303.4,
+      "player_name": "Robert Henry Jr.",
+      "search_name": "robert henry jr",
+      "position": "RB",
+      "nflverse_id": "00-0041178"
+    },
+    {
+      "market_rank": 340,
+      "consensus_rank": 304.2,
+      "player_name": "Roman Hemby",
+      "search_name": "roman hemby",
+      "position": "RB",
+      "nflverse_id": "00-0040998"
+    },
+    {
+      "market_rank": 341,
+      "consensus_rank": 304.7,
+      "player_name": "Devontez Walker",
+      "search_name": "devontez walker",
+      "position": "WR",
+      "nflverse_id": "00-0039792"
+    },
+    {
+      "market_rank": 342,
+      "consensus_rank": 305.0,
+      "player_name": "Malik Davis",
+      "search_name": "malik davis",
+      "position": "RB",
+      "nflverse_id": "00-0037563"
+    },
+    {
+      "market_rank": 343,
+      "consensus_rank": 305.7,
+      "player_name": "Kendrick Law",
+      "search_name": "kendrick law",
+      "position": "WR",
+      "nflverse_id": "LAW090280"
+    },
+    {
+      "market_rank": 344,
+      "consensus_rank": 306.5,
+      "player_name": "Spencer Rattler",
+      "search_name": "spencer rattler",
+      "position": "QB",
+      "nflverse_id": "00-0039376"
+    },
+    {
+      "market_rank": 345,
+      "consensus_rank": 307.4,
+      "player_name": "Michael Trigg",
+      "search_name": "michael trigg",
+      "position": "TE",
+      "nflverse_id": "00-0040939"
+    },
+    {
+      "market_rank": 346,
+      "consensus_rank": 307.5,
+      "player_name": "KaVontae Turpin",
+      "search_name": "kavontae turpin",
+      "position": "WR",
+      "nflverse_id": "00-0037801"
+    },
+    {
+      "market_rank": 347,
+      "consensus_rank": 309.8,
+      "player_name": "Noah Fant",
+      "search_name": "noah fant",
+      "position": "TE",
+      "nflverse_id": "00-0035644"
+    },
+    {
+      "market_rank": 348,
+      "consensus_rank": 310.6,
+      "player_name": "Josh Cameron",
+      "search_name": "josh cameron",
+      "position": "WR",
+      "nflverse_id": "00-0041100"
+    },
+    {
+      "market_rank": 349,
+      "consensus_rank": 311.2,
+      "player_name": "Emari Demercado",
+      "search_name": "emari demercado",
+      "position": "RB",
+      "nflverse_id": "00-0038705"
+    },
+    {
+      "market_rank": 350,
+      "consensus_rank": 311.4,
+      "player_name": "Noah Gray",
+      "search_name": "noah gray",
+      "position": "TE",
+      "nflverse_id": "00-0036637"
+    },
+    {
+      "market_rank": 351,
+      "consensus_rank": 312.0,
+      "player_name": "Elijah Moore",
+      "search_name": "elijah moore",
+      "position": "WR",
+      "nflverse_id": "00-0036980"
+    },
+    {
+      "market_rank": 352,
+      "consensus_rank": 312.8,
+      "player_name": "Mack Hollins",
+      "search_name": "mack hollins",
+      "position": "WR",
+      "nflverse_id": "00-0033555"
+    },
+    {
+      "market_rank": 353,
+      "consensus_rank": 313.0,
+      "player_name": "Tyler Conklin",
+      "search_name": "tyler conklin",
+      "position": "TE",
+      "nflverse_id": "00-0034270"
+    },
+    {
+      "market_rank": 354,
+      "consensus_rank": 313.3,
+      "player_name": "Jawhar Jordan",
+      "search_name": "jawhar jordan",
+      "position": "RB",
+      "nflverse_id": "00-0039405"
+    },
+    {
+      "market_rank": 355,
+      "consensus_rank": 314.0,
+      "player_name": "John Metchie III",
+      "search_name": "john metchie iii",
+      "position": "WR",
+      "nflverse_id": "00-0037614"
+    },
+    {
+      "market_rank": 356,
+      "consensus_rank": 314.4,
+      "player_name": "Tyler Higbee",
+      "search_name": "tyler higbee",
+      "position": "TE",
+      "nflverse_id": "00-0033110"
+    },
+    {
+      "market_rank": 357,
+      "consensus_rank": 315.7,
+      "player_name": "Erick All",
+      "search_name": "erick all",
+      "position": "TE",
+      "nflverse_id": "00-0039814"
+    },
+    {
+      "market_rank": 358,
+      "consensus_rank": 317.2,
+      "player_name": "Mitchell Evans",
+      "search_name": "mitchell evans",
+      "position": "TE",
+      "nflverse_id": "00-0040187"
+    },
+    {
+      "market_rank": 359,
+      "consensus_rank": 317.3,
+      "player_name": "Jordan Whittington",
+      "search_name": "jordan whittington",
+      "position": "WR",
+      "nflverse_id": "00-0039751"
+    },
+    {
+      "market_rank": 360,
+      "consensus_rank": 317.8,
+      "player_name": "KeAndre Lambert-Smith",
+      "search_name": "keandre lambert smith",
+      "position": "WR",
+      "nflverse_id": "00-0040184"
+    },
+    {
+      "market_rank": 361,
+      "consensus_rank": 318.6,
+      "player_name": "Jaleel McLaughlin",
+      "search_name": "jaleel mclaughlin",
+      "position": "RB",
+      "nflverse_id": "00-0038794"
+    },
+    {
+      "market_rank": 362,
+      "consensus_rank": 320.2,
+      "player_name": "Luke Musgrave",
+      "search_name": "luke musgrave",
+      "position": "TE",
+      "nflverse_id": "00-0039144"
+    },
+    {
+      "market_rank": 363,
+      "consensus_rank": 320.3,
+      "player_name": "Jordan Watkins",
+      "search_name": "jordan watkins",
+      "position": "WR",
+      "nflverse_id": "00-0040172"
+    },
+    {
+      "market_rank": 364,
+      "consensus_rank": 320.4,
+      "player_name": "Barion Brown",
+      "search_name": "barion brown",
+      "position": "WR",
+      "nflverse_id": "00-0041099"
+    },
+    {
+      "market_rank": 365,
+      "consensus_rank": 320.5,
+      "player_name": "Jalin Hyatt",
+      "search_name": "jalin hyatt",
+      "position": "WR",
+      "nflverse_id": "00-0038938"
+    },
+    {
+      "market_rank": 366,
+      "consensus_rank": 322.0,
+      "player_name": "Colbie Young",
+      "search_name": "colbie young",
+      "position": "WR",
+      "nflverse_id": "00-0041069"
+    },
+    {
+      "market_rank": 367,
+      "consensus_rank": 322.2,
+      "player_name": "Ty Johnson",
+      "search_name": "ty johnson",
+      "position": "RB",
+      "nflverse_id": "00-0035537"
+    },
+    {
+      "market_rank": 368,
+      "consensus_rank": 323.5,
+      "player_name": "Zach Ertz",
+      "search_name": "zach ertz",
+      "position": "TE",
+      "nflverse_id": "00-0030061"
+    },
+    {
+      "market_rank": 369,
+      "consensus_rank": 324.0,
+      "player_name": "Elijah Higgins",
+      "search_name": "elijah higgins",
+      "position": "TE",
+      "nflverse_id": "00-0039041"
+    },
+    {
+      "market_rank": 370,
+      "consensus_rank": 324.5,
+      "player_name": "Curtis Samuel",
+      "search_name": "curtis samuel",
+      "position": "WR",
+      "nflverse_id": "00-0033282"
+    },
+    {
+      "market_rank": 371,
+      "consensus_rank": 324.7,
+      "player_name": "Eric Rivers Jr.",
+      "search_name": "eric rivers jr",
+      "position": "WR",
+      "nflverse_id": "00-0041257"
+    },
+    {
+      "market_rank": 372,
+      "consensus_rank": 325.5,
+      "player_name": "Trey Palmer",
+      "search_name": "trey palmer",
+      "position": "WR",
+      "nflverse_id": "00-0039052"
+    },
+    {
+      "market_rank": 373,
+      "consensus_rank": 327.8,
+      "player_name": "Nate Boerkircher",
+      "search_name": "nate boerkircher",
+      "position": "TE",
+      "nflverse_id": "00-0041503"
+    },
+    {
+      "market_rank": 374,
+      "consensus_rank": 328.4,
+      "player_name": "Jeff Caldwell",
+      "search_name": "jeff caldwell",
+      "position": "WR",
+      "nflverse_id": "00-0040953"
+    },
+    {
+      "market_rank": 375,
+      "consensus_rank": 330.0,
+      "player_name": "Dyami Brown",
+      "search_name": "dyami brown",
+      "position": "WR",
+      "nflverse_id": "00-0036626"
+    },
+    {
+      "market_rank": 376,
+      "consensus_rank": 331.5,
+      "player_name": "Tai Felton",
+      "search_name": "tai felton",
+      "position": "WR",
+      "nflverse_id": "00-0040154"
+    },
+    {
+      "market_rank": 377,
+      "consensus_rank": 331.8,
+      "player_name": "Joe Royer",
+      "search_name": "joe royer",
+      "position": "TE",
+      "nflverse_id": "00-0041087"
+    },
+    {
+      "market_rank": 378,
+      "consensus_rank": 333.3,
+      "player_name": "Will Kacmarek",
+      "search_name": "will kacmarek",
+      "position": "TE",
+      "nflverse_id": "00-0041524"
+    },
+    {
+      "market_rank": 379,
+      "consensus_rank": 333.8,
+      "player_name": "Dean Connors",
+      "search_name": "dean connors",
+      "position": "RB",
+      "nflverse_id": "00-0041415"
+    },
+    {
+      "market_rank": 380,
+      "consensus_rank": 334.8,
+      "player_name": "Tyren Montgomery",
+      "search_name": "tyren montgomery",
+      "position": "WR",
+      "nflverse_id": "00-0040919"
+    },
+    {
+      "market_rank": 381,
+      "consensus_rank": 335.0,
+      "player_name": "Raheim Sanders",
+      "search_name": "raheim sanders",
+      "position": "RB",
+      "nflverse_id": "00-0040466"
+    },
+    {
+      "market_rank": 382,
+      "consensus_rank": 336.1,
+      "player_name": "Jared Wiley",
+      "search_name": "jared wiley",
+      "position": "TE",
+      "nflverse_id": "00-0039824"
+    },
+    {
+      "market_rank": 383,
+      "consensus_rank": 337.0,
+      "player_name": "Jaren Kanak",
+      "search_name": "jaren kanak",
+      "position": "TE",
+      "nflverse_id": "00-0040901"
+    },
+    {
+      "market_rank": 384,
+      "consensus_rank": 337.0,
+      "player_name": "Kendrick Bourne",
+      "search_name": "kendrick bourne",
+      "position": "WR",
+      "nflverse_id": "00-0033307"
+    },
+    {
+      "market_rank": 385,
+      "consensus_rank": 337.3,
+      "player_name": "Carsen Ryan",
+      "search_name": "carsen ryan",
+      "position": "TE",
+      "nflverse_id": "00-0041131"
+    },
+    {
+      "market_rank": 386,
+      "consensus_rank": 337.6,
+      "player_name": "Bam Knight",
+      "search_name": "bam knight",
+      "position": "RB",
+      "nflverse_id": "00-0037157"
+    },
+    {
+      "market_rank": 387,
+      "consensus_rank": 337.6,
+      "player_name": "Cade Stover",
+      "search_name": "cade stover",
+      "position": "TE",
+      "nflverse_id": "00-0039359"
+    },
+    {
+      "market_rank": 388,
+      "consensus_rank": 338.0,
+      "player_name": "Roschon Johnson",
+      "search_name": "roschon johnson",
+      "position": "RB",
+      "nflverse_id": "00-0039021"
+    },
+    {
+      "market_rank": 389,
+      "consensus_rank": 338.7,
+      "player_name": "Adam Trautman",
+      "search_name": "adam trautman",
+      "position": "TE",
+      "nflverse_id": "00-0036422"
+    },
+    {
+      "market_rank": 390,
+      "consensus_rank": 339.6,
+      "player_name": "Jahdae Walker",
+      "search_name": "jahdae walker",
+      "position": "WR",
+      "nflverse_id": "00-0040277"
+    },
+    {
+      "market_rank": 391,
+      "consensus_rank": 339.7,
+      "player_name": "Josh Cuevas",
+      "search_name": "josh cuevas",
+      "position": "TE",
+      "nflverse_id": "00-0040887"
+    },
+    {
+      "market_rank": 392,
+      "consensus_rank": 339.8,
+      "player_name": "Taysom Hill",
+      "search_name": "taysom hill",
+      "position": "TE",
+      "nflverse_id": "00-0033357"
+    },
+    {
+      "market_rank": 393,
+      "consensus_rank": 340.0,
+      "player_name": "Nick Chubb",
+      "search_name": "nick chubb",
+      "position": "RB",
+      "nflverse_id": "00-0034791"
+    },
+    {
+      "market_rank": 394,
+      "consensus_rank": 340.2,
+      "player_name": "Dallen Bentley",
+      "search_name": "dallen bentley",
+      "position": "TE",
+      "nflverse_id": "00-0041133"
+    },
+    {
+      "market_rank": 395,
+      "consensus_rank": 340.4,
+      "player_name": "Kalif Raymond",
+      "search_name": "kalif raymond",
+      "position": "WR",
+      "nflverse_id": "00-0032464"
+    },
+    {
+      "market_rank": 396,
+      "consensus_rank": 340.6,
+      "player_name": "Dae'Quan Wright",
+      "search_name": "dae quan wright",
+      "position": "TE",
+      "nflverse_id": "00-0040927"
+    },
+    {
+      "market_rank": 397,
+      "consensus_rank": 341.0,
+      "player_name": "Antonio Gibson",
+      "search_name": "antonio gibson",
+      "position": "RB",
+      "nflverse_id": "00-0036328"
+    },
+    {
+      "market_rank": 398,
+      "consensus_rank": 341.0,
+      "player_name": "Rasheen Ali",
+      "search_name": "rasheen ali",
+      "position": "RB",
+      "nflverse_id": "00-0039796"
+    },
+    {
+      "market_rank": 399,
+      "consensus_rank": 341.3,
+      "player_name": "Austin Hooper",
+      "search_name": "austin hooper",
+      "position": "TE",
+      "nflverse_id": "00-0032392"
+    },
+    {
+      "market_rank": 400,
+      "consensus_rank": 341.7,
+      "player_name": "Reggie Virgil",
+      "search_name": "reggie virgil",
+      "position": "WR",
+      "nflverse_id": "00-0041070"
+    },
+    {
+      "market_rank": 401,
+      "consensus_rank": 341.9,
+      "player_name": "Olamide Zaccheaus",
+      "search_name": "olamide zaccheaus",
+      "position": "WR",
+      "nflverse_id": "00-0035208"
+    },
+    {
+      "market_rank": 402,
+      "consensus_rank": 342.2,
+      "player_name": "Phil Mafah",
+      "search_name": "phil mafah",
+      "position": "RB",
+      "nflverse_id": "00-0040021"
+    },
+    {
+      "market_rank": 403,
+      "consensus_rank": 342.6,
+      "player_name": "Jaydn Ott",
+      "search_name": "jaydn ott",
+      "position": "RB",
+      "nflverse_id": "00-0040959"
+    },
+    {
+      "market_rank": 404,
+      "consensus_rank": 343.0,
+      "player_name": "Seydou Traore",
+      "search_name": "seydou traore",
+      "position": "TE",
+      "nflverse_id": "TRA291459"
+    },
+    {
+      "market_rank": 405,
+      "consensus_rank": 343.6,
+      "player_name": "Austin Ekeler",
+      "search_name": "austin ekeler",
+      "position": "RB",
+      "nflverse_id": "00-0033699"
+    },
+    {
+      "market_rank": 406,
+      "consensus_rank": 343.6,
+      "player_name": "Chase Roberts",
+      "search_name": "chase roberts",
+      "position": "WR",
+      "nflverse_id": "00-0041004"
+    },
+    {
+      "market_rank": 407,
+      "consensus_rank": 343.7,
+      "player_name": "Kaden Wetjen",
+      "search_name": "kaden wetjen",
+      "position": "WR",
+      "nflverse_id": "00-0041397"
+    },
+    {
+      "market_rank": 408,
+      "consensus_rank": 343.8,
+      "player_name": "Jake Bobo",
+      "search_name": "jake bobo",
+      "position": "WR",
+      "nflverse_id": "00-0038752"
+    },
+    {
+      "market_rank": 409,
+      "consensus_rank": 343.9,
+      "player_name": "Xavier Hutchinson",
+      "search_name": "xavier hutchinson",
+      "position": "WR",
+      "nflverse_id": "00-0038618"
+    },
+    {
+      "market_rank": 410,
+      "consensus_rank": 344.3,
+      "player_name": "Daniel Bellinger",
+      "search_name": "daniel bellinger",
+      "position": "TE",
+      "nflverse_id": "00-0038115"
+    },
+    {
+      "market_rank": 411,
+      "consensus_rank": 344.4,
+      "player_name": "Jimmy Horn Jr.",
+      "search_name": "jimmy horn jr",
+      "position": "WR",
+      "nflverse_id": "00-0040218"
+    },
+    {
+      "market_rank": 412,
+      "consensus_rank": 344.5,
+      "player_name": "Ty Chandler",
+      "search_name": "ty chandler",
+      "position": "RB",
+      "nflverse_id": "00-0037276"
+    },
+    {
+      "market_rank": 413,
+      "consensus_rank": 344.8,
+      "player_name": "Nick Westbrook-Ikhine",
+      "search_name": "nick westbrook ikhine",
+      "position": "WR",
+      "nflverse_id": "00-0036182"
+    },
+    {
+      "market_rank": 414,
+      "consensus_rank": 345.0,
+      "player_name": "Damien Martinez",
+      "search_name": "damien martinez",
+      "position": "RB",
+      "nflverse_id": "00-0040651"
+    },
+    {
+      "market_rank": 415,
+      "consensus_rank": 345.0,
+      "player_name": "Treylon Burks",
+      "search_name": "treylon burks",
+      "position": "WR",
+      "nflverse_id": "00-0037742"
+    },
+    {
+      "market_rank": 416,
+      "consensus_rank": 345.1,
+      "player_name": "Thomas Fidone II",
+      "search_name": "thomas fidone ii",
+      "position": "TE",
+      "nflverse_id": "00-0040225"
+    },
+    {
+      "market_rank": 417,
+      "consensus_rank": 345.6,
+      "player_name": "Tommy Tremble",
+      "search_name": "tommy tremble",
+      "position": "TE",
+      "nflverse_id": "00-0037005"
+    },
+    {
+      "market_rank": 418,
+      "consensus_rank": 346.0,
+      "player_name": "Jeremy McNichols",
+      "search_name": "jeremy mcnichols",
+      "position": "RB",
+      "nflverse_id": "00-0033955"
+    },
+    {
+      "market_rank": 419,
+      "consensus_rank": 346.0,
+      "player_name": "Kareem Hunt",
+      "search_name": "kareem hunt",
+      "position": "RB",
+      "nflverse_id": "00-0033923"
+    },
+    {
+      "market_rank": 420,
+      "consensus_rank": 346.8,
+      "player_name": "Grant Calcaterra",
+      "search_name": "grant calcaterra",
+      "position": "TE",
+      "nflverse_id": "00-0037086"
+    },
+    {
+      "market_rank": 421,
+      "consensus_rank": 347.1,
+      "player_name": "Jeremy Ruckert",
+      "search_name": "jeremy ruckert",
+      "position": "TE",
+      "nflverse_id": "00-0037805"
+    },
+    {
+      "market_rank": 422,
+      "consensus_rank": 347.1,
+      "player_name": "Noah Whittington",
+      "search_name": "noah whittington",
+      "position": "RB",
+      "nflverse_id": "00-0041312"
+    },
+    {
+      "market_rank": 423,
+      "consensus_rank": 347.3,
+      "player_name": "Isaiah Hodgins",
+      "search_name": "isaiah hodgins",
+      "position": "WR",
+      "nflverse_id": "00-0036165"
+    },
+    {
+      "market_rank": 424,
+      "consensus_rank": 347.6,
+      "player_name": "RJ Maryland",
+      "search_name": "rj maryland",
+      "position": "TE",
+      "nflverse_id": "00-0040945"
+    },
+    {
+      "market_rank": 425,
+      "consensus_rank": 347.7,
+      "player_name": "Josh Oliver",
+      "search_name": "josh oliver",
+      "position": "TE",
+      "nflverse_id": "00-0035249"
+    },
+    {
+      "market_rank": 426,
+      "consensus_rank": 347.8,
+      "player_name": "Foster Moreau",
+      "search_name": "foster moreau",
+      "position": "TE",
+      "nflverse_id": "00-0034981"
+    },
+    {
+      "market_rank": 427,
+      "consensus_rank": 347.8,
+      "player_name": "Miles Sanders",
+      "search_name": "miles sanders",
+      "position": "RB",
+      "nflverse_id": "00-0035243"
+    },
+    {
+      "market_rank": 428,
+      "consensus_rank": 348.1,
+      "player_name": "Chip Trayanum",
+      "search_name": "chip trayanum",
+      "position": "RB",
+      "nflverse_id": "00-0041239"
+    },
+    {
+      "market_rank": 429,
+      "consensus_rank": 348.4,
+      "player_name": "Efton Chism III",
+      "search_name": "efton chism iii",
+      "position": "WR",
+      "nflverse_id": "00-0040563"
+    },
+    {
+      "market_rank": 430,
+      "consensus_rank": 348.5,
+      "player_name": "Dameon Pierce",
+      "search_name": "dameon pierce",
+      "position": "RB",
+      "nflverse_id": "00-0037258"
+    },
+    {
+      "market_rank": 431,
+      "consensus_rank": 348.6,
+      "player_name": "Brevin Jordan",
+      "search_name": "brevin jordan",
+      "position": "TE",
+      "nflverse_id": "00-0036556"
+    },
+    {
+      "market_rank": 432,
+      "consensus_rank": 348.6,
+      "player_name": "Gabe Davis",
+      "search_name": "gabe davis",
+      "position": "WR",
+      "nflverse_id": "00-0036196"
+    },
+    {
+      "market_rank": 433,
+      "consensus_rank": 348.6,
+      "player_name": "Michael Carter",
+      "search_name": "michael carter",
+      "position": "RB",
+      "nflverse_id": "00-0036924"
+    },
+    {
+      "market_rank": 434,
+      "consensus_rank": 349.0,
+      "player_name": "Luke Schoonmaker",
+      "search_name": "luke schoonmaker",
+      "position": "TE",
+      "nflverse_id": "00-0038547"
+    },
+    {
+      "market_rank": 435,
+      "consensus_rank": 349.0,
+      "player_name": "Tyler Badie",
+      "search_name": "tyler badie",
+      "position": "RB",
+      "nflverse_id": "00-0037085"
+    },
+    {
+      "market_rank": 436,
+      "consensus_rank": 349.8,
+      "player_name": "John Michael Gyllenborg",
+      "search_name": "john michael gyllenborg",
+      "position": "TE",
+      "nflverse_id": "00-0040955"
+    },
+    {
+      "market_rank": 437,
+      "consensus_rank": 350.3,
+      "player_name": "Roman Wilson",
+      "search_name": "roman wilson",
+      "position": "WR",
+      "nflverse_id": "00-0039739"
+    },
+    {
+      "market_rank": 438,
+      "consensus_rank": 350.6,
+      "player_name": "DeAndre Hopkins",
+      "search_name": "deandre hopkins",
+      "position": "WR",
+      "nflverse_id": "00-0030564"
+    },
+    {
+      "market_rank": 439,
+      "consensus_rank": 350.6,
+      "player_name": "Raheem Mostert",
+      "search_name": "raheem mostert",
+      "position": "RB",
+      "nflverse_id": "00-0031687"
+    },
+    {
+      "market_rank": 440,
+      "consensus_rank": 350.7,
+      "player_name": "Tanner McKee",
+      "search_name": "tanner mckee",
+      "position": "QB",
+      "nflverse_id": "00-0038400"
+    },
+    {
+      "market_rank": 441,
+      "consensus_rank": 351.1,
+      "player_name": "J. Michael Sturdivant",
+      "search_name": "j michael sturdivant",
+      "position": "WR",
+      "nflverse_id": "00-0040948"
+    },
+    {
+      "market_rank": 442,
+      "consensus_rank": 351.3,
+      "player_name": "CJ Donaldson",
+      "search_name": "cj donaldson",
+      "position": "RB",
+      "nflverse_id": "00-0041326"
+    },
+    {
+      "market_rank": 443,
+      "consensus_rank": 351.3,
+      "player_name": "Theo Wease Jr.",
+      "search_name": "theo wease jr",
+      "position": "WR",
+      "nflverse_id": "00-0040311"
+    },
+    {
+      "market_rank": 444,
+      "consensus_rank": 351.3,
+      "player_name": "Trey Lance",
+      "search_name": "trey lance",
+      "position": "QB",
+      "nflverse_id": "00-0037012"
+    },
+    {
+      "market_rank": 445,
+      "consensus_rank": 351.6,
+      "player_name": "Hunter Long",
+      "search_name": "hunter long",
+      "position": "TE",
+      "nflverse_id": "00-0037004"
+    },
+    {
+      "market_rank": 446,
+      "consensus_rank": 352.1,
+      "player_name": "Davis Mills",
+      "search_name": "davis mills",
+      "position": "QB",
+      "nflverse_id": "00-0036898"
+    },
+    {
+      "market_rank": 447,
+      "consensus_rank": 352.4,
+      "player_name": "Jackson Hawes",
+      "search_name": "jackson hawes",
+      "position": "TE",
+      "nflverse_id": "00-0040194"
+    },
+    {
+      "market_rank": 448,
+      "consensus_rank": 352.5,
+      "player_name": "Riley Leonard",
+      "search_name": "riley leonard",
+      "position": "QB",
+      "nflverse_id": "00-0040206"
+    },
+    {
+      "market_rank": 449,
+      "consensus_rank": 352.9,
+      "player_name": "Demarcus Robinson",
+      "search_name": "demarcus robinson",
+      "position": "WR",
+      "nflverse_id": "00-0032775"
+    },
+    {
+      "market_rank": 450,
+      "consensus_rank": 352.9,
+      "player_name": "Dillon Gabriel",
+      "search_name": "dillon gabriel",
+      "position": "QB",
+      "nflverse_id": "00-0040704"
+    },
+    {
+      "market_rank": 451,
+      "consensus_rank": 353.0,
+      "player_name": "Jacob Cowing",
+      "search_name": "jacob cowing",
+      "position": "WR",
+      "nflverse_id": "00-0039365"
+    },
+    {
+      "market_rank": 452,
+      "consensus_rank": 353.0,
+      "player_name": "Joe Flacco",
+      "search_name": "joe flacco",
+      "position": "QB",
+      "nflverse_id": "00-0026158"
+    },
+    {
+      "market_rank": 453,
+      "consensus_rank": 353.4,
+      "player_name": "Dylan Laube",
+      "search_name": "dylan laube",
+      "position": "RB",
+      "nflverse_id": "00-0039407"
+    },
+    {
+      "market_rank": 454,
+      "consensus_rank": 354.0,
+      "player_name": "Stone Smartt",
+      "search_name": "stone smartt",
+      "position": "TE",
+      "nflverse_id": "00-0037475"
+    },
+    {
+      "market_rank": 455,
+      "consensus_rank": 354.0,
+      "player_name": "Will Levis",
+      "search_name": "will levis",
+      "position": "QB",
+      "nflverse_id": "00-0039152"
+    },
+    {
+      "market_rank": 456,
+      "consensus_rank": 354.6,
+      "player_name": "Elijah Mitchell",
+      "search_name": "elijah mitchell",
+      "position": "RB",
+      "nflverse_id": "00-0036567"
+    },
+    {
+      "market_rank": 457,
+      "consensus_rank": 354.8,
+      "player_name": "Khalil Herbert",
+      "search_name": "khalil herbert",
+      "position": "RB",
+      "nflverse_id": "00-0036906"
+    },
+    {
+      "market_rank": 458,
+      "consensus_rank": 354.9,
+      "player_name": "Greg Dortch",
+      "search_name": "greg dortch",
+      "position": "WR",
+      "nflverse_id": "00-0035500"
+    },
+    {
+      "market_rank": 459,
+      "consensus_rank": 355.0,
+      "player_name": "Gardner Minshew",
+      "search_name": "gardner minshew",
+      "position": "QB",
+      "nflverse_id": "00-0035289"
+    },
+    {
+      "market_rank": 460,
+      "consensus_rank": 356.2,
+      "player_name": "Van Jefferson",
+      "search_name": "van jefferson",
+      "position": "WR",
+      "nflverse_id": "00-0036415"
+    },
+    {
+      "market_rank": 461,
+      "consensus_rank": 356.8,
+      "player_name": "Hassan Haskins",
+      "search_name": "hassan haskins",
+      "position": "RB",
+      "nflverse_id": "00-0037617"
+    },
+    {
+      "market_rank": 462,
+      "consensus_rank": 357.1,
+      "player_name": "Chris Hilton Jr.",
+      "search_name": "chris hilton jr",
+      "position": "WR",
+      "nflverse_id": "00-0041179"
+    },
+    {
+      "market_rank": 463,
+      "consensus_rank": 357.3,
+      "player_name": "Jaheim Bell",
+      "search_name": "jaheim bell",
+      "position": "TE",
+      "nflverse_id": "00-0039420"
+    },
+    {
+      "market_rank": 464,
+      "consensus_rank": 357.3,
+      "player_name": "Zamir White",
+      "search_name": "zamir white",
+      "position": "RB",
+      "nflverse_id": "00-0038040"
+    },
+    {
+      "market_rank": 465,
+      "consensus_rank": 357.6,
+      "player_name": "Harrison Bryant",
+      "search_name": "harrison bryant",
+      "position": "TE",
+      "nflverse_id": "00-0036232"
+    },
+    {
+      "market_rank": 466,
+      "consensus_rank": 358.1,
+      "player_name": "AJ Dillon",
+      "search_name": "aj dillon",
+      "position": "RB",
+      "nflverse_id": "00-0036265"
+    },
+    {
+      "market_rank": 467,
+      "consensus_rank": 358.2,
+      "player_name": "Malachi Corley",
+      "search_name": "malachi corley",
+      "position": "WR",
+      "nflverse_id": "00-0039920"
+    },
+    {
+      "market_rank": 468,
+      "consensus_rank": 358.3,
+      "player_name": "Alexander Mattison",
+      "search_name": "alexander mattison",
+      "position": "RB",
+      "nflverse_id": "00-0034972"
+    },
+    {
+      "market_rank": 469,
+      "consensus_rank": 358.3,
+      "player_name": "Darius Cooper",
+      "search_name": "darius cooper",
+      "position": "WR",
+      "nflverse_id": "00-0040024"
+    },
+    {
+      "market_rank": 470,
+      "consensus_rank": 358.8,
+      "player_name": "Davis Allen",
+      "search_name": "davis allen",
+      "position": "TE",
+      "nflverse_id": "00-0039074"
+    },
+    {
+      "market_rank": 471,
+      "consensus_rank": 358.8,
+      "player_name": "Kenny McIntosh",
+      "search_name": "kenny mcintosh",
+      "position": "RB",
+      "nflverse_id": "00-0038636"
+    },
+    {
+      "market_rank": 472,
+      "consensus_rank": 358.9,
+      "player_name": "Bo Melton",
+      "search_name": "bo melton",
+      "position": "WR",
+      "nflverse_id": "00-0037091"
+    },
+    {
+      "market_rank": 473,
+      "consensus_rank": 359.5,
+      "player_name": "Aidan O'Connell",
+      "search_name": "aidan o connell",
+      "position": "QB",
+      "nflverse_id": "00-0038579"
+    },
+    {
+      "market_rank": 474,
+      "consensus_rank": 359.5,
+      "player_name": "Tyler Huntley",
+      "search_name": "tyler huntley",
+      "position": "QB",
+      "nflverse_id": "00-0035993"
+    },
+    {
+      "market_rank": 475,
+      "consensus_rank": 359.6,
+      "player_name": "Tanner Hudson",
+      "search_name": "tanner hudson",
+      "position": "TE",
+      "nflverse_id": "00-0034613"
+    },
+    {
+      "market_rank": 476,
+      "consensus_rank": 359.7,
+      "player_name": "Carson Wentz",
+      "search_name": "carson wentz",
+      "position": "QB",
+      "nflverse_id": "00-0032950"
+    },
+    {
+      "market_rank": 477,
+      "consensus_rank": 359.7,
+      "player_name": "Jimmy Garoppolo",
+      "search_name": "jimmy garoppolo",
+      "position": "QB",
+      "nflverse_id": "00-0031345"
+    },
+    {
+      "market_rank": 478,
+      "consensus_rank": 359.9,
+      "player_name": "Jelani Woods",
+      "search_name": "jelani woods",
+      "position": "TE",
+      "nflverse_id": "00-0037755"
+    },
+    {
+      "market_rank": 479,
+      "consensus_rank": 360.1,
+      "player_name": "Dane Key",
+      "search_name": "dane key",
+      "position": "WR",
+      "nflverse_id": "00-0041293"
+    },
+    {
+      "market_rank": 480,
+      "consensus_rank": 360.1,
+      "player_name": "Kylen Granson",
+      "search_name": "kylen granson",
+      "position": "TE",
+      "nflverse_id": "00-0036876"
+    },
+    {
+      "market_rank": 481,
+      "consensus_rank": 360.2,
+      "player_name": "Xavier Restrepo",
+      "search_name": "xavier restrepo",
+      "position": "WR",
+      "nflverse_id": "00-0040522"
+    },
+    {
+      "market_rank": 482,
+      "consensus_rank": 360.5,
+      "player_name": "Zach Wilson",
+      "search_name": "zach wilson",
+      "position": "QB",
+      "nflverse_id": "00-0037013"
+    },
+    {
+      "market_rank": 483,
+      "consensus_rank": 361.5,
+      "player_name": "Kenny Pickett",
+      "search_name": "kenny pickett",
+      "position": "QB",
+      "nflverse_id": "00-0038102"
+    },
+    {
+      "market_rank": 484,
+      "consensus_rank": 361.7,
+      "player_name": "Tyrod Taylor",
+      "search_name": "tyrod taylor",
+      "position": "QB",
+      "nflverse_id": "00-0028118"
+    },
+    {
+      "market_rank": 485,
+      "consensus_rank": 362.5,
+      "player_name": "Eric Gray",
+      "search_name": "eric gray",
+      "position": "RB",
+      "nflverse_id": "00-0038396"
+    },
+    {
+      "market_rank": 486,
+      "consensus_rank": 362.6,
+      "player_name": "Noah Thomas",
+      "search_name": "noah thomas",
+      "position": "WR",
+      "nflverse_id": "00-0041248"
+    },
+    {
+      "market_rank": 487,
+      "consensus_rank": 362.8,
+      "player_name": "Kalel Mullings",
+      "search_name": "kalel mullings",
+      "position": "RB",
+      "nflverse_id": "00-0040205"
+    },
+    {
+      "market_rank": 488,
+      "consensus_rank": 363.3,
+      "player_name": "Cam Akers",
+      "search_name": "cam akers",
+      "position": "RB",
+      "nflverse_id": "00-0036414"
+    },
+    {
+      "market_rank": 489,
+      "consensus_rank": 363.3,
+      "player_name": "Jake Briningstool",
+      "search_name": "jake briningstool",
+      "position": "TE",
+      "nflverse_id": "00-0040081"
+    },
+    {
+      "market_rank": 490,
+      "consensus_rank": 363.3,
+      "player_name": "John Bates",
+      "search_name": "john bates",
+      "position": "TE",
+      "nflverse_id": "00-0036628"
+    },
+    {
+      "market_rank": 491,
+      "consensus_rank": 363.3,
+      "player_name": "Sam Howell",
+      "search_name": "sam howell",
+      "position": "QB",
+      "nflverse_id": "00-0037077"
+    },
+    {
+      "market_rank": 492,
+      "consensus_rank": 364.1,
+      "player_name": "Will Dissly",
+      "search_name": "will dissly",
+      "position": "TE",
+      "nflverse_id": "00-0034159"
+    },
+    {
+      "market_rank": 493,
+      "consensus_rank": 364.6,
+      "player_name": "Brandin Cooks",
+      "search_name": "brandin cooks",
+      "position": "WR",
+      "nflverse_id": "00-0031236"
+    },
+    {
+      "market_rank": 494,
+      "consensus_rank": 364.8,
+      "player_name": "Ameer Abdullah",
+      "search_name": "ameer abdullah",
+      "position": "RB",
+      "nflverse_id": "00-0032104"
+    },
+    {
+      "market_rank": 495,
+      "consensus_rank": 365.1,
+      "player_name": "Jarrett Stidham",
+      "search_name": "jarrett stidham",
+      "position": "QB",
+      "nflverse_id": "00-0035264"
+    },
+    {
+      "market_rank": 496,
+      "consensus_rank": 365.1,
+      "player_name": "Trebor Pena",
+      "search_name": "trebor pena",
+      "position": "WR",
+      "nflverse_id": "00-0041216"
+    },
+    {
+      "market_rank": 497,
+      "consensus_rank": 366.3,
+      "player_name": "Evan Hull",
+      "search_name": "evan hull",
+      "position": "RB",
+      "nflverse_id": "00-0038397"
+    },
+    {
+      "market_rank": 498,
+      "consensus_rank": 366.9,
+      "player_name": "Mason Rudolph",
+      "search_name": "mason rudolph",
+      "position": "QB",
+      "nflverse_id": "00-0034771"
+    },
+    {
+      "market_rank": 499,
+      "consensus_rank": 367.1,
+      "player_name": "Tyler Lockett",
+      "search_name": "tyler lockett",
+      "position": "WR",
+      "nflverse_id": "00-0032211"
+    },
+    {
+      "market_rank": 500,
+      "consensus_rank": 367.3,
+      "player_name": "JuJu Smith-Schuster",
+      "search_name": "juju smith schuster",
+      "position": "WR",
+      "nflverse_id": "00-0033857"
+    },
+    {
+      "market_rank": 501,
+      "consensus_rank": 367.5,
+      "player_name": "Mitchell Trubisky",
+      "search_name": "mitchell trubisky",
+      "position": "QB",
+      "nflverse_id": "00-0033869"
+    },
+    {
+      "market_rank": 502,
+      "consensus_rank": 367.8,
+      "player_name": "Arian Smith",
+      "search_name": "arian smith",
+      "position": "WR",
+      "nflverse_id": "00-0040582"
+    },
+    {
+      "market_rank": 503,
+      "consensus_rank": 368.8,
+      "player_name": "Sincere McCormick",
+      "search_name": "sincere mccormick",
+      "position": "RB",
+      "nflverse_id": "00-0037509"
+    },
+    {
+      "market_rank": 504,
+      "consensus_rank": 369.3,
+      "player_name": "Jake Browning",
+      "search_name": "jake browning",
+      "position": "QB",
+      "nflverse_id": "00-0035100"
+    },
+    {
+      "market_rank": 505,
+      "consensus_rank": 369.5,
+      "player_name": "Andy Dalton",
+      "search_name": "andy dalton",
+      "position": "QB",
+      "nflverse_id": "00-0027973"
+    },
+    {
+      "market_rank": 506,
+      "consensus_rank": 369.6,
+      "player_name": "Marquez Valdes-Scantling",
+      "search_name": "marquez valdes scantling",
+      "position": "WR",
+      "nflverse_id": "00-0034272"
+    },
+    {
+      "market_rank": 507,
+      "consensus_rank": 369.8,
+      "player_name": "Luke Altmyer",
+      "search_name": "luke altmyer",
+      "position": "QB",
+      "nflverse_id": "00-0041453"
+    },
+    {
+      "market_rank": 508,
+      "consensus_rank": 370.0,
+      "player_name": "Brady Cook",
+      "search_name": "brady cook",
+      "position": "QB",
+      "nflverse_id": "00-0040398"
+    },
+    {
+      "market_rank": 509,
+      "consensus_rank": 370.5,
+      "player_name": "Trey Sermon",
+      "search_name": "trey sermon",
+      "position": "RB",
+      "nflverse_id": "00-0036984"
+    },
+    {
+      "market_rank": 510,
+      "consensus_rank": 370.6,
+      "player_name": "Brock Wright",
+      "search_name": "brock wright",
+      "position": "TE",
+      "nflverse_id": "00-0036754"
+    },
+    {
+      "market_rank": 511,
+      "consensus_rank": 370.6,
+      "player_name": "Vinny Anthony II",
+      "search_name": "vinny anthony ii",
+      "position": "WR",
+      "nflverse_id": "00-0041185"
+    },
+    {
+      "market_rank": 512,
+      "consensus_rank": 371.1,
+      "player_name": "Luke Farrell",
+      "search_name": "luke farrell",
+      "position": "TE",
+      "nflverse_id": "00-0036887"
+    },
+    {
+      "market_rank": 513,
+      "consensus_rank": 371.6,
+      "player_name": "Josh Whyle",
+      "search_name": "josh whyle",
+      "position": "TE",
+      "nflverse_id": "00-0038589"
+    },
+    {
+      "market_rank": 514,
+      "consensus_rank": 371.6,
+      "player_name": "Noah Brown",
+      "search_name": "noah brown",
+      "position": "WR",
+      "nflverse_id": "00-0033591"
+    },
+    {
+      "market_rank": 515,
+      "consensus_rank": 372.0,
+      "player_name": "Jonathan Mingo",
+      "search_name": "jonathan mingo",
+      "position": "WR",
+      "nflverse_id": "00-0039062"
+    },
+    {
+      "market_rank": 516,
+      "consensus_rank": 372.1,
+      "player_name": "Kyle McCord",
+      "search_name": "kyle mccord",
+      "position": "QB",
+      "nflverse_id": "00-0040014"
+    },
+    {
+      "market_rank": 517,
+      "consensus_rank": 372.1,
+      "player_name": "Tip Reiman",
+      "search_name": "tip reiman",
+      "position": "TE",
+      "nflverse_id": "00-0039737"
+    },
+    {
+      "market_rank": 518,
+      "consensus_rank": 372.8,
+      "player_name": "Dare Ogunbowale",
+      "search_name": "dare ogunbowale",
+      "position": "RB",
+      "nflverse_id": "00-0033854"
+    },
+    {
+      "market_rank": 519,
+      "consensus_rank": 372.8,
+      "player_name": "Tyler Goodson",
+      "search_name": "tyler goodson",
+      "position": "RB",
+      "nflverse_id": "00-0037120"
+    },
+    {
+      "market_rank": 520,
+      "consensus_rank": 373.1,
+      "player_name": "Josh Reynolds",
+      "search_name": "josh reynolds",
+      "position": "WR",
+      "nflverse_id": "00-0033943"
+    },
+    {
+      "market_rank": 521,
+      "consensus_rank": 373.3,
+      "player_name": "Nick Mullens",
+      "search_name": "nick mullens",
+      "position": "QB",
+      "nflverse_id": "00-0033319"
+    },
+    {
+      "market_rank": 522,
+      "consensus_rank": 373.6,
+      "player_name": "Sterling Shepard",
+      "search_name": "sterling shepard",
+      "position": "WR",
+      "nflverse_id": "00-0032385"
+    },
+    {
+      "market_rank": 523,
+      "consensus_rank": 374.1,
+      "player_name": "Drew Lock",
+      "search_name": "drew lock",
+      "position": "QB",
+      "nflverse_id": "00-0035704"
+    },
+    {
+      "market_rank": 524,
+      "consensus_rank": 374.1,
+      "player_name": "Julian Hill",
+      "search_name": "julian hill",
+      "position": "TE",
+      "nflverse_id": "00-0038720"
+    },
+    {
+      "market_rank": 525,
+      "consensus_rank": 374.8,
+      "player_name": "Hendon Hooker",
+      "search_name": "hendon hooker",
+      "position": "QB",
+      "nflverse_id": "00-0038550"
+    },
+    {
+      "market_rank": 526,
+      "consensus_rank": 375.3,
+      "player_name": "Stetson Bennett",
+      "search_name": "stetson bennett",
+      "position": "QB",
+      "nflverse_id": "00-0039107"
+    },
+    {
+      "market_rank": 527,
+      "consensus_rank": 375.6,
+      "player_name": "Devin Culp",
+      "search_name": "devin culp",
+      "position": "TE",
+      "nflverse_id": "00-0039754"
+    },
+    {
+      "market_rank": 528,
+      "consensus_rank": 375.9,
+      "player_name": "Nick Nash",
+      "search_name": "nick nash",
+      "position": "WR",
+      "nflverse_id": "00-0040551"
+    },
+    {
+      "market_rank": 529,
+      "consensus_rank": 376.6,
+      "player_name": "Jalin Conyers",
+      "search_name": "jalin conyers",
+      "position": "TE",
+      "nflverse_id": "00-0040301"
+    },
+    {
+      "market_rank": 530,
+      "consensus_rank": 376.6,
+      "player_name": "Jamari Thrash",
+      "search_name": "jamari thrash",
+      "position": "WR",
+      "nflverse_id": "00-0039379"
+    },
+    {
+      "market_rank": 531,
+      "consensus_rank": 376.9,
+      "player_name": "Zay Jones",
+      "search_name": "zay jones",
+      "position": "WR",
+      "nflverse_id": "00-0033891"
+    },
+    {
+      "market_rank": 532,
+      "consensus_rank": 377.1,
+      "player_name": "Lucas Krull",
+      "search_name": "lucas krull",
+      "position": "TE",
+      "nflverse_id": "00-0037539"
+    },
+    {
+      "market_rank": 533,
+      "consensus_rank": 377.6,
+      "player_name": "Kurtis Rourke",
+      "search_name": "kurtis rourke",
+      "position": "QB",
+      "nflverse_id": "00-0040589"
+    },
+    {
+      "market_rank": 534,
+      "consensus_rank": 377.6,
+      "player_name": "Max Brosmer",
+      "search_name": "max brosmer",
+      "position": "QB",
+      "nflverse_id": "00-0040494"
+    },
+    {
+      "market_rank": 535,
+      "consensus_rank": 377.6,
+      "player_name": "Moliki Matavao",
+      "search_name": "moliki matavao",
+      "position": "TE",
+      "nflverse_id": "00-0040244"
+    },
+    {
+      "market_rank": 536,
+      "consensus_rank": 378.3,
+      "player_name": "Kyle Allen",
+      "search_name": "kyle allen",
+      "position": "QB",
+      "nflverse_id": "00-0034577"
+    },
+    {
+      "market_rank": 537,
+      "consensus_rank": 379.1,
+      "player_name": "Will Mallory",
+      "search_name": "will mallory",
+      "position": "TE",
+      "nflverse_id": "00-0038394"
+    },
+    {
+      "market_rank": 538,
+      "consensus_rank": 379.8,
+      "player_name": "DeeJay Dallas",
+      "search_name": "deejay dallas",
+      "position": "RB",
+      "nflverse_id": "00-0036425"
+    },
+    {
+      "market_rank": 539,
+      "consensus_rank": 380.3,
+      "player_name": "Craig Reynolds",
+      "search_name": "craig reynolds",
+      "position": "RB",
+      "nflverse_id": "00-0035567"
+    },
+    {
+      "market_rank": 540,
+      "consensus_rank": 380.6,
+      "player_name": "Johnny Mundt",
+      "search_name": "johnny mundt",
+      "position": "TE",
+      "nflverse_id": "00-0033246"
+    },
+    {
+      "market_rank": 541,
+      "consensus_rank": 381.1,
+      "player_name": "Jermaine Burton",
+      "search_name": "jermaine burton",
+      "position": "WR",
+      "nflverse_id": "00-0039810"
+    },
+    {
+      "market_rank": 542,
+      "consensus_rank": 381.1,
+      "player_name": "Tim Patrick",
+      "search_name": "tim patrick",
+      "position": "WR",
+      "nflverse_id": "00-0033375"
+    },
+    {
+      "market_rank": 543,
+      "consensus_rank": 381.6,
+      "player_name": "Payne Durham",
+      "search_name": "payne durham",
+      "position": "TE",
+      "nflverse_id": "00-0039050"
+    },
+    {
+      "market_rank": 544,
+      "consensus_rank": 382.1,
+      "player_name": "Ashton Dulin",
+      "search_name": "ashton dulin",
+      "position": "WR",
+      "nflverse_id": "00-0035021"
+    },
+    {
+      "market_rank": 545,
+      "consensus_rank": 382.3,
+      "player_name": "Desmond Ridder",
+      "search_name": "desmond ridder",
+      "position": "QB",
+      "nflverse_id": "00-0038122"
+    },
+    {
+      "market_rank": 546,
+      "consensus_rank": 382.6,
+      "player_name": "Javon Baker",
+      "search_name": "javon baker",
+      "position": "WR",
+      "nflverse_id": "00-0039853"
+    },
+    {
+      "market_rank": 547,
+      "consensus_rank": 382.9,
+      "player_name": "Tylan Wallace",
+      "search_name": "tylan wallace",
+      "position": "WR",
+      "nflverse_id": "00-0036630"
+    },
+    {
+      "market_rank": 548,
+      "consensus_rank": 383.0,
+      "player_name": "Bailey Zappe",
+      "search_name": "bailey zappe",
+      "position": "QB",
+      "nflverse_id": "00-0038108"
+    },
+    {
+      "market_rank": 549,
+      "consensus_rank": 383.3,
+      "player_name": "Jaret Patterson",
+      "search_name": "jaret patterson",
+      "position": "RB",
+      "nflverse_id": "00-0036755"
+    },
+    {
+      "market_rank": 550,
+      "consensus_rank": 383.8,
+      "player_name": "Sam Ehlinger",
+      "search_name": "sam ehlinger",
+      "position": "QB",
+      "nflverse_id": "00-0036879"
+    },
+    {
+      "market_rank": 551,
+      "consensus_rank": 384.1,
+      "player_name": "Drew Sample",
+      "search_name": "drew sample",
+      "position": "TE",
+      "nflverse_id": "00-0035631"
+    },
+    {
+      "market_rank": 552,
+      "consensus_rank": 384.6,
+      "player_name": "Skyy Moore",
+      "search_name": "skyy moore",
+      "position": "WR",
+      "nflverse_id": "00-0038090"
+    },
+    {
+      "market_rank": 553,
+      "consensus_rank": 385.3,
+      "player_name": "Carson Steele",
+      "search_name": "carson steele",
+      "position": "RB",
+      "nflverse_id": "00-0039325"
+    },
+    {
+      "market_rank": 554,
+      "consensus_rank": 386.1,
+      "player_name": "Brevyn Spann-Ford",
+      "search_name": "brevyn spann ford",
+      "position": "TE",
+      "nflverse_id": "00-0039530"
+    },
+    {
+      "market_rank": 555,
+      "consensus_rank": 386.1,
+      "player_name": "Mo Alie-Cox",
+      "search_name": "mo alie cox",
+      "position": "TE",
+      "nflverse_id": "00-0033217"
+    },
+    {
+      "market_rank": 556,
+      "consensus_rank": 386.8,
+      "player_name": "Skylar Thompson",
+      "search_name": "skylar thompson",
+      "position": "QB",
+      "nflverse_id": "00-0037327"
+    },
+    {
+      "market_rank": 557,
+      "consensus_rank": 387.6,
+      "player_name": "Eric Saubert",
+      "search_name": "eric saubert",
+      "position": "TE",
+      "nflverse_id": "00-0033576"
+    },
+    {
+      "market_rank": 558,
+      "consensus_rank": 389.1,
+      "player_name": "Jack Stoll",
+      "search_name": "jack stoll",
+      "position": "TE",
+      "nflverse_id": "00-0036741"
+    },
+    {
+      "market_rank": 559,
+      "consensus_rank": 389.8,
+      "player_name": "Chase Edmonds",
+      "search_name": "chase edmonds",
+      "position": "RB",
+      "nflverse_id": "00-0034681"
+    },
+    {
+      "market_rank": 560,
+      "consensus_rank": 389.8,
+      "player_name": "Josh Johnson",
+      "search_name": "josh johnson",
+      "position": "QB",
+      "nflverse_id": "00-0026300"
+    },
+    {
+      "market_rank": 561,
+      "consensus_rank": 390.8,
+      "player_name": "Cody Schrader",
+      "search_name": "cody schrader",
+      "position": "RB",
+      "nflverse_id": "00-0039703"
+    },
+    {
+      "market_rank": 562,
+      "consensus_rank": 390.8,
+      "player_name": "Tommy DeVito",
+      "search_name": "tommy devito",
+      "position": "QB",
+      "nflverse_id": "00-0038476"
+    },
+    {
+      "market_rank": 563,
+      "consensus_rank": 391.1,
+      "player_name": "Durham Smythe",
+      "search_name": "durham smythe",
+      "position": "TE",
+      "nflverse_id": "00-0034798"
+    },
+    {
+      "market_rank": 564,
+      "consensus_rank": 391.3,
+      "player_name": "Clyde Edwards-Helaire",
+      "search_name": "clyde edwards helaire",
+      "position": "RB",
+      "nflverse_id": "00-0036360"
+    },
+    {
+      "market_rank": 565,
+      "consensus_rank": 393.1,
+      "player_name": "James Mitchell",
+      "search_name": "james mitchell",
+      "position": "TE",
+      "nflverse_id": "00-0037282"
+    },
+    {
+      "market_rank": 566,
+      "consensus_rank": 393.3,
+      "player_name": "Case Keenum",
+      "search_name": "case keenum",
+      "position": "QB",
+      "nflverse_id": "00-0028986"
+    },
+    {
+      "market_rank": 567,
+      "consensus_rank": 393.8,
+      "player_name": "Deneric Prince",
+      "search_name": "deneric prince",
+      "position": "RB",
+      "nflverse_id": "00-0038518"
+    },
+    {
+      "market_rank": 568,
+      "consensus_rank": 393.8,
+      "player_name": "Israel Abanikanda",
+      "search_name": "israel abanikanda",
+      "position": "RB",
+      "nflverse_id": "00-0038389"
+    },
+    {
+      "market_rank": 569,
+      "consensus_rank": 393.8,
+      "player_name": "Keaontay Ingram",
+      "search_name": "keaontay ingram",
+      "position": "RB",
+      "nflverse_id": "00-0037299"
+    },
+    {
+      "market_rank": 570,
+      "consensus_rank": 394.1,
+      "player_name": "A.T. Perry",
+      "search_name": "a t perry",
+      "position": "WR",
+      "nflverse_id": "00-0038612"
+    },
+    {
+      "market_rank": 571,
+      "consensus_rank": 394.1,
+      "player_name": "David Moore",
+      "search_name": "david moore",
+      "position": "WR",
+      "nflverse_id": "00-0033589"
+    },
+    {
+      "market_rank": 572,
+      "consensus_rank": 394.3,
+      "player_name": "Kendall Milton",
+      "search_name": "kendall milton",
+      "position": "RB",
+      "nflverse_id": "00-0039266"
+    },
+    {
+      "market_rank": 573,
+      "consensus_rank": 394.6,
+      "player_name": "Donald Parham",
+      "search_name": "donald parham",
+      "position": "TE",
+      "nflverse_id": "00-0035329"
+    },
+    {
+      "market_rank": 574,
+      "consensus_rank": 395.6,
+      "player_name": "Johnny Wilson",
+      "search_name": "johnny wilson",
+      "position": "WR",
+      "nflverse_id": "00-0039236"
+    },
+    {
+      "market_rank": 575,
+      "consensus_rank": 395.6,
+      "player_name": "Shane Zylstra",
+      "search_name": "shane zylstra",
+      "position": "TE",
+      "nflverse_id": "00-0036534"
+    },
+    {
+      "market_rank": 576,
+      "consensus_rank": 396.3,
+      "player_name": "Pierre Strong",
+      "search_name": "pierre strong",
+      "position": "RB",
+      "nflverse_id": "00-0038098"
+    },
+    {
+      "market_rank": 577,
+      "consensus_rank": 396.6,
+      "player_name": "Ian Thomas",
+      "search_name": "ian thomas",
+      "position": "TE",
+      "nflverse_id": "00-0034365"
+    },
+    {
+      "market_rank": 578,
+      "consensus_rank": 396.8,
+      "player_name": "Deuce Vaughn",
+      "search_name": "deuce vaughn",
+      "position": "RB",
+      "nflverse_id": "00-0038622"
+    },
+    {
+      "market_rank": 579,
+      "consensus_rank": 397.1,
+      "player_name": "Allen Lazard",
+      "search_name": "allen lazard",
+      "position": "WR",
+      "nflverse_id": "00-0034521"
+    },
+    {
+      "market_rank": 580,
+      "consensus_rank": 397.3,
+      "player_name": "Blake Watson",
+      "search_name": "blake watson",
+      "position": "RB",
+      "nflverse_id": "00-0039573"
+    },
+    {
+      "market_rank": 581,
+      "consensus_rank": 397.6,
+      "player_name": "Teagan Quitoriano",
+      "search_name": "teagan quitoriano",
+      "position": "TE",
+      "nflverse_id": "00-0037277"
+    },
+    {
+      "market_rank": 582,
+      "consensus_rank": 398.1,
+      "player_name": "Terrace Marshall Jr.",
+      "search_name": "terrace marshall jr",
+      "position": "WR",
+      "nflverse_id": "00-0036955"
+    },
+    {
+      "market_rank": 583,
+      "consensus_rank": 399.1,
+      "player_name": "Ainias Smith",
+      "search_name": "ainias smith",
+      "position": "WR",
+      "nflverse_id": "00-0039747"
+    },
+    {
+      "market_rank": 584,
+      "consensus_rank": 399.1,
+      "player_name": "Tyler Johnson",
+      "search_name": "tyler johnson",
+      "position": "WR",
+      "nflverse_id": "00-0036427"
+    },
+    {
+      "market_rank": 585,
+      "consensus_rank": 399.3,
+      "player_name": "Sean Clifford",
+      "search_name": "sean clifford",
+      "position": "QB",
+      "nflverse_id": "00-0038391"
+    },
+    {
+      "market_rank": 586,
+      "consensus_rank": 399.6,
+      "player_name": "Dominic Lovett",
+      "search_name": "dominic lovett",
+      "position": "WR",
+      "nflverse_id": "00-0040241"
+    },
+    {
+      "market_rank": 587,
+      "consensus_rank": 400.1,
+      "player_name": "Ray-Ray McCloud",
+      "search_name": "ray ray mccloud",
+      "position": "WR",
+      "nflverse_id": "00-0034407"
+    },
+    {
+      "market_rank": 588,
+      "consensus_rank": 400.8,
+      "player_name": "Salvon Ahmed",
+      "search_name": "salvon ahmed",
+      "position": "RB",
+      "nflverse_id": "00-0036020"
+    },
+    {
+      "market_rank": 589,
+      "consensus_rank": 401.8,
+      "player_name": "Frank Gore Jr.",
+      "search_name": "frank gore jr",
+      "position": "RB",
+      "nflverse_id": "00-0039471"
+    },
+    {
+      "market_rank": 590,
+      "consensus_rank": 402.1,
+      "player_name": "Tyler Scott",
+      "search_name": "tyler scott",
+      "position": "WR",
+      "nflverse_id": "00-0038941"
+    },
+    {
+      "market_rank": 591,
+      "consensus_rank": 402.6,
+      "player_name": "Cedrick Wilson Jr.",
+      "search_name": "cedrick wilson jr",
+      "position": "WR",
+      "nflverse_id": "00-0034418"
+    },
+    {
+      "market_rank": 592,
+      "consensus_rank": 402.8,
+      "player_name": "Ronnie Rivers",
+      "search_name": "ronnie rivers",
+      "position": "RB",
+      "nflverse_id": "00-0037557"
+    },
+    {
+      "market_rank": 593,
+      "consensus_rank": 403.1,
+      "player_name": "Charlie Jones",
+      "search_name": "charlie jones",
+      "position": "WR",
+      "nflverse_id": "00-0038576"
+    },
+    {
+      "market_rank": 594,
+      "consensus_rank": 403.8,
+      "player_name": "Julius Chestnut",
+      "search_name": "julius chestnut",
+      "position": "RB",
+      "nflverse_id": "00-0037594"
+    },
+    {
+      "market_rank": 595,
+      "consensus_rank": 404.3,
+      "player_name": "Keilan Robinson",
+      "search_name": "keilan robinson",
+      "position": "RB",
+      "nflverse_id": "00-0039385"
+    },
+    {
+      "market_rank": 596,
+      "consensus_rank": 405.3,
+      "player_name": "D'Ernest Johnson",
+      "search_name": "d ernest johnson",
+      "position": "RB",
+      "nflverse_id": "00-0035628"
+    },
+    {
+      "market_rank": 597,
+      "consensus_rank": 405.3,
+      "player_name": "Jeff Wilson",
+      "search_name": "jeff wilson",
+      "position": "RB",
+      "nflverse_id": "00-0034115"
+    },
+    {
+      "market_rank": 598,
+      "consensus_rank": 405.3,
+      "player_name": "Kene Nwangwu",
+      "search_name": "kene nwangwu",
+      "position": "RB",
+      "nflverse_id": "00-0036842"
+    },
+    {
+      "market_rank": 599,
+      "consensus_rank": 406.1,
+      "player_name": "Derius Davis",
+      "search_name": "derius davis",
+      "position": "WR",
+      "nflverse_id": "00-0038573"
+    },
+    {
+      "market_rank": 600,
+      "consensus_rank": 409.6,
+      "player_name": "Ben Skowronek",
+      "search_name": "ben skowronek",
+      "position": "WR",
+      "nflverse_id": "00-0036862"
+    },
+    {
+      "market_rank": 601,
+      "consensus_rank": 409.8,
+      "player_name": "Travis Homer",
+      "search_name": "travis homer",
+      "position": "RB",
+      "nflverse_id": "00-0035594"
+    },
+    {
+      "market_rank": 602,
+      "consensus_rank": 410.1,
+      "player_name": "Hunter Renfrow",
+      "search_name": "hunter renfrow",
+      "position": "WR",
+      "nflverse_id": "00-0034983"
+    },
+    {
+      "market_rank": 603,
+      "consensus_rank": 410.1,
+      "player_name": "Justin Watson",
+      "search_name": "justin watson",
+      "position": "WR",
+      "nflverse_id": "00-0034386"
+    },
+    {
+      "market_rank": 604,
+      "consensus_rank": 414.1,
+      "player_name": "Braxton Berrios",
+      "search_name": "braxton berrios",
+      "position": "WR",
+      "nflverse_id": "00-0034419"
+    },
+    {
+      "market_rank": 605,
+      "consensus_rank": 414.1,
+      "player_name": "K.J. Osborn",
+      "search_name": "k j osborn",
+      "position": "WR",
+      "nflverse_id": "00-0036345"
+    },
+    {
+      "market_rank": 606,
+      "consensus_rank": 416.1,
+      "player_name": "Bub Means",
+      "search_name": "bub means",
+      "position": "WR",
+      "nflverse_id": "00-0039386"
+    },
+    {
+      "market_rank": 607,
+      "consensus_rank": 417.6,
+      "player_name": "Tahj Washington",
+      "search_name": "tahj washington",
+      "position": "WR",
+      "nflverse_id": "00-0039884"
+    },
+    {
+      "market_rank": 608,
+      "consensus_rank": 417.6,
+      "player_name": "Velus Jones Jr.",
+      "search_name": "velus jones jr",
+      "position": "WR",
+      "nflverse_id": "00-0037745"
+    },
+    {
+      "market_rank": 609,
+      "consensus_rank": 417.8,
+      "player_name": "JaMycal Hasty",
+      "search_name": "jamycal hasty",
+      "position": "RB",
+      "nflverse_id": "00-0035806"
+    },
+    {
+      "market_rank": 610,
+      "consensus_rank": 418.3,
+      "player_name": "Michael Wiley",
+      "search_name": "michael wiley",
+      "position": "RB",
+      "nflverse_id": "00-0039684"
+    },
+    {
+      "market_rank": 611,
+      "consensus_rank": 418.8,
+      "player_name": "Gary Brightwell",
+      "search_name": "gary brightwell",
+      "position": "RB",
+      "nflverse_id": "00-0036569"
+    },
+    {
+      "market_rank": 612,
+      "consensus_rank": 420.3,
+      "player_name": "Trayveon Williams",
+      "search_name": "trayveon williams",
+      "position": "RB",
+      "nflverse_id": "00-0035291"
+    },
+    {
+      "market_rank": 613,
+      "consensus_rank": 421.1,
+      "player_name": "Xavier Gipson",
+      "search_name": "xavier gipson",
+      "position": "WR",
+      "nflverse_id": "00-0038496"
+    },
+    {
+      "market_rank": 614,
+      "consensus_rank": 422.6,
+      "player_name": "Devin Duvernay",
+      "search_name": "devin duvernay",
+      "position": "WR",
+      "nflverse_id": "00-0036331"
+    },
+    {
+      "market_rank": 615,
+      "consensus_rank": 423.6,
+      "player_name": "Mecole Hardman",
+      "search_name": "mecole hardman",
+      "position": "WR",
+      "nflverse_id": "00-0035140"
+    },
+    {
+      "market_rank": 616,
+      "consensus_rank": 423.6,
+      "player_name": "Quez Watkins",
+      "search_name": "quez watkins",
+      "position": "WR",
+      "nflverse_id": "00-0036271"
+    },
+    {
+      "market_rank": 617,
+      "consensus_rank": 424.1,
+      "player_name": "Jason Brownlee",
+      "search_name": "jason brownlee",
+      "position": "WR",
+      "nflverse_id": "00-0038492"
+    },
+    {
+      "market_rank": 618,
+      "consensus_rank": 427.8,
+      "player_name": "Lew Nichols III",
+      "search_name": "lew nichols iii",
+      "position": "RB",
+      "nflverse_id": "00-0038409"
+    },
+    {
+      "market_rank": 619,
+      "consensus_rank": 429.6,
+      "player_name": "Tejhaun Palmer",
+      "search_name": "tejhaun palmer",
+      "position": "WR",
+      "nflverse_id": "00-0039397"
+    },
+    {
+      "market_rank": 620,
+      "consensus_rank": 429.8,
+      "player_name": "Jashaun Corbin",
+      "search_name": "jashaun corbin",
+      "position": "RB",
+      "nflverse_id": "00-0037410"
+    },
+    {
+      "market_rank": 621,
+      "consensus_rank": 431.1,
+      "player_name": "Danny Gray",
+      "search_name": "danny gray",
+      "position": "WR",
+      "nflverse_id": "00-0037828"
+    }
+  ]
+}

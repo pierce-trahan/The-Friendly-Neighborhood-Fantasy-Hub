@@ -117,7 +117,11 @@ def content_fingerprint(snapshot: object) -> str:
     return hashlib.sha256(canonical_snapshot.encode("utf-8")).hexdigest()
 
 
-def fallback_archetype_for_slot(seed: str, draft_slot: int) -> str:
+def fallback_archetype_for_slot(
+    seed: str,
+    draft_slot: int,
+    engine_version: str = CPU_ENGINE_VERSION,
+) -> str:
     """Assign a stable synthetic profile without depending on database row IDs."""
     assignment_fingerprint = content_fingerprint(
         {
@@ -133,6 +137,7 @@ def fallback_archetype_for_slot(seed: str, draft_slot: int) -> str:
         purpose="fallback-profile-assignment",
         draw_index=0,
         stable_key=str(draft_slot),
+        engine_version=engine_version,
     )
     return SUPPORTED_FALLBACK_ARCHETYPES[
         draw.numerator % len(SUPPORTED_FALLBACK_ARCHETYPES)
@@ -328,6 +333,7 @@ def score_candidates(
     overall_pick: int,
     selecting_slot: int,
     randomness: int,
+    engine_version: str = CPU_ENGINE_VERSION,
 ) -> tuple[ScoredCandidate, ...]:
     _validate_randomness(randomness)
     if not candidates:
@@ -351,6 +357,7 @@ def score_candidates(
             purpose=_RANDOM_VARIATION_PURPOSE,
             draw_index=0,
             stable_key=candidate.player_id,
+            engine_version=engine_version,
         )
         components = ScoreComponents(
             board_order=practice_board_score(
@@ -363,7 +370,7 @@ def score_candidates(
             duplication_penalty=candidate.duplication_penalty,
             random_variation=random_variation(draw, randomness),
         )
-        _validate_components(components, candidate_count)
+        _validate_components(components, candidate_count, engine_version)
         scored.append(
             ScoredCandidate(
                 player_id=candidate.player_id,
@@ -396,7 +403,11 @@ def _validate_randomness(randomness: int) -> None:
         raise ValueError(f"randomness must be between 0 and {MAX_RANDOMNESS}")
 
 
-def _validate_components(components: ScoreComponents, candidate_count: int) -> None:
+def _validate_components(
+    components: ScoreComponents,
+    candidate_count: int,
+    engine_version: str,
+) -> None:
     values: Mapping[str, int] = {
         "board_order": components.board_order,
         "starter_need": components.starter_need,
@@ -411,7 +422,7 @@ def _validate_components(components: ScoreComponents, candidate_count: int) -> N
         bound = COMPONENT_BOUNDS[name]
         maximum = candidate_count * 100 if name == "board_order" else bound.maximum
         if value < bound.minimum or (maximum is not None and value > maximum):
-            raise ValueError(f"{name} score is outside the {CPU_ENGINE_VERSION} bounds")
+            raise ValueError(f"{name} score is outside the {engine_version} bounds")
 
 
 def _validate_and_order_candidates(

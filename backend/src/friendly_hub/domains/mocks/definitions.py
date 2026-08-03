@@ -4,7 +4,13 @@ from dataclasses import dataclass
 from types import MappingProxyType
 from typing import Final
 
-CPU_ENGINE_VERSION: Final = "practice-board-v1"
+PRACTICE_BOARD_ENGINE_VERSION: Final = "practice-board-v1"
+MARKET_BOARD_ENGINE_VERSION: Final = "market-board-v1"
+CPU_ENGINE_VERSION: Final = MARKET_BOARD_ENGINE_VERSION
+SUPPORTED_CPU_ENGINE_VERSIONS: Final = (
+    PRACTICE_BOARD_ENGINE_VERSION,
+    MARKET_BOARD_ENGINE_VERSION,
+)
 RNG_VERSION: Final = "sha256-counter-v1"
 STRATEGY_DEFINITION_VERSION: Final = "strategy-v1"
 MAX_SEED: Final = (1 << 64) - 1

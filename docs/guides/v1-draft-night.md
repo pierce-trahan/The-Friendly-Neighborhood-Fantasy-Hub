@@ -24,7 +24,7 @@ creates and verifies a private backup if a local database already exists. The
 10 newest backups are retained by default.
 
 The green `Local database connected` status means the service, migrations, and
-local database opened successfully. The Overview shows `v1.0.1` for the release
+local database opened successfully. The Overview shows `v1.0.2` for the release
 build.
 
 ## Before the Draft
@@ -33,7 +33,8 @@ build.
 2. Open **Boards**, select the authoritative Personal Board, and click
    **Export CSV**. Keep that file somewhere easy to find.
 3. Open **Mock lab** and rehearse the Entropy startup shape: 10 teams, 24
-   rounds, third-round reversal, your slot 1.
+   rounds, third-round reversal, your slot 1. Confirm the control strip says
+   **Dynasty Superflex expert consensus** and shows the July 31 source date.
 4. Open **Draft room**, create the live room, and confirm the team names and
    first pick before the real clock starts.
 5. Keep the exported board available as the no-network fallback.

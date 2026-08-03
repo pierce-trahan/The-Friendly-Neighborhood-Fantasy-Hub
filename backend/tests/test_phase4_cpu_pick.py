@@ -128,6 +128,8 @@ def test_one_cpu_request_saves_one_reproducible_pick_and_audit(
         assert decision["limitation_codes"] == [
             "FALLBACK_PROFILE_NO_HISTORY",
             "LEAGUE_SHAPE_UNAVAILABLE",
+            "MARKET_BASELINE_UNAVAILABLE",
+            "NOT_MARKET_EVIDENCE",
         ]
         assert decision["chosen_player_id"] == replay_decision["chosen_player_id"]
         assert decision["total_score"] == replay_decision["total_score"]

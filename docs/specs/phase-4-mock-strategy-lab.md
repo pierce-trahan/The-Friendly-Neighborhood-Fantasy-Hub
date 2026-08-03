@@ -7,6 +7,13 @@
 **Product approval:** All four gate decisions were approved by the product
 owner on 2026-07-28.
 
+> **V1.0.2 amendment (2026-08-03):** The approved
+> [Market Board and Mock CPU corrective specification](v1.0.2-market-board-mock-cpu.md)
+> supersedes the practice-board baseline for newly created mocks when the
+> bundled market snapshot is valid. Existing mocks retain their frozen Phase 4
+> engine version. The original contract below remains the historical basis for
+> `practice-board-v1` and the explicit unavailable-data fallback.
+
 ## How to Use This Document
 
 - The product owner has approved the four product-gate decisions and initial

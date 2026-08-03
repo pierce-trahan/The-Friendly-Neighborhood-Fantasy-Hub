@@ -239,6 +239,12 @@ Exit criteria:
 **Status:** Complete as of 2026-07-28. See the
 [Phase 4 live workflow audit](docs/audits/phase-4-live-workflow-audit.md).
 
+**V1.0.2 correction:** New mocks use a frozen, provenance-tracked dynasty
+Superflex expert-consensus baseline for CPU valuation. This supersedes the
+alphabetical unranked-player fallback as CPU strategy while leaving the user's
+Personal Board authoritative. See the
+[market-board corrective specification](docs/specs/v1.0.2-market-board-mock-cpu.md).
+
 **Goal:** Let users practice roster-building philosophies and learn when to pivot.
 
 Initial strategy guides:

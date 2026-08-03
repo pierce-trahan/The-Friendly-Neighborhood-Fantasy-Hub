@@ -32,6 +32,7 @@ EXPECTED_COLUMNS = {
         "strategy_definition_version",
         "league_shape_json",
         "league_shape_source_timestamp",
+        "market_baseline_json",
         "content_fingerprint",
         "randomness",
         "current_strategy_key",

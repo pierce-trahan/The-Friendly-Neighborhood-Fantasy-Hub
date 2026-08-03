@@ -1,6 +1,14 @@
 from __future__ import annotations
 
-from sqlalchemy import Boolean, ForeignKey, Integer, String, Text, UniqueConstraint
+from sqlalchemy import (
+    Boolean,
+    CheckConstraint,
+    ForeignKey,
+    Integer,
+    String,
+    Text,
+    UniqueConstraint,
+)
 from sqlalchemy.orm import Mapped, mapped_column
 
 from friendly_hub.db.base import Base
@@ -57,6 +65,10 @@ class DraftCandidateRow(Base):
     __tablename__ = "draft_candidate"
     __table_args__ = (
         UniqueConstraint("session_id", "player_id", name="uq_draft_candidate_player"),
+        CheckConstraint(
+            "market_rank IS NULL OR market_rank >= 1",
+            name="ck_draft_candidate_market_rank",
+        ),
     )
 
     id: Mapped[str] = mapped_column(String(36), primary_key=True)
@@ -79,6 +91,7 @@ class DraftCandidateRow(Base):
     rookie_class: Mapped[int | None] = mapped_column(Integer)
     snapshot_source: Mapped[str] = mapped_column(String(24), nullable=False)
     manual_rank: Mapped[int | None] = mapped_column(Integer)
+    market_rank: Mapped[int | None] = mapped_column(Integer)
     tier_name: Mapped[str | None] = mapped_column(String(80))
     tier_color: Mapped[str | None] = mapped_column(String(32))
     tier_order: Mapped[int | None] = mapped_column(Integer)

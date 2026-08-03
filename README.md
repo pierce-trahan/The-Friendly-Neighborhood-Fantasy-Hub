@@ -52,13 +52,17 @@ See [PROJECT_ROADMAP.md](PROJECT_ROADMAP.md) for the complete product roadmap an
 
 ## Project Status
 
-**V1.0.1 is complete and ready to try.** The corrective player-data release
-now seeds 1,148 current fantasy-relevant nflverse player records into the local
-database automatically, including the 2026 rookie class. No sample load,
-manual player creation, or launch-time internet connection is required. See
-the [V1.0.1 release notes](docs/releases/v1.0.1.md),
-[draft-night guide](docs/guides/v1-draft-night.md), and
-[V1.0.1 player-universe audit](docs/audits/v1.0.1-player-universe-audit.md).
+**V1.0.2 is complete and ready to try.** The Mock Lab now freezes a bundled,
+format-aware dynasty Superflex expert-consensus baseline for CPU decisions, so
+a small Personal Board no longer sends CPU teams into alphabetical order. The
+source, date, coverage, and evidence limits remain visible; the Personal Board
+still controls the user's rankings and decisions. The earlier V1.0.1 player
+correction continues to seed 1,148 current fantasy-relevant nflverse records
+without a launch-time network connection. See the
+[V1.0.2 release notes](docs/releases/v1.0.2.md),
+[market-board corrective specification](docs/specs/v1.0.2-market-board-mock-cpu.md),
+[V1.0.2 market-board audit](docs/audits/v1.0.2-market-board-audit.md), and
+[draft-night guide](docs/guides/v1-draft-night.md).
 
 Phase 0 is complete: the repository contains a production-shaped local launch
 proof with configuration persistence, a sanitized offline Entropy profile, and
