@@ -6952,6 +6952,14 @@
             "title": "Completed At",
             "type": "string"
           },
+          "draft_format": {
+            "enum": [
+              "snake",
+              "linear"
+            ],
+            "title": "Draft Format",
+            "type": "string"
+          },
           "draft_mode": {
             "enum": [
               "live",
@@ -6976,6 +6984,17 @@
             "title": "Explanation Template Version",
             "type": "string"
           },
+          "final_strategy": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Final Strategy"
+          },
           "generated_at": {
             "title": "Generated At",
             "type": "string"
@@ -6983,6 +7002,17 @@
           "id": {
             "title": "Id",
             "type": "string"
+          },
+          "initial_strategy": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Initial Strategy"
           },
           "league_shape_fingerprint": {
             "title": "League Shape Fingerprint",
@@ -7003,12 +7033,35 @@
             "title": "Report Rules Version",
             "type": "string"
           },
+          "round_count": {
+            "maximum": 60.0,
+            "minimum": 1.0,
+            "title": "Round Count",
+            "type": "integer"
+          },
           "section_summary": {
             "additionalProperties": {
               "type": "string"
             },
             "title": "Section Summary",
             "type": "object"
+          },
+          "strategy_definition_version": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Strategy Definition Version"
+          },
+          "team_count": {
+            "maximum": 32.0,
+            "minimum": 2.0,
+            "title": "Team Count",
+            "type": "integer"
           }
         },
         "required": [
@@ -7023,6 +7076,12 @@
           "report_rules_version",
           "explanation_template_version",
           "league_shape_fingerprint",
+          "draft_format",
+          "team_count",
+          "round_count",
+          "initial_strategy",
+          "final_strategy",
+          "strategy_definition_version",
           "section_summary",
           "limitations"
         ],
@@ -8114,6 +8173,180 @@
         "summary": "Save Board Order",
         "tags": [
           "boards"
+        ]
+      }
+    },
+    "/api/v1/boards/{board_id}/post-draft-reports": {
+      "get": {
+        "operationId": "get_post_draft_reports_for_board_api_v1_boards__board_id__post_draft_reports_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "board_id",
+            "required": true,
+            "schema": {
+              "title": "Board Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "mode",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "enum": [
+                    "live",
+                    "mock"
+                  ],
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Mode"
+            }
+          },
+          {
+            "in": "query",
+            "name": "completed_from",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "format": "date",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Completed From"
+            }
+          },
+          {
+            "in": "query",
+            "name": "completed_to",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "format": "date",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Completed To"
+            }
+          },
+          {
+            "in": "query",
+            "name": "strategy_key",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maxLength": 80,
+                  "minLength": 1,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Strategy Key"
+            }
+          },
+          {
+            "in": "query",
+            "name": "report_version",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maxLength": 64,
+                  "minLength": 1,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Report Version"
+            }
+          },
+          {
+            "in": "query",
+            "name": "league_shape_fingerprint",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maxLength": 64,
+                  "minLength": 64,
+                  "pattern": "^[0-9a-f]{64}$",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "League Shape Fingerprint"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 100,
+              "maximum": 100,
+              "minimum": 1,
+              "title": "Limit",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "offset",
+            "required": false,
+            "schema": {
+              "default": 0,
+              "minimum": 0,
+              "title": "Offset",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PostDraftReportListResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Get Post Draft Reports For Board",
+        "tags": [
+          "post-draft reports"
         ]
       }
     },

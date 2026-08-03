@@ -72,6 +72,18 @@ export type MockSession = components["schemas"]["MockSessionRead"];
 export type MockSessionCreate = components["schemas"]["MockSessionCreate"];
 export type MockStrategyPivot =
   components["schemas"]["MockStrategyPivotCreate"];
+export type PostDraftReport =
+  components["schemas"]["PostDraftReportRead"];
+export type PostDraftReportSummary =
+  components["schemas"]["PostDraftReportSummaryRead"];
+export type PostDraftReportList =
+  components["schemas"]["PostDraftReportListResponse"];
+export type PostDraftReportGenerateRequest =
+  components["schemas"]["PostDraftReportGenerateRequest"];
+export type PostDraftReportGenerateResponse =
+  components["schemas"]["PostDraftReportGenerateResponse"];
+export type PostDraftReportComparison =
+  components["schemas"]["PostDraftReportComparisonRead"];
 export type CsvPreviewRequest = components["schemas"]["CsvPreviewRequest"];
 export type MappingDecisionRequest =
   components["schemas"]["MappingDecisionRequest"];
@@ -457,6 +469,78 @@ export function undoDraftPick(
 
 export function getDraftExportUrl(sessionId: string): string {
   return `/api/v1/draft-sessions/${encodeURIComponent(sessionId)}/export.csv`;
+}
+
+export function getBoardPostDraftReports(
+  boardId: string,
+  filters: {
+    mode?: "live" | "mock";
+    completedFrom?: string;
+    completedTo?: string;
+    strategyKey?: string;
+    reportVersion?: string;
+    leagueShapeFingerprint?: string;
+    limit?: number;
+    offset?: number;
+  } = {},
+): Promise<PostDraftReportList> {
+  const parameters = new URLSearchParams({
+    limit: String(filters.limit ?? 100),
+    offset: String(filters.offset ?? 0),
+  });
+  if (filters.mode) parameters.set("mode", filters.mode);
+  if (filters.completedFrom) {
+    parameters.set("completed_from", filters.completedFrom);
+  }
+  if (filters.completedTo) parameters.set("completed_to", filters.completedTo);
+  if (filters.strategyKey) parameters.set("strategy_key", filters.strategyKey);
+  if (filters.reportVersion) {
+    parameters.set("report_version", filters.reportVersion);
+  }
+  if (filters.leagueShapeFingerprint) {
+    parameters.set(
+      "league_shape_fingerprint",
+      filters.leagueShapeFingerprint,
+    );
+  }
+  return request(
+    `/api/v1/boards/${encodeURIComponent(boardId)}/post-draft-reports?${parameters.toString()}`,
+  );
+}
+
+export function getDraftPostDraftReports(
+  sessionId: string,
+): Promise<PostDraftReportList> {
+  return request(
+    `/api/v1/draft-sessions/${encodeURIComponent(sessionId)}/post-draft-reports`,
+  );
+}
+
+export function generatePostDraftReport(
+  sessionId: string,
+  payload: PostDraftReportGenerateRequest,
+): Promise<PostDraftReportGenerateResponse> {
+  return request(
+    `/api/v1/draft-sessions/${encodeURIComponent(sessionId)}/post-draft-reports`,
+    { method: "POST", body: JSON.stringify(payload) },
+  );
+}
+
+export function getPostDraftReport(reportId: string): Promise<PostDraftReport> {
+  return request(`/api/v1/post-draft-reports/${encodeURIComponent(reportId)}`);
+}
+
+export function previewPostDraftReportComparison(
+  reportIds: string[],
+): Promise<PostDraftReportComparison> {
+  return request("/api/v1/post-draft-report-comparisons/preview", {
+    method: "POST",
+    body: JSON.stringify({ report_ids: reportIds }),
+  });
+}
+
+export function getPostDraftReportExportUrl(reportId: string): string {
+  return `/api/v1/post-draft-reports/${encodeURIComponent(reportId)}/export.html`;
 }
 
 export function getAlertEvidenceSnapshots(

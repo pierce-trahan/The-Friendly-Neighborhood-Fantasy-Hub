@@ -265,6 +265,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/boards/{board_id}/post-draft-reports": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get Post Draft Reports For Board */
+        get: operations["get_post_draft_reports_for_board_api_v1_boards__board_id__post_draft_reports_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/boards/{board_id}/tiers": {
         parameters: {
             query?: never;
@@ -3299,6 +3316,11 @@ export interface components {
             /** Completed At */
             completed_at: string;
             /**
+             * Draft Format
+             * @enum {string}
+             */
+            draft_format: "snake" | "linear";
+            /**
              * Draft Mode
              * @enum {string}
              */
@@ -3311,10 +3333,14 @@ export interface components {
             draft_session_id: string;
             /** Explanation Template Version */
             explanation_template_version: string;
+            /** Final Strategy */
+            final_strategy: string | null;
             /** Generated At */
             generated_at: string;
             /** Id */
             id: string;
+            /** Initial Strategy */
+            initial_strategy: string | null;
             /** League Shape Fingerprint */
             league_shape_fingerprint: string;
             /** Limitations */
@@ -3323,10 +3349,16 @@ export interface components {
             report_engine_version: string;
             /** Report Rules Version */
             report_rules_version: string;
+            /** Round Count */
+            round_count: number;
             /** Section Summary */
             section_summary: {
                 [key: string]: string;
             };
+            /** Strategy Definition Version */
+            strategy_definition_version: string | null;
+            /** Team Count */
+            team_count: number;
         };
         /** SafetyConfiguration */
         SafetyConfiguration: {
@@ -4042,6 +4074,46 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["BoardRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_post_draft_reports_for_board_api_v1_boards__board_id__post_draft_reports_get: {
+        parameters: {
+            query?: {
+                mode?: ("live" | "mock") | null;
+                completed_from?: string | null;
+                completed_to?: string | null;
+                strategy_key?: string | null;
+                report_version?: string | null;
+                league_shape_fingerprint?: string | null;
+                limit?: number;
+                offset?: number;
+            };
+            header?: never;
+            path: {
+                board_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PostDraftReportListResponse"];
                 };
             };
             /** @description Validation Error */

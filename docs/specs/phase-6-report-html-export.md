@@ -110,7 +110,8 @@ The full repository verifier remains the publication gate.
 
 ## Next Implementation Boundary
 
-After this module is reviewed, Phase 6 step 10 may add only the desktop Reports
-workspace over the approved generation, read/list, comparison, and export APIs.
-It must not add new report calculations, persistence, grading, projections, or
-cloud behavior.
+Phase 6 step 10 implements this boundary in the
+[desktop Reports workspace contract](phase-6-desktop-reports-workspace.md).
+The remaining boundary is the final specification and offline workflow audit,
+without new report calculations, persistence, grading, projections, or cloud
+behavior.
