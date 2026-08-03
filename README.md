@@ -104,7 +104,7 @@ prohibit automatic picks, trades, and objective-value claims. See the
 which records the passing 10-team, 24-round offline rehearsal and full
 specification traceability.
 
-Phase 6 is approved for bounded implementation. The
+Phase 6 is complete. The
 [Post-Draft Report specification](docs/specs/phase-6-post-draft-report.md)
 defines an immutable evidence ledger for completed drafts, deterministic
 starter coverage, bounded decision moments, compatible comparisons, safe HTML
@@ -132,7 +132,11 @@ creates a print-friendly offline artifact without scripts or remote assets.
 The [desktop Reports workspace](docs/specs/phase-6-desktop-reports-workspace.md)
 now connects explicit generation, saved history, section detail, compatible
 comparison, and local export. The final specification and offline workflow
-audit remains before Phase 6 is complete.
+audit is recorded in the
+[Phase 6 live workflow and specification audit](docs/audits/phase-6-live-workflow-audit.md),
+including the passing 720-pick offline workflow, restart/idempotency checks,
+privacy scans, and performance evidence. Phase 7 is the next roadmap boundary
+and focuses on draft-night hardening rather than feature expansion.
 
 ## Local Setup
 
