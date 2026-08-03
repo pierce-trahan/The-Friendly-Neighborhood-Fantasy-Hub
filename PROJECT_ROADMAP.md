@@ -342,6 +342,9 @@ Exit criteria:
 
 **Goal:** Stabilize rather than expand.
 
+**Frozen V1 contract:**
+[Phase 7 V1 Draft-Night Hardening Specification](docs/specs/phase-7-v1-hardening.md)
+
 Checklist:
 
 - freeze non-critical features;
